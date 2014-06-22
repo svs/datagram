@@ -18,11 +18,12 @@ RSpec.describe Watch, :type => :model do
     let!(:w) {  FactoryGirl.create(:watch, data: {"foo" => "bar"}) }
 
     it "should log" do
-      expect { w.publish }.to change(DekkoLog, :count).by(1)
+      expect { w.publish }.to change(WatchResponse, :count).by(1)
     end
 
     it "should publish properly" do
-      w.publish["key"].should_not be nil
+      x = w.publish
+      expect(x["key"]).to_not be nil
     end
   end
 

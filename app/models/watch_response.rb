@@ -3,10 +3,11 @@ class WatchResponse
   include Mongoid::Document
   include Mongoid::Token
 
-  field :watch_id, Integer
-  field :status_code, Integer
+  field :watch_id, type: Integer
+  field :status_code, type: Integer
 
   token length: 10
+
 
 
 

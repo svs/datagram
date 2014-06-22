@@ -4,17 +4,18 @@ class Watch < ActiveRecord::Base
   validates :frequency, { presence: true }
 
 
-  def publish
+  def publish(callback_host = "http://localhost:3000")
     log!
-    attributes.merge("key" => @key)
+    callback_url = "#{callback_host}/watches/#{@key}"
+    attributes.merge("key" => @key, "callback_url" => callback_url)
   end
 
 
   private
 
   def log!
-    DekkoLog.create(watch_id: self.id, key: SecureRandom.base64).tap{|d|
-      @key = d.key
+    WatchResponse.create(watch_id: self.id).tap{|d|
+      @key = d.token
     }
   end
 
