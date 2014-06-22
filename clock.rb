@@ -23,7 +23,8 @@ module Clockwork
 
   sync_database_tasks model: Watch, every: 1.minute do |instance_job_name|
     watch = Watch.find_by_name(instance_job_name)
-    $x.publish(watch.to_json, routing_key: $q.name)
+    watch.log!
+    $x.publish(watch.publish.to_json, routing_key: $q.name)
 
     # Or, e.g. if your queue system just needs job names
     # Stalker.enqueue(instance_job_name)

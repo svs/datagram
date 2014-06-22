@@ -14,12 +14,16 @@ RSpec.describe Watch, :type => :model do
   end
 
 
-  it "should create a log entry" do
-    w = FactoryGirl.build(:watch, data: {"foo" => "bar"})
-    expect { w.save }.to change(DekkoLog, :count).by(1)
-    d = DekkoLog.last
-    expect(d.watch).to be_eql(w)
-  end
+  describe "publish" do
+    let!(:w) {  FactoryGirl.create(:watch, data: {"foo" => "bar"}) }
 
+    it "should log" do
+      expect { w.publish }.to change(DekkoLog, :count).by(1)
+    end
+
+    it "should publish properly" do
+      w.publish["key"].should_not be nil
+    end
+  end
 
 end
