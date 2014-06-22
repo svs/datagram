@@ -11,10 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140621212635) do
+ActiveRecord::Schema.define(version: 20140622122555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "dekko_logs", force: true do |t|
+    t.string   "key"
+    t.integer  "status"
+    t.integer  "watch_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.datetime "created_at"
@@ -37,7 +45,13 @@ ActiveRecord::Schema.define(version: 20140621212635) do
   create_table "watches", force: true do |t|
     t.integer  "user_id"
     t.json     "data"
-    t.integer  "interval"
+    t.integer  "frequency"
+    t.string   "at"
+    t.string   "name"
+    t.string   "url"
+    t.string   "method",      default: "get"
+    t.string   "webhook_url"
+    t.string   "protocol",    default: "http"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
