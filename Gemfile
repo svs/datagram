@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-
+ruby '2.1.1'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.0'
 # Use postgresql as the database for Active Record
@@ -52,4 +52,5 @@ group :development, :test do
   gem 'awesome_print'
   gem 'shoulda-matchers', require: false
   gem 'pry-byebug'
+
 end
