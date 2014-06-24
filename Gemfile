@@ -48,6 +48,8 @@ gem 'mongoid', '~> 4.0.0.rc1', github: 'mongoid/mongoid'
 gem 'bson_ext'
 gem 'mongoid_token', github: 'apai4/mongoid_token'
 gem "moped", github: "mongoid/moped"
+gem 'hashdiff'
+
 
 group :development, :test do
   gem 'rspec-rails'

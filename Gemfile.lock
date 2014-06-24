@@ -106,6 +106,7 @@ GEM
     guard-rspec (4.2.10)
       guard (~> 2.1)
       rspec (>= 2.14, < 4.0)
+    hashdiff (0.2.0)
     hike (1.2.3)
     i18n (0.6.9)
     jbuilder (2.1.1)
@@ -249,6 +250,7 @@ DEPENDENCIES
   devise
   factory_girl_rails
   guard-rspec
+  hashdiff
   jbuilder (~> 2.0)
   jquery-rails
   mongoid (~> 4.0.0.rc1)!
