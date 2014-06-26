@@ -4,12 +4,25 @@ class Watch < ActiveRecord::Base
   validates :frequency, { presence: true }
 
 
-  def publish(callback_host = "http://localhost:3000")
+  def publish(exchange: $x, queue: $q, callback_host: "http://localhost:3000")
     log!
     callback_url = "#{callback_host}/watch_responses/#{@key}"
-    attributes.merge("key" => @key, "callback_url" => callback_url)
+    d = attributes.merge("key" => @key, "callback_url" => callback_url)
+    exchange.publish(d.to_json, routing_key: queue.name)
+    @key
   end
 
+  def responses
+    WatchResponse.where(watch_id: id)
+  end
+
+ def as_json( include_root = false )
+   uri = URI.parse(url)
+   super.except(:url, :created_at, :updated_at, :diff).merge(
+     :hostname => uri.hostname,
+     :pathname => uri.path.gsub("/ /","")
+   )
+  end
 
   private
 

@@ -1,0 +1,24 @@
+= form_for(@watch, html: {role: "form"}) do |f|
+  .col-md-5
+    .form-group
+      label Name
+      = f.text_field :name, class: 'form-control'
+    .form-group
+      label Protocol
+      = f.select :method, [["http","http(s)"],["mysql","mysql"],["postgres","postgres"]], {}, {class: 'form-control', style: "width: 10em"}
+    .form-group
+      label Method
+      = f.select :method, [["get","get"],["post","post"]], {}, {class: 'form-control', style: "width: 10em"}
+    .form-group
+      label URL
+      = f.text_field :url, class: 'form-control'
+    .form-group
+      label Data
+      = f.text_area :data, class: 'form-control'
+    .form-group
+      label Refresh Frequency (seconds)
+      = f.text_field :frequency, {class: 'form-control', style: "width: 10em"}
+    .form-group
+      label At
+      = f.text_field :at, {class: 'form-control', style: "width: 10em"}
+    = f.submit 'Create Datagram!', {class: 'btn btn-success'}

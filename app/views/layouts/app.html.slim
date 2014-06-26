@@ -1,0 +1,282 @@
+doctype html
+html.no-js[lang="en"]
+  head
+    title
+      | Analytics Dashboard · MVP Ready Admin
+    meta[charset="utf-8"]
+    meta[name="viewport" content="width=device-width, initial-scale=1.0"]
+    meta[name="description" content=""]
+    meta[name="author" content=""]
+    = javascript_include_tag 'application'
+    link[rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,800,800italic"]
+    link[rel="stylesheet" href="http://fonts.googleapis.com/css?family=Oswald:400,300,700"]
+    = stylesheet_link_tag 'application'
+    link[rel="shortcut icon" href="favicon.ico"]
+  body
+    #wrapper
+      header.navbar.navbar-inverse[role="banner"]
+        .container
+          .navbar-header
+            button.navbar-toggle[type="button" data-toggle="collapse" data-target=".navbar-collapse"]
+              span.sr-only
+                | Toggle navigation
+              i.fa.fa-cog
+            a.navbar-brand.navbar-brand-img[href="./"]
+              img[src="./img/logo.png" alt="MVP Ready"]
+          nav.collapse.navbar-collapse[role="navigation"]
+            ul.nav.navbar-nav.noticebar.navbar-left
+              li.dropdown
+                a.dropdown-toggle[href="./page-notifications.html" data-toggle="dropdown"]
+                  i.fa.fa-bell
+                  span.navbar-visible-collapsed
+                    |  Notifications 
+                  span.badge.badge-primary
+                    | 3
+                ul.dropdown-menu.noticebar-menu.noticebar-hoverable[role="menu"]
+                  li.nav-header
+                    .pull-left
+                      |  Notifications
+                    .pull-right
+                      a[href="javascript:;"]
+                        | Mark as Read
+                  li
+                    a.noticebar-item[href="./page-notifications.html"]
+                      span.noticebar-item-image
+                        i.fa.fa-cloud-upload.text-success
+                      span.noticebar-item-body
+                        strong.noticebar-item-title
+                          | Templates Synced
+                        span.noticebar-item-text
+                          | 20 Templates have been synced to the Mashon Demo instance.
+                        span.noticebar-item-time
+                          i.fa.fa-clock-o
+                          |  12 minutes ago
+                  li
+                    a.noticebar-item[href="./page-notifications.html"]
+                      span.noticebar-item-image
+                        i.fa.fa-ban.text-danger
+                      span.noticebar-item-body
+                        strong.noticebar-item-title
+                          | Sync Error
+                        span.noticebar-item-text
+                          | 5 Designs have been failed to be synced to the Mashon Demo instance.
+                        span.noticebar-item-time
+                          i.fa.fa-clock-o
+                          |  20 minutes ago
+                  li.noticebar-menu-view-all
+                    a[href="./page-notifications.html"]
+                      | View All Notifications
+              li.dropdown
+                a.dropdown-toggle[href="./page-notifications.html" data-toggle="dropdown"]
+                  i.fa.fa-envelope
+                  span.navbar-visible-collapsed
+                    |  Messages 
+                ul.dropdown-menu.noticebar-menu.noticebar-hoverable[role="menu"]
+                  li.nav-header
+                    .pull-left
+                      |  Messages
+                    .pull-right
+                      a[href="javascript:;"]
+                        | New Message
+                  li
+                    a.noticebar-item[href="./page-notifications.html"]
+                      span.noticebar-item-image
+                        img[src="./img/avatars/avatar-1-md.jpg" style="width: 50px" alt=""]
+                      span.noticebar-item-body
+                        strong.noticebar-item-title
+                          | New Message
+                        span.noticebar-item-text
+                          | Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+                        span.noticebar-item-time
+                          i.fa.fa-clock-o
+                          |  20 minutes ago
+                  li
+                    a.noticebar-item[href="./page-notifications.html"]
+                      span.noticebar-item-image
+                        img[src="./img/avatars/avatar-2-md.jpg" style="width: 50px" alt=""]
+                      span.noticebar-item-body
+                        strong.noticebar-item-title
+                          | New Message
+                        span.noticebar-item-text
+                          | Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+                        span.noticebar-item-time
+                          i.fa.fa-clock-o
+                          |  5 hours ago
+                  li.noticebar-menu-view-all
+                    a[href="./page-notifications.html"]
+                      | View All Messages
+              li.dropdown
+                a.dropdown-toggle[href="javascript:;" data-toggle="dropdown"]
+                  i.fa.fa-exclamation-triangle
+                  span.navbar-visible-collapsed
+                    |  Alerts 
+                ul.dropdown-menu.noticebar-menu.noticebar-hoverable[role="menu"]
+                  li.nav-header
+                    .pull-left
+                      |  Alerts
+                  li.noticebar-empty
+                    h4.noticebar-empty-title
+                      | No alerts here.
+                    p.noticebar-empty-text
+                      | Check out what other makers are doing on Explore!
+            ul.nav.navbar-nav.navbar-right
+              li
+                a[href="javsacript:;"]
+                  | About
+              li
+                a[href="javascript:;"]
+                  | Resources
+              li.dropdown.navbar-profile
+                a.dropdown-toggle[data-toggle="dropdown" href="javascript:;"]
+                  img.navbar-profile-avatar[src="./img/avatars/avatar-1-xs.jpg" alt=""]
+                  span.navbar-profile-label
+                    | rod@rod.me  
+                  i.fa.fa-caret-down
+                ul.dropdown-menu[role="menu"]
+                  li
+                    a[href="./page-profile.html"]
+                      i.fa.fa-user
+                      |    My Profile
+                  li
+                    a[href="./page-pricing.html"]
+                      i.fa.fa-dollar
+                      |    Plans & Billing
+                  li
+                    a[href="./page-settings.html"]
+                      i.fa.fa-cogs
+                      |    Settings
+                  li.divider
+                  li
+                    a[href="./account-login.html"]
+                      i.fa.fa-sign-out
+                      |    Logout
+      .mainnav
+        .container
+          a.mainnav-toggle[data-toggle="collapse" data-target=".mainnav-collapse"]
+            span.sr-only
+              | Toggle navigation
+            i.fa.fa-bars
+          nav.collapse.mainnav-collapse[role="navigation"]
+            form.mainnav-form.pull-right[role="search"]
+              input.form-control.input-md.mainnav-search-query[type="text" placeholder="Search"]
+              button.btn.btn-sm.mainnav-form-btn
+                i.fa.fa-search
+            ul.mainnav-menu
+              li.dropdown.active
+                a[ui-sref="index" href="#"]
+                  | Datagrams
+              li.dropdown
+                a.dropdown-toggle[href="javascript:;" data-toggle="dropdown" data-hover="dropdown"]
+                  |  Components
+                  i.mainnav-caret
+                ul.dropdown-menu[role="menu"]
+                  li
+                    a[href="./components-tabs.html"]
+                      i.fa.fa-bars
+                      |    Tabs & Accordions
+                  li
+                    a[href="./components-popups.html"]
+                      i.fa.fa-calendar-o
+                      |    Popups & Alerts
+                  li
+                    a[href="./components-validation.html"]
+                      i.fa.fa-check
+                      |    Validation
+                  li
+                    a[href="./components-datatables.html"]
+                      i.fa.fa-table
+                      |    Data Tables
+                  li
+                    a[href="./components-gallery.html"]
+                      i.fa.fa-picture-o
+                      |    Gallery
+                  li
+                    a[href="./components-charts.html"]
+                      i.fa.fa-bar-chart-o
+                      |    Charts
+              li.dropdown
+                a.dropdown-toggle[href="javascript:;" data-toggle="dropdown" data-hover="dropdown"]
+                  |  Sample Pages
+                  i.mainnav-caret
+                ul.dropdown-menu[role="menu"]
+                  li
+                    a[href="./page-pricing.html"]
+                      i.fa.fa-money
+                      |    Plans & Billing
+                  li
+                    a[href="./page-profile.html"]
+                      i.fa.fa-user
+                      |    Profile
+                  li
+                    a[href="./page-settings.html"]
+                      i.fa.fa-cogs
+                      |    Settings
+                  li
+                    a[href="./page-faq.html"]
+                      i.fa.fa-question
+                      |    FAQ
+              li.dropdown
+                a.dropdown-toggle[href="javascript:;" data-toggle="dropdown" data-hover="dropdown"]
+                  |  Extras
+                  i.mainnav-caret
+                ul.dropdown-menu[role="menu"]
+                  li
+                    a[href="./page-notifications.html"]
+                      i.fa.fa-bell
+                      |    Notifications
+                  li
+                    a[href="./extras-icons.html"]
+                      i.fa.fa-smile-o
+                      |    Font Icons
+                  li.dropdown-submenu
+                    a[tabindex="-1" href="#"]
+                      i.fa.fa-ban
+                      |    Error Pages
+                    ul.dropdown-menu
+                      li
+                        a[href="./page-404.html"]
+                          i.fa.fa-ban
+                          |    404 Error
+                      li
+                        a[href="./page-500.html"]
+                          i.fa.fa-ban
+                          |    500 Error
+                  li.dropdown-submenu
+                    a[tabindex="-1" href="#"]
+                      i.fa.fa-lock
+                      |    Login Pages
+                    ul.dropdown-menu
+                      li
+                        a[href="./account-login.html"]
+                          i.fa.fa-unlock
+                          |    Login
+                      li
+                        a[href="./account-login-social.html"]
+                          i.fa.fa-unlock
+                          |    Login Social
+                      li
+                        a[href="./account-signup.html"]
+                          i.fa.fa-star
+                          |    Signup
+                      li
+                        a[href="./account-forgot.html"]
+                          i.fa.fa-envelope
+                          |    Forgot Password
+      .content
+        .container
+          = yield
+    footer.footer
+      .container
+        p.pull-left
+          | Copyright © 2013 MVP Ready.
+    script[src="./js/libs/jquery-1.10.2.min.js"]
+    script[src="./js/libs/bootstrap.min.js"]
+    script[src="./js/plugins/flot/jquery.flot.js"]
+    script[src="./js/plugins/flot/jquery.flot.tooltip.min.js"]
+    script[src="./js/plugins/flot/jquery.flot.pie.js"]
+    script[src="./js/plugins/flot/jquery.flot.resize.js"]
+    script[src="./js/mvpready-core.js"]
+    script[src="./js/mvpready-admin.js"]
+    script[src="./js/demos/flot/line.js"]
+    script[src="./js/demos/flot/pie.js"]
+    script[src="./js/demos/flot/auto.js"]

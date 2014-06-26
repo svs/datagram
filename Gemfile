@@ -49,7 +49,7 @@ gem 'bson_ext'
 gem 'mongoid_token', github: 'apai4/mongoid_token'
 gem "moped", github: "mongoid/moped"
 gem 'hashdiff'
-
+gem 'pusher'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -58,5 +58,5 @@ group :development, :test do
   gem 'awesome_print'
   gem 'shoulda-matchers', require: false
   gem 'pry-byebug'
-
+  gem 'html2slim'
 end

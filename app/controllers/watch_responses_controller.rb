@@ -4,8 +4,14 @@ protect_from_forgery :except => [:update]
 
   def update
     wr = WatchResponse.find(params[:token])
-    if wr.update(response_json: {data: JSON.parse(params[:data])},
+    data = params[:data].is_a?(String) ? JSON.parse(params[:data]) : params[:data]
+    if wr.update(response_json: {data: data},
                         status_code: params[:status_code])
+
+      Rails.logger.info "Pushing...."
+      Pusher.trigger('stats', 'data', wr)
+      Rails.logger.info "..done"
+
       respond_to do |format|
         format.json { "ok" }
         format.html { redirect_to watches_path }

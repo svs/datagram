@@ -1,0 +1,62 @@
+
+script type="text/ng-template" id="show.html"
+  = stylesheet_link_tag 'highlight'
+  div ng-controller="watchCtrl"
+    .row
+      .col-md-5
+        | {{$scope}}
+        h1.pull-left style = "margin: 3px"
+          | {{watch.name}}
+        div.pull-left ng-show="showing"
+          a.btn.btn-success ng-click="toggleEdit()" style="margin: 8px"
+            i.fa.fa-edit
+            | Edit
+        div.pull-left ng-show="!showing"
+          a.btn.btn-success ng-click="save()" style="margin: 8px"
+            i.fa.fa-save
+            | Save
+          a.btn.btn-warning ng-show="!showing" ng-click="toggleEdit()" style="margin: 8px"
+            i.fa.fa-times
+            | Cancel
+        a.btn.btn-info ng-click="preview()" style="margin: 8px"
+          i.fa.fa-eye
+          | Preview
+
+        table.table ng-show="showing"
+          tr
+            th Name
+            td
+              | {{watch.name}}
+          tr
+            th Hostname
+            td
+              | {{watch.hostname}}
+          tr
+            th Data
+            td
+              | {{watch.data}}
+          tr
+            th Frequency
+            td
+              | {{watch.frequency}}
+          tr
+            th At
+            td
+              | {{watch.at}}
+
+        form#watch_form.form-horizontal role="form" ng-show="!(showing)"
+          .form-group
+            label.col-md-3 Name
+            .col-md-7
+              input.form-control ng-model="watch.name"
+          .form-group
+            label.col-md-3 URL
+            .col-md-7
+              input.form-control ng-model="watch.url"
+          .form-group
+            label.col-md-3 Data
+            .col-md-7
+              textarea.form-control ng-model="watch.data"
+      .col-md-1
+      .col-md-5
+        div hljs="true" language="json" source="preview_response"

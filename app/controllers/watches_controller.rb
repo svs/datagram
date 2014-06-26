@@ -1,10 +1,7 @@
 class WatchesController < ApplicationController
 
   def index
-  end
-
-  def new
-    render
+    render layout: 'app'
   end
 
 end

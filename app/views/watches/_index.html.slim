@@ -1,0 +1,19 @@
+script type="text/ng-template" id="index.html"
+  div ng-controller="watchesCtrl"
+    h3 All Datagrams
+
+    table.table.table-striped
+      thead
+        tr
+          th Name
+          th Protocol
+          th Host
+      tbody
+        tr ng-repeat="w in watches"
+          td
+            a ui-sref="show({id: w.id})"
+              | {{w.name}}
+          td
+            | {{w.protocol}}
+          td
+            | {{w.hostname}}{{w.pathname}}

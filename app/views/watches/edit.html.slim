@@ -1,0 +1,9 @@
+h3 Edit Datagramme
+- if @watch.errors.any?
+  .bg-danger
+    ul
+      - @watch.errors.full_messages.each do |msg|
+        li
+          = msg
+
+= render 'form'

@@ -1,0 +1,6 @@
+| Home/Index
+
+- if current_user
+  = link_to "New", new_watch_path
+  - @watches.each do |watch|
+    = watch.name

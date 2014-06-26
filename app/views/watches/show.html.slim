@@ -1,0 +1,31 @@
+
+h1
+  = @watch.name
+
+= link_to 'Edit', edit_watch_path(@watch)
+
+table.table
+  tr
+    th Name
+    td
+      = @watch.name
+  tr
+    th Protocol
+    td
+      = @watch.protocol
+  tr
+    th URL
+    td
+      = @watch.url
+  tr
+    th Data
+    td
+      = @watch.data
+  tr
+    th Frequency
+    td
+      = @watch.frequency
+  tr
+    th At
+    td
+      = @watch.at

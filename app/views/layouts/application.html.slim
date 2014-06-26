@@ -5,9 +5,12 @@ html
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   body
-    - if current_user
-      = current_user.email
-    - else
-      | Not Logged In
-    h1 Dekko
-    = yield
+    nav.navbar.navbar-default role="navigation"
+      .container
+        .pull-right
+          - if current_user
+            = current_user.email
+          - else
+            | Not Logged In
+    .container
+      = yield

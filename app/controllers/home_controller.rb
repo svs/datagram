@@ -4,7 +4,7 @@ class HomeController < ApplicationController
     if current_user
       @watches = current_user.watches
     end
-    render
+    render layout: 'landing'
   end
 
 end
