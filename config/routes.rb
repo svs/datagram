@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   namespace 'api' do
     namespace 'v1' do
+      resources :watch_responses
       resources :watches do
         member do
           put 'preview'

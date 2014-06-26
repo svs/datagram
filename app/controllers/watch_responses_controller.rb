@@ -8,10 +8,13 @@ protect_from_forgery :except => [:update]
     if wr.update(response_json: {data: data},
                         status_code: params[:status_code])
 
-      Rails.logger.info "Pushing...."
-      Pusher.trigger('stats', 'data', wr)
-      Rails.logger.info "..done"
-
+      begin
+        Rails.logger.info "Pushing...."
+        Pusher.trigger('stats', 'data', wr)
+        Rails.logger.info "..done"
+      rescue Pusher::Error
+        Pusher.trigger('stats', 'data', {status: "push failed", token: wr.token})
+      end
       respond_to do |format|
         format.json { "ok" }
         format.html { redirect_to watches_path }

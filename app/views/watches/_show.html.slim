@@ -1,4 +1,7 @@
+javascript:
+  window.define = window.define || ace.define;
 
+= stylesheet_link_tag 'json-tree'
 script type="text/ng-template" id="show.html"
   = stylesheet_link_tag 'highlight'
   div ng-controller="watchCtrl"
@@ -52,11 +55,14 @@ script type="text/ng-template" id="show.html"
           .form-group
             label.col-md-3 URL
             .col-md-7
-              input.form-control ng-model="watch.url"
+              input.form-control ng-model="watch.url" ng-change="checkSql()"
           .form-group
-            label.col-md-3 Data
-            .col-md-7
-              textarea.form-control ng-model="watch.data"
+            label.col-md-3
+              span ng-show="isSql" Query
+              span ng-show="!isSql" Data
+            .col-md-8
+              div ui-ace="{mode: 'sql',  useWrapMode : true}" ng-model="watch.data.query" style="height: 200px" ng-show="isSql"
+              div ui-ace="{mode: 'json',  useWrapMode : true}" ng-model="watchDataStr" style="height: 200px" ng-show="!isSql"
       .col-md-1
       .col-md-5
         div hljs="true" language="json" source="preview_response"

@@ -1,7 +1,10 @@
 //= require angular-pusher
 //= require highlight.pack
 //= require angular-highlightjs.js
-var watchesApp = angular.module('watchesApp', ['restangular','ui.router','doowb.angular-pusher', 'hljs']).
+//= require ace.js
+//= require ui-ace.js
+//= require json-tree.js
+var watchesApp = angular.module('watchesApp', ['restangular','ui.router','doowb.angular-pusher', 'hljs','ui.ace','json-tree']).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -42,26 +45,38 @@ angular.module('watchesApp').controller('watchesCtrl',['$scope','Restangular','$
 angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$stateParams', 'Pusher', function($scope, Restangular,$stateParams, Pusher) {
   Restangular.one('api/v1/watches',$stateParams.id).get().then(function(r) {
     $scope.watch = r;
-    $scope.watch.data.toString = function(){
-      return JSON.stringify(this);
-    };
-    console.log($scope.watch);
+    // $scope.watch.data.toString = function(){
+    //   return JSON.stringify(this);
+    // };
+    $scope.watchDataStr = JSON.stringify($scope.watch.data);
     $scope.showing = true;
+    $scope.checkSql();
   });
 
   $scope.preview_response = {};
   Pusher.subscribe('stats','data', function(item) {
     console.log(item);
-    $scope.preview_response = JSON.stringify(item, null, 2);
+    if (item.status == "push failed") {
+      Restangular.one('api/v1/watch_responses',item.token).get().then(function(r) {
+	$scope.preview_response = JSON.stringify(r, null, 2);
+      });
+    } else {
+	$scope.preview_response = JSON.stringify(item, null, 2);
+    }
   });
 
 
   $scope.state = $stateParams;
 
-  $scope.save = function() {
+  // gets the protocol (mysql|http|) etc from the URL provided
+  var getProtocol = function() {
     var url = document.createElement('a');
     url.href = $scope.watch.url;
-    $scope.watch.protocol = url.protocol;
+    return url.protocol;
+  };
+
+  $scope.save = function() {
+    $scope.watch.protocol = getProtocol();
     $scope.watch.put().then(function(r,s) {
       $scope.showing = true;
     });
@@ -73,12 +88,13 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
 
   $scope.preview = function() {
     console.log('preview',$scope.watch);
-    var url = document.createElement('a');
-    url.href = $scope.watch.url;
-    protocol = url.protocol.split(':')[0];
-    $scope.watch.protocol = protocol;
+    $scope.watch.protocol = getProtocol();
     $scope.watch.customPUT($scope.watch,'preview').then(function(r,s) {
     });
+  };
+
+  $scope.checkSql = function() {
+    $scope.isSql = $scope.watch.url.match(/^[mysql|postgres]/);
   };
 
 }]);
