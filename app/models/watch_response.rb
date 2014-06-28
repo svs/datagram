@@ -4,7 +4,7 @@ class WatchResponse
   include Mongoid::Token
   include Mongoid::Timestamps
 
-  before_validation :calc_diff
+  before_validation :check_changed
 
   field :watch_id, type: Integer
   field :status_code, type: Integer
@@ -12,6 +12,8 @@ class WatchResponse
   field :round_trip_time, type: Float
   field :response_json, type: Hash
   field :diff, type: Hash
+  field :signature, type: String
+  field :modified, type: Boolean
 
   field :previous_response_token, type: String
   token length: 10
@@ -20,24 +22,28 @@ class WatchResponse
     self.class.find(previous_response_token) rescue nil
   end
 
-  def mark_response(response)
-    update(response)
+  def modified?
+    modified
   end
 
   private
 
-  def calc_diff
+  def check_changed
     if self.status_code
-      self.diff = {"data" => HashDiff.diff(previous_response_data, response_json["data"])}
+      self.signature = "v1>" + Base64.encode64(hmac("secret", response_json[:data].to_json)).strip
+      self.modified = (self.signature != previous_response_signature)
+      self.round_trip_time = DateTime.now.to_f - created_at.to_f
     end
-    self.round_trip_time = DateTime.now.to_f - created_at.to_f
 
   end
 
-  def previous_response_data
-    previous_response.response_json["data"] rescue {}
+  def previous_response_signature
+    previous_response.signature rescue {}
   end
 
+  def hmac(key, value, digest = 'sha256')
+    OpenSSL::HMAC.digest(OpenSSL::Digest::Digest.new(digest), key, value)
+  end
 
 
 

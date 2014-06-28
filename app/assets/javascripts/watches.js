@@ -72,7 +72,7 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
   var getProtocol = function() {
     var url = document.createElement('a');
     url.href = $scope.watch.url;
-    return url.protocol;
+    return url.protocol.replace(":","");
   };
 
   $scope.save = function() {

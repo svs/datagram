@@ -38,8 +38,10 @@ module Api
       end
 
       def preview
-        ap preview_params
+        ap "Params"
         ap params
+        ap "Preview Params"
+        ap preview_params
         @watch = Watch.new(preview_params)
         @watch.publish
         render json: "ok"
@@ -48,12 +50,16 @@ module Api
       private
 
       def watch_params
-        params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at, :data)
+        params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at).tap do |wl|
+          wl[:data] = params[:watch][:data]
+        end
       end
 
       def preview_params
         params[:watch][:data] = JSON.parse(params[:watch][:data]) if params[:watch][:data].is_a? String
-        params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at, :id, :user_id, :webhook_url, :created_at, :updated_at, :data => [:query])
+        params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at, :id, :user_id, :webhook_url, :created_at, :updated_at).tap do |whitelisted|
+          whitelisted[:data] = params[:watch][:data]
+        end
       end
 
     end
