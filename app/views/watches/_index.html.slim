@@ -1,7 +1,8 @@
 script type="text/ng-template" id="index.html"
   div ng-controller="watchesCtrl"
-    h3 All Datagrams
-
+    h3.pull-left style="margin-right: 10px"  All Datagrams
+    a.btn.btn-success.btn-large ui-sref="new"
+      | Add a datagram
     table.table.table-striped
       thead
         tr

@@ -5,8 +5,9 @@ protect_from_forgery :except => [:update]
   def update
     wr = WatchResponse.find_by(token: params[:token])
     data = params[:data].is_a?(String) ? JSON.parse(params[:data]) : params[:data]
-    if wr.update(response_json: {data: data},
-                        status_code: params[:status_code])
+    if wr.update(response_json: {data: data.merge(_http_status: params[:status_code])},
+                 status_code: params[:status_code],
+                 elapsed: params[:elapsed])
 
       begin
         Rails.logger.info "Pushing watch id: #{wr.watch_id}"

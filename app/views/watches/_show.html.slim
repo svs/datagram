@@ -10,17 +10,10 @@ script type="text/ng-template" id="show.html"
         | {{$scope}}
         h1.pull-left style = "margin: 3px"
           | {{watch.name}}
-        div.pull-left ng-show="showing"
-          a.btn.btn-success ng-click="toggleEdit()" style="margin: 8px"
+        div.pull-left
+          a.btn.btn-success ui-sref="edit({id: watch.id})" style="margin: 8px"
             i.fa.fa-edit
             | Edit
-        div.pull-left ng-show="!showing"
-          a.btn.btn-success ng-click="save()" style="margin: 8px"
-            i.fa.fa-save
-            | Save
-          a.btn.btn-warning ng-show="!showing" ng-click="toggleEdit()" style="margin: 8px"
-            i.fa.fa-times
-            | Cancel
         a.btn.btn-info ng-click="preview()" style="margin: 8px"
           i.fa.fa-eye
           | Preview
@@ -46,23 +39,6 @@ script type="text/ng-template" id="show.html"
             th At
             td
               | {{watch.at}}
-
-        form#watch_form.form-horizontal role="form" ng-show="!(showing)"
-          .form-group
-            label.col-md-3 Name
-            .col-md-7
-              input.form-control ng-model="watch.name"
-          .form-group
-            label.col-md-3 URL
-            .col-md-7
-              input.form-control ng-model="watch.url" ng-change="checkSql()"
-          .form-group
-            label.col-md-3
-              span ng-show="isSql" Query
-              span ng-show="!isSql" Data
-            .col-md-8
-              div ui-ace="{mode: 'sql',  useWrapMode : true}" ng-model="watch.data.query" style="height: 200px" ng-show="isSql"
-              div ui-ace="{mode: 'json',  useWrapMode : true}" ng-model="watchDataStr" style="height: 200px" ng-show="!isSql"
       .col-md-1
       .col-md-5
         div hljs="true" language="json" source="preview_response"

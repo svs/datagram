@@ -1,24 +1,20 @@
-= form_for(@watch, remote: true, html: {role: "form"}) do |f|
-  .col-md-5
-    .form-group
-      label Name
-      = f.text_field :name, class: 'form-control'
-    .form-group
-      label Protocol
-      = f.select :method, [["http","http(s)"],["mysql","mysql"],["postgres","postgres"]], {}, {class: 'form-control', style: "width: 10em"}
-    .form-group
-      label Method
-      = f.select :method, [["get","get"],["post","post"]], {}, {class: 'form-control', style: "width: 10em"}
-    .form-group
-      label URL
-      = f.text_field :url, class: 'form-control'
-    .form-group
-      label Data
-      = f.text_area :data, class: 'form-control'
-    .form-group
-      label Refresh Frequency (seconds)
-      = f.text_field :frequency, {class: 'form-control', style: "width: 10em"}
-    .form-group
-      label At
-      = f.text_field :at, {class: 'form-control', style: "width: 10em"}
-    = f.submit 'Create Datagram!', {class: 'btn btn-success'}
+.form-group
+  label.col-md-3 Name
+  .col-md-7
+    input.form-control ng-model="watch.name"
+.form-group
+  label.col-md-3 URL
+  .col-md-7
+    input.form-control ng-model="watch.url" ng-change="checkSql()"
+.form-group
+  label.col-md-3
+    span ng-show="isSql" Query
+    span ng-show="!isSql" Data
+  .col-md-8
+    div ui-ace="{mode: 'sql',  useWrapMode : true}" ng-model="watch.data.query" style="height: 200px" ng-show="isSql"
+    div ui-ace="{mode: 'json',  useWrapMode : true}" ng-model="watchDataStr" style="height: 200px" ng-show="!isSql"
+.form-group
+  label.col-md-3
+    span Strip Keys
+  .col-md-8
+    div ui-ace="{mode: 'json',  useWrapMode : true}" ng-model="watchStripKeysStr" style="height: 200px" ng-show="!isSql"

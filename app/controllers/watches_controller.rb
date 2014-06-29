@@ -4,4 +4,7 @@ class WatchesController < ApplicationController
     render layout: 'app'
   end
 
+  def new
+    render
+  end
 end

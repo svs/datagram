@@ -10,6 +10,8 @@ class CreateWatches < ActiveRecord::Migration
       t.string :method, default: "get"
       t.string :webhook_url
       t.string :protocol, default: "http"
+      t.string :token
+      t.json :strip_keys
       t.timestamps
     end
   end

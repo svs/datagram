@@ -1,0 +1,27 @@
+javascript:
+  window.define = window.define || ace.define;
+script type="text/ng-template" id="new.html"
+  = stylesheet_link_tag 'highlight'
+  div ng-controller="watchCtrl"
+    .row
+      .col-md-5
+        .row
+          div.pull-left
+            h1.pull-left style = "margin: 3px"
+              | {{watch.name}}
+          div.pull-left
+            a.btn.btn-success ng-click="save()" style="margin: 8px"
+              i.fa.fa-save
+              | Save
+            a.btn.btn-warning ng-click="toggleEdit()" style="margin: 8px"
+              i.fa.fa-times
+              | Cancel
+            a.btn.btn-info ng-click="preview()" style="margin: 8px"
+              i.fa.fa-eye
+              | Preview
+        .row
+          form#watch_form.form-horizontal role="form"
+            = render "form"
+      .col-md-1
+      .col-md-5
+        div hljs="true" language="json" source="preview_response"

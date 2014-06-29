@@ -44,6 +44,8 @@ ActiveRecord::Schema.define(version: 20140621212635) do
     t.string   "method",      default: "get"
     t.string   "webhook_url"
     t.string   "protocol",    default: "http"
+    t.string   "token"
+    t.json     "strip_keys"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
