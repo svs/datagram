@@ -5,7 +5,7 @@ RSpec.describe Watch, :type => :model do
   subject { build(:watch).tap{|w| w.save } }
   it { should be_valid }
   it { should validate_presence_of :user_id }
-  it { should validate_presence_of :frequency }
+
 
   it "should have a token" do
     expect(subject.token).to_not be_nil
@@ -26,8 +26,7 @@ RSpec.describe Watch, :type => :model do
 
     it "should publish properly" do
       x = w.publish
-      ap x
-      expect(x).to_not be nil
+      expect(WatchResponse.find(x)).to be_a WatchResponse
     end
   end
 

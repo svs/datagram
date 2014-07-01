@@ -6,4 +6,8 @@ class User < ActiveRecord::Base
 
   has_many :watches
 
+  def datagrams
+    Datagram.where(user_id: self.id)
+  end
+
 end

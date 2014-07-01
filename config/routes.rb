@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   root to: "home#index"
 
   resources :watches
-  match '/watch_responses/:token', to: 'watch_responses#update', via: :put
+  resources :datagrams
 
   namespace 'api' do
     namespace 'v1' do
@@ -13,6 +13,7 @@ Rails.application.routes.draw do
           put 'preview'
         end
       end
+      resources :datagrams
     end
   end
 end

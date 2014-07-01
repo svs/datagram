@@ -2,15 +2,20 @@ script type="text/ng-template" id="index.html"
   div ng-controller="watchesCtrl"
     h3.pull-left style="margin-right: 10px"  All Datagrams
     a.btn.btn-success.btn-large ui-sref="new"
-      | Add a datagram
+      | Add a watch
+
+
     table.table.table-striped
       thead
         tr
+          th &nbsp;
           th Name
           th Protocol
           th Host
       tbody
         tr ng-repeat="w in watches"
+          td
+            input type="checkbox" checklist-model="chosenWatches" checklist-value="w.id"
           td
             a ui-sref="show({id: w.id})"
               | {{w.name}}

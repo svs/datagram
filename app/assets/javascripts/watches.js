@@ -3,9 +3,10 @@
 //= require angular-highlightjs.js
 //= require ace.js
 //= require ui-ace.js
-//= require json-tree.js
 //= require checklist-model.js
-var watchesApp = angular.module('watchesApp', ['restangular','ui.router','doowb.angular-pusher', 'hljs','ui.ace','json-tree', 'checklist-model']).
+
+
+var watchesApp = angular.module('watchesApp', ['restangular','ui.router','doowb.angular-pusher', 'hljs','ui.ace', 'checklist-model']).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -19,7 +20,7 @@ watchesApp.config(function($stateProvider,$urlRouterProvider) {
   $urlRouterProvider.otherwise('/');
 
   $stateProvider.
-    state('index',
+    state('watches',
 	  {url: '/', templateUrl: "index.html"}
 	 ).
     state('new',
@@ -65,6 +66,8 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
   } else {
     Restangular.one('api/v1/watches/new').get().then(function(r) {
       $scope.watch = r;
+      $scope.watchDataStr = $scope.watch.data ? JSON.stringify($scope.watch.data, null, 2) : "";
+      $scope.watchStripKeysStr = $scope.watch.strip_keys ? JSON.stringify($scope.watch.strip_keys, null, 2) : "";
     });
   };
 
@@ -122,6 +125,7 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
   };
 
   $scope.preview = function() {
+    console.log("preview", $scope.watch);
     beforeSave();
     $scope.watch.protocol = getProtocol();
     $scope.watch.customPUT($scope.watch,'preview').then(function(r,s) {

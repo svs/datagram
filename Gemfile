@@ -59,4 +59,5 @@ group :development, :test do
   gem 'shoulda-matchers', require: false
   gem 'pry-byebug'
   gem 'html2slim'
+  gem 'spring-commands-rspec'
 end

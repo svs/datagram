@@ -20,6 +20,8 @@ class WatchResponse
   field :previous_response_token, type: String
   token length: 10
 
+  validates :watch_id, {presence: true}
+
   def previous_response
     self.class.find(previous_response_token) rescue nil
   end
@@ -30,6 +32,10 @@ class WatchResponse
 
   def watch
     @watch ||= Watch.find(watch_id)
+  end
+
+  def watch=(watch)
+    self.watch_id = watch.id
   end
 
   private
@@ -58,7 +64,9 @@ class WatchResponse
   def _strip_keys(keys, hash)
     Array(keys).map do |k, v|
       if !v.is_a?(Hash)
-        hash[k].delete(v)
+        Array(v).map do |_v|
+          hash[k].delete(_v)
+        end
       else
         _strip_keys(v, hash[k])
       end

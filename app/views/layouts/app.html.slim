@@ -163,8 +163,10 @@ html.no-js[lang="en"]
                 i.fa.fa-search
             ul.mainnav-menu
               li.dropdown.active
-                a[ui-sref="index" href="#"]
-                  | Datagrams
+                = link_to 'Datagrams', datagrams_path
+              li.dropdown
+                = link_to 'Watches', watches_path
+
               li.dropdown
                 a.dropdown-toggle[href="javascript:;" data-toggle="dropdown" data-hover="dropdown"]
                   |  Components

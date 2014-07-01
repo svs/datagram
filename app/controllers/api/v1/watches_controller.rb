@@ -22,7 +22,7 @@ module Api
       end
 
       def show
-        if params[:id].to_i > 0
+        if (Integer(params[:id]) rescue nil)
           watch = current_user.watches.find(params[:id])
           render json: watch.to_json
         else

@@ -1,7 +1,6 @@
 javascript:
   window.define = window.define || ace.define;
 
-= stylesheet_link_tag 'json-tree'
 script type="text/ng-template" id="show.html"
   = stylesheet_link_tag 'highlight'
   div ng-controller="watchCtrl"
@@ -24,13 +23,18 @@ script type="text/ng-template" id="show.html"
             td
               | {{watch.name}}
           tr
-            th Hostname
+            th URL
             td
-              | {{watch.hostname}}
+              | {{watch.url}}
           tr
             th Data
             td
               | {{watch.data}}
+          tr
+            th Strip Keys
+            td
+              | {{watch.strip_keys}}
+
           tr
             th Frequency
             td

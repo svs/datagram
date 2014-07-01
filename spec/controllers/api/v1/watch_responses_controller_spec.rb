@@ -1,15 +1,14 @@
 require 'rails_helper'
 
-describe WatchResponsesController do
+describe Api::V1::WatchResponsesController do
 
-  context "status is nil" do
+  context "when status is nil" do
+    let!(:wr) { FactoryGirl.build(:watch_response).tap{|wr| wr.save} }
     it "should update a watch response" do
-      w = FactoryGirl.build(:watch).tap{|f| f.save }
-      w.publish
-      d = WatchResponse.last
-      ap d
-      put(:update, id: d.token, format: :json)
-      ap response.body
+      expect(Pusher).to receive(:trigger)
+      put(:update, id: wr.token, format: :json, data: {"a" => 1}, status_code: 200)
+      expect(response.status).to be 200
+      expect(wr.reload.response_json).to_not be_nil
     end
   end
 
@@ -23,14 +22,13 @@ describe WatchResponsesController do
       wr.update(response_json: {data: {a: 1}},
                 status_code: 200)
       expect(wr.response_json).to eql({"data" => {"a" => 1}})
-      expect(wr.diff).to be_eql({"data" => [["+","a",1]]})
 
       w.publish
       wr = WatchResponse.last
       wr.update(response_json: {data: {b: 2}},
                 status_code: 200)
       expect(wr.response_json).to be_eql({"data" => {"b" => 2}})
-      expect(wr.diff).to be_eql({"data" => [["-","a",1],["+","b",2]]})
+      expect(wr).to be_modified
     end
 
   end
