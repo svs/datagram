@@ -26,7 +26,7 @@ script type="text/ng-template" id="new.html"
               tbody
                 tr ng-repeat="w in watches"
                   td
-                    input type="checkbox" checklist-model="datagram.watches" checklist-value="w.id"
+                    input type="checkbox" checklist-model="datagram.watch_ids" checklist-value="w.id"
                   td
                     a ui-sref="show({id: w.id})"
                       | {{w.name}}

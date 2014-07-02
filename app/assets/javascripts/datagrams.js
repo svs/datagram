@@ -1,5 +1,7 @@
 //= require 'checklist-model.js'
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model']);
+//= require highlight.pack
+//= require angular-highlightjs.js
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs']);
 
 
 datagramsApp.config(function($stateProvider,$urlRouterProvider) {
@@ -38,7 +40,10 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
   Restangular.all('api/v1/watches').getList().then(function(r) {
     $scope.watches = r;
   });
-  $scope.datagram = { watches: [], at: '', frequency: 0, name: null};
+  Restangular.one('api/v1/datagrams/new').get().then(function(r) {
+    $scope.datagram = r;
+  });
+
   var baseDatagrams = Restangular.all('api/v1/datagrams');
 
   $scope.save = function() {
@@ -52,6 +57,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   if ($stateParams.id) {
     Restangular.one('api/v1/datagrams',$stateParams.id).get().then(function(r) {
       $scope.datagram = r;
+      $scope.preview_responses = JSON.stringify(r.responses, null, 2);
     });
   };
 }]);

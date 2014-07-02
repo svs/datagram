@@ -9,6 +9,9 @@ module Api
         render json: @datagrams
       end
 
+      def new
+        render json: Datagram.new
+      end
 
       def create
         datagram = Datagram.new(create_params)
@@ -32,7 +35,7 @@ module Api
 
       def create_params
         params.require(:datagram).permit(:at, :frequency, :name).tap{|wl|
-          wl[:watches] = params[:datagram][:watches]
+          wl[:watch_ids] = params[:datagram][:watch_ids]
           wl[:user_id] = current_user.id
         }
       end

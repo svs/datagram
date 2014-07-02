@@ -8,6 +8,7 @@ class WatchResponse
   after_validation :strip_keys!
 
   field :watch_id, type: Integer
+  field :datagram_id, type: String
   field :status_code, type: Integer
   field :response_received_at, type: DateTime
   field :round_trip_time, type: Float
@@ -16,6 +17,7 @@ class WatchResponse
   field :modified, type: Boolean
   field :elapsed, type: Integer
   field :strip_keys, type: Hash
+  field :timestamp, type: Integer
 
   field :previous_response_token, type: String
   token length: 10
