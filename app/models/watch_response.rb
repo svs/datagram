@@ -22,7 +22,6 @@ class WatchResponse
   field :previous_response_token, type: String
   token length: 10
 
-  validates :watch_id, {presence: true}
 
   def previous_response
     self.class.find(previous_response_token) rescue nil

@@ -16,3 +16,8 @@
 //= require restangular.min
 //= require angular-ui-router
 //= require bootstrap.min
+
+
+$(document).ready(function() {
+  $('a[href="' + window.location.pathname + '"]').parent().addClass('active');
+});

@@ -3,20 +3,29 @@ script type="text/ng-template" id="show.html"
   div ng-controller="datagramCtrl"
     .col-md-6
 
-      h4.portlet-title
-        u Datagram {{datagram.name}}
+      h2.portlet-title
+        u
+          | {{datagram.name}}
         a.btn.btn-large.btn-warning
           i.fa.fa-refresh style="margin-right: 5px"
           | Refresh!
       form.form-horizontal
         .form-group
-          label.col-md-3 Sources
+          label.col-md-3
+            h4 Sources
           .col-md-5
             ul
               li ng-repeat="watch in datagram.watches" {{watch.name}}
         .form-group
-          label.col-md-3 Updated At
+          label.col-md-3
+            h4 Updated At
           .col-md-5
             | {{ datagram.timestamp }}
+        .form-group
+          label.col-md-3
+            h4 Token
+          .col-md-5
+            | {{ datagram.token }}
+
     .col-md-5
       div hljs="true" language="json" source="preview_responses"

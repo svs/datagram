@@ -5,7 +5,7 @@ class Watch < ActiveRecord::Base
 
   before_create :set_token
 
-  def publish(datagram_id:, timestamp:, exchange: $x, queue: $q, callback_host: "http://localhost:3000")
+  def publish(datagram_id: nil, timestamp: nil, exchange: $x, queue: $q, callback_host: "http://localhost:3000")
     log!(datagram_id, timestamp)
     callback_url = "#{callback_host}/api/v1/watch_responses/#{@key}"
     d = attributes.merge(key: @key, callback_url: callback_url )
@@ -32,7 +32,7 @@ class Watch < ActiveRecord::Base
   private
 
   def log!(datagram_id = nil, timestamp = nil)
-    WatchResponse.create(watch_id: self.id, previous_response_token: previous_response_token, strip_keys: strip_keys, datagram_id: datagram_id, timestamp: timestamp).tap{|d|
+    w = WatchResponse.create(watch_id: self.id, previous_response_token: previous_response_token, strip_keys: strip_keys, datagram_id: datagram_id, timestamp: timestamp).tap{|d|
       @key = d.token
     }
   end

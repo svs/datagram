@@ -97,11 +97,13 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     } else {
       $scope.watch.strip_keys = {};
     }
-
-    if ($scope.watchDataStr.length > 0) {
-      $scope.watch.data = JSON.parse($scope.watchDataStr);
-    }
     $scope.watch.protocol = getProtocol();
+    if ($scope.watch.protocol == 'mysql' || $scope.watch.protocol == 'postgres') {
+    } else {
+      if ($scope.watchDataStr.length > 0) {
+	$scope.watch.data = JSON.parse($scope.watchDataStr);
+      }
+    }
   };
 
   $scope.update = function() {

@@ -6,7 +6,8 @@ module Api
       def update
         wr = WatchResponse.find(params[:id])
         data = (params[:data].is_a?(String) ? JSON.parse(params[:data]) : params[:data]) || {}
-        if wr.update(response_json: {data: data.merge(_http_status: params[:status_code])},
+        data = data.merge(_http_status: params[:status_code]) if data.is_a? Hash
+        if wr.update(response_json: {data: data},
                      status_code: params[:status_code],
                      elapsed: params[:elapsed],
                      response_received_at: Time.zone.now)

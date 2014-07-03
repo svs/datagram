@@ -162,108 +162,11 @@ html.no-js[lang="en"]
               button.btn.btn-sm.mainnav-form-btn
                 i.fa.fa-search
             ul.mainnav-menu
-              li.dropdown.active
+              li.dropdown
                 = link_to 'Datagrams', datagrams_path
               li.dropdown
                 = link_to 'Watches', watches_path
 
-              li.dropdown
-                a.dropdown-toggle[href="javascript:;" data-toggle="dropdown" data-hover="dropdown"]
-                  |  Components
-                  i.mainnav-caret
-                ul.dropdown-menu[role="menu"]
-                  li
-                    a[href="./components-tabs.html"]
-                      i.fa.fa-bars
-                      |    Tabs & Accordions
-                  li
-                    a[href="./components-popups.html"]
-                      i.fa.fa-calendar-o
-                      |    Popups & Alerts
-                  li
-                    a[href="./components-validation.html"]
-                      i.fa.fa-check
-                      |    Validation
-                  li
-                    a[href="./components-datatables.html"]
-                      i.fa.fa-table
-                      |    Data Tables
-                  li
-                    a[href="./components-gallery.html"]
-                      i.fa.fa-picture-o
-                      |    Gallery
-                  li
-                    a[href="./components-charts.html"]
-                      i.fa.fa-bar-chart-o
-                      |    Charts
-              li.dropdown
-                a.dropdown-toggle[href="javascript:;" data-toggle="dropdown" data-hover="dropdown"]
-                  |  Sample Pages
-                  i.mainnav-caret
-                ul.dropdown-menu[role="menu"]
-                  li
-                    a[href="./page-pricing.html"]
-                      i.fa.fa-money
-                      |    Plans & Billing
-                  li
-                    a[href="./page-profile.html"]
-                      i.fa.fa-user
-                      |    Profile
-                  li
-                    a[href="./page-settings.html"]
-                      i.fa.fa-cogs
-                      |    Settings
-                  li
-                    a[href="./page-faq.html"]
-                      i.fa.fa-question
-                      |    FAQ
-              li.dropdown
-                a.dropdown-toggle[href="javascript:;" data-toggle="dropdown" data-hover="dropdown"]
-                  |  Extras
-                  i.mainnav-caret
-                ul.dropdown-menu[role="menu"]
-                  li
-                    a[href="./page-notifications.html"]
-                      i.fa.fa-bell
-                      |    Notifications
-                  li
-                    a[href="./extras-icons.html"]
-                      i.fa.fa-smile-o
-                      |    Font Icons
-                  li.dropdown-submenu
-                    a[tabindex="-1" href="#"]
-                      i.fa.fa-ban
-                      |    Error Pages
-                    ul.dropdown-menu
-                      li
-                        a[href="./page-404.html"]
-                          i.fa.fa-ban
-                          |    404 Error
-                      li
-                        a[href="./page-500.html"]
-                          i.fa.fa-ban
-                          |    500 Error
-                  li.dropdown-submenu
-                    a[tabindex="-1" href="#"]
-                      i.fa.fa-lock
-                      |    Login Pages
-                    ul.dropdown-menu
-                      li
-                        a[href="./account-login.html"]
-                          i.fa.fa-unlock
-                          |    Login
-                      li
-                        a[href="./account-login-social.html"]
-                          i.fa.fa-unlock
-                          |    Login Social
-                      li
-                        a[href="./account-signup.html"]
-                          i.fa.fa-star
-                          |    Signup
-                      li
-                        a[href="./account-forgot.html"]
-                          i.fa.fa-envelope
-                          |    Forgot Password
       .content
         .container
           = yield
