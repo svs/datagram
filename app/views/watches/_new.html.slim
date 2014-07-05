@@ -20,8 +20,10 @@ script type="text/ng-template" id="new.html"
               i.fa.fa-eye
               | Preview
         .row
+          | mysql://root:hatstars@localhost/embibe_development
           form#watch_form.form-horizontal role="form"
             = render "form"
       .col-md-1
       .col-md-5
+        = render 'tabs'
         div hljs="true" language="json" source="preview_response"

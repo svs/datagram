@@ -10,13 +10,13 @@ class Datagram
   field :user_id, type: Integer
 
   def watches
-    Watch.find(watch_ids)
+    Watch.find(watch_ids) rescue []
   end
 
   def as_json(include_root = false)
     attributes.merge({watches: watches.map{|w| w.attributes.slice("name")},
                        responses: Hash[last_responses.map{|r| [r.watch.name, r.response_json]}],
-                       timestamp: Time.at(max_ts/1000)})
+                       timestamp: (Time.at(max_ts/1000) rescue Time.now)})
   end
 
   def publish

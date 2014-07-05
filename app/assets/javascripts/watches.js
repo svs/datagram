@@ -75,7 +75,9 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
   Pusher.subscribe('stats','data', function(item) {
     console.log("pusher sent",item);
     Restangular.one('api/v1/watch_responses',item.token).get().then(function(r) {
-      $scope.preview_response = JSON.stringify(Restangular.stripRestangular(r), null, 2);
+      console.log(r);
+      $scope.watch_response = r;
+      $scope.setActiveTab('data');
     });
   });
 
@@ -87,6 +89,11 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     var url = document.createElement('a');
     url.href = $scope.watch.url;
     return url.protocol.replace(":","");
+  };
+
+  $scope.setActiveTab = function(tab) {
+    $scope.preview_response = JSON.stringify(Restangular.stripRestangular($scope.watch_response[tab]), null, 2);
+    $scope.activeTab = tab;
   };
 
   var beforeSave = function() {
@@ -142,7 +149,8 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
 
   var getPreview = function(token) {
     Restangular.one('api/v1/watches', token).get().then(function(r) {
-      $scope.preview_response = JSON.stringify(Restangular.stripRestangular(r), null, 2);
+      $scope.watch_response = r;
+      $scope.setActiveTab('data');
     });
   };
 

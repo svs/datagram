@@ -31,6 +31,8 @@ class Watch < ActiveRecord::Base
 
   private
 
+
+
   def log!(datagram_id = nil, timestamp = nil)
     w = WatchResponse.create(watch_id: self.id, previous_response_token: previous_response_token, strip_keys: strip_keys, datagram_id: datagram_id, timestamp: timestamp).tap{|d|
       @key = d.token

@@ -33,6 +33,12 @@ describe Api::V1::DatagramsController do
       expect { post :create, datagram: d.attributes }.to change(Datagram, :count).by(1)
     end
 
+    it "can refresh a datagram" do
+      u1_d1.should_receive(:publish)
+      post :refresh, {id: u1_d1.id}
+
+    end
+
     it "shows only the users datagrams" do
       get :show, {id: u1_d1.id}
       expect(response.status).to eql 200

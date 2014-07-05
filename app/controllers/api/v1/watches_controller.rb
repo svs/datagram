@@ -28,11 +28,7 @@ module Api
         else
           watch = current_user.watches.find_by(token: params[:id])
           response = WatchResponse.where(watch_id: watch.id).last
-          if params[:all]
-            render json: response
-          else
-            render json: response.response_json
-          end
+          render json: response
         end
       end
 

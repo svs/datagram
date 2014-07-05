@@ -1,0 +1,10 @@
+ul.nav.nav-pills
+  li ng-class="activeTab == 'data' ? 'active' : ''"
+    a ng-click="setActiveTab('data')" style="margin: 8px"
+      | Data
+  li ng-class="activeTab == 'errors' ? 'active' : ''"
+    a ng-click="setActiveTab('errors')" style="margin: 8px"
+      | Errors
+  li ng-class="activeTab == 'metadata' ? 'active' : ''"
+    a ng-click="setActiveTab('metadata')" style="margin: 8px"
+      | MetaData

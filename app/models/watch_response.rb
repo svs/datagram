@@ -13,6 +13,7 @@ class WatchResponse
   field :response_received_at, type: DateTime
   field :round_trip_time, type: Float
   field :response_json, type: Hash
+  field :error, type: Array
   field :signature, type: String
   field :modified, type: Boolean
   field :elapsed, type: Integer
@@ -37,6 +38,14 @@ class WatchResponse
 
   def watch=(watch)
     self.watch_id = watch.id
+  end
+
+  def as_json(x)
+    {
+      data: response_json,
+      errors: error,
+      metadata: attributes.slice("elapsed", "status_code", "token", "response_received_at")
+    }
   end
 
   private
