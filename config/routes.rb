@@ -13,7 +13,11 @@ Rails.application.routes.draw do
           put 'preview'
         end
       end
-      resources :datagrams
+      resources :datagrams do
+        member do
+          put 'refresh'
+        end
+      end
     end
   end
 end

@@ -6,9 +6,9 @@ script type="text/ng-template" id="show.html"
       h2.portlet-title
         u
           | {{datagram.name}}
-        a.btn.btn-large.btn-warning
+        a.btn.btn-large.btn-warning ng-click="refresh()"
           i.fa.fa-refresh style="margin-right: 5px"
-          | Refresh!
+          | Refresh!!
       form.form-horizontal
         .form-group
           label.col-md-3
@@ -28,4 +28,10 @@ script type="text/ng-template" id="show.html"
             | {{ datagram.token }}
 
     .col-md-5
-      div hljs="true" language="json" source="preview_responses"
+      ul.nav.nav-pills
+        li ng-repeat="response in datagram.responses"
+          a ng-click="setActiveResponse(response)"
+            | {{response.name}}
+      = render 'tabs'
+
+      div hljs="true" language="json" source="preview_response"

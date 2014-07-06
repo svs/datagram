@@ -24,8 +24,5 @@ script type="text/ng-template" id="edit.html"
             = render "form"
       .col-md-1
       .col-md-5
-        ul.nav.nav-pills
-          li ng-class="activeTab == 'errors' ? 'active' : ''"
-            a ng-click="setActiveTab('errors')" style="margin: 8px"
-              | Errors
+        = render 'tabs'
         div hljs="true" language="json" source="preview_response"

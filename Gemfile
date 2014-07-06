@@ -50,7 +50,9 @@ gem 'mongoid_token', github: 'apai4/mongoid_token'
 gem "moped", github: "mongoid/moped"
 gem 'hashdiff'
 gem 'pusher'
-
+gem 'daemons'
+gem 'eventmachine'
+gem 'amqp'
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard-rspec'
@@ -60,4 +62,5 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'html2slim'
   gem 'spring-commands-rspec'
+  gem 'metric_fu'
 end

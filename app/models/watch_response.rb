@@ -19,13 +19,14 @@ class WatchResponse
   field :elapsed, type: Integer
   field :strip_keys, type: Hash
   field :timestamp, type: Integer
+  field :started_at, type: Integer
+  field :ended_at, type: Integer
 
-  field :previous_response_token, type: String
   token length: 10
 
 
   def previous_response
-    self.class.find(previous_response_token) rescue nil
+    self.class.all.lt(timestamp: timestamp).last
   end
 
   def modified?
@@ -40,12 +41,16 @@ class WatchResponse
     self.watch_id = watch.id
   end
 
-  def as_json(x)
+  def as_json(x = nil)
     {
-      data: response_json,
+      data: response_json[:data],
       errors: error,
-      metadata: attributes.slice("elapsed", "status_code", "token", "response_received_at")
+      metadata: metadata
     }
+  end
+
+  def metadata
+    attributes.slice("elapsed", "status_code", "token", "response_received_at")
   end
 
   private
@@ -54,7 +59,8 @@ class WatchResponse
     if self.status_code
       self.signature = "v1>" + Base64.encode64(hmac("secret", response_json[:data].to_json)).strip
       self.modified = (self.signature != previous_response_signature)
-      self.round_trip_time = DateTime.now.to_f - created_at.to_f
+      self.ended_at = (Time.now.to_f  * 1000).round
+      self.round_trip_time = self.ended_at - self.started_at
     end
   end
 

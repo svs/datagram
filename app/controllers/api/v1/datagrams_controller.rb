@@ -31,6 +31,16 @@ module Api
         end
       end
 
+      def refresh
+        datagram = current_user.datagrams.find(params[:id]) rescue nil
+        if datagram
+          datagram.publish
+          render json: "ok"
+        else
+          render json: "not found", status: 404
+        end
+      end
+
       private
 
       def create_params

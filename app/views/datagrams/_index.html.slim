@@ -14,7 +14,7 @@ script type="text/ng-template" id="index.html"
       tbody
         tr ng-repeat="datagram in datagrams"
           td
-            a ui-sref="show({id: datagram._id.$oid})"
+            a ui-sref="show({id: datagram.id})"
               | {{datagram.name}}
           td
             | {{ datagram.watches}}

@@ -1,6 +1,8 @@
 class Datagram
 
   include Mongoid::Document
+  include Mongoid::Token
+  include Mongoid::Timestamps
 
   field :name
   field :watch_ids, type: Array
@@ -9,19 +11,23 @@ class Datagram
 
   field :user_id, type: Integer
 
+  token length: 10
+
   def watches
     Watch.find(watch_ids) rescue []
   end
 
   def as_json(include_root = false)
-    attributes.merge({watches: watches.map{|w| w.attributes.slice("name")},
-                       responses: Hash[last_responses.map{|r| [r.watch.name, r.response_json]}],
-                       timestamp: (Time.at(max_ts/1000) rescue Time.now)})
+    attributes.merge({
+                       id: _id.to_s,
+                       watches: watches.map{|w| w.attributes.slice("name", "token")},
+                       responses: last_responses.map{|r| {name: r.watch.name, data: r.response_json, errors: r.error, metadata: r.metadata}},
+                       timestamp: (Time.at(max_ts/1000) rescue Time.now)
+                     }).except("_id")
   end
 
   def publish
-    ts = (Time.now.to_f  * 1000).round
-    watches.each{|w| w.publish(datagram_id: self.id, timestamp: ts)}
+    DatagramPublisher.new(self).publish
   end
 
   def last_responses

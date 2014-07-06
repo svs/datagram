@@ -1,7 +1,17 @@
+//= require angular-pusher
 //= require 'checklist-model.js'
 //= require highlight.pack
 //= require angular-highlightjs.js
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs']);
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher']).
+config(['PusherServiceProvider',
+  function(PusherServiceProvider) {
+    PusherServiceProvider
+      .setToken('44c0d19c3ef1598f3721')
+      .setOptions({});
+  }
+]);
+
+
 
 
 datagramsApp.config(function($stateProvider,$urlRouterProvider) {
@@ -53,11 +63,46 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
   };
 }]);
 
-angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', function($scope, Restangular, $stateParams, $state) {
-  if ($stateParams.id) {
-    Restangular.one('api/v1/datagrams',$stateParams.id).get().then(function(r) {
-      $scope.datagram = r;
-      $scope.preview_responses = JSON.stringify(r.responses, null, 2);
+angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', function($scope, Restangular, $stateParams, $state, Pusher) {
+
+  $scope.setActiveTab = function(field) {
+    $scope.activeTab = field;
+    $scope.preview_response = JSON.stringify($scope.activeResponse[field], null, 2);
+  };
+
+  $scope.setActiveResponse = function(json) {
+    $scope.activeResponse = json;
+  };
+
+  $scope.refresh = function() {
+    console.log('PUT', $scope.datagram);
+    $scope.datagram.customPUT({id:$scope.datagram.id}, 'refresh' ).then(function(r) {
     });
   };
+
+  var getDatagram = function(id) {
+    Restangular.one('api/v1/datagrams',id).get().then(function(r) {
+      $scope.datagram = r;
+      $scope.setActiveResponse(r.responses[0]);
+      $scope.setActiveTab('data');
+    });
+  };
+
+  var refreshWatchResponses = function() {
+    _.each($scope.datagram.watches, function(w,i) {
+      console.log('subscribing to ', w.token);
+      Pusher.subscribe(w.token,'data', function(item) {
+	console.log('Pusher received', item);
+	Restangular.one('api/v1/watch_responses',item.token).get().then(function(wr) {
+	  console.log(wr);
+	  $scope.datagram.responses[i] = wr;
+	});
+      });
+    });
+  };
+
+  if ($stateParams.id) {
+  };
+
+
 }]);
