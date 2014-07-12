@@ -18,7 +18,7 @@ class Datagram
     attributes.merge({
                        id: _id.to_s,
                        watches: watches.map{|w| w.attributes.slice("name", "token")},
-                       responses: responses.to_a,
+                       responses: response_data.to_a,
                        timestamp: (Time.at(max_ts/1000) rescue Time.now)
                      }).except("_id")
   end

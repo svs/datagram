@@ -31,6 +31,15 @@ module Api
         end
       end
 
+      def t
+        datagram = current_user.datagrams.find_by(token: params[:id]) rescue nil
+        if datagram
+          render json: datagram
+        else
+          render json: "not found", status: 404
+        end
+      end
+
       def refresh
         @datagram = current_user.datagrams.find(params[:id]) rescue nil
         if @datagram

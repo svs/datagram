@@ -43,7 +43,7 @@ class WatchResponse
 
   def as_json(x = nil)
     {
-      data: response_json[:data],
+      data: response_json,
       errors: error,
       metadata: metadata
     }

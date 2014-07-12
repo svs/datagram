@@ -73,19 +73,20 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.setActiveResponse = function(json) {
     $scope.activeResponse = json;
+    $scope.preview_response = JSON.stringify($scope.activeResponse['data'], null, 2);
   };
 
   $scope.refresh = function() {
     console.log('PUT', $scope.datagram);
     $scope.datagram.customPUT({id:$scope.datagram.id}, 'refresh' ).then(function(r) {
-      Pusher.subscribe($scope.datagram.id,'data', function(item) {
+      Pusher.subscribe($scope.datagram.token,'data', function(item) {
 	console.log('Pusher received', item);
-	getDatagram($scope.datagram.id);
+	$scope.getDatagram($scope.datagram.id);
       });
     });
   };
 
-  var getDatagram = function(id) {
+  $scope.getDatagram = function(id) {
     $scope.activeResponse = {};
     Restangular.one('api/v1/datagrams',id).get().then(function(r) {
       $scope.datagram = r;
@@ -103,7 +104,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   if ($stateParams.id) {
-    getDatagram($stateParams.id);
+    $scope.getDatagram($stateParams.id);
   };
 
 

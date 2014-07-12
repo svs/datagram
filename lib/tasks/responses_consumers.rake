@@ -14,7 +14,6 @@ task :datagram_consumer => :environment do
   $datagram_responses.subscribe(block: true) do |di, md, payload|
     ap JSON.parse(payload)
     d = DatagramResponseHandler.new(JSON.parse(payload)).handle!
-    binding.pry
     ap "#DatagramResponse on channel #{d[:token]}"
     ap d
     ap "--------------------------------"

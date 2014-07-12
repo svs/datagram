@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       resources :datagrams do
         member do
           put 'refresh'
+          get 't'
         end
       end
     end

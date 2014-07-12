@@ -3,7 +3,6 @@ require 'rails_helper'
 
 describe WatchResponse do
 
-  it { should validate_presence_of(:watch_id) }
   it { should validate_uniqueness_of(:token)  }
 
   it "should recognise previous response" do

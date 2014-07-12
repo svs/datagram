@@ -1,8 +1,13 @@
 html
   head
     title Dekko
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+
+    link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,800,800italic"
+    link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Oswald:400,300,700"
+
+    = stylesheet_link_tag    'landing', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'landing', 'data-turbolinks-track' => true
     = csrf_meta_tags
-  body
-    = yield
+  body class=" " ng-app="landingApp"
+    div ng-controller="landingCtrl"
+      = yield

@@ -12,7 +12,8 @@ class DatagramPublisher
 
   def publish!
     return false if @published
-    x = watch_publishers.map{|wp| wp.publish!(exchange: nil, datagram_id: datagram.id)}
+    t = Time.now
+    x = watch_publishers.map{|wp| wp.publish!(exchange: nil, datagram_id: datagram.id, timestamp: t.to_f)}
     exchange.publish(payload.to_json, routing_key: queue.name)
     @published = true
     payload
@@ -25,7 +26,8 @@ class DatagramPublisher
       datagram_id: datagram.id.to_s,
       timestamp: (Time.now.to_f  * 1000).round,
       watches: watches_payload,
-      routing_key: queue.name
+      routing_key: queue.name,
+      datagram_token: datagram.token
     }
   end
 

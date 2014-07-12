@@ -7,9 +7,9 @@ class WatchPublisher
     @watch = watch
   end
 
-  def publish!(exchange: $x, queue: $watches, datagram_id: nil)
+  def publish!(exchange: $x, queue: $watches, datagram_id: nil, timestamp: nil)
     return false if published
-    make_new_response!(datagram_id)
+    make_new_response!(datagram_id, timestamp)
     if exchange
       exchange.publish(payload.to_json, routing_key: queue.name)
     end
@@ -32,14 +32,14 @@ class WatchPublisher
   attr_accessor :published
 
 
-  def make_new_response!(datagram_id = nil)
-    ts = (Time.now.to_f  * 1000).round
+  def make_new_response!(datagram_id = nil, timestamp = nil)
+    ts = timestamp || (Time.now.to_f  * 1000).round
     @response ||= WatchResponse.where(watch_id: watch.id,
-                                      strip_keys: watch.strip_keys,
                                       timestamp: ts,
-                                      started_at: ts,
                                       token: token,
-                                      datagram_id: datagram_id).first_or_create
+                                      datagram_id: datagram_id).first_or_create(strip_keys: watch.strip_keys,
+                                                                                started_at: ts)
+
   end
 
   def token

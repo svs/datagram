@@ -7,8 +7,9 @@ class WatchResponseHandler
 
   def handle!
     wr = WatchResponse.find_by(token: params[:id])
+
     update_attrs = {
-      response_json: {data: data},
+      response_json: data,
       status_code: params[:status_code],
       elapsed: params[:elapsed],
       response_received_at: Time.zone.now,
@@ -20,7 +21,9 @@ class WatchResponseHandler
   end
 
   def data
-    params[:data]
+    data = params[:data]
+    data = data.is_a?(Array) ? {data: data} : data
+    data.is_a?(String) ? JSON.parse(data) : data
   end
 
   private
