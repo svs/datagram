@@ -54,6 +54,7 @@ angular.module('watchesApp').controller('watchesCtrl',['$scope','Restangular','$
 angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$stateParams', 'Pusher','$state', function($scope, Restangular,$stateParams, Pusher, $state) {
   console.log($stateParams);
   var baseWatches = Restangular.all('api/v1/watches');
+
   if ($stateParams.id) {
     Restangular.one('api/v1/watches',$stateParams.id).get().then(function(r) {
       $scope.watch = r;
@@ -142,6 +143,13 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     beforeSave();
     $scope.watch.protocol = getProtocol();
     $scope.watch.customPUT($scope.watch,'preview').then(function(r,s) {
+      Pusher.subscribe(r, 'data', function(item) {
+	Restangular.one('api/v1/watch_responses',item.watch_response_token).get().then(function(r) {
+	  console.log(r);
+	  $scope.watch_response = r;
+	  $scope.setActiveTab('data');
+	});
+      });
     });
   };
 

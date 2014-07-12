@@ -5,7 +5,6 @@ class DatagramResponseHandler
   end
 
   def handle!
-    binding.pry
     wrs = @params["responses"].map do |watch|
       WatchResponseHandler.new(watch).handle!
     end

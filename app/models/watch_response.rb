@@ -23,7 +23,7 @@ class WatchResponse
   field :token, type: String
 
   validates :token, uniqueness: { scope: :watch_id }
-  validates :watch_id, presence: true
+
 
   def previous_response
     self.class.all.lt(timestamp: timestamp).last
@@ -34,7 +34,7 @@ class WatchResponse
   end
 
   def watch
-    @watch ||= Watch.find(watch_id)
+    @watch ||= (watch_id ? Watch.find(watch_id) : nil)
   end
 
   def watch=(watch)

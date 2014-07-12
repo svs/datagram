@@ -12,7 +12,7 @@ class DatagramPublisher
 
   def publish!
     return false if @published
-    watches.map{|w| WatchPublisher.new(w).publish!(exhange: nil) }
+    x = watch_publishers.map{|wp| wp.publish!(exchange: nil, datagram_id: datagram.id)}
     exchange.publish(payload.to_json, routing_key: queue.name)
     @published = true
     payload
@@ -34,10 +34,14 @@ class DatagramPublisher
   attr_reader :datagram, :exchange, :queue
 
 
-  def watches_payload
-    @watches ||= datagram.watches.map{|w|
-      w.payload
+  def watch_publishers
+    @watch_publishers ||= datagram.watches.map{|w|
+      WatchPublisher.new(w)
     }
+  end
+
+  def watches_payload
+    watch_publishers.map(&:payload)
   end
 
   def watches

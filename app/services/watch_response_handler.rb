@@ -15,7 +15,7 @@ class WatchResponseHandler
       error: params[:errors]
     }
     if wr.update(update_attrs)
-      return {watch_token: wr.watch.token, watch_response_token: wr.token, modified: wr.modified}
+      return {watch_token: wr.watch ? wr.watch.token : nil, watch_response_token: wr.token, modified: wr.modified}
     end
   end
 
