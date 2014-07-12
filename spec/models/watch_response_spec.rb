@@ -3,13 +3,8 @@ require 'rails_helper'
 
 describe WatchResponse do
 
-  describe "creation" do
-    subject { FactoryGirl.build(:watch_response).tap{|wr| wr.save} }
-
-    it "should autogenerate a token" do
-      expect(subject.token).to_not be_nil
-    end
-  end
+  it { should validate_presence_of(:watch_id) }
+  it { should validate_uniqueness_of(:token)  }
 
   it "should recognise previous response" do
     wr1 = FactoryGirl.build(:watch_response, timestamp: 1).tap{|wr| wr.save}

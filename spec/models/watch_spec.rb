@@ -26,7 +26,7 @@ RSpec.describe Watch, :type => :model do
 
     it "should publish properly" do
       x = w.publish
-      expect(WatchResponse.find(x)).to be_a WatchResponse
+      expect(WatchResponse.find_by(token:x)).to be_a WatchResponse
     end
   end
 

@@ -63,4 +63,6 @@ group :development, :test do
   gem 'html2slim'
   gem 'spring-commands-rspec'
   gem 'metric_fu'
+  gem 'pry-rails'
+  gem 'mongoid-rspec'
 end

@@ -1,7 +1,6 @@
 class WatchResponse
 
   include Mongoid::Document
-  include Mongoid::Token
   include Mongoid::Timestamps
 
   before_validation :check_changed
@@ -21,9 +20,10 @@ class WatchResponse
   field :timestamp, type: Integer
   field :started_at, type: Integer
   field :ended_at, type: Integer
+  field :token, type: String
 
-  token length: 10
-
+  validates :token, uniqueness: { scope: :watch_id }
+  validates :watch_id, presence: true
 
   def previous_response
     self.class.all.lt(timestamp: timestamp).last
@@ -57,7 +57,7 @@ class WatchResponse
 
   def check_changed
     if self.status_code
-      self.signature = "v1>" + Base64.encode64(hmac("secret", response_json[:data].to_json)).strip
+      self.signature = "v1>" + Base64.encode64(hmac("secret", response_json[:data].to_json + status_code.to_json)).strip
       self.modified = (self.signature != previous_response_signature)
       self.ended_at = (Time.now.to_f  * 1000).round
       self.round_trip_time = self.ended_at - self.started_at
@@ -88,9 +88,5 @@ class WatchResponse
       end
     end
   end
-
-
-
-
 
 end

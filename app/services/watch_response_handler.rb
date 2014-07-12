@@ -1,12 +1,12 @@
-class ResponseHandler
+class WatchResponseHandler
 
   def initialize(params)
     @params = params
-    Rails.logger.ap params
+    ap params
   end
 
   def handle!
-    wr = WatchResponse.find(params[:id])
+    wr = WatchResponse.find_by(token: params[:id])
     update_attrs = {
       response_json: {data: data},
       status_code: params[:status_code],
@@ -15,11 +15,7 @@ class ResponseHandler
       error: params[:errors]
     }
     if wr.update(update_attrs)
-      begin
-        Rails.logger.info "Pushing watch id: #{wr.watch_id} to channel #{wr.watch.token}"
-        d = {token: wr.token, modified: wr.modified}
-        Pusher.trigger(wr.watch.token, 'data', d)
-      end
+      return {watch_token: wr.watch.token, watch_response_token: wr.token, modified: wr.modified}
     end
   end
 

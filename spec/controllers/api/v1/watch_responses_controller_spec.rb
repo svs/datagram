@@ -3,6 +3,7 @@ require 'rails_helper'
 describe Api::V1::WatchResponsesController do
 
   context "when status is nil" do
+
     let!(:wr) { FactoryGirl.build(:watch_response).tap{|wr| wr.save} }
     it "should update a watch response" do
       expect(Pusher).to receive(:trigger)

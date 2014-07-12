@@ -10,7 +10,7 @@ describe WatchPublisher do
     it "should publish once and only once" do
       expect { 5.times {|i| wp.publish! }.to change(WatchResponse, :count).by(1) }
       r = (0..4).map {|i| wp.publish! }
-      expect(r).to eql([true, false, false, false, false])
+      expect(r).to eql([WatchResponse.last.token, false, false, false, false])
     end
 
     it "should have a payload" do

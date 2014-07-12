@@ -7,36 +7,43 @@ class WatchPublisher
     @watch = watch
   end
 
-  def publish!(exchange: $x, queue: $q)
+  def publish!(exchange: $x, queue: $watches)
     return false if published
-    exchange.publish(payload.to_json, routing_key: queue.name)
+    make_new_response!
+    if exchange
+      exchange.publish(payload.to_json, routing_key: queue.name)
+    end
     self.published = true
+    @token
   end
 
   def published?
     published
   end
 
-
   def payload
-    watch.attributes.merge(key: response.token)
+    @payload ||= watch.attributes.merge(key: token)
   end
+
+
 
   private
   attr_reader :watch
   attr_accessor :published
 
 
-
-  def response
+  def make_new_response!
     ts = (Time.now.to_f  * 1000).round
     @response ||= WatchResponse.where(watch_id: watch.id,
                                       strip_keys: watch.strip_keys,
                                       timestamp: ts,
-                                      started_at: ts).first_or_create
+                                      started_at: ts,
+                                      token: token).first_or_create
   end
 
-
+  def token
+    @token ||= SecureRandom.urlsafe_base64
+  end
 
 
 end

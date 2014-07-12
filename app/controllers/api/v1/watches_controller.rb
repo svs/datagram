@@ -55,8 +55,8 @@ module Api
 
       def preview
         @watch = Watch.new(preview_params)
-        @watch.publish
-        render json: "ok" and return
+        token = @watch.publish
+        render json: token and return
       end
 
       private

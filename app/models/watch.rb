@@ -2,7 +2,7 @@ class Watch < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
   validates :user_id, { presence: true }
-
+  belongs_to :user
   before_create :set_token
 
   def responses
@@ -10,8 +10,13 @@ class Watch < ActiveRecord::Base
   end
 
   def publish
-    WatchPublisher.new(self).publish!
+    publisher.publish!
   end
+
+  def payload
+    @payload ||= publisher.payload
+  end
+
 
  def as_json( include_root = false )
    if url
@@ -29,6 +34,10 @@ class Watch < ActiveRecord::Base
 
   def set_token
     self.token = SecureRandom.urlsafe_base64
+  end
+
+  def publisher
+    @publisher ||= WatchPublisher.new(self)
   end
 
 

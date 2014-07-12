@@ -13,29 +13,48 @@ class Datagram
 
   token length: 10
 
-  def watches
-    Watch.find(watch_ids) rescue []
-  end
 
   def as_json(include_root = false)
     attributes.merge({
                        id: _id.to_s,
                        watches: watches.map{|w| w.attributes.slice("name", "token")},
-                       responses: last_responses.map{|r| {name: r.watch.name, data: r.response_json, errors: r.error, metadata: r.metadata}},
+                       responses: responses.to_a,
                        timestamp: (Time.at(max_ts/1000) rescue Time.now)
                      }).except("_id")
   end
 
   def publish
-    DatagramPublisher.new(self).publish
+    publisher.publish!
   end
 
-  def last_responses
-    WatchResponse.where(datagram_id: self.id, timestamp: max_ts)
+  def payload
+    publisher.payload
   end
+
+
+  def watches
+    @watches ||= Watch.find(watch_ids) rescue []
+  end
+
+  private
+
+
+
+  def publisher
+    @publisher ||= DatagramPublisher.new(datagram: self)
+  end
+
 
   def max_ts
-    WatchResponse.where(datagram_id: self.id).max(:timestamp)
+    @max_ts ||= responses.max(:timestamp)
+  end
+
+  def response_data
+    @response_data ||= responses.where(timestamp: max_ts).map{|r| {name: r.watch.name, data: r.response_json, errors: r.error, metadata: r.metadata}}
+  end
+
+  def responses
+    @responses ||= WatchResponse.where(datagram_id: self.id)
   end
 
 end

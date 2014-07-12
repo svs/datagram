@@ -62,25 +62,29 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
       $scope.showing = true;
       $scope.checkSql();
       getPreview(r.token);
+      subscribe();
     });
   } else {
     Restangular.one('api/v1/watches/new').get().then(function(r) {
       $scope.watch = r;
       $scope.watchDataStr = $scope.watch.data ? JSON.stringify($scope.watch.data, null, 2) : "";
       $scope.watchStripKeysStr = $scope.watch.strip_keys ? JSON.stringify($scope.watch.strip_keys, null, 2) : "";
+      subscribe();
     });
   };
 
   $scope.preview_response = {};
-  Pusher.subscribe('stats','data', function(item) {
-    console.log("pusher sent",item);
-    Restangular.one('api/v1/watch_responses',item.token).get().then(function(r) {
-      console.log(r);
-      $scope.watch_response = r;
-      $scope.setActiveTab('data');
+  var subscribe = function() {
+    console.log('#Pusher subscribe to', $scope.watch.token);
+    Pusher.subscribe($scope.watch.token,'data', function(item) {
+      console.log("pusher sent",item);
+      Restangular.one('api/v1/watch_responses',item.watch_response_token).get().then(function(r) {
+	console.log(r);
+	$scope.watch_response = r;
+	$scope.setActiveTab('data');
+      });
     });
-  });
-
+  };
 
   $scope.state = $stateParams;
 

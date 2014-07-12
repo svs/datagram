@@ -83,8 +83,9 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   var getDatagram = function(id) {
     Restangular.one('api/v1/datagrams',id).get().then(function(r) {
       $scope.datagram = r;
-      $scope.setActiveResponse(r.responses[0]);
-      $scope.setActiveTab('data');
+      console.log(r);
+      //$scope.setActiveResponse(r.responses[0]);
+      //$scope.setActiveTab('data');
     });
   };
 
@@ -102,6 +103,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   if ($stateParams.id) {
+    getDatagram($stateParams.id);
   };
 
 

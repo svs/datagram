@@ -22,10 +22,13 @@ describe Api::V1::DatagramsController do
     before(:each) {
       sign_in user1
     }
+
     it "can index" do
       get :index, format: :json
       expect(response.status).to eql 200
-      expect(response.body).to eql [u1_d1].to_json
+      r = JSON.parse(response.body)[0].except("timestamp","updated_at", "created_at")
+      d = u1_d1.as_json.except(:timestamp).stringify_keys.except("updated_at", "created_at")
+      expect(r).to eql d
     end
 
     it "can create a datagram" do
@@ -34,7 +37,8 @@ describe Api::V1::DatagramsController do
     end
 
     it "can refresh a datagram" do
-      u1_d1.should_receive(:publish)
+      expect(assigns(:datagram)).to eql(u1_d1)
+      expect(assigns(:datagram)).to receive(:publish)
       post :refresh, {id: u1_d1.id}
 
     end
