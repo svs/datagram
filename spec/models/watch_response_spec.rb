@@ -5,11 +5,18 @@ describe WatchResponse do
 
   it { should validate_uniqueness_of(:token)  }
 
-  it "should recognise previous response" do
-    wr1 = FactoryGirl.build(:watch_response, timestamp: 1).tap{|wr| wr.save}
-    wr2 = FactoryGirl.build(:watch_response, timestamp: 2).tap{|wr| wr.save}
+  it "should recognise previous response and modifications" do
+    wr1 = FactoryGirl.build(:watch_response, timestamp: 1, response_json: {a: 1}, status_code: 200).tap{|wr| wr.save}
+    expect(wr1.signature).to_not be_nil
+    wr2 = FactoryGirl.build(:watch_response, timestamp: 2, response_json: {a: 1}, status_code: 200).tap{|wr| wr.save}
     expect(wr2.previous_response).to eq(wr1)
+    expect(wr2).to_not be_modified
+    wr3 = FactoryGirl.build(:watch_response, timestamp: 3, response_json: {a: 2}, status_code: 200).tap{|wr| wr.save}
+    expect(wr3).to be_modified
+    wr4 = FactoryGirl.build(:watch_response, timestamp: 2, response_json: {a: 2}, status_code: 100).tap{|wr| wr.save}
+    expect(wr4).to be_modified
   end
+
 
   describe "strip keys" do
     subject { FactoryGirl.build(:watch_response) }

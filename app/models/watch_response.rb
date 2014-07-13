@@ -58,10 +58,10 @@ class WatchResponse
 
   def check_changed
     if self.status_code
-      self.signature = "v1>" + Base64.encode64(hmac("secret", response_json[:data].to_json + status_code.to_json)).strip
+      self.signature = "v1>" + Base64.encode64(hmac("secret", response_json.to_json + status_code.to_json)).strip
       self.modified = (self.signature != previous_response_signature)
       self.ended_at = (Time.now.to_f  * 1000).round
-      self.round_trip_time = self.ended_at - self.started_at
+      self.round_trip_time = (self.ended_at - self.started_at) rescue 0
     end
   end
 

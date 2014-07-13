@@ -65,6 +65,7 @@ module Api
         params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at, :strip_keys).tap do |wl|
           wl[:data] = params[:watch][:data]
           wl[:strip_keys] = params[:watch][:strip_keys]
+          wl[:keep_keys] = params[:watch][:keep_keys]
         end
       end
 
