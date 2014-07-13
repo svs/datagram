@@ -17,6 +17,7 @@ class WatchResponse
   field :modified, type: Boolean
   field :elapsed, type: Integer
   field :strip_keys, type: Hash
+  field :keep_keys, type: Hash
   field :timestamp, type: Integer
   field :started_at, type: Integer
   field :ended_at, type: Integer
@@ -74,19 +75,13 @@ class WatchResponse
 
   def strip_keys!
     return if response_json.blank?
-    _strip_keys(strip_keys, response_json)
-  end
-
-  def _strip_keys(keys, hash)
-    Array(keys).map do |k, v|
-      if !v.is_a?(Hash)
-        Array(v).map do |_v|
-          hash[k].delete(_v)
-        end
-      else
-        _strip_keys(v, hash[k])
-      end
+    if keep_keys && !keep_keys.empty?
+      self.response_json = HashFilter.keep(self.response_json, keep_keys)
+    end
+    if strip_keys
+      self.response_json = HashFilter.drop(response_json, strip_keys)
     end
   end
+
 
 end

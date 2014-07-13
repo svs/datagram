@@ -50,9 +50,9 @@ gem 'mongoid_token', github: 'apai4/mongoid_token'
 gem "moped", github: "mongoid/moped"
 gem 'hashdiff'
 gem 'pusher'
-gem 'daemons'
-gem 'eventmachine'
-gem 'amqp'
+
+gem 'hashfilter'
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard-rspec'

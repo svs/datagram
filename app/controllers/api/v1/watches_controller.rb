@@ -73,6 +73,7 @@ module Api
         params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at, :id, :user_id, :webhook_url, :created_at, :updated_at, :strip_keys).tap do |whitelisted|
           whitelisted[:data] = params[:watch][:data]
           whitelisted[:strip_keys] = params[:watch][:strip_keys]
+          whitelisted[:keep_keys] = params[:watch][:keep_keys]
         end
       end
 

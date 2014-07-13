@@ -15,9 +15,10 @@ describe WatchResponse do
     subject { FactoryGirl.build(:watch_response) }
 
     it "should strip keys properly" do
-      subject.response_json = {:data => {:a => {:b => {:b1 => 1, :b2 => 2}, :c => [1,2,3]}}}
-      subject.strip_keys = {:data => {:a => {:b => :b2}}}
+      subject.response_json = {:data => {:a => {:b => {:b1 => 1, :b2 => 2, :b3 => { :b4 => 'c'} }, :c => [1,2,3]}}}
+      subject.strip_keys = {:data => {:a => {:b => {:b2 => true, :b3 => :b4}}}}
       subject.save
+
       expect(subject.response_json[:data]).to eql ({:a => {:b => {:b1 => 1}, :c => [1,2,3]}})
     end
   end

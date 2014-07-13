@@ -38,6 +38,7 @@ class WatchPublisher
                                       timestamp: ts,
                                       token: token,
                                       datagram_id: datagram_id).first_or_create(strip_keys: watch.strip_keys,
+                                                                                keep_keys: watch.keep_keys,
                                                                                 started_at: ts)
 
   end

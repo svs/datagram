@@ -60,6 +60,7 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
       $scope.watch = r;
       $scope.watchDataStr = $scope.watch.data ? JSON.stringify($scope.watch.data, null, 2) : "";
       $scope.watchStripKeysStr = $scope.watch.strip_keys ? JSON.stringify($scope.watch.strip_keys, null, 2) : "";
+      $scope.watchKeepKeysStr = $scope.watch.keep_keys ? JSON.stringify($scope.watch.keep_keys, null, 2) : "";
       $scope.showing = true;
       $scope.checkSql();
       getPreview(r.token);
@@ -70,6 +71,7 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
       $scope.watch = r;
       $scope.watchDataStr = $scope.watch.data ? JSON.stringify($scope.watch.data, null, 2) : "";
       $scope.watchStripKeysStr = $scope.watch.strip_keys ? JSON.stringify($scope.watch.strip_keys, null, 2) : "";
+      $scope.watchKeeppKeysStr = $scope.watch.keep_keys ? JSON.stringify($scope.watch.keep_keys, null, 2) : "";
       subscribe();
     });
   };
@@ -109,6 +111,13 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     } else {
       $scope.watch.strip_keys = {};
     }
+    if ($scope.watchKeepKeysStr.length > 0) {
+      var str = JSON.parse($scope.watchKeepKeysStr.replace(/\\n/,''));
+      $scope.watch.keep_keys = str;
+    } else {
+      $scope.watch.keep_keys = {};
+    }
+
     $scope.watch.protocol = getProtocol();
     if ($scope.watch.protocol == 'mysql' || $scope.watch.protocol == 'postgres') {
     } else {

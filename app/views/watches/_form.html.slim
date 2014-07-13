@@ -15,6 +15,11 @@
     div ui-ace="{mode: 'json',  useWrapMode : true}" ng-model="watchDataStr" style="height: 200px" ng-show="!isSql"
 .form-group
   label.col-md-3
+    span Keep Keys
+  .col-md-8
+    div ui-ace="{mode: 'json',  useWrapMode : true}" ng-model="watchKeepKeysStr" style="height: 200px" ng-show="!isSql"
+.form-group
+  label.col-md-3
     span Strip Keys
   .col-md-8
     div ui-ace="{mode: 'json',  useWrapMode : true}" ng-model="watchStripKeysStr" style="height: 200px" ng-show="!isSql"
