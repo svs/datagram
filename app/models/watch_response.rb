@@ -4,7 +4,6 @@ class WatchResponse
   include Mongoid::Timestamps
 
   before_validation :check_changed
-  after_validation :strip_keys!
 
   field :watch_id, type: Integer
   field :datagram_id, type: String
@@ -54,15 +53,29 @@ class WatchResponse
     attributes.slice("elapsed", "status_code", "token", "response_received_at")
   end
 
+  def diff_with(token)
+    wr = WatchResponse.find_by(token: token)
+    diff = HashDiff.diff(self.response_json, wr.response_json)
+  end
+
   private
 
   def check_changed
+    strip_keys!
     if self.status_code
-      self.signature = "v1>" + Base64.encode64(hmac("secret", response_json.to_json + status_code.to_json)).strip
+      self.signature = sig
       self.modified = (self.signature != previous_response_signature)
-      self.ended_at = (Time.now.to_f  * 1000).round
-      self.round_trip_time = (self.ended_at - self.started_at) rescue 0
+      self.ended_at ||= (Time.now.to_f  * 1000).round
+      self.round_trip_time ||= (self.ended_at - self.started_at) rescue 0
     end
+  end
+
+  def sig
+    "v1>" + Base64.encode64(hmac("secret", sig_data))
+  end
+
+  def sig_data
+    (response_json.merge(status_code: status_code)).to_json
   end
 
   def previous_response_signature

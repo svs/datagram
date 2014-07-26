@@ -50,7 +50,7 @@ gem 'mongoid_token', github: 'apai4/mongoid_token'
 gem "moped", github: "mongoid/moped"
 gem 'hashdiff'
 gem 'pusher'
-
+gem 'redis'
 gem 'hashfilter'
 
 group :development, :test do

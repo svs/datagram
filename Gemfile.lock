@@ -364,6 +364,7 @@ DEPENDENCIES
   pry-rails
   pusher
   rails (= 4.1.0)
+  redis
   restclient
   rspec-rails
   sass-rails (~> 4.0.3)
