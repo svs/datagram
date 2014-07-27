@@ -10,7 +10,7 @@ class Datagram
   field :at, type: String
 
   field :user_id, type: Integer
-
+  field :last_update_timestamp, type: Integer
   token length: 10
 
 
@@ -36,6 +36,11 @@ class Datagram
     @watches ||= Watch.find(watch_ids) rescue []
   end
 
+  def self.find_by_name(name)
+    Datagram.find_by(name: name)
+  end
+
+
   private
 
 
@@ -46,7 +51,7 @@ class Datagram
 
 
   def max_ts
-    @max_ts ||= responses.max(:timestamp)
+    last_update_timestamp
   end
 
   def response_data

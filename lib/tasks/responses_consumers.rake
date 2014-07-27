@@ -22,6 +22,7 @@ task :datagram_consumer => :environment do
     d = DatagramResponseHandler.new(JSON.parse(payload)).handle!
     ap d
     if d[:modified]
+      Rails.logger.info("Pushing ...")
       Pusher.trigger(d[:token], 'data', d)
     else
       Rails.logger.info "d[:token] not modified"

@@ -65,6 +65,7 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', function($scope, Restangular, $stateParams, $state, Pusher) {
 
+  var subscribed = false;
 
   $scope.setActiveTab = function(field) {
     $scope.activeTab = field;
@@ -79,10 +80,13 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   $scope.refresh = function() {
     console.log('PUT', $scope.datagram);
     $scope.datagram.customPUT({id:$scope.datagram.id}, 'refresh' ).then(function(r) {
-      Pusher.subscribe($scope.datagram.token,'data', function(item) {
-	console.log('Pusher received', item);
-	$scope.getDatagram($scope.datagram.id);
-      });
+      if (!subscribed) {
+	subscribed = true;
+	Pusher.subscribe($scope.datagram.token,'data', function(item) {
+	  console.log('Pusher received', item);
+	  $scope.getDatagram($scope.datagram.id);
+	});
+      }
     });
   };
 
@@ -93,6 +97,13 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       console.log(r);
       $scope.activeResponse = r.responses[0];
       $scope.setActiveTab('data');
+      if (!subscribed) {
+	subscribed = true;
+	Pusher.subscribe($scope.datagram.token,'data', function(item) {
+	  console.log('Pusher received', item);
+	  $scope.getDatagram($scope.datagram.id);
+	});
+      };
     });
   };
 
