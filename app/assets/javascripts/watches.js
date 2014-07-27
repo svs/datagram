@@ -1,7 +1,7 @@
 //= require angular-pusher
 //= require highlight.pack
 //= require angular-highlightjs.js
-//= require ace.js
+//= require ace/ace.js
 //= require ui-ace.js
 //= require checklist-model.js
 
