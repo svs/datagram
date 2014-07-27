@@ -1,11 +1,3 @@
-//= require angular-pusher
-//= require highlight.js
-//= require angular-highlightjs.js
-//= require ace/ace.js
-//= require ui-ace.js
-//= require checklist-model.js
-
-
 var watchesApp = angular.module('watchesApp', ['restangular','ui.router','doowb.angular-pusher', 'hljs','ui.ace', 'checklist-model']).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {

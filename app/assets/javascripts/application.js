@@ -15,6 +15,12 @@
 //= require lodash
 //= require restangular
 //= require angular-ui-router
+//= require angular-pusher
+//= require highlight.js
+//= require angular-highlightjs.js
+//= require ace/ace.js
+//= require ui-ace.js
+//= require checklist-model.js
 //= require bootstrap.min
 
 
