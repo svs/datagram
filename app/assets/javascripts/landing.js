@@ -13,7 +13,7 @@
 //= require jquery
 //= require angular
 //= require lodash
-//= require restangular.min
+//= require restangular
 //= require angular-ui-router
 //= require bootstrap.min
 //= require datagrams
