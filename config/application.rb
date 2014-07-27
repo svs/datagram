@@ -27,6 +27,5 @@ module Dekko
 
     #config.autoload_paths += %W(#{config.root}/app)
 
-    config.serve_static_assets = true
   end
 end
