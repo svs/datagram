@@ -53,6 +53,7 @@ gem 'pusher'
 gem 'redis'
 gem 'hashfilter'
 gem 'rails_12factor', group: :production
+gem 'puma'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -66,4 +67,13 @@ group :development, :test do
   gem 'metric_fu'
   gem 'pry-rails'
   gem 'mongoid-rspec'
+end
+
+group :development do
+  gem "capistrano-rails", "~> 1.1"
+  gem "capistrano", "~> 3.1"
+  gem 'capistrano-rbenv', '~> 2.0.1'
+  gem 'capistrano-bundler', '1.1.1'
+  gem 'capistrano3-puma', github: "seuros/capistrano-puma"
+  gem 'capistrano-sidekiq' , github: 'seuros/capistrano-sidekiq'
 end
