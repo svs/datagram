@@ -1,5 +1,5 @@
 //= require angular-pusher
-//= require highlight.pack
+//= require highlight.js
 //= require angular-highlightjs.js
 //= require ace/ace.js
 //= require ui-ace.js

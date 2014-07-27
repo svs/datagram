@@ -20,7 +20,7 @@
 //= require_self
 
 //= require angular-pusher
-//= require highlight.pack
+//= require highlight
 //= require angular-highlightjs.js
 var landingApp = angular.module('landingApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher']).
 config(['PusherServiceProvider',

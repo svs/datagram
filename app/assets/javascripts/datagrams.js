@@ -1,6 +1,6 @@
 //= require angular-pusher
 //= require 'checklist-model.js'
-//= require highlight.pack
+//= require highlight.js
 //= require angular-highlightjs.js
 var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher']).
 config(['PusherServiceProvider',
