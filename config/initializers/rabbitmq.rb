@@ -1,5 +1,5 @@
-if ENV['RABBITMQ_BIGWIG_TX_URL']
-  $conn = Bunny.new(ENV['RABBITMQ_BIGWIG_TX_URL'])
+if Rails.application.secrets.rmq_tx_url
+  $conn = Bunny.new(Rails.application.secrets.rmq_tx_url)
 else
   $conn = Bunny.new
 end
