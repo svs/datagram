@@ -1,5 +1,5 @@
-if Rails.application.secrets.rmq_tx_url
-  $conn = Bunny.new(Rails.application.secrets.rmq_tx_url)
+if Rails.application.secrets.rabbitmq_url
+  $conn = Bunny.new(Rails.application.secrets.rabbitmq_url)
 else
   $conn = Bunny.new
 end
