@@ -21,7 +21,7 @@ default: &default
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
 
-development:
+production:
   <<: *default
   database: dekko_dev
 
@@ -78,8 +78,3 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
-production:
-  <<: *default
-  database: dekko_production
-  username: dekko
-  password: <%= ENV['DEKKO_DATABASE_PASSWORD'] %>
