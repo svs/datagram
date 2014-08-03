@@ -54,6 +54,7 @@ gem 'redis'
 gem 'hashfilter'
 gem 'rails_12factor', group: :production
 gem 'puma'
+gem 'ace-rails-ap'
 
 group :development, :test do
   gem 'rspec-rails'
