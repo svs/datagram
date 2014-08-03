@@ -7,7 +7,8 @@ else
   $conn = Bunny.new
 end
 
-$conn.start
+$tx_conn.start
+$rx_conn.start
 
 $ch_tx = ($conn || $tx_conn).create_channel
 $ch_rx = ($conn || $rx_conn).create_channel
