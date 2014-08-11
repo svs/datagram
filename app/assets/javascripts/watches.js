@@ -1,4 +1,4 @@
-var watchesApp = angular.module('watchesApp', ['restangular','ui.router','doowb.angular-pusher', 'hljs','ui.ace', 'checklist-model']).
+var watchesApp = angular.module('watchesApp', ['restangular','ui.router','doowb.angular-pusher', 'hljs', 'checklist-model']).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -74,6 +74,7 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     Pusher.subscribe($scope.watch.token,'data', function(item) {
       console.log("pusher sent",item);
       Restangular.one('api/v1/watch_responses',item.watch_response_token).get().then(function(r) {
+	$scope.loading = false;
 	console.log(r);
 	$scope.watch_response = r;
 	$scope.setActiveTab('data');
@@ -146,12 +147,14 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
   };
 
   $scope.preview = function() {
-    console.log("preview", $scope.watch);
+    $scope.loading = true;
+    console.log('loading', $scope.loading);
     beforeSave();
     $scope.watch.protocol = getProtocol();
     $scope.watch.customPUT($scope.watch,'preview').then(function(r,s) {
       Pusher.subscribe(r, 'data', function(item) {
 	Restangular.one('api/v1/watch_responses',item.watch_response_token).get().then(function(r) {
+	  $scope.loading = false;
 	  console.log(r);
 	  $scope.watch_response = r;
 	  $scope.setActiveTab('data');

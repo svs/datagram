@@ -14,4 +14,9 @@ class ApplicationController < ActionController::Base
   def verified_request?
     super || form_authenticity_token == request.headers['X-XSRF-TOKEN']
   end
+
+def after_sign_in_path_for(resource)
+  datagrams_path
+end
+
 end

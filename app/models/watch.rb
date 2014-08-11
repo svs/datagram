@@ -9,8 +9,8 @@ class Watch < ActiveRecord::Base
     WatchResponse.where(watch_id: id)
   end
 
-  def publish
-    publisher.publish!
+  def publish(args = {})
+    publisher.publish!(args: args)
   end
 
   def payload

@@ -7,11 +7,11 @@ class WatchPublisher
     @watch = watch
   end
 
-  def publish!(exchange: $x, queue: $watches, datagram_id: nil, timestamp: nil)
+  def publish!(exchange: $x, queue: $watches, datagram_id: nil, timestamp: nil, args: {})
     return false if published
     make_new_response!(datagram_id, timestamp)
     if exchange
-      exchange.publish(payload.to_json, routing_key: queue.name)
+      exchange.publish(payload(args).to_json, routing_key: queue.name)
     end
     self.published = true
     @token
@@ -21,8 +21,8 @@ class WatchPublisher
     published
   end
 
-  def payload
-    @payload ||= watch.attributes.merge(key: token)
+  def payload(args)
+    @payload ||= watch.attributes.merge(key: token).merge(meta: args)
   end
 
 

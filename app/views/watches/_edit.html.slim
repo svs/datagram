@@ -19,6 +19,7 @@ script type="text/ng-template" id="edit.html"
             a.btn.btn-info ng-click="preview()" style="margin: 8px"
               i.fa.fa-eye
               | Preview
+            span ng-show="loading" loading...
         .row
           form#watch_form.form-horizontal role="form"
             = render "form"

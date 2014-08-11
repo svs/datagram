@@ -22,12 +22,12 @@ module Api
       end
 
       def show
-        if (Integer(params[:id]) rescue nil)
+        if (Integer(params[:id]) rescue nil) # aaaa!!!! we have coupling with our datastore's primary key type!
           watch = current_user.watches.find(params[:id])
           render json: watch.to_json
-        else
+        else # we sent a mongo id, so we meant /details, so fetch the WatchResponse instead. This is simply atrocious!
           watch = current_user.watches.find_by(token: params[:id])
-          response = WatchResponse.where(watch_id: watch.id).last
+          response = WatchResponse.where(watch_id: watch.last_response_id).last # TODO:
           render json: response
         end
       end
@@ -55,7 +55,7 @@ module Api
 
       def preview
         @watch = Watch.new(preview_params)
-        token = @watch.publish
+        token = @watch.publish(preview: true)
         render json: token and return
       end
 

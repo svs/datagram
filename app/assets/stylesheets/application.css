@@ -13,5 +13,6 @@
  *= require 'bootstrap.min.css'
  *= require 'mvpready-admin.css'
  *= require 'mvpready-flat.css'
+ *= require 'datagram.css'
  *= require_self
  */

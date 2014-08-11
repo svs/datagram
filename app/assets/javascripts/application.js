@@ -18,11 +18,6 @@
 //= require angular-pusher
 //= require highlight.pack.js
 //= require angular-highlightjs.js
-//= require ace/ace.js
-//= require ui-ace.js
-//= require ace/worker-json.js
-//= require ace/mode-json.js
-//= require ace/mode-sql.js
 //= require checklist-model.js
 //= require bootstrap.min
 

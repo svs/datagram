@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140713131514) do
+ActiveRecord::Schema.define(version: 20140811203022) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,14 +41,15 @@ ActiveRecord::Schema.define(version: 20140713131514) do
     t.string   "at"
     t.string   "name"
     t.string   "url"
-    t.string   "method",      default: "get"
+    t.string   "method",              default: "get"
     t.string   "webhook_url"
-    t.string   "protocol",    default: "http"
+    t.string   "protocol",            default: "http"
     t.string   "token"
     t.json     "strip_keys"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.json     "keep_keys"
+    t.string   "last_response_token"
   end
 
 end

@@ -10,7 +10,8 @@ script type="text/ng-template" id="index.html"
         tr
           th Name
           th Watches
-          th Refresh
+          th Every
+          th Last Update
       tbody
         tr ng-repeat="datagram in datagrams"
           td
@@ -22,3 +23,6 @@ script type="text/ng-template" id="index.html"
             | {{ datagram.at }}
             | &nbsp;
             | {{ datagram.frequency}}
+            | seconds
+          td
+            | {{ datagram.last_update_timestamp }}
