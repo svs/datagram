@@ -99,6 +99,54 @@ before :soft_restart, 'puma:restart'
 after :soft_restart, 'sidekiq:start'
 
 
+namespace :foreman do
+  namespace :eye do
+    task :export do
+      on roles(:app) do
+        within current_path do
+          execute :bundle, "exec foreman export bluepill -c clock=1,watch_consumer=1,datagram_consumer=1 -a stats  -l #{current_path} -u deploy -r #{shared_path}/tmp/pids -t config/config.eye.erb #{shared_path}/eye"
+        end
+      end
+    end
+
+    task :restart do
+      invoke 'foreman:eye:export'
+      invoke 'foreman:eye:quit'
+      invoke 'foreman:eye:start'
+    end
+
+    task :start do
+      on roles(:app) do
+        within current_path do
+          execute :bundle, "exec  eye load #{shared_path}/eye/stats.pill"
+          execute :bundle, "exec  eye start queues"
+        end
+      end
+
+    end
+
+    task :stop do
+      on roles(:app) do
+        within current_path do
+          execute :bundle, "exec eye stop queues"
+        end
+      end
+    end
+
+    task :quit do
+      on roles(:app) do
+        within current_path do
+          execute :bundle, "exec eye stop queues"
+          execute :bundle, "exec eye quit"
+        end
+      end
+    end
+
+
+  end
+end
+
+
 task :foo do
   on roles(:app) do
     execute "ls"

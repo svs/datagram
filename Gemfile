@@ -56,6 +56,9 @@ gem 'rails_12factor', group: :production
 gem 'puma'
 gem 'ace-rails-ap'
 
+gem 'foreman', github: 'svs/foreman'
+gem 'eye'
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard-rspec'
