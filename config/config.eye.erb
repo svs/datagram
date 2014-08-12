@@ -4,7 +4,7 @@ Eye.application "stats" do
 
   working_dir "<%= log %>"
   stdall "log/trash.log" # stdout,err logs for processes by default
-  env "RAILS_ENV" => "production" # global env for each processes
+  env "RAILS_ENV" => "staging" # global env for each processes
 
   group "queues" do
   <% engine.each_process do |name, process| %>
