@@ -19,7 +19,7 @@ set :format, :pretty
 set :log_level, :debug
 set :pty, true
 
-set :linked_files, %w{config/puma.rb config/database.yml config/secrets.yml Procfile}
+set :linked_files, %w{config/puma.rb config/database.yml config/secrets.yml Procfile config/config.eye.erb}
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 set :bundle_bins, fetch(:bundle_bins, []).push('rake')

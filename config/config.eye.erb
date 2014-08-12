@@ -12,7 +12,7 @@ Eye.application "stats" do
 
      # eye daemonized process
      process "<%= name %>-<%= num %>" do
-        pid_file "pids/<%= name %>-<%= num %>.pid" # pid_path will be expanded with the working_dir
+        pid_file "tmp/pids/<%= name %>-<%= num %>.pid" # pid_path will be expanded with the working_dir
         start_command "<%= process.command %>"
 
         # when no stop_command or stop_signals, default stop is [:TERM, 0.5, :KILL]

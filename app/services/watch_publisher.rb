@@ -21,7 +21,7 @@ class WatchPublisher
     published
   end
 
-  def payload(args)
+  def payload(args = {})
     @payload ||= watch.attributes.merge(key: token).merge(meta: args)
   end
 
