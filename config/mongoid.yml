@@ -70,8 +70,8 @@ test:
 production:
   sessions:
     default:
-      uri: <%= ENV['MONGOHQ_URL'] || Rails.application.secret.mongohq_url %>
+      uri: <%= ENV['MONGOHQ_URL'] || Rails.application.secrets.mongohq_url %>
 staging:
   sessions:
     default:
-      uri: <%= ENV['MONGOHQ_URL'] || Rails.application.secret.mongohq_url %>
+      uri: <%= ENV['MONGOHQ_URL'] || Rails.application.secrets.mongohq_url %>
