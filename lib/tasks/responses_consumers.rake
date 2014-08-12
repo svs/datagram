@@ -12,6 +12,7 @@ task :watch_consumer => :environment do
         Rails.logger.info "#ResponsesConsumer#watch_consumer w[:token] not modified...."
       end
     rescue Exception => e
+      puts e.message
       puts e.backtrace
     end
   end
