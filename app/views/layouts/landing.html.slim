@@ -1,6 +1,6 @@
 html
   head
-    title Dekko
+    title Datagram
 
     link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,800,800italic"
     link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Oswald:400,300,700"
@@ -10,4 +10,72 @@ html
     = csrf_meta_tags
   body class=" " ng-app="landingApp"
     div ng-controller="landingCtrl"
+      #wrapper
+        header.navbar.navbar-inverse role="banner"
+          .container
+            .navbar-header
+              a.navbar-brand.navbar-brand-img href="./"
+                img alt=("MVP Ready") src="/assets/mvpready/logo.png"
+              button.navbar-toggle data-target=".navbar-collapse" data-toggle="collapse" type="button"
+                span.sr-only Toggle navigation
+                i.fa.fa-bars
+            /! /.navbar-header
+            nav.collapse.navbar-collapse role="navigation"
+              ul.nav.navbar-nav.navbar-right.mainnav-menu
+                li.active
+                  a href="/"  Home
+                li
+                  a href="./page-features.html"  Features
+                li
+                  a href="./page-faq.html"  FAQ
+                li
+                  a href="./page-pricing.html"  Pricing
+                li
+                  a href="./page-contact.html"  Contact
+                /!
+                  | <li class="dropdown"
+
+                  | <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                  | Dropdown
+                  | <i class="mainnav-caret"></i
+                  | </a
+
+                  | <ul class="dropdown-menu" role="menu"
+                  | <li
+                  | <a href="./page-notifications.html"
+                  | <i class="fa fa-bell"></i
+                  | \&amp;nbsp;&amp;nbsp;Notifications
+                  | </a
+                  | </li
+
+                  | <li
+                  | <a href="./components-icons.html"
+                  | <i class="fa fa-smile-o"></i
+                  | \&amp;nbsp;&amp;nbsp;Font Icons
+                  | </a
+                  | </li
+
+                  | </ul
+
+                  | </li
+                li
+                  a href="/users/sign_in"  Login
+              ul.nav.navbar-nav.navbar-social.navbar-left
+                li
+                  a.ui-tooltip data-placement="bottom" href="javascript:;" title="Facebook"
+                    i.fa.fa-facebook
+                    span.navbar-social-label Facebook
+                li
+                  a.ui-tooltip data-placement="bottom" href="javascript:;" title="Twitter"
+                    i.fa.fa-twitter
+                    span.navbar-social-label Twitter
+                li
+                  a.ui-tooltip data-placement="bottom" href="javascript:;" title="Google+"
+                    i.fa.fa-google-plus
+                    span.navbar-social-label Google+
       = yield
+    footer.copyright
+      .container
+        .row
+          .col-sm-12
+            p Copyright &copy; 2013 MVP Ready.

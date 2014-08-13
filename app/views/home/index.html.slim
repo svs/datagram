@@ -1,338 +1,267 @@
-#wrapper
-  header.navbar.navbar-inverse role="banner"
-    .container
-      .navbar-header
-        a.navbar-brand.navbar-brand-img href="./"
-          img alt=("MVP Ready") src="/assets/mvpready/logo.png"
-        button.navbar-toggle data-target=".navbar-collapse" data-toggle="collapse" type="button"
-          span.sr-only Toggle navigation
-          i.fa.fa-bars
-      /! /.navbar-header
-      nav.collapse.navbar-collapse role="navigation"
-        ul.nav.navbar-nav.navbar-right.mainnav-menu
-          li.active
-            a href="./index.html"  Home
-          li
-            a href="./page-features.html"  Features
-          li
-            a href="./page-faq.html"  FAQ
-          li
-            a href="./page-pricing.html"  Pricing
-          li
-            a href="./page-contact.html"  Contact
-          /!
-            | <li class="dropdown"
+.masthead
+  .container
+    /! starts carousel
+    #masthead-carousel.carousel.masthead-carousel.slide
+      .carousel-inner
+        .item.active
+          .row
+            .col-md-6.masthead-text
+              h1.masthead-title Share data as easily as you share photos.
+              p class="masthead-"
+                h3 style="font-weight: 300; line-height: 1.5em"
+                  ul
+                    li Turn any SQL query into a JSON endpoint
+                    li Turn any JSON endpoint into a pubsub publisher
+                    li Combine various sources into Datagrams. Share them with colleagues
+                    li Free for public data
+              br
+                .masthead-actions
+                  a.btn.btn-transparent.btn-jumbo href="./page-features.html"
+                    | Learn More
+                  a.btn.btn-primary.btn-jumbo href="/users/sign_up"
+                    | Create an Account
+                /! /.masthead-actions
+            /! /.masthead-text
+            .col-md-6.masthead-img.animated.fadeInUpBig
+              form.form.masthead-form.well style="width: 90%"
+                h3.text-center
+                  | Check out the &nbsp;
+                  a href="#" github status
+                  | &nbsp; datagram
+                #github-status
+            /! /.masthead-img
+          /! /.row
+        /! /.item
+.content
+  .container
+    h4.content-title
+      span What is Datagram?
+    br
+      .row
+        .mini-feature
+          i.fa.fa-globe.mini-feature-icon.text-secondary
+          .mini-feature-text
+            h5.mini-feature-title Turn any SQL query into a JSON endpoint
+            p Define your SQL database connections and queries, and they'll be made available behind a URL in JSON format
+        /! /.mini-feature
+        .mini-feature
+          i.fa.fa-dashboard.mini-feature-icon.text-secondary
+          .mini-feature-text
+            h5.mini-feature-title Watch any JSON endpoint and be notified of changes
+            p Get sub-second updates on changes to any JSON endpoint anywhere. Subscribe to every refresh or just the ones with changes
+        /! /.mini-feature
+        .mini-feature
+          i.fa.fa-html5.mini-feature-icon.text-secondary
+          .mini-feature-text
+            h5.mini-feature-title Make your infra go further
+            p Got heavy reports? Cache them with datagram. Got loads of clients? Notify them when data changes instead of having them poll your servers
+        /! /.mini-feature
+      /! /.row
+      .row
+        .mini-feature
+          i.fa.fa-globe.mini-feature-icon.text-secondary
+          .mini-feature-text
+            h5.mini-feature-title Easily embed data in web pages
+            p Like github gists, it's easy to embed widgets based on datagrams. Use datagrams to drive dashboards, send email reports and so on.
+        .mini-feature
+          i.fa.fa-globe.mini-feature-icon.text-secondary
+          .mini-feature-text
+            h5.mini-feature-title Drive your team with data
+            p Not vice versa. Leave your data guys to test interesting hypothesis, not emailing CSV reports.
+        .mini-feature
+          i.fa.fa-globe.mini-feature-icon.text-secondary
+          .mini-feature-text
+            h5.mini-feature-title Keep a history of your reports
+            p Keep versions of datagrams for as long as you like. Great for seeing what a report looked like in the past.
 
-            | <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
-            | Dropdown
-            | <i class="mainnav-caret"></i
-            | </a
+        /! /.mini-feature
 
-            | <ul class="dropdown-menu" role="menu"
-            | <li
-            | <a href="./page-notifications.html"
-            | <i class="fa fa-bell"></i
-            | \&amp;nbsp;&amp;nbsp;Notifications
-            | </a
-            | </li
 
-            | <li
-            | <a href="./components-icons.html"
-            | <i class="fa fa-smile-o"></i
-            | \&amp;nbsp;&amp;nbsp;Font Icons
-            | </a
-            | </li
-
-            | </ul
-
-            | </li
-          li
-            a href="/users/sign_in"  Login
-        ul.nav.navbar-nav.navbar-social.navbar-left
+      .row-divider
+      /! /.row-divider
+      .row
+        .col-sm-6.col-sm-push-6
+          h4.content-title
+            span About MVPReady
+          p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus, autem, quos, dicta, tempora omnis beatae aspernatur repellat aperiam fugit enim animi temporibus magnam tempore quae impedit velit voluptatum consequuntur cupiditate.
+          br
+            .row
+              .col-sm-6
+                ul.icons-list
+                  li
+                    i.icon-li.fa.fa-check.text-primary
+                    | Custom Header Images
+                  li
+                    i.icon-li.fa.fa-check.text-primary
+                    | Unlimited Portfolios & Blogs
+                  li
+                    i.icon-li.fa.fa-check.text-primary
+                    | Millions Of Page Combinations
+              .col-sm-6
+                ul.icons-list
+                  li
+                    i.icon-li.fa.fa-check.text-primary
+                    | Custom Header Images
+                  li
+                    i.icon-li.fa.fa-check.text-primary
+                    | Unlimited Portfolios & Blogs
+                  li
+                    i.icon-li.fa.fa-check.text-primary
+                    | Millions Of Page Combinations
+            br
+              a.btn.btn-default href="javascript:;"  Get MVP Ready Today
+              br
+                br
+                  br
+        /! /.col
+        .col-sm-6.col-sm-pull-6.text-center
+          br
+            br
+              img.img-responsive alt="Macbook" src="/assets/mvpready/devices/macbook.png"
+        /! /.col
+      /! /.row
+      .row-divider
+      /! /.row-divider
+      .row
+        .col-sm-6
+          h4.content-title
+            span Latest News
+          .recent-news
+            .recent-news-item.clearfix
+              .recent-news-item-date
+                | 13
+                span Jan
+              .recent-news-item-description
+                h5.recent-news-item-title
+                  a href="http://inovado.mintithemes.com/this-is-a-standard-post/" title=("This is a Standard Post")  This is a Standard Post
+                span.recent-news-item-comments 7 Comments
+                .recent-news-item-excerpt
+                  | Praesent augue arcu, ornare ut tincidunt eu, mattis a libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames...
+                  a.recent-news-item-more href="http://inovado.mintithemes.com/this-is-a-standard-post/"  Read More →
+            /! /.recent-news-item
+            .recent-news-item.clearfix
+              .recent-news-item-date
+                | 04
+                span Jan
+              .recent-news-item-description
+                h5.recent-news-item-title
+                  a href="http://inovado.mintithemes.com/this-is-a-standard-post/" title=("This is a Standard Post")  This is a Standard Post
+                span.recent-news-item-comments 2 Comments
+                .recent-news-item-excerpt
+                  | Praesent augue arcu, ornare ut tincidunt eu, mattis a libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames...
+                  a.recent-news-item-more href="http://inovado.mintithemes.com/this-is-a-standard-post/"  Read More →
+            /! /.recent-news-item
+          /! /.recent-news
+          br.visible-xs
+        /! /.col
+        .col-sm-6
+          h4.content-title
+            span Testimonials
+            a.btn.btn-default.btn-sm.carousel-prev data-slide="prev" href="#clients-carousel"  &lsaquo;
+            a.btn.btn-default.btn-sm.carousel-next data-slide="next" href="#clients-carousel"  &rsaquo;
+          #clients-carousel.carousel.slide data-interval="0"
+            .carousel-inner
+              .item.active
+                .testimonial
+                  p.testimonial-text
+                    | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, sed, nulla, provident porro quaerat aperiam eum tempore fugiat dicta obcaecati itaque adipisci perspiciatis unde voluptatibus architecto vitae reiciendis distinctio incidunt! Tempore quae impedit velit voluptatum consequuntur cupiditate.
+                  .testimonials-arrow
+                  .testimonial-author
+                    .testimonial-image
+                      img alt="" src="/assets/mvpready/avatars/avatar-1-lg.jpg" /
+                    .testimonial-author-info
+                      h5
+                        a href="#"  Rod Howard
+                      | Jumpstart Themes
+                /! /.testimonial
+              /! /.item
+              .item
+                .testimonial
+                  p.testimonial-text
+                    | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, sed, nulla, provident porro quaerat aperiam eum tempore fugiat dicta obcaecati itaque adipisci perspiciatis unde voluptatibus architecto vitae reiciendis distinctio incidunt! Tempore quae impedit velit voluptatum consequuntur cupiditate.
+                  .testimonials-arrow
+                  .testimonial-author
+                    .testimonial-image
+                      img alt="" src="/assets/mvpready/avatars/avatar-2-lg.jpg" /
+                    .testimonial-author-info
+                      h5
+                        a href="#"  Nikita Williams
+                      | Nikita Chanel
+                /! /.testimonial
+              /! /.item
+            /! /.carousel-inner
+          /! /.carousel
+        /! /.col
+      /! /.row
+      .row-divider
+      /! /.row-divider
+      .carousel-container
+        .row
+          .col-sm-12
+            h4.content-title
+              span See Our Clients
+              a.btn.btn-default.btn-sm.carousel-prev data-slide="prev" href="#"  &lsaquo;
+              a.btn.btn-default.btn-sm.carousel-next data-slide="next" href="#"  &rsaquo;
+            ul.clients-list
+              li
+                img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo1-grayscale.png"
+              li
+                img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo2-grayscale.png"
+              li
+                img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo3-grayscale.png"
+              li
+                img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo4-grayscale.png"
+              li
+                img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo5-grayscale.png"
+              li
+                img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo6-grayscale.png"
+          /! /.col
+        /! /.row
+      /! /.carousel-container
+  /! /.container
+/! /.content
+/! /#wrapper
+footer.footer
+.container
+  .row
+    .col-sm-3
+      h4.content-title
+        span MVP Ready
+      | Aliquam fringilla, sapien egetferas scelerisque placerat, lorem libero cursus lorem, sed sodales lorem libero eu sapien. Nunc mattis feugiat justo vel faucibus. Nulla consequat feugiat malesuada.
+    /! /.col
+    .col-sm-3
+      h4.content-title
+        span Twitter Feed
+      #tweets
+    /! /.col
+    .col-sm-3
+      h4.content-title
+        span Stay Connected
+      p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, nam quae veniam optio sunt exercitationem.
+      br
+        ul.footer-social-link
           li
             a.ui-tooltip data-placement="bottom" href="javascript:;" title="Facebook"
               i.fa.fa-facebook
-              span.navbar-social-label Facebook
           li
             a.ui-tooltip data-placement="bottom" href="javascript:;" title="Twitter"
               i.fa.fa-twitter
-              span.navbar-social-label Twitter
           li
             a.ui-tooltip data-placement="bottom" href="javascript:;" title="Google+"
               i.fa.fa-google-plus
-              span.navbar-social-label Google+
-    /! /.container
-  .masthead
-    .container
-      /! starts carousel
-      #masthead-carousel.carousel.masthead-carousel.slide
-        .carousel-inner
-          .item.active
-            .row
-              .col-md-6.masthead-text
-                h1.masthead-title Share data as easily as you share photos.
-                p class="masthead-"
-                  h3 style="font-weight: 300; line-height: 1.5em"
-                    ul
-                      li Turn any SQL query into a JSON endpoint
-                      li Turn any JSON endpoint into a pubsub publisher
-                      li Combine various sources into Datagrams. Share them with colleagues
-                      li Free for public data
-                br
-                  .masthead-actions
-                    a.btn.btn-transparent.btn-jumbo href="./page-features.html"
-                      | Learn More
-                    a.btn.btn-primary.btn-jumbo href="../admin/account-signup.html"
-                      | Create an Account
-                  /! /.masthead-actions
-              /! /.masthead-text
-              .col-md-6.masthead-img.animated.fadeInUpBig
-                form.form.masthead-form.well style="width: 90%"
-                  h3.text-center
-                    | Check out the &nbsp;
-                    a href="#" github status
-                    | &nbsp; datagram
-                  #github-status
-              /! /.masthead-img
-            /! /.row
-          /! /.item
-  .content
-    .container
+    /! /.col
+    .col-sm-3
       h4.content-title
-        span What is Datagram?
-      br
-        .row
-          .mini-feature
-            i.fa.fa-globe.mini-feature-icon.text-secondary
-            .mini-feature-text
-              h5.mini-feature-title Turn any SQL query into a JSON endpoint
-              p Define your SQL database connections and queries, and they'll be made available behind a URL in JSON format
-          /! /.mini-feature
-          .mini-feature
-            i.fa.fa-dashboard.mini-feature-icon.text-secondary
-            .mini-feature-text
-              h5.mini-feature-title Watch any JSON endpoint and be notified of changes
-              p Get sub-second updates on changes to any JSON endpoint anywhere. Subscribe to every refresh or just the ones with changes
-          /! /.mini-feature
-          .mini-feature
-            i.fa.fa-html5.mini-feature-icon.text-secondary
-            .mini-feature-text
-              h5.mini-feature-title Make your infra go further
-              p Got heavy reports? Cache them with datagram. Got loads of clients? Notify them when data changes instead of having them poll your servers
-          /! /.mini-feature
-        /! /.row
-        .row
-          .mini-feature
-            i.fa.fa-globe.mini-feature-icon.text-secondary
-            .mini-feature-text
-              h5.mini-feature-title Easily embed data in web pages
-              p Like github gists, it's easy to embed widgets based on datagrams. Use datagrams to drive dashboards, send email reports and so on.
-          .mini-feature
-            i.fa.fa-globe.mini-feature-icon.text-secondary
-            .mini-feature-text
-              h5.mini-feature-title Drive your team with data
-              p Not vice versa. Leave your data guys to test interesting hypothesis, not emailing CSV reports.
-          .mini-feature
-            i.fa.fa-globe.mini-feature-icon.text-secondary
-            .mini-feature-text
-              h5.mini-feature-title Keep a history of your reports
-              p Keep versions of datagrams for as long as you like. Great for seeing what a report looked like in the past.
-
-          /! /.mini-feature
-
-
-        .row-divider
-        /! /.row-divider
-        .row
-          .col-sm-6.col-sm-push-6
-            h4.content-title
-              span About MVPReady
-            p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus, autem, quos, dicta, tempora omnis beatae aspernatur repellat aperiam fugit enim animi temporibus magnam tempore quae impedit velit voluptatum consequuntur cupiditate.
-            br
-              .row
-                .col-sm-6
-                  ul.icons-list
-                    li
-                      i.icon-li.fa.fa-check.text-primary
-                      | Custom Header Images
-                    li
-                      i.icon-li.fa.fa-check.text-primary
-                      | Unlimited Portfolios & Blogs
-                    li
-                      i.icon-li.fa.fa-check.text-primary
-                      | Millions Of Page Combinations
-                .col-sm-6
-                  ul.icons-list
-                    li
-                      i.icon-li.fa.fa-check.text-primary
-                      | Custom Header Images
-                    li
-                      i.icon-li.fa.fa-check.text-primary
-                      | Unlimited Portfolios & Blogs
-                    li
-                      i.icon-li.fa.fa-check.text-primary
-                      | Millions Of Page Combinations
-              br
-                a.btn.btn-default href="javascript:;"  Get MVP Ready Today
-                br
-                  br
-                    br
-          /! /.col
-          .col-sm-6.col-sm-pull-6.text-center
-            br
-              br
-                img.img-responsive alt="Macbook" src="/assets/mvpready/devices/macbook.png"
-          /! /.col
-        /! /.row
-        .row-divider
-        /! /.row-divider
-        .row
-          .col-sm-6
-            h4.content-title
-              span Latest News
-            .recent-news
-              .recent-news-item.clearfix
-                .recent-news-item-date
-                  | 13
-                  span Jan
-                .recent-news-item-description
-                  h5.recent-news-item-title
-                    a href="http://inovado.mintithemes.com/this-is-a-standard-post/" title=("This is a Standard Post")  This is a Standard Post
-                  span.recent-news-item-comments 7 Comments
-                  .recent-news-item-excerpt
-                    | Praesent augue arcu, ornare ut tincidunt eu, mattis a libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames...
-                    a.recent-news-item-more href="http://inovado.mintithemes.com/this-is-a-standard-post/"  Read More →
-              /! /.recent-news-item
-              .recent-news-item.clearfix
-                .recent-news-item-date
-                  | 04
-                  span Jan
-                .recent-news-item-description
-                  h5.recent-news-item-title
-                    a href="http://inovado.mintithemes.com/this-is-a-standard-post/" title=("This is a Standard Post")  This is a Standard Post
-                  span.recent-news-item-comments 2 Comments
-                  .recent-news-item-excerpt
-                    | Praesent augue arcu, ornare ut tincidunt eu, mattis a libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames...
-                    a.recent-news-item-more href="http://inovado.mintithemes.com/this-is-a-standard-post/"  Read More →
-              /! /.recent-news-item
-            /! /.recent-news
-            br.visible-xs
-          /! /.col
-          .col-sm-6
-            h4.content-title
-              span Testimonials
-              a.btn.btn-default.btn-sm.carousel-prev data-slide="prev" href="#clients-carousel"  &lsaquo;
-              a.btn.btn-default.btn-sm.carousel-next data-slide="next" href="#clients-carousel"  &rsaquo;
-            #clients-carousel.carousel.slide data-interval="0"
-              .carousel-inner
-                .item.active
-                  .testimonial
-                    p.testimonial-text
-                      | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, sed, nulla, provident porro quaerat aperiam eum tempore fugiat dicta obcaecati itaque adipisci perspiciatis unde voluptatibus architecto vitae reiciendis distinctio incidunt! Tempore quae impedit velit voluptatum consequuntur cupiditate.
-                    .testimonials-arrow
-                    .testimonial-author
-                      .testimonial-image
-                        img alt="" src="/assets/mvpready/avatars/avatar-1-lg.jpg" /
-                      .testimonial-author-info
-                        h5
-                          a href="#"  Rod Howard
-                        | Jumpstart Themes
-                  /! /.testimonial
-                /! /.item
-                .item
-                  .testimonial
-                    p.testimonial-text
-                      | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, sed, nulla, provident porro quaerat aperiam eum tempore fugiat dicta obcaecati itaque adipisci perspiciatis unde voluptatibus architecto vitae reiciendis distinctio incidunt! Tempore quae impedit velit voluptatum consequuntur cupiditate.
-                    .testimonials-arrow
-                    .testimonial-author
-                      .testimonial-image
-                        img alt="" src="/assets/mvpready/avatars/avatar-2-lg.jpg" /
-                      .testimonial-author-info
-                        h5
-                          a href="#"  Nikita Williams
-                        | Nikita Chanel
-                  /! /.testimonial
-                /! /.item
-              /! /.carousel-inner
-            /! /.carousel
-          /! /.col
-        /! /.row
-        .row-divider
-        /! /.row-divider
-        .carousel-container
-          .row
-            .col-sm-12
-              h4.content-title
-                span See Our Clients
-                a.btn.btn-default.btn-sm.carousel-prev data-slide="prev" href="#"  &lsaquo;
-                a.btn.btn-default.btn-sm.carousel-next data-slide="next" href="#"  &rsaquo;
-              ul.clients-list
-                li
-                  img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo1-grayscale.png"
-                li
-                  img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo2-grayscale.png"
-                li
-                  img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo3-grayscale.png"
-                li
-                  img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo4-grayscale.png"
-                li
-                  img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo5-grayscale.png"
-                li
-                  img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo6-grayscale.png"
-            /! /.col
-          /! /.row
-        /! /.carousel-container
-    /! /.container
-  /! /.content
-/! /#wrapper
-footer.footer
-  .container
-    .row
-      .col-sm-3
-        h4.content-title
-          span MVP Ready
-        | Aliquam fringilla, sapien egetferas scelerisque placerat, lorem libero cursus lorem, sed sodales lorem libero eu sapien. Nunc mattis feugiat justo vel faucibus. Nulla consequat feugiat malesuada.
-      /! /.col
-      .col-sm-3
-        h4.content-title
-          span Twitter Feed
-        #tweets
-      /! /.col
-      .col-sm-3
-        h4.content-title
-          span Stay Connected
-        p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, nam quae veniam optio sunt exercitationem.
-        br
-          ul.footer-social-link
-            li
-              a.ui-tooltip data-placement="bottom" href="javascript:;" title="Facebook"
-                i.fa.fa-facebook
-            li
-              a.ui-tooltip data-placement="bottom" href="javascript:;" title="Twitter"
-                i.fa.fa-twitter
-            li
-              a.ui-tooltip data-placement="bottom" href="javascript:;" title="Google+"
-                i.fa.fa-google-plus
-      /! /.col
-      .col-sm-3
-        h4.content-title
-          span Stay Updated
-        p Get emails about new theme launches &amp;  future updates.
-        form.form action="/"
-          .form-group
-            /! <label>Email: <span class="required">*</span></label
-            input#newsletter_email.form-control name="newsletter_email" placeholder=("Email Address") required="" type="text" value=""
-          /! /.form-group
-          .form-group
-            button.btn.btn-transparent Subscribe Me
-          /! /.form-group
-      /! /.col
-    /! /.row
-  /! /.container
-footer.copyright
-  .container
-    .row
-      .col-sm-12
-        p Copyright &copy; 2013 MVP Ready.
-      /! /.col
-    /! /.row
+        span Stay Updated
+      p Get emails about new theme launches &amp;  future updates.
+      form.form action="/"
+        .form-group
+          /! <label>Email: <span class="required">*</span></label
+          input#newsletter_email.form-control name="newsletter_email" placeholder=("Email Address") required="" type="text" value=""
+        /! /.form-group
+        .form-group
+          button.btn.btn-transparent Subscribe Me
+        /! /.form-group
+    /! /.col
+  /! /.row
+/! /.container

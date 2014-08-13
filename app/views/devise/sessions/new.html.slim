@@ -1,0 +1,35 @@
+.account-wrapper
+  .account-body
+    h3
+      | Welcome back to MVP Ready.
+    h5
+      | Please sign in to get access.
+    = form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: '.form.account-form'}) do |f|
+      .form-group
+        label.placeholder-hidden[for="user_email"]
+          | Username
+        = f.email_field :email, autofocus: true, class: 'form-control', placeholder: "Email"
+      .form-group
+        label.placeholder-hidden[for="login-password"]
+          | Password
+        = f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: "Password"
+      - if devise_mapping.rememberable?
+        .form-group.clearfix
+          .pull-left
+            label.checkbox-inline
+              = f.check_box :remember_me
+              small
+                | Remember me
+          .pull-right
+            small
+              a[href="./account-forgot.html"]
+                | Forgot Password?
+      .form-group
+        button.btn.btn-primary.btn-block.btn-lg[type="submit" tabindex="4"]
+          |  Signin  
+          i.fa.fa-play-circle
+  .account-footer
+    p
+      |  Don't have an account?  
+      a[href="./account-signup.html"]
+        | Create an Account!

@@ -11,7 +11,7 @@ module Clockwork
   Clockwork.manager = ManagerWithDatabaseTasks.new
 
   sync_database_tasks model: DatagramFinder, every: 1.minute do |instance_job_name|
-    Rails.logger.info('#Clock queuing #{instance_job_name}')
+    Rails.logger.info("#Clock queuing #{instance_job_name}")
     datagram = Datagram.find_by_name(instance_job_name)
     datagram.publish
 
