@@ -8,13 +8,14 @@ class DatagramPublisher
     @exchange = exchange
     @queue = queue
     @timestamp = (Time.now.to_f * 1000).round
+    @user = datagram.user
   end
 
 
   def publish!
     return false if @published
     x = watch_publishers.map{|wp| wp.publish!(exchange: nil, datagram_id: datagram.id, timestamp: timestamp)}
-    exchange.publish(payload.to_json, routing_key: queue.name)
+    exchange.publish(payload.to_json, routing_key: "cm6GLX4hZwFxTQxx")
     @published = true
     payload
   end
@@ -25,7 +26,7 @@ class DatagramPublisher
       datagram_id: datagram.id.to_s,
       timestamp: (Time.now.to_f  * 1000).round,
       watches: watches_payload,
-      routing_key: queue.name,
+      routing_key: routing_key,
       datagram_token: datagram.token,
       timestamp: timestamp
     }
@@ -33,7 +34,7 @@ class DatagramPublisher
 
   private
 
-  attr_reader :datagram, :exchange, :queue, :timestamp
+  attr_reader :datagram, :exchange, :queue, :timestamp, :user
 
 
   def watch_publishers
@@ -50,5 +51,8 @@ class DatagramPublisher
     @watches ||= datagram.watches
   end
 
+  def routing_key
+    user.token || queue.name
+  end
 
 end

@@ -1,23 +1,14 @@
-if Rails.application.secrets.rabbitmq_url
-  $conn = Bunny.new(Rails.application.secrets.rabbitmq_url)
-elsif ENV['RABBITMQ_BIGWIG_TX_URL']
-  $tx_conn = Bunny.new(ENV['RABBITMQ_BIGWIG_TX_URL'])
-  $rx_conn = Bunny.new(ENV['RABBITMQ_BIGWIG_RX_URL'])
-else
-  $conn = Bunny.new
-end
+endpoint = Rails.application.secrets.rabbitmq_url || "amqp://localhost:5672"
+username = Rails.application.secrets.rabbitmq_user || "guest"
+password = Rails.application.secrets.rabbitmq_password || "guest"
 
-if $conn
-  $conn.start
-else
-  $tx_conn.start
-  $rx_conn.start
-end
+$conn = Bunny.new(endpoint)
 
-$ch_tx = ($conn || $tx_conn).create_channel
-$ch_rx = ($conn || $rx_conn).create_channel
-$watches  = $ch_tx.queue("watches", :durable => true)
-$watch_responses  = $ch_rx.queue("watch_responses", :durable => true)
-$datagrams =  $ch_tx.queue("datagrams", :durable => true)
-$datagram_responses =  $ch_rx.queue("datagram_responses", :durable => true)
-$x  = $ch_tx.default_exchange
+$conn.start
+
+$ch = $conn.create_channel
+$watches  = $ch.queue("watches", :durable => true)
+$watch_responses  = $ch.queue("watch_responses", :durable => true)
+$datagrams =  $ch.queue("datagrams", :durable => true)
+$datagram_responses =  $ch.queue("datagram_responses", :durable => true)
+$x  = $ch.direct('datagrams', auto_delete: false)

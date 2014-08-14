@@ -14,6 +14,10 @@ class Datagram
   token length: 10
 
 
+  def user
+    User.find(user_id)
+  end
+
   def as_json(include_root = false)
     attributes.merge({
                        id: _id.to_s,
