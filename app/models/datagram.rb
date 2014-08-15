@@ -13,6 +13,8 @@ class Datagram
   field :last_update_timestamp, type: Integer
   token length: 10
 
+  field :use_routing_key, type: Boolean, default: false
+
 
   def user
     User.find(user_id)

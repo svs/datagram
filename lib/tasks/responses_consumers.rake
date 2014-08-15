@@ -7,7 +7,7 @@ task :watch_consumer => :environment do
       w = WatchResponseHandler.new(pl).handle!
       if w[:modified] || pl.fetch("meta",{})["preview"]
         Pusher.trigger(w[:watch_token] || w[:watch_response_token], 'data', w)
-        Rails.logger.info "#DatagramResponse on channel #{w[:token]}"
+        Rails.logger.info "ResponseConsumer#watch_consumer on channel #{w[:token]}"
       else
         Rails.logger.info "#ResponsesConsumer#watch_consumer w[:token] not modified...."
       end

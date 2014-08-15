@@ -5,9 +5,9 @@ class WatchResponseHandler
   end
 
   def handle!
+    Rails.logger.info "#WatchResponseHandler processing: #{params[:id]}"
     wr = WatchResponse.find_by(token: params[:id]) rescue nil
     if wr
-      Rails.logger.info "#WatchResponseHandler found token: #{params[:id]}"
       update_attrs = {
         response_json: data,
         status_code: params[:status_code],

@@ -2,6 +2,7 @@ class DatagramResponseHandler
 
   def initialize(params)
     @params = params
+    Rails.logger.info "#DataGramResponsehandler processing #{params[:datagram_id]}"
   end
 
   def handle!
