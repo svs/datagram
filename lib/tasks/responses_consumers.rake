@@ -1,5 +1,5 @@
 task :watch_consumer => :environment do
-  Rails.logger.info 'Started WatchConsumer'
+  Rails.logger.info 'Started #WatchConsumer'
   $watch_responses.subscribe(block: true) do |di, md, payload|
     Rails.logger.info "#WatchConsumer processing..."
     begin
@@ -20,7 +20,7 @@ end
 
 
 task :datagram_consumer => :environment do
-  Rails.logger.info 'Started DatagramConsumer'
+  Rails.logger.info 'Started #DatagramConsumer'
   $datagram_responses.subscribe(block: true) do |di, md, payload|
     d = DatagramResponseHandler.new(JSON.parse(payload)).handle!
     if d[:modified]
