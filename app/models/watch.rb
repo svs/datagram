@@ -20,10 +20,10 @@ class Watch < ActiveRecord::Base
 
  def as_json( include_root = false )
    if url
-     uri = URI.parse(url)
+     uri = URI.parse(url) rescue nil
      uri_parts = {
-       :hostname => uri.hostname,
-       :pathname => uri.path.gsub("/ /",""),
+       :hostname => (uri.hostname rescue ''),
+       :pathname => (uri.path.gsub("/ /","") rescue ''),
        :permalink => api_v1_watch_path(self)
      }
    end

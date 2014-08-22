@@ -63,7 +63,7 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
       $scope.watch = r;
       $scope.watchDataStr = $scope.watch.data ? JSON.stringify($scope.watch.data, null, 2) : "";
       $scope.watchStripKeysStr = $scope.watch.strip_keys ? JSON.stringify($scope.watch.strip_keys, null, 2) : "";
-      $scope.watchKeeppKeysStr = $scope.watch.keep_keys ? JSON.stringify($scope.watch.keep_keys, null, 2) : "";
+      $scope.watchKeepKeysStr = $scope.watch.keep_keys ? JSON.stringify($scope.watch.keep_keys, null, 2) : "";
       subscribe();
     });
   };

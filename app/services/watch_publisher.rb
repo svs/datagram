@@ -7,13 +7,14 @@ class WatchPublisher
     @watch = watch
   end
 
-  def publish!(exchange: $x, queue: $watches, datagram_id: nil, timestamp: nil, args: {})
+  def publish!(exchange: $x, queue: $watches, datagram_id: nil, timestamp: nil, args: {}, routing_key: nil)
     return false if published
     make_new_response!(datagram_id, timestamp)
     if exchange
-      exchange.publish(payload(args).to_json, routing_key: queue.name)
+      exchange.publish(payload(args).to_json, routing_key: routing_key || "watch:watches")
     end
     self.published = true
+    Rails.logger.info "#WatchPublisher published watch #{watch.id}"
     @token
   end
 
@@ -40,12 +41,12 @@ class WatchPublisher
                                       datagram_id: datagram_id).first_or_create(strip_keys: watch.strip_keys,
                                                                                 keep_keys: watch.keep_keys,
                                                                                 started_at: ts)
-
   end
 
   def token
     @token ||= SecureRandom.urlsafe_base64
   end
+
 
 
 end
