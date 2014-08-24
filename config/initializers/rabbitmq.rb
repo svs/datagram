@@ -1,4 +1,3 @@
-ap Rails.application.secrets
 endpoint = Rails.application.secrets.rabbitmq_url || "amqp://localhost:5672"
 username = Rails.application.secrets.rabbitmq_user || "guest"
 password = Rails.application.secrets.rabbitmq_password || "guest"
