@@ -56,6 +56,7 @@ gem 'hashfilter'
 gem 'rails_12factor', group: :production
 gem 'puma'
 gem 'ace-rails-ap'
+gem 'awesome_print'
 
 gem 'foreman', github: 'svs/foreman'
 gem 'eye'
@@ -64,7 +65,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'guard-rspec'
   gem 'factory_girl_rails'
-  gem 'awesome_print'
   gem 'shoulda-matchers', require: false
   gem 'pry-byebug'
   gem 'html2slim'
