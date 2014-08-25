@@ -10,6 +10,7 @@ class Watch < ActiveRecord::Base
   end
 
   def publish(args = {})
+    args.merge(routing_key: self.user.token) if use_routing_key
     publisher.publish!(args: args)
   end
 
