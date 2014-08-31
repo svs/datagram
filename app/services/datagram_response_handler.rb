@@ -18,7 +18,7 @@ class DatagramResponseHandler
 
   def datagram
     return @datagram if @datagram
-    c1 = Datagram.where(:token => params[:datagram_id])
+    c1 = Datagram.where(:id => params[:datagram_id])
     @datagram = (c1.where(:last_update_timestamp.lt => params[:timestamp]) | c1.where(:last_update_timestamp => nil)).first
   end
 

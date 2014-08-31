@@ -14,3 +14,6 @@ $watch_responses  = $ch.queue("watch_responses", :durable => true)
 $datagrams =  $ch.queue("datagrams", :durable => true)
 $datagram_responses =  $ch.queue("datagram_responses", :durable => true)
 $x  = $ch.direct('datagrams_exchange', auto_delete: false)
+
+$watches.bind('datagrams_exchange')
+$datagrams.bind('datagrams_exchange')

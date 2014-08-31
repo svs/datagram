@@ -21,6 +21,7 @@ class WatchResponse
   field :started_at, type: Integer
   field :ended_at, type: Integer
   field :token, type: String
+  field :preview, type: Boolean
 
   validates :token, uniqueness: { scope: :watch_id }
 

@@ -17,7 +17,7 @@ class DatagramPublisher
     x = watch_publishers.map{|wp| wp.publish!(exchange: nil, datagram_id: datagram.id, timestamp: timestamp)}
     exchange.publish(payload.to_json, routing_key: routing_key)
     @published = true
-    Rails.logger.info "#DatagramPublisher published datagram #{datagram.id}"
+    Rails.logger.info "#DatagramPublisher published datagram id: #{datagram.id} token: #{datagram.token} routing_key: #{routing_key}"
     payload
   end
 

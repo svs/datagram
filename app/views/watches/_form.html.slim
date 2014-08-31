@@ -15,11 +15,17 @@
     textarea.form-control rows="3" ng-model="watchDataStr" style="height: 200px" ng-show="!isSql"
 .form-group
   label.col-md-3
+    span Use Routing Key
+  .col-md-8
+    input type="checkbox" ng-model="watch.use_routing_key"
+
+.form-group
+  label.col-md-3
     span Keep Keys
   .col-md-8
-    textarea ng-model="watchKeepKeysStr" style="height: 200px" ng-show="!isSql"
+    textarea ng-model="watchKeepKeysStr" style="height: 200px"
 .form-group
   label.col-md-3
     span Strip Keys
   .col-md-8
-    textarea ng-model="watchStripKeysStr" style="height: 200px" ng-show="!isSql"
+    textarea ng-model="watchStripKeysStr" style="height: 200px"

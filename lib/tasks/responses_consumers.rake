@@ -5,12 +5,8 @@ task :watch_consumer => :environment do
     begin
       pl = JSON.parse(payload)
       w = WatchResponseHandler.new(pl).handle!
-      if w[:modified] || pl.fetch("meta",{})["preview"]
-        Pusher.trigger(w[:watch_token] || w[:watch_response_token], 'data', w)
-        Rails.logger.info "ResponseConsumer#watch_consumer on channel #{w[:token]}"
-      else
-        Rails.logger.info "#ResponsesConsumer#watch_consumer w[:token] not modified...."
-      end
+      Pusher.trigger(w[:watch_token] || w[:watch_response_token], 'data', w)
+      Rails.logger.info "ResponseConsumer#watch_consumer on channel #{w[:token]}"
     rescue Exception => e
       puts e.message
       puts e.backtrace
@@ -23,11 +19,7 @@ task :datagram_consumer => :environment do
   Rails.logger.info 'Started #DatagramConsumer'
   $datagram_responses.subscribe(block: true) do |di, md, payload|
     d = DatagramResponseHandler.new(JSON.parse(payload)).handle!
-    if d[:modified]
-      Rails.logger.info("ResponsesConsumer#datagram_consumer Pushing ...")
-      Pusher.trigger(d[:token], 'data', d)
-    else
-      Rails.logger.info "ResponsesConsumer#datagram_consumer d[:token] not modified"
-    end
+    Rails.logger.info("ResponsesConsumer#datagram_consumer Pushing ...")
+    Pusher.trigger(d[:token], 'data', d)
   end
 end
