@@ -2,7 +2,7 @@ module Api
   module V1
     class DatagramsController < ApplicationController
 
-      before_action :authenticate_user!
+      before_action :authenticate_user!, except: [:t]
 
       def index
         @datagrams = current_user.datagrams
@@ -32,11 +32,11 @@ module Api
       end
 
       def t
-        datagram = current_user.datagrams.find_by(token: params[:id]) rescue nil
+        datagram = Datagram.find_by(token: params[:token]) rescue nil
         if datagram
-          render json: datagram
+          render json: datagram.for_token
         else
-          render json: "not found", status: 404
+          render json: {404 => "not found"}, status: 404
         end
       end
 

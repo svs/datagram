@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140825031539) do
+ActiveRecord::Schema.define(version: 20140901135838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 20140825031539) do
     t.json     "keep_keys"
     t.string   "last_response_token"
     t.boolean  "use_routing_key"
+    t.string   "slug"
   end
 
 end

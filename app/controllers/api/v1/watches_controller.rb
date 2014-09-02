@@ -27,7 +27,7 @@ module Api
           render json: watch.to_json
         else # we sent a mongo id, so we meant /details, so fetch the WatchResponse instead. This is simply atrocious!
           watch = current_user.watches.find_by(token: params[:id])
-          response = WatchResponse.where(watch_id: watch.last_response_id).last # TODO:
+          response = watch.last_good_response
           render json: response
         end
       end

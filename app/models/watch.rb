@@ -1,9 +1,13 @@
 class Watch < ActiveRecord::Base
+
   include Rails.application.routes.url_helpers
+  include FriendlyId
 
   validates :user_id, { presence: true }
   belongs_to :user
   before_create :set_token
+
+  friendly_id :name, use: :slugged
 
   def responses
     WatchResponse.where(watch_id: id)
@@ -30,6 +34,10 @@ class Watch < ActiveRecord::Base
    end
    super.except(:url, :created_at, :updated_at, :diff).merge(uri_parts || {})
   end
+
+ def last_good_response
+   WatchResponse.where(watch_id: id, status_code: 200).last
+ end
 
   private
 

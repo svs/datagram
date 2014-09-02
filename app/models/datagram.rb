@@ -11,7 +11,7 @@ class Datagram
 
   field :user_id, type: Integer
   field :last_update_timestamp, type: Integer
-  token length: 10
+  token length: 10, skip_finders: true
 
   field :use_routing_key, type: Boolean, default: false
 
@@ -27,6 +27,10 @@ class Datagram
                        responses: response_data.to_a,
                        timestamp: (Time.at(max_ts/1000) rescue Time.now)
                      }).except("_id")
+  end
+
+  def for_token
+    {responses: Hash[response_data.map{|r| [r[:slug], r]}]}
   end
 
   def publish
@@ -61,7 +65,13 @@ class Datagram
   end
 
   def response_data
-    @response_data ||= responses.where(timestamp: max_ts).map{|r| {name: r.watch.name, data: r.response_json, errors: r.error, metadata: r.metadata}}
+    @response_data ||= responses.where(timestamp: max_ts).map{|r| {
+        slug: r.watch.slug,
+        name: r.watch.name,
+        data: r.response_json,
+        errors: r.error,
+        metadata: r.metadata
+      }}
   end
 
   def responses
