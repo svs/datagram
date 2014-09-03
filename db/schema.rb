@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140901135838) do
+ActiveRecord::Schema.define(version: 20140903100315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "datagrams", force: true do |t|
+    t.string  "name"
+    t.integer "watch_ids",                       array: true
+    t.string  "at"
+    t.integer "frequency"
+    t.integer "user_id"
+    t.string  "token"
+    t.boolean "use_routing_key"
+    t.integer "last_update_timestamp", limit: 8
+  end
 
   create_table "users", force: true do |t|
     t.datetime "created_at"
@@ -34,6 +45,26 @@ ActiveRecord::Schema.define(version: 20140901135838) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "watch_responses", force: true do |t|
+    t.integer  "watch_id"
+    t.integer  "datagram_id"
+    t.integer  "status_code"
+    t.datetime "response_received_at"
+    t.integer  "round_trip_time"
+    t.json     "response_json"
+    t.json     "error"
+    t.string   "signature"
+    t.boolean  "modified"
+    t.integer  "elapsed"
+    t.json     "strip_keys"
+    t.json     "keep_keys"
+    t.integer  "started_at"
+    t.integer  "ended_at"
+    t.string   "token"
+    t.boolean  "preview"
+    t.integer  "timestamp",            limit: 8
+  end
 
   create_table "watches", force: true do |t|
     t.integer  "user_id"

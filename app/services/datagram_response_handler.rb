@@ -9,7 +9,7 @@ class DatagramResponseHandler
     wrs = params["responses"].map do |watch|
       WatchResponseHandler.new(watch).handle!
     end
-    datagram.update(last_update_timestamp: params[:timestamp])
+    datagram.update(last_update_timestamp: params[:timestamp]) if datagram
     {token: params["datagram_id"], responses: wrs, modified: wrs.map{|w| w[:modified]}.any?}
   end
 
@@ -18,8 +18,7 @@ class DatagramResponseHandler
 
   def datagram
     return @datagram if @datagram
-    c1 = Datagram.where(:id => params[:datagram_id])
-    @datagram = (c1.where(:last_update_timestamp.lt => params[:timestamp]) | c1.where(:last_update_timestamp => nil)).first
+    @datagram = Datagram.where('token = ? AND (last_update_timestamp < ? OR last_update_timestamp is null)', params[:datagram_id], params[:timestamp]).last
   end
 
   def params

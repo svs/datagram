@@ -1,35 +1,19 @@
-class Datagram
+class Datagram < ActiveRecord::Base
 
-  include Mongoid::Document
-  include Mongoid::Token
-  include Mongoid::Timestamps
+  belongs_to :user
 
-  field :name
-  field :watch_ids, type: Array
-  field :frequency, type: Integer
-  field :at, type: String
-
-  field :user_id, type: Integer
-  field :last_update_timestamp, type: Integer
-  token length: 10, skip_finders: true
-
-  field :use_routing_key, type: Boolean, default: false
-
-
-  def user
-    User.find(user_id)
-  end
+  before_save :make_token
 
   def as_json(include_root = false)
     attributes.merge({
-                       id: _id.to_s,
+                       id: id.to_s,
                        watches: watches.map{|w| w.attributes.slice("name", "token")},
                        responses: response_data.to_a,
                        timestamp: (Time.at(max_ts/1000) rescue Time.now)
                      }).except("_id")
   end
 
-  def for_token
+  def response_json
     {responses: Hash[response_data.map{|r| [r[:slug], r]}]}
   end
 
@@ -46,14 +30,7 @@ class Datagram
     @watches ||= Watch.find(watch_ids) rescue []
   end
 
-  def self.find_by_name(name)
-    Datagram.find_by(name: name)
-  end
-
-
   private
-
-
 
   def publisher
     @publisher ||= DatagramPublisher.new(datagram: self)
@@ -76,6 +53,10 @@ class Datagram
 
   def responses
     @responses ||= WatchResponse.where(datagram_id: self.id)
+  end
+
+  def make_token
+    self.token ||= SecureRandom.urlsafe_base64
   end
 
 end

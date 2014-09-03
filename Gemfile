@@ -45,12 +45,7 @@ gem 'slim'
 gem 'devise'
 gem 'bunny'
 gem 'rabbitmq_http_api_client', '>= 1.3.0'
-gem 'mongoid', '~> 4.0.0.rc1', github: 'mongoid/mongoid'
-gem 'bson_ext'
-gem 'mongoid_token', github: 'apai4/mongoid_token'
-gem 'mongoid_slug'
 gem 'friendly_id', '~> 5.0.0'
-gem "moped", github: "mongoid/moped"
 gem 'hashdiff'
 gem 'pusher'
 gem 'redis'
@@ -73,7 +68,6 @@ group :development, :test do
   gem 'spring-commands-rspec'
   gem 'metric_fu'
   gem 'pry-rails'
-  gem 'mongoid-rspec'
 end
 
 group :development do

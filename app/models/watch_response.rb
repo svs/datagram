@@ -1,45 +1,15 @@
-class WatchResponse
+class WatchResponse < ActiveRecord::Base
 
-  include Mongoid::Document
-  include Mongoid::Timestamps
-
+  belongs_to :watch
   before_validation :check_changed
+  before_create :set_timestamp
+  before_create :set_token
 
-  field :watch_id, type: Integer
-  field :datagram_id, type: String
-  field :status_code, type: Integer
-  field :response_received_at, type: DateTime
-  field :round_trip_time, type: Float
-  field :response_json, type: Hash
-  field :error, type: Array
-  field :signature, type: String
-  field :modified, type: Boolean
-  field :elapsed, type: Integer
-  field :strip_keys, type: Hash
-  field :keep_keys, type: Hash
-  field :timestamp, type: Integer
-  field :started_at, type: Integer
-  field :ended_at, type: Integer
-  field :token, type: String
-  field :preview, type: Boolean
 
   validates :token, uniqueness: { scope: :watch_id }
 
-
-  def previous_response
-    self.class.all.lt(timestamp: timestamp).last
-  end
-
   def modified?
     modified
-  end
-
-  def watch
-    @watch ||= (watch_id ? Watch.find(watch_id) : nil)
-  end
-
-  def watch=(watch)
-    self.watch_id = watch.id
   end
 
   def as_json(x = nil)
@@ -59,14 +29,16 @@ class WatchResponse
     diff = HashDiff.diff(self.response_json, wr.response_json)
   end
 
+
+
   private
 
   def check_changed
     strip_keys!
-    unless self.status_code.nil?
-      self.signature = sig
+    self.signature = sig
+    if (id && status_code)
       self.modified = (self.signature != previous_response_signature)
-      self.ended_at ||= (Time.now.to_f  * 1000).round
+      self.ended_at ||= Time.zone.now
       self.round_trip_time ||= (self.ended_at - self.started_at) rescue 0
     end
     return true
@@ -77,7 +49,7 @@ class WatchResponse
   end
 
   def sig_data
-    (response_json.merge(status_code: status_code)).to_json
+    ((response_json || {}).merge(status_code: status_code)).to_json
   end
 
   def previous_response_signature
@@ -97,6 +69,19 @@ class WatchResponse
       self.response_json = HashFilter.drop(response_json, strip_keys)
     end
   end
+
+  def set_timestamp
+    self.timestamp ||= Time.zone.now
+  end
+
+  def set_token
+    self.token ||= SecureRandom.base64(20)
+  end
+
+  def previous_response
+    self.class.where('id < ? and watch_id = ?', id, watch_id).last if id
+  end
+
 
 
 end

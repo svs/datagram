@@ -34,7 +34,7 @@ class WatchPublisher
 
 
   def make_new_response!(datagram_id = nil, timestamp = nil, args = {})
-    ts = timestamp || (Time.now.to_f  * 1000).round
+    ts = timestamp || (Time.now)
     if !args[:preview]
       @response ||= WatchResponse.where(watch_id: watch.id,
                                       timestamp: ts,
