@@ -34,7 +34,7 @@ module Api
       def t
         datagram = Datagram.find_by(token: params[:token]) rescue nil
         if datagram
-          render json: datagram.for_token
+          render json: datagram.response_json
         else
           render json: {404 => "not found"}, status: 404
         end
