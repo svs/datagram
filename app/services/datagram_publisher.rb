@@ -24,7 +24,7 @@ class DatagramPublisher
 
   def payload
     @payload ||= {
-      datagram_id: datagram.id.to_s,
+      datagram_id: datagram.token.to_s,
       watches: watches_payload,
       routing_key: routing_key,
       datagram_token: datagram.token,

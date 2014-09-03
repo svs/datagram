@@ -49,6 +49,7 @@ describe "Models" do
     @datagram.save
     expect(@datagram.id).to_not be_nil
     @datagram.publish
+    expect(@datagram.last_update_timestamp).to be_nil
     @wr = WatchResponse.last
     response = File.read('spec/fixtures/d.json')
     json = JSON.parse(response)
