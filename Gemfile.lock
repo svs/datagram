@@ -215,6 +215,7 @@ GEM
     minitest (5.4.0)
     multi_json (1.8.4)
     multipart-post (2.0.0)
+    mustache (0.99.6)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
@@ -414,6 +415,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   metric_fu
+  mustache
   pg
   pry-byebug
   pry-rails

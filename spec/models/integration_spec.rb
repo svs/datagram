@@ -57,6 +57,7 @@ describe "Models" do
     json["responses"][0]["id"] = @wr.token
     DatagramResponseHandler.new(json).handle!
     @datagram.reload
+    expect(@wr.reload.params).to be_nil
     expect(@datagram.last_update_timestamp).to_not be_nil
 
     # Now a datagram for a  parameterized watch
@@ -67,7 +68,7 @@ describe "Models" do
     @datagram.publish
     @wr = WatchResponse.last
     expect(@wr.reload.params).to eq(default_params.stringify_keys)
-
+    ap @wr
 
 
 

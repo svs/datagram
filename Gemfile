@@ -57,6 +57,8 @@ gem 'awesome_print'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'foreman', github: 'svs/foreman'
 gem 'eye'
+gem 'mustache'
+
 
 group :development, :test do
   gem 'rspec-rails'

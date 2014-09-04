@@ -22,17 +22,16 @@ class Watch < ActiveRecord::Base
     @payload ||= publisher.payload
   end
 
-
- def as_json( include_root = false )
-   if url
+  def as_json( include_root = false )
+    if url
      uri = URI.parse(url) rescue nil
-     uri_parts = {
-       :hostname => (uri.hostname rescue ''),
-       :pathname => (uri.path.gsub("/ /","") rescue ''),
-       :permalink => api_v1_watch_path(self)
-     }
-   end
-   super.except(:url, :created_at, :updated_at, :diff).merge(uri_parts || {})
+      uri_parts = {
+        :hostname => (uri.hostname rescue ''),
+        :pathname => (uri.path.gsub("/ /","") rescue ''),
+        :permalink => api_v1_watch_path(self)
+      }
+    end
+    super.except(:url, :created_at, :updated_at, :diff).merge(uri_parts || {})
   end
 
  def last_good_response

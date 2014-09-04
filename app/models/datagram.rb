@@ -18,7 +18,7 @@ class Datagram < ActiveRecord::Base
   end
 
   def publish(params: {})
-    publisher.publish!(params)
+    publisher(params).publish!
   end
 
   def payload
@@ -32,8 +32,8 @@ class Datagram < ActiveRecord::Base
 
   private
 
-  def publisher
-    @publisher ||= DatagramPublisher.new(datagram: self)
+  def publisher(params)
+    @publisher ||= DatagramPublisher.new(datagram: self, params: params)
   end
 
 
