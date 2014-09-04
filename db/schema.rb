@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140904043221) do
+ActiveRecord::Schema.define(version: 20140904074655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 20140904043221) do
     t.integer  "timestamp",            limit: 8
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.json     "params"
   end
 
   create_table "watches", force: true do |t|
@@ -88,6 +89,7 @@ ActiveRecord::Schema.define(version: 20140904043221) do
     t.string   "last_response_token"
     t.boolean  "use_routing_key"
     t.string   "slug"
+    t.json     "params"
   end
 
 end

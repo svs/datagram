@@ -12,23 +12,25 @@ class DatagramPublisher
   end
 
 
-  def publish!
+  def publish!(params: {})
     return false if @published
-    x = watch_publishers.map{|wp| wp.publish!(exchange: nil, datagram_id: datagram.id, timestamp: timestamp)} #doesn't actually send to rabbitmq. just creates the watch_responses
-    exchange.publish(payload.to_json, routing_key: routing_key)
+    exchange.publish(payload(params).to_json, routing_key: routing_key)
     @published = true
-    Rails.logger.info "#DatagramPublisher published datagram id: #{datagram.id} token: #{datagram.token} routing_key: #{routing_key}"
-    payload
+    Rails.logger.info "#DatagramPublisher published datagram id: #{datagram.id} token: #{datagram.token} routing_key: #{routing_key} params: #{params}"
+    payload(params)
   end
 
 
-  def payload
+  def payload(params)
+    return @payload if @payload
+    watch_publishers.map{|wp| wp.make_new_response!(datagram_id: datagram.id, timestamp: timestamp, params: params)}
     @payload ||= {
       datagram_id: datagram.token.to_s,
       watches: watches_payload,
       routing_key: routing_key,
       datagram_token: datagram.token,
-      timestamp: timestamp
+      timestamp: timestamp,
+      params: params
     }
   end
 

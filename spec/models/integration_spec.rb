@@ -58,7 +58,17 @@ describe "Models" do
     DatagramResponseHandler.new(json).handle!
     @datagram.reload
     expect(@datagram.last_update_timestamp).to_not be_nil
-    ap @wr.reload
+
+    # Now a datagram for a  parameterized watch
+    default_params = {date: "2014-09-03" }
+    @watch = FactoryGirl.create(:watch, params: default_params)
+    ap @watch
+    @datagram = FactoryGirl.create(:datagram, watch_ids: [@watch.id])
+    @datagram.publish
+    @wr = WatchResponse.last
+    expect(@wr.reload.params).to eq(default_params.stringify_keys)
+
+
 
 
   end

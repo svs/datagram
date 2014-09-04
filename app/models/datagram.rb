@@ -17,8 +17,8 @@ class Datagram < ActiveRecord::Base
     {responses: Hash[response_data.map{|r| [r[:slug], r]}]}
   end
 
-  def publish
-    publisher.publish!
+  def publish(params: {})
+    publisher.publish!(params)
   end
 
   def payload
