@@ -20,7 +20,6 @@ describe DatagramPublisher do
     p1 = ap publisher.publish!
     p2 = ap publisher.publish!
 
-    ap WatchResponse.all.map(&:token)
     expect(p1).to eql p2
   end
 
