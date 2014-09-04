@@ -31,15 +31,5 @@ RSpec.describe Watch, :type => :model do
   end
 
 
-  describe "watch responses" do
-
-    context "without params" do
-      let!(:w) {  FactoryGirl.build(:watch, url: "http://echo.jsontest.com/key/value/{{foo}}", params: {"foo" => "bar"}).tap{|w| w.save} }
-      it "should parameterize the url" do
-        ap WatchPublisher.new(w).payload
-      end
-    end
-
-  end
 
 end

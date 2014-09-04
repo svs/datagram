@@ -9,6 +9,7 @@ class WatchPublisher
   end
 
   def publish!(exchange: $x, queue: $watches, datagram_id: nil, timestamp: nil, args: {})
+    return false if published
     if make_new_response!(datagram_id: datagram_id, timestamp: timestamp, args: args)
       exchange.publish(payload(args).to_json, routing_key: routing_key)
       Rails.logger.info "#WatchPublisher published watch #{watch.id} with routing_key #{routing_key}"
@@ -62,8 +63,8 @@ class WatchPublisher
   attr_accessor :published
 
   def watch_attributes
-    watch.attributes.merge(url: watch.url ? Mustache.render(watch.url, params) : watch.url,
-                           data: watch.data ? JSON.parse(Mustache.render(JSON.dump(watch.data), params)) : watch.data)
+    watch.attributes.stringify_keys.merge("url" => watch.url ? Mustache.render(watch.url, params) : watch.url,
+                                          "data" => watch.data ? JSON.parse(Mustache.render(JSON.dump(watch.data), params).gsub("\n"," ")) : watch.data)
   end
 
   def token

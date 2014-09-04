@@ -66,6 +66,7 @@ module Api
           wl[:data] = params[:watch][:data]
           wl[:strip_keys] = params[:watch][:strip_keys]
           wl[:keep_keys] = params[:watch][:keep_keys]
+          wl[:params] = params[:watch][:params]
         end
       end
 
@@ -75,6 +76,7 @@ module Api
           whitelisted[:data] = params[:watch][:data]
           whitelisted[:strip_keys] = params[:watch][:strip_keys]
           whitelisted[:keep_keys] = params[:watch][:keep_keys]
+          whitelisted[:params] = params[:watch][:params]
         end
       end
 

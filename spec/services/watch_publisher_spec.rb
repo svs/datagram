@@ -20,4 +20,17 @@ describe WatchPublisher do
 
   end
 
+  context "params" do
+    let!(:w) {  FactoryGirl.build(:watch, url: "http://echo.jsontest.com/key/value/{{foo}}", params: {"foo" => "bar"}, "data" => {x: "{{foo}}"}).tap{|w| w.save} }
+    it "should parameterize the url" do
+      expect(WatchPublisher.new(w).payload["url"] =~ /bar/).to_not be_nil
+    end
+    it "should parameterize the data" do
+      expect(WatchPublisher.new(w).payload["data"]["x"]).to eq("bar")
+    end
+
+  end
+
+
+
 end
