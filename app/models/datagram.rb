@@ -13,7 +13,7 @@ class Datagram < ActiveRecord::Base
                      }).except("_id")
   end
 
-  def response_json
+  def response_json(time = nil)
     {responses: Hash[response_data.map{|r| [r[:slug], r]}]}
   end
 
@@ -41,8 +41,13 @@ class Datagram < ActiveRecord::Base
     last_update_timestamp
   end
 
-  def response_data
-    @response_data ||= responses.where(timestamp: max_ts).map{|r| {
+  def response_data(timestamp = nil)
+    if timestamp
+      rs = all_responses.where('timestamp < ?', timestamp).last
+    else
+      rs = all_responses.where(timestamp: max_ts)
+    end
+    @response_data ||= rs.map{|r| {
         slug: r.watch.slug,
         name: r.watch.name,
         data: r.response_json,
@@ -51,7 +56,7 @@ class Datagram < ActiveRecord::Base
       }}
   end
 
-  def responses
+  def all_responses
     @responses ||= WatchResponse.where(datagram_id: self.id)
   end
 

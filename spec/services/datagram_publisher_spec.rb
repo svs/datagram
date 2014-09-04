@@ -18,7 +18,6 @@ describe DatagramPublisher do
 
   it "should have a payload" do
     p1 = ap publisher.publish!
-    binding.pry
     p2 = ap publisher.publish!
 
     ap WatchResponse.all.map(&:token)

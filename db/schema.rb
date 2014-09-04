@@ -11,20 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140903100315) do
+ActiveRecord::Schema.define(version: 20140904043221) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "datagrams", force: true do |t|
-    t.string  "name"
-    t.integer "watch_ids",                       array: true
-    t.string  "at"
-    t.integer "frequency"
-    t.integer "user_id"
-    t.string  "token"
-    t.boolean "use_routing_key"
-    t.integer "last_update_timestamp", limit: 8
+    t.string   "name"
+    t.integer  "watch_ids",                       array: true
+    t.string   "at"
+    t.integer  "frequency"
+    t.integer  "user_id"
+    t.string   "token"
+    t.boolean  "use_routing_key"
+    t.integer  "last_update_timestamp", limit: 8
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|
@@ -64,6 +66,8 @@ ActiveRecord::Schema.define(version: 20140903100315) do
     t.string   "token"
     t.boolean  "preview"
     t.integer  "timestamp",            limit: 8
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "watches", force: true do |t|

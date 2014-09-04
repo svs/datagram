@@ -35,7 +35,7 @@ RSpec.describe Watch, :type => :model do
 
     context "without params" do
       let!(:w) {  FactoryGirl.build(:watch, data: {"foo" => "bar"}).tap{|w| w.save} }
-      let!(wr) { FactoryGirl.create(:watch_response, watch_id: w.id).tap{|wr| wr.save} }
+      let!(:wr) { FactoryGirl.create(:watch_response, watch_id: w.id).tap{|wr| wr.save} }
     end
 
   end

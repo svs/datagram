@@ -1,8 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe User, :type => :model do
-  subject { build(:user).tap{|u| u.save } }
-  it { should be_valid }
-  its(:token) { should_not be nil }
+describe User do
+  let(:user) { FactoryGirl.build(:user).tap{|u| u.save } }
+
+  specify { expect(user).to be_valid }
+  specify { expect(user.token).to_not be_nil }
 
 end
