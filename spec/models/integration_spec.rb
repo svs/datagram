@@ -63,12 +63,24 @@ describe "Models" do
     # Now a datagram for a  parameterized watch
     default_params = {date: "2014-09-03" }
     @watch = FactoryGirl.create(:watch, params: default_params)
-    ap @watch
     @datagram = FactoryGirl.create(:datagram, watch_ids: [@watch.id])
     @datagram.publish
     @wr = WatchResponse.last
     expect(@wr.reload.params).to eq(default_params.stringify_keys)
-    ap @wr
+
+
+    # Now persist the report_time
+    # First, when nothing specified, make it the current time
+
+    @watch = FactoryGirl.create(:watch)
+    response = File.read('spec/fixtures/r.json')
+    json = JSON.parse(response)
+    json["id"] = WatchResponse.last.token
+    handler = WatchResponseHandler.new(json)
+    handler.handle!
+    @watch.publish
+    @wr = WatchResponse.last
+    expect(@wr.report_time).to be_a(DateTime)
 
 
 

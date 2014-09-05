@@ -58,7 +58,7 @@ gem 'rack-cors', :require => 'rack/cors'
 gem 'foreman', github: 'svs/foreman'
 gem 'eye'
 gem 'mustache'
-
+gem 'jsonpath'
 
 group :development, :test do
   gem 'rspec-rails'
