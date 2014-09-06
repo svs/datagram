@@ -43,8 +43,8 @@ module Api
       def refresh
         @datagram = current_user.datagrams.find(params[:id]) rescue nil
         if @datagram
-          @datagram.publish
-          render json: "ok"
+          channel = @datagram.publish(params[:params])
+          render json: channel
         else
           render json: "not found", status: 404
         end

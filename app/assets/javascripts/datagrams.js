@@ -2,7 +2,8 @@
 //= require 'checklist-model.js'
 //= require highlight.pack.js
 //= require angular-highlightjs.js
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher']).
+//= require directives.js
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json']).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -76,17 +77,15 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     $scope.activeResponse = json;
     $scope.preview_response = JSON.stringify($scope.activeResponse['data'], null, 2);
   };
-
+  $scope.x = {};
   $scope.refresh = function() {
     console.log('PUT', $scope.datagram);
-    $scope.datagram.customPUT({id:$scope.datagram.id}, 'refresh' ).then(function(r) {
-      if (!subscribed) {
-	subscribed = true;
-	Pusher.subscribe($scope.datagram.token,'data', function(item) {
-	  console.log('Pusher received', item);
-	  $scope.getDatagram($scope.datagram.id);
-	});
-      }
+    $scope.datagram.customPUT({id:$scope.datagram.id, params: $scope.x.publish_params}, 'refresh' ).then(function(r) {
+      console.log(r);
+      Pusher.subscribe(r,'data', function(item) {
+	console.log('Pusher received', item);
+	$scope.getDatagram($scope.datagram.id);
+      });
     });
   };
 
@@ -97,6 +96,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       console.log(r);
       $scope.activeResponse = r.responses[0];
       $scope.setActiveTab('data');
+      $scope.x.publish_params = _.reduce(_.pluck($scope.datagram.watches,"params"), function(a,b,c) { return _.merge(a,b); });
       if (!subscribed) {
 	subscribed = true;
 	Pusher.subscribe($scope.datagram.token,'data', function(item) {

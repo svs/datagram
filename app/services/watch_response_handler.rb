@@ -46,7 +46,7 @@ class WatchResponseHandler
   def report_time
     return @report_time if @report_time
     if watch.report_time
-      jt = JsonPath.new(watch.report_time).on(data)[0]
+      jt = JsonPath.new(watch.report_time).on(data.to_json)[0]
       if jt.is_a?(Fixnum) #seconds since epoch
         @report_time = Time.strptime(jt.to_s,'%s')
       else

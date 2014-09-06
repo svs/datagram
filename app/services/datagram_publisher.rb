@@ -13,12 +13,13 @@ class DatagramPublisher
   end
 
 
+  # Returns the channel on which updates to this datagram-param combination will be published
   def publish!
     return false if @published
     exchange.publish(payload.to_json, routing_key: routing_key)
     @published = true
     Rails.logger.info "#DatagramPublisher published datagram id: #{datagram.id} token: #{datagram.token} routing_key: #{routing_key} params: #{params}"
-    payload
+    return channel_name
   end
 
 
@@ -55,6 +56,10 @@ class DatagramPublisher
 
   def routing_key
     "datagram:#{datagram.use_routing_key ? user.token : queue.name}"
+  end
+
+  def channel_name
+    "#{datagram.token}-#{params.sort.to_s.gsub(/[\[ ,\]"]/,'')}"
   end
 
 end

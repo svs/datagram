@@ -7,7 +7,7 @@ class Datagram < ActiveRecord::Base
   def as_json(include_root = false)
     attributes.merge({
                        id: id.to_s,
-                       watches: watches.map{|w| w.attributes.slice("name", "token")},
+                       watches: watches.map{|w| w.attributes.slice("name", "token","params")},
                        responses: response_data.to_a,
                        timestamp: (Time.at(max_ts/1000) rescue Time.now)
                      }).except("_id")
@@ -17,7 +17,7 @@ class Datagram < ActiveRecord::Base
     {responses: Hash[response_data.map{|r| [r[:slug], r]}]}
   end
 
-  def publish(params: {})
+  def publish(params = {})
     publisher(params).publish!
   end
 
