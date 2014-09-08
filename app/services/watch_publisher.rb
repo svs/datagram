@@ -64,8 +64,8 @@ class WatchPublisher
   attr_accessor :published
 
   def watch_attributes
-    watch.attributes.stringify_keys.merge("url" => watch.url ? Mustache.render(watch.url, params) : watch.url,
-                                          "data" => watch.data ? JSON.parse(Mustache.render(JSON.dump(watch.data), params).gsub("\n"," ")) : watch.data)
+    watch.attributes.stringify_keys.merge("url" => watch.url ? ::Mustache.render(watch.url, params) : watch.url,
+                                          "data" => watch.data ? JSON.parse(::Mustache.render(JSON.dump(watch.data), params).gsub("\n"," ")) : watch.data)
   end
 
   def token
