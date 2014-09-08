@@ -32,9 +32,14 @@ module Api
       end
 
       def t
+        Rails.logger.info "#DatagramsController requested for #{params}"
         datagram = Datagram.find_by(token: params[:token]) rescue nil
         if datagram
-          render json: datagram.response_json
+          response = datagram.response_json(params: params[:params]).merge(params: params[:params])
+          if params[:refresh]
+            response = response.merge(refresh_channel: datagram.publish(params[:params] || {}))
+          end
+          render json: response
         else
           render json: {404 => "not found"}, status: 404
         end

@@ -1,4 +1,6 @@
-var watchesApp = angular.module('watchesApp', ['restangular','ui.router','doowb.angular-pusher', 'hljs', 'checklist-model']).
+//= require directives.js
+
+var watchesApp = angular.module('watchesApp', ['restangular','ui.router','doowb.angular-pusher', 'hljs', 'checklist-model','directives.json']).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider

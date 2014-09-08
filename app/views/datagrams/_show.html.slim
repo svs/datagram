@@ -9,8 +9,7 @@ script type="text/ng-template" id="show.html"
         a.btn.btn-large.btn-warning ng-click="refresh()"
           i.fa.fa-refresh style="margin-right: 5px"
           | Refresh!!
-      div ng-repeat="watch in datagram.watches"
-        textarea.form-control rows=5 json=true ng-model="x.publish_params"
+      textarea.form-control rows=5 json=true ng-model="x.publish_params"
       | {{ x.publish_params }}
       form.form-horizontal
         .form-group

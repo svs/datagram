@@ -22,7 +22,12 @@
   label.col-md-3
     span Params
   .col-md-8
-    textarea ng-model="watch.params" style="height: 200px"
+    textarea json=true ng-model="watch.params" style="height: 200px"
+.form-group
+  label.col-md-3
+    span Report Time
+  .col-md-8
+    textarea json=true ng-model="watch.report_time" style="height: 200px"
 
 .form-group
   label.col-md-3

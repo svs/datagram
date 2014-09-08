@@ -76,6 +76,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   $scope.setActiveResponse = function(json) {
     $scope.activeResponse = json;
     $scope.preview_response = JSON.stringify($scope.activeResponse['data'], null, 2);
+    $scope.setActiveTab('data');
   };
   $scope.x = {};
   $scope.refresh = function() {
@@ -95,7 +96,6 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       $scope.datagram = r;
       console.log(r);
       $scope.activeResponse = r.responses[0];
-      $scope.setActiveTab('data');
       $scope.x.publish_params = _.reduce(_.pluck($scope.datagram.watches,"params"), function(a,b,c) { return _.merge(a,b); });
       if (!subscribed) {
 	subscribed = true;
