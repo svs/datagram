@@ -53,7 +53,7 @@ class Datagram < ActiveRecord::Base
   end
 
   def all_responses(params)
-    params_clause = params.map{|k,v| "params->>'#{k}' = '#{v}' "}.join(' AND ')
+    params_clause = (params || {}).map{|k,v| "params->>'#{k}' = '#{v}' "}.join(' AND ')
     @responses ||= WatchResponse.where(datagram_id: self.id).where(params_clause)
 
 
