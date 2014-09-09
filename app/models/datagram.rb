@@ -42,7 +42,7 @@ class Datagram < ActiveRecord::Base
   end
 
   def response_data(params = {},as_of = nil)
-    rs = all_responses(params, as_of).select('distinct on (watch_id) *').order('watch_id, timestamp desc')
+    rs = all_responses(params, as_of).select('distinct on (watch_id) *').order('watch_id, report_time desc')
     @response_data ||= rs.map{|r| {
         slug: r.watch.slug,
         name: r.watch.name,
@@ -61,7 +61,6 @@ class Datagram < ActiveRecord::Base
       @responses = @responses.where('report_time <= ?',DateTime.parse(as_of))
     end
     @responses
-
   end
 
   def make_token
