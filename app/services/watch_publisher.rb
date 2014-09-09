@@ -15,6 +15,7 @@ class WatchPublisher
       exchange.publish(payload(args).to_json, routing_key: routing_key)
       Rails.logger.info "#WatchPublisher published watch #{watch.id} with routing_key #{routing_key}"
     end
+    ap payload(args)
     self.published = true
     @token
   end
@@ -65,7 +66,7 @@ class WatchPublisher
 
   def watch_attributes
     watch.attributes.stringify_keys.merge("url" => watch.url ? ::Mustache.render(watch.url, params) : watch.url,
-                                          "data" => watch.data ? JSON.parse(::Mustache.render(JSON.dump(watch.data), params).gsub("\n"," ")) : watch.data)
+                                          "data" => watch.data ? JSON.parse(::Mustache.render(JSON.dump(watch.data), params).gsub("\\n"," ").gsub("&#39;","'")) : watch.data)
   end
 
   def token

@@ -35,7 +35,7 @@ module Api
         Rails.logger.info "#DatagramsController requested for #{params}"
         datagram = Datagram.find_by(token: params[:token]) rescue nil
         if datagram
-          response = datagram.response_json(params: params[:params]).merge(params: params[:params])
+          response = datagram.response_json(params: params[:params], as_of: params[:as_of] ).merge(params: params[:params])
           if params[:refresh]
             response = response.merge(refresh_channel: datagram.publish(params[:params] || {}))
           end

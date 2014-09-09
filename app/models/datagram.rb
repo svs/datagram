@@ -13,8 +13,8 @@ class Datagram < ActiveRecord::Base
                      }).except("_id")
   end
 
-  def response_json(params: {}, time: nil)
-    {responses: Hash[response_data(params, time).map{|r| [r[:slug], r]}]}
+  def response_json(params: {}, as_of: nil)
+    {responses: Hash[response_data(params, as_of).map{|r| [r[:slug], r]}]}
   end
 
   def publish(params = {})
@@ -41,21 +41,26 @@ class Datagram < ActiveRecord::Base
     last_update_timestamp
   end
 
-  def response_data(params = {},timestamp = nil)
-    rs = all_responses(params).select('distinct on (watch_id) *').order('watch_id, timestamp desc')
+  def response_data(params = {},as_of = nil)
+    rs = all_responses(params, as_of).select('distinct on (watch_id) *').order('watch_id, timestamp desc')
     @response_data ||= rs.map{|r| {
         slug: r.watch.slug,
         name: r.watch.name,
         data: r.response_json,
         errors: r.error,
-        metadata: r.metadata
+        metadata: r.metadata,
       }}
   end
 
-  def all_responses(params)
-    params_clause = (params || {}).map{|k,v| "params->>'#{k}' = '#{v}' "}.join(' AND ')
+  def all_responses(params, as_of)
+    params_clause = (params || {}).map{|k,v|
+      v = v.gsub("'",%q(\\\')) # escape postgres single quotes
+      "params->>'#{k}' = E'#{v}' "}.join(' AND ')
     @responses ||= WatchResponse.where(datagram_id: self.id).where(params_clause)
-
+    if as_of
+      @responses = @responses.where('report_time <= ?',DateTime.parse(as_of))
+    end
+    @responses
 
   end
 

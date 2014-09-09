@@ -27,15 +27,15 @@
   label.col-md-3
     span Report Time
   .col-md-8
-    textarea json=true ng-model="watch.report_time" style="height: 200px"
+    textarea ng-model="watch.report_time" style="height: 200px"
 
 .form-group
   label.col-md-3
     span Keep Keys
   .col-md-8
-    textarea ng-model="watchKeepKeysStr" style="height: 200px"
+    textarea json=true ng-model="watch.keep_keys" style="height: 200px"
 .form-group
   label.col-md-3
     span Strip Keys
   .col-md-8
-    textarea ng-model="watchStripKeysStr" style="height: 200px"
+    textarea json=true ng-model="watch.strip_keys" style="height: 200px"

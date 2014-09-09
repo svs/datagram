@@ -21,7 +21,7 @@ class WatchResponse < ActiveRecord::Base
   end
 
   def metadata
-    attributes.slice("elapsed", "status_code", "token", "response_received_at")
+    attributes.slice("elapsed", "status_code", "token", "response_received_at", "report_time")
   end
 
   def diff_with(token)
