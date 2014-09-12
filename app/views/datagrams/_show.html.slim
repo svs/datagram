@@ -1,39 +1,43 @@
 = stylesheet_link_tag 'highlight'
 script type="text/ng-template" id="show.html"
   div ng-controller="datagramCtrl"
-    .col-md-6
-
-      h2.portlet-title
+    .col-md-6 style="border-right: 1px solid #aaa"
+      h2.portlet-title style="margin-bottom: 0px"
         u
           | {{datagram.name}}
         a.btn.btn-large.btn-warning ng-click="refresh()"
           i.fa.fa-refresh style="margin-right: 5px"
           | Refresh!!
-      textarea.form-control rows=5 json=true ng-model="x.publish_params"
-      | {{ x.publish_params }}
-      form.form-horizontal
-        .form-group
-          label.col-md-3
-            h4 Sources
-          .col-md-5
+      a ng-click="showParams=!showParams" style="cursor:pointer" Show Params
+      textarea.form-control rows=5 json=true ng-model="x.publish_params" ng-show="showParams"
+      table.table
+        tr
+          th
+            h5 Sources
+          td
             ul
-              li ng-repeat="watch in datagram.watches" {{watch.name}}
-        .form-group
-          label.col-md-3
-            h4 Updated At
-          .col-md-5
-            | {{ datagram.timestamp }}
-        .form-group
-          label.col-md-3
-            h4 Token
-          .col-md-5
+              li ng-repeat="watch in datagram.watches"
+                a href="/watches/\#{{watch.id}}"
+                  | {{watch.name}}
+        tr
+          th
+            h5 Updated At
+          td
+            | {{ datagram.updated_at }}
+        tr
+          th
+            h5 Token
+          td
             | {{ datagram.token }}
 
     .col-md-5
       ul.nav.nav-pills
-        li ng-repeat="response in datagram.responses"
-          a ng-click="setActiveResponse(response)"
-            | {{response.name}}
-      = render 'tabs'
-
-      div hljs="true" language="json" source="preview_response"
+        tabset
+          tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
+            tabset
+              tab heading="Data"
+                div hljs-to-json="response.data"
+              tab heading="Errors"
+                div hljs-to-json="response.errors"
+              tab heading="MetaData"
+                div hljs-to-json="response.metadata"

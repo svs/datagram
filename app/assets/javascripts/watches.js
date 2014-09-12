@@ -1,6 +1,6 @@
 //= require directives.js
 
-var watchesApp = angular.module('watchesApp', ['restangular','ui.router','doowb.angular-pusher', 'hljs', 'checklist-model','directives.json']).
+var watchesApp = angular.module('watchesApp', ['restangular','ui.router','doowb.angular-pusher', 'hljs', 'checklist-model','directives.json','ui.bootstrap']).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -70,7 +70,6 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     });
   };
 
-  $scope.preview_response = {};
   var subscribe = function() {
     console.log('#Pusher subscribe to', $scope.watch.token);
     Pusher.subscribe($scope.watch.token,'data', function(item) {
@@ -93,10 +92,6 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     return url.protocol.replace(":","");
   };
 
-  $scope.setActiveTab = function(tab) {
-    $scope.preview_response = JSON.stringify(Restangular.stripRestangular($scope.watch_response[tab]), null, 2);
-    $scope.activeTab = tab;
-  };
 
   var beforeSave = function() {
     console.log("watchStripKeysStr", str);

@@ -18,7 +18,9 @@
 //= require angular-pusher
 //= require highlight.pack.js
 //= require angular-highlightjs.js
+//= require ui-bs.js
 //= require checklist-model.js
+
 //= require bootstrap.min
 
 

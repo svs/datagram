@@ -7,7 +7,7 @@ class Datagram < ActiveRecord::Base
   def as_json(include_root = false)
     attributes.merge({
                        id: id.to_s,
-                       watches: watches.map{|w| w.attributes.slice("name", "token","params")},
+                       watches: watches.map{|w| w.attributes.slice("name", "token","params","id","slug")},
                        responses: response_data.to_a,
                        timestamp: (Time.at(max_ts/1000) rescue Time.now)
                      }).except("_id")

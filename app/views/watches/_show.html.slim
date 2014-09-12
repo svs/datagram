@@ -34,6 +34,11 @@ script type="text/ng-template" id="show.html"
           tr
             th Strip Keys
             td hljs-to-json="watch.strip_keys"
-      .col-md-5
-        = render 'tabs'
-        div hljs="true" language="json" source="preview_response"
+      .col-md-6
+        tabset
+          tab heading="Response"
+            div hljs-to-json="watch_response.data"
+          tab heading="Errors"
+            div hljs-to-json="watch_response.errors"
+          tab heading="Metadata"
+            div hljs-to-json="watch_response.metadata"
