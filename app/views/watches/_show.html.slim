@@ -3,8 +3,7 @@ script type="text/ng-template" id="show.html"
   div ng-controller="watchCtrl"
     .row
       .col-md-6 style="border-right: 1px solid #aaa"
-        | {{$scope}}
-        h1.pull-left style = "margin: 3px"
+        h2 style = "margin: 3px"
           | {{watch.name}}
         div.pull-left
           a.btn.btn-success ui-sref="edit({id: watch.id})" style="margin: 8px"

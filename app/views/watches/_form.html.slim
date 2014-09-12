@@ -11,8 +11,8 @@
     span ng-show="isSql" Query
     span ng-show="!isSql" Data
   .col-md-8
-    textarea.form-control rows="3" ng-model="watch.data.query" style="height: 200px" ng-show="isSql"
-    textarea.form-control rows="3" ng-model="watchDataStr" style="height: 200px" ng-show="!isSql"
+    textarea.form-control rows="3" ng-model="watch.data.query" style="height: 100px" ng-show="isSql"
+    textarea.form-control rows="3" ng-model="watchDataStr" style="height: 100px" ng-show="!isSql"
 .form-group
   label.col-md-3
     span Use Routing Key
@@ -22,20 +22,20 @@
   label.col-md-3
     span Params
   .col-md-8
-    textarea json=true ng-model="watch.params" style="height: 200px"
+    textarea json=true ng-model="watch.params" style="height: 100px;width: 100%"
 .form-group
   label.col-md-3
     span Report Time
   .col-md-8
-    textarea ng-model="watch.report_time" style="height: 200px"
+    textarea ng-model="watch.report_time" style="height: 100px;width: 100%"
 
 .form-group
   label.col-md-3
     span Keep Keys
   .col-md-8
-    textarea json=true ng-model="watch.keep_keys" style="height: 200px"
+    textarea json=true ng-model="watch.keep_keys" style="height: 100px;width: 100%"
 .form-group
   label.col-md-3
     span Strip Keys
   .col-md-8
-    textarea json=true ng-model="watch.strip_keys" style="height: 200px"
+    textarea json=true ng-model="watch.strip_keys" style="height: 100px;width: 100%"

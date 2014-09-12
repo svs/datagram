@@ -2,11 +2,10 @@ script type="text/ng-template" id="edit.html"
   = stylesheet_link_tag 'highlight'
   div ng-controller="watchCtrl"
     .row
-      .col-md-5
+      .col-md-6 style="border-right: 1px solid #aaa"
         .row
-          div.pull-left
-            h1.pull-left style = "margin: 3px"
-              | {{watch.name}}
+          h2 style = "margin: 3px"
+            | {{watch.name}}
           div.pull-left
             a.btn.btn-success ng-click="update()" style="margin: 8px"
               i.fa.fa-save
