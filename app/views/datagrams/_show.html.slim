@@ -1,7 +1,7 @@
 = stylesheet_link_tag 'highlight'
 script type="text/ng-template" id="show.html"
   div ng-controller="datagramCtrl"
-    .col-md-6 style="border-right: 1px solid #aaa"
+    .col-md-4 style="border-right: 1px solid #aaa"
       h2.portlet-title style="margin-bottom: 0px"
         u
           | {{datagram.name}}
@@ -30,7 +30,7 @@ script type="text/ng-template" id="show.html"
           td
             | {{ datagram.token }}
 
-    .col-md-5
+    .col-md-8
       ul.nav.nav-pills
         tabset
           tab ng-repeat="response in datagram.responses" heading="{{response.name}}"

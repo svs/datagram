@@ -10,7 +10,7 @@ script type="text/ng-template" id="index.html"
         tr
           th Name
           th Watches
-          th Every
+          th Refresh
           th Last Update
       tbody
         tr ng-repeat="datagram in datagrams"
@@ -18,11 +18,15 @@ script type="text/ng-template" id="index.html"
             a ui-sref="show({id: datagram.id})"
               | {{datagram.name}}
           td
-            | {{ datagram.watches}}
+            ul
+              li ng-repeat="watch in datagram.watches"
+                a href="/watches/\#{{watch.id}}"
+                  | {{ watch.name}}
           td
             | {{ datagram.at }}
             | &nbsp;
             | {{ datagram.frequency}}
-            | seconds
+            span ng-if="datagram.frequency"
+              | seconds
           td
-            | {{ datagram.last_update_timestamp }}
+            | {{ (datagram.last_update_timestamp  * 1000) | date:'medium':timezone }}
