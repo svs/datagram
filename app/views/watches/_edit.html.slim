@@ -20,7 +20,11 @@ script type="text/ng-template" id="edit.html"
         .row
           form#watch_form.form-horizontal role="form"
             = render "form"
-      .col-md-1
-      .col-md-5
-        = render 'tabs'
-        div hljs="true" language="json" source="preview_response"
+      .col-md-6
+        tabset
+          tab heading="Data"
+            div hljs-to-json="watch_response.data"
+          tab heading="Errors"
+            div hljs-to-json="watch_response.errors"
+          tab heading="MetaData"
+            div hljs-to-json="watch_response.metadata"

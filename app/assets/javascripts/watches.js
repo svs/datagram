@@ -78,7 +78,6 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
 	$scope.loading = false;
 	console.log(r);
 	$scope.watch_response = r;
-	$scope.setActiveTab('data');
       });
     });
   };
@@ -94,27 +93,7 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
 
 
   var beforeSave = function() {
-    console.log("watchStripKeysStr", str);
-    if ($scope.watchStripKeysStr.length > 0) {
-      var str = JSON.parse($scope.watchStripKeysStr.replace(/\\n/,''));
-      $scope.watch.strip_keys = str;
-    } else {
-      $scope.watch.strip_keys = {};
-    }
-    if ($scope.watchKeepKeysStr.length > 0) {
-      var str = JSON.parse($scope.watchKeepKeysStr.replace(/\\n/,''));
-      $scope.watch.keep_keys = str;
-    } else {
-      $scope.watch.keep_keys = {};
-    }
     $scope.watch.protocol = getProtocol();
-    if ($scope.watch.protocol == 'mysql' || $scope.watch.protocol == 'postgres') {
-
-    } else {
-      if ($scope.watchDataStr.length > 0) {
-	$scope.watch.data = JSON.parse($scope.watchDataStr);
-      }
-    }
   };
 
   $scope.update = function() {
@@ -148,7 +127,6 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
 	  $scope.loading = false;
 	  console.log(r);
 	  $scope.watch_response = r;
-	  $scope.setActiveTab('data');
 	});
       });
     });
@@ -163,7 +141,6 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
   var getPreview = function(token) {
     Restangular.one('api/v1/watches', token).get().then(function(r) {
       $scope.watch_response = r;
-      $scope.setActiveTab('data');
     });
   };
 
