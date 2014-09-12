@@ -14,7 +14,7 @@ html.no-js[lang="en"]
     link[rel="shortcut icon" href="favicon.ico"]
   body
     #wrapper
-      header.navbar.navbar-inverse[role="banner"]
+      header.navbar.navbar[role="banner"]
         .container
           .navbar-header
             button.navbar-toggle[type="button" data-toggle="collapse" data-target=".navbar-collapse"]
@@ -22,115 +22,20 @@ html.no-js[lang="en"]
                 | Toggle navigation
               i.fa.fa-cog
             a.navbar-brand.navbar-brand-img[href="./"]
-              img[src="./img/logo.png" alt="MVP Ready"]
+              h1 Datagram
           nav.collapse.navbar-collapse[role="navigation"]
-            ul.nav.navbar-nav.noticebar.navbar-left
+            ul.mainnav-menu
               li.dropdown
-                a.dropdown-toggle[href="./page-notifications.html" data-toggle="dropdown"]
-                  i.fa.fa-bell
-                  span.navbar-visible-collapsed
-                    |  Notifications 
-                  span.badge.badge-primary
-                    | 3
-                ul.dropdown-menu.noticebar-menu.noticebar-hoverable[role="menu"]
-                  li.nav-header
-                    .pull-left
-                      |  Notifications
-                    .pull-right
-                      a[href="javascript:;"]
-                        | Mark as Read
-                  li
-                    a.noticebar-item[href="./page-notifications.html"]
-                      span.noticebar-item-image
-                        i.fa.fa-cloud-upload.text-success
-                      span.noticebar-item-body
-                        strong.noticebar-item-title
-                          | Templates Synced
-                        span.noticebar-item-text
-                          | 20 Templates have been synced to the Mashon Demo instance.
-                        span.noticebar-item-time
-                          i.fa.fa-clock-o
-                          |  12 minutes ago
-                  li
-                    a.noticebar-item[href="./page-notifications.html"]
-                      span.noticebar-item-image
-                        i.fa.fa-ban.text-danger
-                      span.noticebar-item-body
-                        strong.noticebar-item-title
-                          | Sync Error
-                        span.noticebar-item-text
-                          | 5 Designs have been failed to be synced to the Mashon Demo instance.
-                        span.noticebar-item-time
-                          i.fa.fa-clock-o
-                          |  20 minutes ago
-                  li.noticebar-menu-view-all
-                    a[href="./page-notifications.html"]
-                      | View All Notifications
+                = link_to 'Datagrams', datagrams_path
               li.dropdown
-                a.dropdown-toggle[href="./page-notifications.html" data-toggle="dropdown"]
-                  i.fa.fa-envelope
-                  span.navbar-visible-collapsed
-                    |  Messages 
-                ul.dropdown-menu.noticebar-menu.noticebar-hoverable[role="menu"]
-                  li.nav-header
-                    .pull-left
-                      |  Messages
-                    .pull-right
-                      a[href="javascript:;"]
-                        | New Message
-                  li
-                    a.noticebar-item[href="./page-notifications.html"]
-                      span.noticebar-item-image
-                        img[src="./img/avatars/avatar-1-md.jpg" style="width: 50px" alt=""]
-                      span.noticebar-item-body
-                        strong.noticebar-item-title
-                          | New Message
-                        span.noticebar-item-text
-                          | Lorem ipsum dolor sit amet, consectetur adipisicing elit...
-                        span.noticebar-item-time
-                          i.fa.fa-clock-o
-                          |  20 minutes ago
-                  li
-                    a.noticebar-item[href="./page-notifications.html"]
-                      span.noticebar-item-image
-                        img[src="./img/avatars/avatar-2-md.jpg" style="width: 50px" alt=""]
-                      span.noticebar-item-body
-                        strong.noticebar-item-title
-                          | New Message
-                        span.noticebar-item-text
-                          | Lorem ipsum dolor sit amet, consectetur adipisicing elit...
-                        span.noticebar-item-time
-                          i.fa.fa-clock-o
-                          |  5 hours ago
-                  li.noticebar-menu-view-all
-                    a[href="./page-notifications.html"]
-                      | View All Messages
-              li.dropdown
-                a.dropdown-toggle[href="javascript:;" data-toggle="dropdown"]
-                  i.fa.fa-exclamation-triangle
-                  span.navbar-visible-collapsed
-                    |  Alerts 
-                ul.dropdown-menu.noticebar-menu.noticebar-hoverable[role="menu"]
-                  li.nav-header
-                    .pull-left
-                      |  Alerts
-                  li.noticebar-empty
-                    h4.noticebar-empty-title
-                      | No alerts here.
-                    p.noticebar-empty-text
-                      | Check out what other makers are doing on Explore!
+                = link_to 'Watches', watches_path
+
             ul.nav.navbar-nav.navbar-right
-              li
-                a[href="javsacript:;"]
-                  | About
-              li
-                a[href="javascript:;"]
-                  | Resources
               li.dropdown.navbar-profile
                 a.dropdown-toggle[data-toggle="dropdown" href="javascript:;"]
-                  img.navbar-profile-avatar[src="./img/avatars/avatar-1-xs.jpg" alt=""]
+                  = current_user.email
                   span.navbar-profile-label
-                    | rod@rod.me  
+                    = current_user.email
                   i.fa.fa-caret-down
                 ul.dropdown-menu[role="menu"]
                   li
@@ -150,22 +55,6 @@ html.no-js[lang="en"]
                     = link_to destroy_user_session_path do
                       i.fa.fa-sign-out
                       |    Logout
-      .mainnav
-        .container
-          a.mainnav-toggle[data-toggle="collapse" data-target=".mainnav-collapse"]
-            span.sr-only
-              | Toggle navigation
-            i.fa.fa-bars
-          nav.collapse.mainnav-collapse[role="navigation"]
-            form.mainnav-form.pull-right[role="search"]
-              input.form-control.input-md.mainnav-search-query[type="text" placeholder="Search"]
-              button.btn.btn-sm.mainnav-form-btn
-                i.fa.fa-search
-            ul.mainnav-menu
-              li.dropdown
-                = link_to 'Datagrams', datagrams_path
-              li.dropdown
-                = link_to 'Watches', watches_path
 
       .content
         .container

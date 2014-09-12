@@ -50,3 +50,29 @@ angular.module('directives.json',[]).directive('json', function() {
     }
   };
 });
+
+angular.module('directives.json')
+.directive('hljsToJson', [function () {
+  return {
+    restrict: 'EA',
+    scope: {
+      obj: '=hljsToJson'
+    },
+    template: '<div hljs source="prettyJSON"></div>',
+    link: function postLink(scope, iElm, iAttrs) {
+      var tabWidth = 4;
+
+      scope.prettyJSON = '';
+
+      scope.$watch('obj', function (newObj, oldObj) {
+
+        if (angular.isDefined(newObj) &&
+            (newObj === oldObj || !angular.equals(newObj, oldObj))) {
+
+          scope.prettyJSON = JSON.stringify(newObj, null, tabWidth);
+        }
+
+      });
+    }
+  };
+}]);
