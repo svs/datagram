@@ -2,11 +2,14 @@ class Datagram < ActiveRecord::Base
 
   belongs_to :user
 
-  before_save :make_token
+  before_save :make_token_and_slug
+  include Rails.application.routes.url_helpers
 
   def as_json(include_root = false)
     attributes.merge({
                        id: id.to_s,
+                       private_url: private_url,
+                       public_url: public_url,
                        watches: watches.map{|w| w.attributes.slice("name", "token","params","id","slug")},
                        responses: response_data.to_a,
                        timestamp: (Time.at(max_ts/1000) rescue Time.now)
@@ -28,6 +31,14 @@ class Datagram < ActiveRecord::Base
 
   def watches
     @watches ||= Watch.find(watch_ids) rescue []
+  end
+
+  def private_url
+    api_v1_t_path(slug: slug, api_key: user.token)
+  end
+
+  def public_url
+    api_v1_d_path(token: token)
   end
 
   private
@@ -67,8 +78,9 @@ class Datagram < ActiveRecord::Base
     @responses
   end
 
-  def make_token
+  def make_token_and_slug
     self.token ||= SecureRandom.urlsafe_base64
+    self.slug ||= name.parameterize
   end
 
 end

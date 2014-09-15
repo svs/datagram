@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :watches
-
+  has_many :watch_responses, through: :watches
   before_create :create_token
 
   def datagrams

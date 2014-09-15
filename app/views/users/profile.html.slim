@@ -1,0 +1,31 @@
+.row
+  .col-md-1.col-sm-2
+  .col-md-7.col-sm-9
+    h3= current_user.email
+
+    ul.icons-list
+      li
+        i.icon-li.fa.fa-key
+        = current_user.token
+  .col-md-3.col-sm-5
+    h5.content-title
+      u Stats
+    .list-group
+      a.list-group-item
+        h3.pull-right
+          i.fa.fa-camera.text-primary
+        h4.list-group-item-heading
+          = current_user.datagrams.count
+        p.list-group-item-text Datagrams
+      a.list-group-item
+        h3.pull-right
+          i.fa.fa-eye.text-primary
+        h4.list-group-item-heading
+          = current_user.watches.count
+        p.list-group-item-text Watches
+      a.list-group-item
+        h3.pull-right
+          i.fa.fa-exchange.text-primary
+        h4.list-group-item-heading
+          = current_user.watch_responses.count
+        p.list-group-item-text Data Updates

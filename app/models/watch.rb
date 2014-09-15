@@ -9,6 +9,8 @@ class Watch < ActiveRecord::Base
 
   friendly_id :name, use: :slugged
 
+  has_many :watch_responses
+
   def responses
     WatchResponse.where(watch_id: id)
   end

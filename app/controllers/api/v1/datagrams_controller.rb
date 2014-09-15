@@ -33,7 +33,11 @@ module Api
 
       def t
         Rails.logger.info "#DatagramsController requested for #{params}"
-        datagram = Datagram.find_by(token: params[:token]) rescue nil
+        if params[:token]
+          datagram = Datagram.find_by(token: params[:token]) rescue nil
+        elsif params[:api_key]
+          datagram = User.find_by(token: params[:api_key]).datagrams.find_by(slug: params[:slug])
+        end
         if datagram
           response = datagram.response_json(params: params[:params], as_of: params[:as_of] ).merge(params: params[:params])
           if params[:refresh]

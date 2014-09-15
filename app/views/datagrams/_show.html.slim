@@ -29,6 +29,23 @@ script type="text/ng-template" id="show.html"
             h5 Token
           td
             | {{ datagram.token }}
+        tr
+          th
+            h5
+              | Private URL
+              button.btn-danger popover-placement="right" popover="Do not share this URL with anyone as it contains your private key. To share datagrams, generate shareable tokens" class="btn btn-default" popover-trigger="mouseenter"
+                i.fa.fa-exclamation-circle
+          td
+            a href="{{datagram.private_url}}"
+              | {{ datagram.private_url }}
+        tr
+          th
+            h5
+              | Public URL
+          td
+            a href="{{datagram.public_url}}"
+              | {{ datagram.public_url }}
+
 
     .col-md-8
       ul.nav.nav-pills

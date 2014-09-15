@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'registrations' }
   root to: "home#index"
-
+  get '/profile', to: 'users#profile'
   resources :watches
   resources :datagrams
 
@@ -18,7 +18,8 @@ Rails.application.routes.draw do
           put 'refresh'
         end
       end
-      get 'd/:token', to: 'datagrams#t'
+      get 'd/:token', to: 'datagrams#t', as: 'd'
+      get 't/:slug', to: 'datagrams#t', as: 't'
     end
   end
 end
