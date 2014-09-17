@@ -19,7 +19,6 @@ class DatagramPublisher
     exchange.publish(payload.to_json, routing_key: routing_key)
     @published = true
     Rails.logger.info "#DatagramPublisher published datagram id: #{datagram.id} token: #{datagram.token} routing_key: #{routing_key} params: #{params}"
-    ap payload
     return channel_name
   end
 
