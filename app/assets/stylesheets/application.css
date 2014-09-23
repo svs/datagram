@@ -23,10 +23,10 @@ h1, h2, h3{
 
 pre {
   background: none;
-  font-family: 'Ubuntu Mono';
+  font-family: 'Ubuntu Mono', monospace;
   border: none;
   code {
-      font-family: 'Ubuntu Mono';
+      font-family: 'Ubuntu Mono', monospace;
       .hljs {
 	  background: none;
       }

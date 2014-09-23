@@ -3,7 +3,7 @@ module Api
     class WatchesController < ApplicationController
 
       def index
-        @watches = current_user.watches
+        @watches = policy_scope(Watch)
         render json: @watches
       end
 
@@ -22,10 +22,10 @@ module Api
       end
 
       def show
-        if (Integer(params[:id]) rescue nil) # aaaa!!!! we have coupling with our datastore's primary key type!
-          watch = current_user.watches.find(params[:id])
+        if (Integer(params[:id]) rescue nil)
+          watch = policy_scope(Watch).find(params[:id])
           render json: watch.to_json
-        else # we sent a mongo id, so we meant /details, so fetch the WatchResponse instead. This is simply atrocious!
+        else
           watch = current_user.watches.find_by(token: params[:id])
           response = watch.last_good_response
           render json: response
@@ -39,7 +39,7 @@ module Api
           @watch.publish
           render json: "ok" and return
         else
-          @watch = current_user.watches.find(params[:id])
+          @watch = policy_scope(Watch).find(params[:id])
           if @watch.update(watch_params)
             render json: @watch
           else
@@ -49,7 +49,7 @@ module Api
       end
 
       def details
-        @watch = current_user.watches.find(params[:id]).responses.last
+        @watch = policy_scope(Watch).find(params[:id]).responses.last
         render json: @watch.response_json["data"]
       end
 

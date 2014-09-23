@@ -2,6 +2,7 @@ class WatchResponseHandler
 
   def initialize(params)
     @params = params
+    ap params
   end
 
   def handle!

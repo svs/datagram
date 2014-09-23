@@ -59,7 +59,7 @@ gem 'foreman', github: 'svs/foreman'
 gem 'eye'
 gem 'mustache'
 gem 'jsonpath'
-
+gem "pundit"
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard-rspec'

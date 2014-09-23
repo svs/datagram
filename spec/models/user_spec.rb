@@ -6,4 +6,8 @@ describe User do
   specify { expect(user).to be_valid }
   specify { expect(user.token).to_not be_nil }
 
+
+  specify { expect(user).to belong_to :organisation }
+  specify { expect(user).to have_property :role }
+
 end

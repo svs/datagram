@@ -3,9 +3,8 @@ module Api
     class DatagramsController < ApplicationController
 
       before_action :authenticate_user!, except: [:t]
-
       def index
-        @datagrams = current_user.datagrams
+        @datagrams = DatagramPolicy::Scope.new(current_user, Datagram).resolve
         render json: @datagrams
       end
 
@@ -23,7 +22,7 @@ module Api
       end
 
       def show
-        datagram = current_user.datagrams.find(params[:id]) rescue nil
+        datagram = policy_scope(Datagram).find(params[:id]) rescue nil
         if datagram
           render json: datagram
         else
@@ -50,7 +49,7 @@ module Api
       end
 
       def refresh
-        @datagram = current_user.datagrams.find(params[:id]) rescue nil
+        @datagram = policy_scope(Datagram).find(params[:id]) rescue nil
         if @datagram
           channel = @datagram.publish(params[:params])
           render json: channel
