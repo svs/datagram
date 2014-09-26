@@ -16,10 +16,14 @@ class Datagram < ActiveRecord::Base
                      }).except("_id")
   end
 
+  # JSON representation of the latest requested responses.
+  # params: arbitrary hash passed on to callees
+  # as_of: a datetime. we show the last response before the requested time.
   def response_json(params: {}, as_of: nil)
     {responses: Hash[response_data(params, as_of).map{|r| [r[:slug], r]}]}
   end
 
+  # calls WatchPublisher.publish! passing on the given hash.
   def publish(params = {})
     publisher(params).publish!
   end
@@ -52,6 +56,10 @@ class Datagram < ActiveRecord::Base
     last_update_timestamp
   end
 
+  # the last available responses for this datagram for all included watches
+  # edge cases abound!
+  # what happens if one of the watches crashed?
+  # we should actually persist this on calculation. So meta!
   def response_data(params = {},as_of = nil)
     rs = all_responses(params, as_of).select('distinct on (watch_id) *').order('watch_id, report_time desc, created_at desc')
     @response_data ||= rs.map{|r| {
@@ -63,15 +71,19 @@ class Datagram < ActiveRecord::Base
       }}
   end
 
-  def all_responses(params, as_of)
+  def all_responses(search_params, as_of)
+    # filters responses for watch params
     return @responses if @responses
-    params_clause = (params || {}).map{|k,v|
+    params_clause = (search_params || {}).map{|k,v|
       v = v.gsub("'",%q(\\\')) # escape postgres single quotes
       "params->>'#{k}' = E'#{v}' "}.join(' AND ')
+    # and for those without responses
     @responses = WatchResponse.where(datagram_id: self.id).where('response_json is not null')
+    # execute search filter
     if !params.blank?
       @responses = @responses.where(params_clause)
     end
+    # execute report_time filter
     if as_of
       @responses = @responses.where('report_time <= ?',DateTime.parse(as_of))
     end

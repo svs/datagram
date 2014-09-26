@@ -60,6 +60,8 @@ gem 'eye'
 gem 'mustache'
 gem 'jsonpath'
 gem "pundit"
+gem "dogstatsd-ruby"
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard-rspec'
@@ -70,6 +72,8 @@ group :development, :test do
   gem 'spring-commands-rspec'
   gem 'metric_fu'
   gem 'pry-rails'
+  gem 'rspec-legacy_formatters'
+  gem 'faye_formatter', path: '../faye_formatter'
 end
 
 group :development do

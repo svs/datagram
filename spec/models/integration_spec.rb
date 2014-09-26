@@ -17,14 +17,20 @@ describe "Models" do
                                ).tap{|w| w.save}
 
     # Run it once
+
+    # Publish a watch in preview mode.
     @watch.publish(preview: true)
     expect(WatchResponse.count).to eq 1
     @watch_response = WatchResponse.last
+
+    # mark the response
     response = File.read('spec/fixtures/r.json')
     json = JSON.parse(response)
     json["id"] = WatchResponse.last.token
     handler = WatchResponseHandler.new(json)
     handler.handle!
+
+    #assert correct
     @watch_response.reload
     expect(@watch_response).to be_modified
     expect(@watch.last_good_response).to eq @watch_response
@@ -41,6 +47,8 @@ describe "Models" do
     handler.handle!
     @watch_response.reload
     @watch.reload
+
+    # check for modification
     expect(@watch_response_2).to_not be_modified
     expect(@watch.last_good_response).to eq @watch_response_2
 
@@ -82,6 +90,7 @@ describe "Models" do
     @wr = WatchResponse.last
     expect(@wr.report_time).to be_a(DateTime)
 
+    # When a time is specified, it should be saved as the report time
 
 
   end

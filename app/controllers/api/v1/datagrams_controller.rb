@@ -24,6 +24,8 @@ module Api
       def show
         datagram = policy_scope(Datagram).find(params[:id]) rescue nil
         if datagram
+          $statsd.increment('datagram.show')
+          $statsd.increment("datagram.#{datagram.id}.show")
           render json: datagram
         else
           render json: "not found", status: 404
@@ -34,10 +36,15 @@ module Api
         Rails.logger.info "#DatagramsController requested for #{params}"
         if params[:token]
           datagram = Datagram.find_by(token: params[:token]) rescue nil
+          $statsd.increment("token.#{params[:token]}") if datagram
         elsif params[:api_key]
           datagram = User.find_by(token: params[:api_key]).datagrams.find_by(slug: params[:slug])
+          if datagram
+            $statsd.increment("api_key.#{params[:api_key]}")
+          end
         end
         if datagram
+          $statsd.increment("datagram.#{datagram.slug}")
           response = datagram.response_json(params: params[:params], as_of: params[:as_of] ).merge(params: params[:params])
           if params[:refresh]
             response = response.merge(refresh_channel: datagram.publish(params[:params] || {}))
