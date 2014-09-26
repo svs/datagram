@@ -80,7 +80,7 @@ class Datagram < ActiveRecord::Base
     # and for those without responses
     @responses = WatchResponse.where(datagram_id: self.id).where('response_json is not null')
     # execute search filter
-    if !params.blank?
+    if !search_params.blank?
       @responses = @responses.where(params_clause)
     end
     # execute report_time filter
