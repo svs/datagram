@@ -45,6 +45,7 @@ module Api
         end
         if datagram
           $statsd.increment("datagram.slug.#{datagram.slug}")
+          $statsd.increment("datagram.t")
           response = datagram.response_json(params: params[:params], as_of: params[:as_of] ).merge(params: params[:params])
           if params[:refresh]
             response = response.merge(refresh_channel: datagram.publish(params[:params] || {}))
