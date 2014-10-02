@@ -35,6 +35,11 @@ class DatagramPublisher
     }
   end
 
+  def channel_name
+    datagram.refresh_channel(params)
+  end
+
+
   private
 
   attr_reader :datagram, :exchange, :queue, :timestamp, :user, :params
@@ -58,8 +63,5 @@ class DatagramPublisher
     "datagram:#{datagram.use_routing_key ? user.token : queue.name}"
   end
 
-  def channel_name
-    "#{datagram.token}-#{params.sort.to_s.gsub(/[\[ ,\]"]/,'')}"
-  end
 
 end

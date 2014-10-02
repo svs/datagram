@@ -6,11 +6,8 @@ class DatagramResponseHandler
   end
 
   def handle!
-    wrs = params["responses"].map do |watch|
-      WatchResponseHandler.new(watch).handle!
-    end
     datagram.update(last_update_timestamp: params[:timestamp]) if datagram
-    {token: params["datagram_id"], responses: wrs, modified: wrs.map{|w| w[:modified]}.any?}
+    {token: params["datagram_id"], responses: wrs, modified: wrs.map{|w| w[:modified]}.any?, refresh_channel: refresh_channel }
   end
 
   private
@@ -25,9 +22,19 @@ class DatagramResponseHandler
     @params.with_indifferent_access
   end
 
+  def wrs
+    params["responses"].map do |watch|
+      WatchResponseHandler.new(watch).handle!
+    end
+  end
 
+  def watch_params
+    WatchResponse.find_by(token: wrs[0][:watch_response_token]).params
+  end
 
-
+  def refresh_channel
+    datagram.refresh_channel(watch_params)
+  end
 
 
 end

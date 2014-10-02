@@ -19,8 +19,9 @@ class Datagram < ActiveRecord::Base
   # JSON representation of the latest requested responses.
   # params: arbitrary hash passed on to callees
   # as_of: a datetime. we show the last response before the requested time.
-  def response_json(params: {}, as_of: nil)
-    {responses: Hash[response_data(params, as_of).map{|r| [r[:slug], r]}]}
+  # staleness: no of seconds staleness we can accept
+  def response_json(params: {}, as_of: nil, staleness: nil)
+    {responses: Hash[response_data(params, as_of, staleness).map{|r| [r[:slug], r]}]}
   end
 
   # calls WatchPublisher.publish! passing on the given hash.
@@ -45,6 +46,11 @@ class Datagram < ActiveRecord::Base
     api_v1_d_path(token: token)
   end
 
+  def refresh_channel(params)
+    params = {token: self.token}.merge(params || {})
+    Base64.urlsafe_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::Digest.new('sha256'), "secret", params.to_json)).strip
+  end
+
   private
 
   def publisher(params)
@@ -59,9 +65,13 @@ class Datagram < ActiveRecord::Base
   # the last available responses for this datagram for all included watches
   # edge cases abound!
   # what happens if one of the watches crashed?
-  # we should actually persist this on calculation. So meta!
-  def response_data(params = {},as_of = nil)
-    rs = all_responses(params, as_of).select('distinct on (watch_id) *').order('watch_id, report_time desc, created_at desc')
+  def response_data(params = {},as_of = nil, staleness = nil)
+    rs = all_responses(params, as_of).
+      select('distinct on (watch_id) *').
+      order('watch_id, report_time desc, created_at desc')
+    if staleness
+      rs = rs.where('extract(epoch from (? - response_received_at)) < ?', Time.zone.now, staleness)
+    end
     @response_data ||= rs.map{|r| {
         slug: r.watch.slug,
         name: r.watch.name,
@@ -77,7 +87,7 @@ class Datagram < ActiveRecord::Base
     params_clause = (search_params || {}).map{|k,v|
       v = v.gsub("'",%q(\\\')) # escape postgres single quotes
       "params->>'#{k}' = E'#{v}' "}.join(' AND ')
-    # and for those without responses
+    # and for those where there is no response yet (crashed, timedout, still processing....)
     @responses = WatchResponse.where(datagram_id: self.id).where('response_json is not null')
     # execute search filter
     if !search_params.blank?
