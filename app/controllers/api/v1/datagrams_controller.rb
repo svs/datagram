@@ -50,7 +50,7 @@ module Api
           response = datagram.response_json(params: params[:params], as_of: params[:as_of], staleness: params[:staleness] ).
                      merge(refresh_channel: datagram.refresh_channel(params[:params]))
           if params[:refresh] && response[:responses].blank?            
-            datagram.publish(params[:params] || {})}
+            datagram.publish(params[:params] || {})
           end
           render json: response
         else
