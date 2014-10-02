@@ -34,6 +34,7 @@ module Api
 
       def t
         Rails.logger.info "#DatagramsController requested for #{params}"
+        params[:staleness] = nil if params[:staleness] == "any"
         if params[:token]
           datagram = Datagram.find_by(token: params[:token]) rescue nil
           $statsd.increment("datagram.token.#{params[:token]}") if datagram
@@ -46,9 +47,10 @@ module Api
         if datagram
           $statsd.increment("datagram.slug.#{datagram.slug}")
           $statsd.increment("datagram.t")
-          response = datagram.response_json(params: params[:params], as_of: params[:as_of] ).merge(params: params[:params])
-          if params[:refresh]
-            response = response.merge(refresh_channel: datagram.publish(params[:params] || {}))
+          response = datagram.response_json(params: params[:params], as_of: params[:as_of], staleness: params[:staleness] ).
+                     merge(refresh_channel: datagram.refresh_channel(params[:params]))
+          if params[:refresh] && response[:responses].blank?            
+            datagram.publish(params[:params] || {})}
           end
           render json: response
         else

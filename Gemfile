@@ -73,7 +73,7 @@ group :development, :test do
   gem 'metric_fu'
   gem 'pry-rails'
   gem 'rspec-legacy_formatters'
-  gem 'faye_formatter', path: '../faye_formatter'
+  # gem 'faye_formatter', path: '../faye_formatter'
 end
 
 group :development do
