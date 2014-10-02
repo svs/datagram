@@ -19,7 +19,7 @@ task :datagram_consumer => :environment do
   Rails.logger.info 'Started #DatagramConsumer'
   $datagram_responses.subscribe(block: true) do |di, md, payload|
     d = DatagramResponseHandler.new(JSON.parse(payload)).handle!
-    Rails.logger.info("ResponsesConsumer#datagram_consumer Pushing ...")
+    Rails.logger.info("ResponsesConsumer#datagram_consumer Pushing on #{d[:refresh_channel]} ...")
     Pusher.trigger(d[:refresh_channel], 'data', d)
   end
 end

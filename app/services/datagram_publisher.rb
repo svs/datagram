@@ -10,6 +10,7 @@ class DatagramPublisher
     @timestamp = (Time.now.to_f).round
     @user = datagram.user
     @params = params
+    @refresh_channel = datagram.refresh_channel(params)
   end
 
 
@@ -18,8 +19,9 @@ class DatagramPublisher
     return false if @published
     exchange.publish(payload.to_json, routing_key: routing_key)
     @published = true
-    Rails.logger.info "#DatagramPublisher published datagram id: #{datagram.id} token: #{datagram.token} routing_key: #{routing_key} params: #{params}"
-    return channel_name
+    Rails.logger.info "#DatagramPublisher published datagram id: #{datagram.id} token: #{datagram.token} routing_key: #{routing_key} params: #{params} refresh_channel: #{refresh_channel}"
+    ap payload
+    return refresh_channel
   end
 
 
@@ -32,6 +34,7 @@ class DatagramPublisher
       routing_key: routing_key,
       datagram_token: datagram.token,
       timestamp: timestamp,
+      refresh_channel: refresh_channel
     }
   end
 
@@ -42,7 +45,7 @@ class DatagramPublisher
 
   private
 
-  attr_reader :datagram, :exchange, :queue, :timestamp, :user, :params
+  attr_reader :datagram, :exchange, :queue, :timestamp, :user, :params, :refresh_channel
 
 
   def watch_publishers
