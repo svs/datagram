@@ -7,7 +7,7 @@ class DatagramResponseHandler
 
   def handle!
     datagram.update(last_update_timestamp: params[:timestamp]) if datagram
-    {token: params["datagram_id"], responses: wrs, modified: wrs.map{|w| w[:modified]}.any?, refresh_channel: refresh_channel }
+    {token: params["datagram_id"], responses: wrs, modified: wrs.map{|w| w[:modified]}.any?, refresh_channel: params[:refresh_channel] }
   end
 
   private
@@ -33,6 +33,7 @@ class DatagramResponseHandler
   end
 
   def refresh_channel
+    binding.pry
     datagram.refresh_channel(watch_params)
   end
 
