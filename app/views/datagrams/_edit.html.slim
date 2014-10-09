@@ -1,14 +1,5 @@
 script type="text/ng-template" id="edit.html"
   div ng-controller="editDatagramCtrl"
     h3 New Datagram
-    .row
-      .col-md-5
-        .portlet
-          h4.portlet-title
-            u
-              .kv-icon.kv-icon-secondary.pull-left 1
-              | Name
-          input.form-control ng-model="datagram.name"
-        .portlet
-          = render 'form'
-    .btn.btn-primary ng-click="save()" Update Datagram!
+    = render 'form'
+    .btn.btn-primary ng-click="save()" Create Datagram!

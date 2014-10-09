@@ -12,7 +12,8 @@ class Datagram < ActiveRecord::Base
                        public_url: public_url,
                        watches: watches.map{|w| w.attributes.slice("name", "token","params","id","slug")},
                        responses: response_data.to_a,
-                       timestamp: (Time.at(max_ts/1000) rescue Time.now)
+                       timestamp: (Time.at(max_ts/1000) rescue Time.now),
+                       publish_params: publish_params
                      }).except("_id")
   end
 

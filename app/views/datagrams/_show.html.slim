@@ -9,7 +9,7 @@ script type="text/ng-template" id="show.html"
           i.fa.fa-refresh style="margin-right: 5px"
           | Refresh!!
       a ng-click="showParams=!showParams" style="cursor:pointer" Show Params
-      textarea.form-control rows=5 json=true ng-model="x.publish_params" ng-show="showParams"
+      textarea.form-control rows=5 json=true ng-model="datagram.publish_params" ng-show="showParams"
       table.table
         tr
           th

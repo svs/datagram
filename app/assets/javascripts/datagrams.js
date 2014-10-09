@@ -77,44 +77,9 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', function($scope, Restangular, $stateParams, $state, Pusher) {
 
-  var subscribed = false;
-
-  $scope.setActiveTab = function(field) {
-    $scope.activeTab = field;
-    $scope.preview_response = JSON.stringify($scope.activeResponse[field], null, 2);
-  };
-
-  $scope.setActiveResponse = function(json) {
-    $scope.activeResponse = json;
-    $scope.preview_response = JSON.stringify($scope.activeResponse['data'], null, 2);
-    $scope.setActiveTab('data');
-  };
-  $scope.x = {};
-  $scope.refresh = function() {
-    console.log('PUT', $scope.datagram);
-    $scope.datagram.customPUT({id:$scope.datagram.id, params: $scope.x.publish_params}, 'refresh' ).then(function(r) {
-      console.log(r);
-      Pusher.subscribe(r,'data', function(item) {
-	console.log('Pusher received', item);
-	$scope.getDatagram($scope.datagram.id);
-      });
-    });
-  };
-
   $scope.getDatagram = function(id) {
-    $scope.activeResponse = {};
     Restangular.one('api/v1/datagrams',id).get().then(function(r) {
       $scope.datagram = r;
-      console.log(r);
-      $scope.activeResponse = r.responses[0];
-      $scope.x.publish_params = _.reduce(_.pluck($scope.datagram.watches,"params"), function(a,b,c) { return _.merge(a,b); });
-      if (!subscribed) {
-	subscribed = true;
-	Pusher.subscribe($scope.datagram.token,'data', function(item) {
-	  console.log('Pusher received', item);
-	  $scope.getDatagram($scope.datagram.id);
-	});
-      };
     });
   };
 
@@ -130,4 +95,46 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
 
+}]);
+
+angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', function($scope, Restangular, $stateParams, $state, Pusher) {
+  var loaded = false;
+    $scope.getDatagram = function(id) {
+      Restangular.one('api/v1/datagrams',id).get().then(function(r) {
+	$scope.datagram = r;
+    });
+  };
+
+  if ($stateParams.id) {
+    $scope.getDatagram($stateParams.id);
+  };
+  Restangular.all('api/v1/watches').getList().then(function(r) {
+    $scope.watches = r;
+  });
+
+    $scope.$watch('datagram.watch_ids.length', function(n,o) { 
+	console.log(o,n);
+	console.log(loaded);
+        if (loaded) {
+            var selected_watches = _.filter($scope.watches, function(w) { 
+		return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params)); 
+              });
+            console.log('selected_watches', selected_watches);
+            $scope.datagram.publish_params = _.zipObject(_.map(selected_watches,function(w) { return [w.id, w.params]}));
+	    
+	} else {
+	    if (!(_.isUndefined(n))) {
+		loaded = true;
+	    }
+	}
+    });
+	
+  $scope.save = function() {
+    $scope.datagram.save().then(function(r) {
+      $state.go('show',{id: $scope.watch.id});
+    });
+  };
+
+
+    
 }]);
