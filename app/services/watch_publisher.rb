@@ -5,8 +5,8 @@ class WatchPublisher
 
   def initialize(watch, params = {})
     @watch = watch
-    params ||= {} #deal with nils
-    @params = (watch.params || {}).merge(params)
+    params ||= {} # should deal with nils
+    @params = (watch.params || {}).merge(params)  # should use watch parameters when no parameters provided
   end
 
   def publish!(exchange: $x, queue: $watches, datagram_id: nil, timestamp: nil, args: {})
@@ -31,6 +31,7 @@ class WatchPublisher
                                         datagram_id: datagram_id,
                                         ).first_or_create(strip_keys: watch.strip_keys,
                                                           keep_keys: watch.keep_keys,
+                                                          transform: watch.transform,
                                                           started_at: ts,
                                                           params: params)
     else
@@ -65,8 +66,15 @@ class WatchPublisher
   attr_accessor :published
 
   def watch_attributes
-    watch.attributes.stringify_keys.merge("url" => watch.url ? ::Mustache.render(watch.url, params) : watch.url,
-                                          "data" => watch.data ? JSON.parse(::Mustache.render(JSON.dump(watch.data), params).gsub("\\n"," ").gsub("&#39;","'")) : watch.data)
+    watch.attributes.stringify_keys.merge("url" => watch_url, "data" => watch_data)
+  end
+
+  def watch_url
+    watch.url ? (::Mustache.render(watch.url, params)) : watch.url
+  end
+
+  def watch_data
+    watch.data ? JSON.parse(::Mustache.render(JSON.dump(watch.data), params).gsub("\\n"," ").gsub("&#39;","'")) : watch.data
   end
 
   def token

@@ -2,7 +2,14 @@ class DatagramPublisher
 
   # Publsihes a datagram to RabbitMQ
   #
-
+  # if params are provided, 
+  #    if params is a Hash with watch_ids as keys, 
+  #      then each watch is published with the corresponding params
+  #    else each watch is published with the given params merged with its own default params
+  # else each watch is published with the datagrams default params
+  # if the datagram does not have default params
+  #   the watches params are used
+  #
   def initialize(datagram:, exchange: $x, queue: $datagrams, params: {})
     @datagram = datagram
     @exchange = exchange
@@ -20,7 +27,6 @@ class DatagramPublisher
     exchange.publish(payload.to_json, routing_key: routing_key)
     @published = true
     Rails.logger.info "#DatagramPublisher published datagram id: #{datagram.id} token: #{datagram.token} routing_key: #{routing_key} params: #{params} refresh_channel: #{refresh_channel}"
-    ap payload
     return refresh_channel
   end
 
@@ -45,12 +51,22 @@ class DatagramPublisher
 
   private
 
-  attr_reader :datagram, :exchange, :queue, :timestamp, :user, :params, :refresh_channel
+  attr_reader :datagram, :exchange, :queue, :timestamp, :user, :refresh_channel
 
+  def params
+    params_keys_are_subset_of_watch_ids? ? @params : Hash[datagram.watches.map{|w| [w.id, @params]}]
+  end
+
+  def params_keys_are_subset_of_watch_ids?
+    params = @params.blank? ? datagram.publish_params : @params
+    param_keys = Set.new(@params.keys.map(&:to_i))
+    watch_ids = Set.new(datagram.watches.map(&:id))
+    param_keys.proper_subset?(watch_ids)
+  end
 
   def watch_publishers
     @watch_publishers ||= datagram.watches.map{|w|
-      WatchPublisher.new(w, params)
+      WatchPublisher.new(w, params[w.id])
     }
   end
 

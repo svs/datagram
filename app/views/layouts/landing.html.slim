@@ -15,7 +15,7 @@ html
           .container
             .navbar-header
               a.navbar-brand.navbar-brand-img href="./"
-                img alt=("MVP Ready") src="/assets/mvpready/logo.png"
+                h3 style="padding-top: 13px" Datagram
               button.navbar-toggle data-target=".navbar-collapse" data-toggle="collapse" type="button"
                 span.sr-only Toggle navigation
                 i.fa.fa-bars
@@ -60,19 +60,6 @@ html
                   | </li
                 li
                   a href="/users/sign_in"  Login
-              ul.nav.navbar-nav.navbar-social.navbar-left
-                li
-                  a.ui-tooltip data-placement="bottom" href="javascript:;" title="Facebook"
-                    i.fa.fa-facebook
-                    span.navbar-social-label Facebook
-                li
-                  a.ui-tooltip data-placement="bottom" href="javascript:;" title="Twitter"
-                    i.fa.fa-twitter
-                    span.navbar-social-label Twitter
-                li
-                  a.ui-tooltip data-placement="bottom" href="javascript:;" title="Google+"
-                    i.fa.fa-google-plus
-                    span.navbar-social-label Google+
         = yield
     footer.copyright
       .container

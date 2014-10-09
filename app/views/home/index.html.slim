@@ -9,8 +9,19 @@
               h1.masthead-title Share data as easily as you share photos.
               p class="masthead-"
                 h3 style="font-weight: 300; line-height: 1.5em"
-                  ul
-                    li Turn any SQL query into a JSON endpoint
+                  ul                    
+                    | Turn any 
+                    #ticker-div
+                      ul#ticker
+                        li piece of data
+                        li SQL query                            
+                        li MongoDb Query
+                        li HTTP API
+                        li Redis Command
+                        li Google Sheet
+                        li RSS Feed
+                        li Redshift query
+                    | into a JSON endpoint
                     li Turn any JSON endpoint into a pubsub publisher
                     li Combine various sources into Datagrams. Share them with colleagues
                     li Free for public data
@@ -42,84 +53,52 @@
           i.fa.fa-globe.mini-feature-icon.text-secondary
           .mini-feature-text
             h5.mini-feature-title Turn any SQL query into a JSON endpoint
-            p Define your SQL database connections and queries, and they'll be made available behind a URL in JSON format
+            p 
+              | Define your SQL database connections and queries, and they'll be made available behind a URL in JSON format. Also works with
+              |  HTTP, Redis, Google Sheets, Redshift, BigQuery and so on.
+              
         /! /.mini-feature
         .mini-feature
-          i.fa.fa-dashboard.mini-feature-icon.text-secondary
+          i.fa.fa-eye.mini-feature-icon.text-secondary
           .mini-feature-text
             h5.mini-feature-title Watch any JSON endpoint and be notified of changes
             p Get sub-second updates on changes to any JSON endpoint anywhere. Subscribe to every refresh or just the ones with changes
         /! /.mini-feature
         .mini-feature
-          i.fa.fa-html5.mini-feature-icon.text-secondary
+          i.fa.fa-refresh.mini-feature-icon.text-secondary
           .mini-feature-text
-            h5.mini-feature-title Make your infra go further
-            p Got heavy reports? Cache them with datagram. Got loads of clients? Notify them when data changes instead of having them poll your servers
+            h5.mini-feature-title Refresh datagrams per a schedule
+            p Data changes at different speeds. Take control of when datagrams get refreshed so users always have relevant information without overloading your datastores
         /! /.mini-feature
       /! /.row
+    h4.content-title
+      span How does it help me?
+    br
+
       .row
         .mini-feature
-          i.fa.fa-globe.mini-feature-icon.text-secondary
+          i.fa.fa-share.mini-feature-icon.text-secondary
           .mini-feature-text
-            h5.mini-feature-title Easily embed data in web pages
-            p Like github gists, it's easy to embed widgets based on datagrams. Use datagrams to drive dashboards, send email reports and so on.
+            h5.mini-feature-title Share data from anywhere...
+            p Give your team access to reports from SQL databases, Elasticsearch, MongoDB, Redis, Redshift, Google Drive and so on...
+        .mini-feature
+          i.fa.fa-ticket.mini-feature-icon.text-secondary
+          .mini-feature-text
+            h5.mini-feature-title ... with complete control!
+            p
+              | ... without providing access credentials. Generate and expire tokens 
+              | to control who can access which queries.
         .mini-feature
           i.fa.fa-globe.mini-feature-icon.text-secondary
           .mini-feature-text
-            h5.mini-feature-title Drive your team with data
-            p Not vice versa. Leave your data guys to test interesting hypothesis, not emailing CSV reports.
-        .mini-feature
-          i.fa.fa-globe.mini-feature-icon.text-secondary
-          .mini-feature-text
-            h5.mini-feature-title Keep a history of your reports
-            p Keep versions of datagrams for as long as you like. Great for seeing what a report looked like in the past.
+            h5.mini-feature-title Free your data team
+            p Let your data team concentrate on confirming hypothesis. Let datagram do the refreshing of reports and notifying interested parties.
 
         /! /.mini-feature
 
 
       .row-divider
       /! /.row-divider
-      .row
-        .col-sm-6.col-sm-push-6
-          h4.content-title
-            span About MVPReady
-          p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus, autem, quos, dicta, tempora omnis beatae aspernatur repellat aperiam fugit enim animi temporibus magnam tempore quae impedit velit voluptatum consequuntur cupiditate.
-          br
-            .row
-              .col-sm-6
-                ul.icons-list
-                  li
-                    i.icon-li.fa.fa-check.text-primary
-                    | Custom Header Images
-                  li
-                    i.icon-li.fa.fa-check.text-primary
-                    | Unlimited Portfolios & Blogs
-                  li
-                    i.icon-li.fa.fa-check.text-primary
-                    | Millions Of Page Combinations
-              .col-sm-6
-                ul.icons-list
-                  li
-                    i.icon-li.fa.fa-check.text-primary
-                    | Custom Header Images
-                  li
-                    i.icon-li.fa.fa-check.text-primary
-                    | Unlimited Portfolios & Blogs
-                  li
-                    i.icon-li.fa.fa-check.text-primary
-                    | Millions Of Page Combinations
-            br
-              a.btn.btn-default href="javascript:;"  Get MVP Ready Today
-              br
-                br
-                  br
-        /! /.col
-        .col-sm-6.col-sm-pull-6.text-center
-          br
-            br
-              img.img-responsive alt="Macbook" src="/assets/mvpready/devices/macbook.png"
-        /! /.col
-      /! /.row
       .row-divider
       /! /.row-divider
       .row

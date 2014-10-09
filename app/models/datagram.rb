@@ -24,7 +24,7 @@ class Datagram < ActiveRecord::Base
     {responses: Hash[response_data(params, as_of, staleness).map{|r| [r[:slug], r]}]}
   end
 
-  # calls WatchPublisher.publish! passing on the given hash.
+  # calls DatagramPublisher.publish! passing on the given hash.
   def publish(params = {})
     publisher(params).publish!
   end
@@ -39,11 +39,11 @@ class Datagram < ActiveRecord::Base
   end
 
   def private_url
-    api_v1_t_path(slug: slug, api_key: user.token)
+    api_v1_t_path(slug: slug, api_key: user.token) rescue ""
   end
 
   def public_url
-    api_v1_d_path(token: token)
+    api_v1_d_path(token: token) rescue ""
   end
 
   def refresh_channel(params)

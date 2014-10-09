@@ -74,6 +74,7 @@ module Api
         params.require(:datagram).permit(:at, :frequency, :name).tap{|wl|
           wl[:watch_ids] = params[:datagram][:watch_ids]
           wl[:user_id] = current_user.id
+          wl[:publish_params] = params[:datagram][:publish_params]
         }
       end
 
