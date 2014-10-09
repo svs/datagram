@@ -62,6 +62,17 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
       $state.go('show',{id: $scope.watch.id});
     });
   };
+
+  $scope.$watch('datagram.watch_ids.length', function(n,o) { 
+      $scope.datagram.publish_params = {};
+      var selected_watches = _.filter($scope.watches, function(w) { 
+	  return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params)); 
+      });
+      console.log('selected_watches', selected_watches);
+      $scope.datagram.publish_params = _.zipObject(_.map(selected_watches,function(w) { return [w.id, w.params]}));
+
+  });
+
 }]);
 
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', function($scope, Restangular, $stateParams, $state, Pusher) {

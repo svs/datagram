@@ -36,6 +36,7 @@ class WatchResponse < ActiveRecord::Base
 
   def check_changed
     strip_keys!
+    #json2json!
     self.signature = sig
     if (id && status_code)
       self.modified = (self.signature != previous_response_signature)
@@ -51,6 +52,11 @@ class WatchResponse < ActiveRecord::Base
 
   def sig_data
     ((response_json || {}).merge(status_code: status_code)).to_json
+  end
+
+  def json2json
+    return unless self.transformation_template
+    self.response_json = Json2Json.transform(self.response_json, self.transformation_template)
   end
 
   def previous_response_signature
@@ -69,6 +75,10 @@ class WatchResponse < ActiveRecord::Base
     if strip_keys
       self.response_json = HashFilter.drop(response_json, strip_keys)
     end
+  end
+
+  def transform
+    
   end
 
   def set_timestamp

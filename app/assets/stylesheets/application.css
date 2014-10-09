@@ -47,3 +47,77 @@ td {
     }
   }
 }
+
+#ticker-div {
+    position: relative;
+    top: 5px;
+    overflow: hidden;
+    height: 28px;
+    display: inline-block;
+    margin: 0px 3px;
+}
+
+
+ul#ticker {
+    display: inline-block;
+    padding: 0px;
+    height: 27px;
+    margin: 0px;
+    position: relative;
+    -webkit-animation: ticker 10s cubic-bezier(1, 0, .5, 0) 1;
+    -moz-animation: ticker 10s cubic-bezier(1, 0, .5, 0) 1;
+    -ms-animation: ticker 10s cubic-bezier(1, 0, .5, 0) 1;
+    animation: ticker 10s cubic-bezier(1, 0, .5, 0) 1;
+    list-style-type: none;
+}
+ul#ticker li { 
+    text-align: center;
+    line-height: 26px;
+}
+
+
+@-webkit-keyframes ticker {
+	0%   {margin-top: -182px;}
+	13%  {margin-top: -26px;}
+	25%  {margin-top: -52px;}
+	38%  {margin-top: -78px;}
+	50%  {margin-top: -104px;}
+	63%  {margin-top: -130px;}
+	75%  {margin-top: -156px;}
+	88%  {margin-top: -182px;}
+	100% {margin-top: -182px;}
+}
+@-moz-keyframes ticker {
+	0%   {margin-top: 0;}
+	13%  {margin-top: -26px;}
+	25%  {margin-top: -52px;}
+	38%  {margin-top: -78px;}
+	50%  {margin-top: -104px;}
+	63%  {margin-top: -130px;}
+	75%  {margin-top: -156px;}
+	88%  {margin-top: -182px;}
+	100% {margin-top: -182px;}
+}
+@-ms-keyframes ticker {
+	0%   {margin-top: 0;}
+	13%  {margin-top: -26px;}
+	25%  {margin-top: -52px;}
+	38%  {margin-top: -78px;}
+	50%  {margin-top: -104px;}
+	63%  {margin-top: -130px;}
+	75%  {margin-top: -156px;}
+	88%  {margin-top: -182px;}
+	100% {margin-top: -182px;}
+}
+
+@keyframes ticker {
+	0%   {margin-top: 0;}
+	13%  {margin-top: -26px;}
+	25%  {margin-top: -52px;}
+	38%  {margin-top: -78px;}
+	50%  {margin-top: -104px;}
+	63%  {margin-top: -130px;}
+	75%  {margin-top: -156px;}
+	88%  {margin-top: -182px;}
+	100% {margin-top: -182px;}
+}
