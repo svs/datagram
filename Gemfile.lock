@@ -22,12 +22,6 @@ GIT
       dotenv (>= 0.7)
       thor (>= 0.13.6)
 
-PATH
-  remote: ../json2json
-  specs:
-    json2json (0.0.1)
-      jsonpath
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -429,7 +423,6 @@ DEPENDENCIES
   html2slim
   jbuilder (~> 2.0)
   jquery-rails
-  json2json!
   jsonpath
   metric_fu
   mustache
