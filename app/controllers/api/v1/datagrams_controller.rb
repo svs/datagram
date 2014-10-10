@@ -72,7 +72,6 @@ module Api
       def refresh
         @datagram = policy_scope(Datagram).find(params[:id]) rescue nil
         if @datagram
-          binding.pry
           channel = @datagram.publish(params[:params])
           render json: channel
         else

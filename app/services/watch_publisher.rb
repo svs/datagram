@@ -25,7 +25,6 @@ class WatchPublisher
     ts = timestamp || (Time.now.to_f)
     uniquifiers = {watch_id: watch.id, timestamp: ts, token: token, datagram_id: datagram_id}
     watch_response_data = watch.attributes.slice("strip_keys","keep_keys","transform").merge(started_at: ts, params: params)
-    binding.pry
     if !args[:preview]
       @response ||= WatchResponse.where(uniquifiers).first_or_create(watch_response_data)
     else
