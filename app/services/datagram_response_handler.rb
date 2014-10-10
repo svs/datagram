@@ -33,7 +33,6 @@ class DatagramResponseHandler
   end
 
   def refresh_channel
-    binding.pry
     datagram.refresh_channel(watch_params)
   end
 

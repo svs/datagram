@@ -59,6 +59,7 @@ gem 'foreman', github: 'svs/foreman'
 gem 'eye'
 gem 'mustache'
 gem 'jsonpath'
+gem 'json2json', path: '../json2json'
 gem "pundit"
 gem "dogstatsd-ruby"
 
