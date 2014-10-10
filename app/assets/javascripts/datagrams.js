@@ -89,6 +89,18 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     });
   };
 
+    $scope.refresh = function() {
+    console.log('PUT', $scope.datagram);
+    $scope.datagram.customPUT({id:$scope.datagram.id, params: $scope.datagram.publish_params}, 'refresh' ).then(function(r) {
+      console.log(r);
+      Pusher.subscribe(r,'data', function(item) {
+       console.log('Pusher received', item);
+       $scope.getDatagram($scope.datagram.id);
+      });
+    });
+  };
+
+
   var refreshWatchResponses = function() {
     _.each($scope.datagram.watches, function(w,i) {
       console.log('subscribing to ', w.token);
