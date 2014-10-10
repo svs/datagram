@@ -31,6 +31,12 @@ describe WatchPublisher do
 
   end
 
+  it "should write required watch data onto the response" do
+    reqd_data = {"keep_keys" => {"a" => true}, "strip_keys" => {"b" => true}, "transform" => {"c" => "$"}}
+    watch = FactoryGirl.build(:watch, reqd_data)
+    watch.publish
+    WatchResponse.last.attributes.slice(*reqd_data.keys).should == reqd_data
+  end
 
 
 end

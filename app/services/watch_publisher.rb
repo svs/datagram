@@ -15,7 +15,7 @@ class WatchPublisher
       exchange.publish(payload(args).to_json, routing_key: routing_key)
       Rails.logger.info "#WatchPublisher published watch #{watch.id} with routing_key #{routing_key}"
     end
-    ap payload(args)
+    #ap payload(args)
     self.published = true
     @token
   end
@@ -41,6 +41,7 @@ class WatchPublisher
                                          datagram_id: "nil",
                                          strip_keys: watch.strip_keys,
                                          keep_keys: watch.keep_keys,
+                                         transform: watch.transform,
                                          started_at: ts,
                                          preview: true,
                                          params: params)

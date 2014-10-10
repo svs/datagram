@@ -77,6 +77,7 @@ module Api
           whitelisted[:strip_keys] = params[:watch][:strip_keys]
           whitelisted[:keep_keys] = params[:watch][:keep_keys]
           whitelisted[:params] = params[:watch][:params]
+          whitelisted[:transform] = params[:watch][:transform]
         end
       end
 

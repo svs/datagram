@@ -21,6 +21,7 @@ module Dekko
     # config.i18n.default_locale = :de
 
     #config.autoload_paths += %W(#{config.root}/app)
+    config.autoload_paths << Rails.root.join('lib')
 
     config.middleware.use "Rack::Cors" do
       allow do
