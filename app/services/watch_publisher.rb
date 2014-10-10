@@ -5,8 +5,7 @@ class WatchPublisher
 
   def initialize(watch, params = {})
     @watch = watch
-    params ||= {} # should deal with nils
-    @params = (watch.params || {}).merge(params)  # should use watch parameters when no parameters provided
+    @params = params || {}  # should use watch parameters when no parameters provided
   end
 
   def publish!(exchange: $x, queue: $watches, datagram_id: nil, timestamp: nil, args: {})
@@ -26,6 +25,7 @@ class WatchPublisher
     ts = timestamp || (Time.now.to_f)
     uniquifiers = {watch_id: watch.id, timestamp: ts, token: token, datagram_id: datagram_id}
     watch_response_data = watch.attributes.slice("strip_keys","keep_keys","transform").merge(started_at: ts, params: params)
+    binding.pry
     if !args[:preview]
       @response ||= WatchResponse.where(uniquifiers).first_or_create(watch_response_data)
     else

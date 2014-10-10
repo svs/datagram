@@ -54,7 +54,7 @@ class DatagramPublisher
   attr_reader :datagram, :exchange, :queue, :timestamp, :user, :refresh_channel
 
   def publish_params
-    params_keys_are_subset_of_watch_ids? ? params : Hash[datagram.watches.map{|w| [w.id, params]}]
+    params_keys_are_subset_of_watch_ids? ? params : Hash[datagram.watches.map{|w| [w.id.to_s, params]}]
   end
 
   def params
@@ -64,12 +64,13 @@ class DatagramPublisher
   def params_keys_are_subset_of_watch_ids?
     param_keys = Set.new(params.keys.map(&:to_i))
     watch_ids = Set.new(datagram.watches.map(&:id))
-    param_keys.proper_subset?(watch_ids)
+    param_keys.subset?(watch_ids)
   end
 
   def watch_publishers
+    binding.pry
     @watch_publishers ||= datagram.watches.map{|w|
-      WatchPublisher.new(w, publish_params[w.id])
+      WatchPublisher.new(w, publish_params[w.id.to_s])
     }
   end
 
