@@ -68,7 +68,6 @@ class DatagramPublisher
   end
 
   def watch_publishers
-    binding.pry
     @watch_publishers ||= datagram.watches.map{|w|
       WatchPublisher.new(w, publish_params[w.id.to_s])
     }
