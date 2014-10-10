@@ -24,27 +24,14 @@ class WatchPublisher
   def make_new_response!(datagram_id: nil, timestamp: nil, args: {})
     return false if published
     ts = timestamp || (Time.now.to_f)
+    uniquifiers = {watch_id: watch.id, timestamp: ts, token: token, datagram_id: datagram_id}
+    watch_response_data = watch.attributes.slice("strip_keys","keep_keys","transform").merge(started_at: ts, params: params)
     if !args[:preview]
-      @response ||= WatchResponse.where(watch_id: watch.id,
-                                        timestamp: ts,
-                                        token: token,
-                                        datagram_id: datagram_id,
-                                        ).first_or_create(strip_keys: watch.strip_keys,
-                                                          keep_keys: watch.keep_keys,
-                                                          transform: watch.transform,
-                                                          started_at: ts,
-                                                          params: params)
+      @response ||= WatchResponse.where(uniquifiers).first_or_create(watch_response_data)                                                          params: params)
     else
-      @response ||= WatchResponse.create(watch_id: watch.id,
-                                         timestamp: ts,
-                                         token: token,
-                                         datagram_id: "nil",
-                                         strip_keys: watch.strip_keys,
-                                         keep_keys: watch.keep_keys,
-                                         transform: watch.transform,
-                                         started_at: ts,
-                                         preview: true,
-                                         params: params)
+      @response ||= WatchResponse.create(uniquifiers.merge("datagram_id" => nil).
+                                          merge(watch_response_data).merge(preview: true))
+
     end
     self.published = true
   end
