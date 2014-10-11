@@ -5,7 +5,7 @@ class WatchPublisher
 
   def initialize(watch, params = {})
     @watch = watch
-    @params = params || {}  # should use watch parameters when no parameters provided
+    @params = params.blank? ? (watch.params || {}) : watch.params.merge(params) # should use watch parameters when no parameters provided
   end
 
   def publish!(exchange: $x, queue: $watches, datagram_id: nil, timestamp: nil, args: {})

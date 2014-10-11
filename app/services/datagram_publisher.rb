@@ -2,8 +2,8 @@ class DatagramPublisher
 
   # Publsihes a datagram to RabbitMQ
   #
-  # if params are provided, 
-  #    if params is a Hash with watch_ids as keys, 
+  # if params are provided,
+  #    if params is a Hash with watch_ids as keys,
   #      then each watch is published with the corresponding params
   #    else each watch is published with the given params merged with its own default params
   # else each watch is published with the datagrams default params
@@ -54,7 +54,7 @@ class DatagramPublisher
   attr_reader :datagram, :exchange, :queue, :timestamp, :user, :refresh_channel
 
   def publish_params
-    params_keys_are_subset_of_watch_ids? ? params : Hash[datagram.watches.map{|w| [w.id.to_s, params]}]
+    params_keys_are_subset_of_watch_ids? ? params.stringify_keys : Hash[datagram.watches.map{|w| [w.id.to_s, params]}]
   end
 
   def params

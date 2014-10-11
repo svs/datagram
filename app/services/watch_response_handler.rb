@@ -6,6 +6,7 @@ class WatchResponseHandler
 
   def handle!
     Rails.logger.info "#WatchResponseHandler processing: #{params[:id]}"
+    ap params
     if wr
       update_attrs = {
         response_json: data,
