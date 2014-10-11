@@ -11,6 +11,7 @@ script type="text/ng-template" id="index.html"
           th Name
           th Watches
           th Refresh
+          th Token
           th Last Update
       tbody
         tr ng-repeat="datagram in datagrams"
@@ -22,6 +23,8 @@ script type="text/ng-template" id="index.html"
               li ng-repeat="watch in datagram.watches"
                 a href="/watches/\#{{watch.id}}"
                   | {{ watch.name}}
+          td
+            | {{datagram.token}}
           td
             | {{ datagram.at }}
             | &nbsp;
