@@ -2,7 +2,7 @@ script type="text/ng-template" id="show.html"
   = stylesheet_link_tag 'highlight'
   div ng-controller="watchCtrl"
     .row
-      .col-md-6 style="border-right: 1px solid #aaa"
+      .col-md-7 style="border-right: 1px solid #aaa"
         h2 style = "margin: 3px"
           | {{watch.name}}
         div.pull-left
@@ -24,7 +24,9 @@ script type="text/ng-template" id="show.html"
               | {{watch.url}}
           tr
             th Data
-            td hljs-to-json="watch.data"
+            td
+              div ui-ace="{mode: 'sql', theme: 'eclipse', showGutter: false, onLoad: aceLoaded}" ng-show="isSql" style="height: 200px" readonly="true" ng-model="watch.data.query"
+              div hljs-to-json="watch.data" ng-show="!isSql"
           tr
             th Params
             td hljs-to-json="watch.params"
@@ -34,7 +36,7 @@ script type="text/ng-template" id="show.html"
           tr
             th Strip Keys
             td hljs-to-json="watch.strip_keys"
-      .col-md-6
+      .col-md-5
         tabset
           tab heading="Response"
             div hljs-to-json="watch_response.data"
