@@ -8,7 +8,7 @@ role :app, %w{datagram-s1-deploy}
 role :web, %w{datagram-s1-deploy}
 role :db,  %w{datagram-s1-deploy}
 
-set :rails_env, 'staging'
+set :rails_env, 'production'
 
 
 # Extended Server Syntax
