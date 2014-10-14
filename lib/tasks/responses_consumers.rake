@@ -21,5 +21,6 @@ task :datagram_consumer => :environment do
     d = DatagramResponseHandler.new(JSON.parse(payload)).handle!
     Rails.logger.info("ResponsesConsumer#datagram_consumer Pushing on #{d[:refresh_channel]} ...")
     Pusher.trigger(d[:refresh_channel], 'data', d)
+    $redis.set(d[:refresh_channel], "1")
   end
 end

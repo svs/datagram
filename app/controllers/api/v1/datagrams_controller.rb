@@ -30,7 +30,7 @@ module Api
             render json: datagram.errors, status: 422
           end
         end
-      end   
+      end
 
       def show
         datagram = policy_scope(Datagram).find(params[:id]) rescue nil
@@ -58,10 +58,29 @@ module Api
         if datagram
           $statsd.increment("datagram.slug.#{datagram.slug}")
           $statsd.increment("datagram.t")
+          rc = datagram.refresh_channel(params[:params])
           response = datagram.response_json(params: params[:params], as_of: params[:as_of], staleness: params[:staleness] ).
-                     merge(refresh_channel: datagram.refresh_channel(params[:params]))
-          if params[:refresh] && response[:responses].blank?            
+                     merge(refresh_channel: rc)
+          if params[:refresh] && response[:responses].blank?
+            if params[:sync]
+              $redis.setex(rc, 10, 0)
+            end
             datagram.publish(params[:params] || {})
+            if params[:sync]
+              done = false
+              while (!done) do
+                Rails.logger.info "#DatagramController waiting for refresh on #{rc}"
+                v = $redis.get(rc)
+                if v == nil
+                  Rails.logger.info "#DatagramController TIMEOUT #{rc}"
+                end
+                done = v != "0"
+                sleep 0.2
+              end
+              datagram.reset!
+              response = datagram.response_json(params: params[:params], as_of: params[:as_of] ).
+                merge(refresh_channel: rc)
+            end
           end
           render json: response
         else
