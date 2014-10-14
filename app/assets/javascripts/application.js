@@ -10,6 +10,7 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require ace.js
 //= require jquery
 //= require angular
 //= require lodash
@@ -18,6 +19,7 @@
 //= require angular-pusher
 //= require highlight.pack.js
 //= require angular-highlightjs.js
+//= require ui-ace.js
 //= require ui-bs.js
 //= require checklist-model.js
 
