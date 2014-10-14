@@ -2,7 +2,7 @@ script type="text/ng-template" id="edit.html"
   = stylesheet_link_tag 'highlight'
   div ng-controller="watchCtrl"
     .row
-      .col-md-6 style="border-right: 1px solid #aaa"
+      .col-md-7 style="border-right: 1px solid #aaa"
         .row
           h2 style = "margin: 3px"
             | {{watch.name}}
@@ -20,7 +20,7 @@ script type="text/ng-template" id="edit.html"
         .row
           form#watch_form.form-horizontal role="form"
             = render "form"
-      .col-md-6
+      .col-md-5
         tabset
           tab heading="Data"
             div hljs-to-json="watch_response.data"

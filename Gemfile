@@ -61,7 +61,11 @@ gem 'mustache'
 gem 'jsonpath'
 gem 'json2json'
 gem "pundit"
+
+# Stats
 gem "dogstatsd-ruby"
+gem 'act-fluent-logger-rails'
+gem 'lograge'
 
 group :development, :test do
   gem 'rspec-rails'

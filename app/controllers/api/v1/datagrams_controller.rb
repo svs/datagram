@@ -69,7 +69,7 @@ module Api
             if params[:sync]
               done = false
               while (!done) do
-                Rails.logger.info "#DatagramController waiting for refresh on #{rc}"
+                t = Time.now
                 v = $redis.get(rc)
                 if v == nil
                   Rails.logger.info "#DatagramController TIMEOUT #{rc}"
@@ -109,11 +109,7 @@ module Api
       end
 
       def update_params
-        params.require(:datagram).permit(:at, :frequency, :name).tap{|wl|
-          wl[:watch_ids] = params[:datagram][:watch_ids]
-          wl[:user_id] = current_user.id
-          wl[:publish_params] = params[:datagram][:publish_params]
-        }
+        create_params
       end
 
 
