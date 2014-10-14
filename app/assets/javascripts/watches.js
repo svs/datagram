@@ -145,4 +145,9 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     });
   };
 
+    $scope.aceLoaded = function(_editor) {
+	// Options
+	_editor.setHighlightActiveLine(false);
+    };
+
 }]);
