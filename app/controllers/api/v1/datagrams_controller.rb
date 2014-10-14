@@ -44,6 +44,7 @@ module Api
       end
 
       def t
+        sleep(3) if params[:sync]
         Rails.logger.info "#DatagramsController requested for #{params}"
         params[:staleness] = nil if params[:staleness] == "any"
         if params[:token]
