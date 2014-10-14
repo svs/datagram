@@ -52,6 +52,10 @@ class Datagram < ActiveRecord::Base
     Base64.urlsafe_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::Digest.new('sha256'), "secret", params.to_json)).strip
   end
 
+  def reset!
+    @response_data = nil
+  end
+
   private
 
   def publisher(params)
