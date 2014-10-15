@@ -43,7 +43,7 @@ datagramsApp.config(function($stateProvider,$urlRouterProvider) {
 angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams', function($scope, Restangular,$stateParams) {
   Restangular.all('api/v1/datagrams').getList().then(function(r) {
     console.log(r);
-    $scope.datagrams = r;
+    $scope.datagrams = _.sortBy(r, function(s) { return s.name});
   });
 }]);
 
@@ -56,21 +56,21 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
   });
 
   var baseDatagrams = Restangular.all('api/v1/datagrams');
-  var loaded = false;  
+  var loaded = false;
   $scope.save = function() {
     baseDatagrams.post({datagram: $scope.datagram}).then(function(r) {
       $state.go('show',{id: $scope.watch.id});
     });
   };
 
-  $scope.$watch('datagram.watch_ids.length', function(n,o) { 
+  $scope.$watch('datagram.watch_ids.length', function(n,o) {
         if (loaded) {
-            var selected_watches = _.filter($scope.watches, function(w) { 
-		return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params)); 
+            var selected_watches = _.filter($scope.watches, function(w) {
+		return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params));
               });
             console.log('selected_watches', selected_watches);
             $scope.datagram.publish_params = _.zipObject(_.map(selected_watches,function(w) { return [w.id, w.params]}));
-	    
+
 	} else {
 	    if (!(_.isUndefined(n))) {
 		loaded = true;
@@ -130,23 +130,23 @@ angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','Restangu
     $scope.watches = r;
   });
 
-    $scope.$watch('datagram.watch_ids.length', function(n,o) { 
+    $scope.$watch('datagram.watch_ids.length', function(n,o) {
 	console.log(o,n);
 	console.log(loaded);
         if (loaded) {
-            var selected_watches = _.filter($scope.watches, function(w) { 
-		return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params)); 
+            var selected_watches = _.filter($scope.watches, function(w) {
+		return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params));
               });
             console.log('selected_watches', selected_watches);
             $scope.datagram.publish_params = _.zipObject(_.map(selected_watches,function(w) { return [w.id, w.params]}));
-	    
+
 	} else {
 	    if (!(_.isUndefined(n))) {
 		loaded = true;
 	    }
 	}
     });
-	
+
   $scope.save = function() {
     $scope.datagram.save().then(function(r) {
       $state.go('show',{id: $scope.watch.id});
@@ -154,5 +154,5 @@ angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','Restangu
   };
 
 
-    
+
 }]);
