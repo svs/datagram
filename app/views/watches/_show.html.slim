@@ -21,7 +21,9 @@ script type="text/ng-template" id="show.html"
           tr
             th URL
             td
-              | {{watch.url}}
+              pre style="white-space: pre-wrap; font-size: 12px"
+                code
+                | {{watch.url}}
           tr
             th Data
             td
@@ -30,10 +32,10 @@ script type="text/ng-template" id="show.html"
           tr
             th Params
             td hljs-to-json="watch.params"
-          tr
+          tr ng-show="watch.keep_keys"
             th Keep Keys
             td hljs-to-json="watch.keep_keys"
-          tr
+          tr ng-show="watch.strip_keys"
             th Strip Keys
             td hljs-to-json="watch.strip_keys"
       .col-md-5

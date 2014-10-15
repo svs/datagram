@@ -62,11 +62,13 @@ module Api
       private
 
       def watch_params
-        params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at, :strip_keys).tap do |wl|
+        params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at, :strip_keys, :use_routing_key).tap do |wl|
           wl[:data] = params[:watch][:data]
           wl[:strip_keys] = params[:watch][:strip_keys]
           wl[:keep_keys] = params[:watch][:keep_keys]
           wl[:params] = params[:watch][:params]
+          wl[:transform] = params[:watch][:transform]
+          wl[:report_time] = params[:watch][:report_time]
         end
       end
 
@@ -78,6 +80,7 @@ module Api
           whitelisted[:keep_keys] = params[:watch][:keep_keys]
           whitelisted[:params] = params[:watch][:params]
           whitelisted[:transform] = params[:watch][:transform]
+          whitelisted[:report_time] = params[:watch][:report_time]
         end
       end
 
