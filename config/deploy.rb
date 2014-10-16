@@ -49,7 +49,7 @@ set :puma_workers, 0
 set :sidekiq_timeout, 10
 set :sidekiq_pid, "#{current_path}/tmp/pids/sidekiq.pid"
 set :sidekiq_processes, 1
-set :sidekiq_concurrency, 5
+set :sidekiq_concurrency, 1
 
 namespace :deploy do
 
