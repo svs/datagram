@@ -100,7 +100,11 @@ class Datagram < ActiveRecord::Base
     end
     # execute report_time filter
     if as_of
-      @responses = @responses.where('report_time <= ?',DateTime.parse(as_of))
+      as_of_date = DateTime.parse(as_of)
+      if as_of_date.seconds_until_end_of_day == 86399
+        as_of_date = as_of_date.end_of_day
+      end
+      @responses = @responses.where('report_time <= ?',as_of_date)
     end
     @responses
   end
