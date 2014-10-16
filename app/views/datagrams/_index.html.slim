@@ -10,8 +10,8 @@ script type="text/ng-template" id="index.html"
         tr
           th Name
           th Watches
-          th Refresh
           th Token
+          th Refresh
           th Last Update
       tbody
         tr ng-repeat="datagram in datagrams"
@@ -26,10 +26,11 @@ script type="text/ng-template" id="index.html"
           td
             | {{datagram.token}}
           td
-            | {{ datagram.at }}
-            | &nbsp;
-            | {{ datagram.frequency}}
             span ng-if="datagram.frequency"
-              | seconds
+              | every
+              |  {{ datagram.frequency | humanSeconds}}
+              span ng-if="datagram.at"
+                |  @
+                |  {{ datagram.at }}
           td
-            | {{ (datagram.last_update_timestamp  * 1000) | date:'medium':timezone }}
+            | {{ (datagram.last_update_timestamp  * 1000) | fromNow }}

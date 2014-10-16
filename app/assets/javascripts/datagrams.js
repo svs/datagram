@@ -3,7 +3,7 @@
 //= require highlight.pack.js
 //= require angular-highlightjs.js
 //= require directives.js
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap']).
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds"]).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -12,7 +12,11 @@ config(['PusherServiceProvider',
   }
 ]);
 
-
+angular.module('datagramsApp').filter('fromNow', function() {
+  return function(date) {
+    return moment(date).fromNow();
+  };
+});
 
 
 datagramsApp.config(function($stateProvider,$urlRouterProvider) {

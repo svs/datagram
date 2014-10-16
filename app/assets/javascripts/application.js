@@ -22,6 +22,9 @@
 //= require ui-ace.js
 //= require ui-bs.js
 //= require checklist-model.js
+//= require moment.min.js
+//= require angular-translate.min.js
+//= require angular-humanSeconds.min.js
 
 //= require bootstrap.min
 
