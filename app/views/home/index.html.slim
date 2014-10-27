@@ -5,23 +5,28 @@
       .carousel-inner
         .item.active
           .row
-            .col-md-6.masthead-text
-              h1.masthead-title Share data as easily as you share photos.
+            .col-md-12.masthead-text style="text-align: center"
+              h1.masthead-title  The Information Infrastructure for your Organization
+              h3 style="font-weight: 300"
+                | Datagram enables your data analysts to create and share analyses with the whole organisation
+          .row
+            .col-md-6
               p class="masthead-"
                 h3 style="font-weight: 300; line-height: 1.5em"
-                  ul                    
-                    | Turn any 
-                    #ticker-div
-                      ul#ticker
-                        li piece of data
-                        li SQL query                            
-                        li MongoDb Query
-                        li HTTP API
-                        li Redis Command
-                        li Google Sheet
-                        li RSS Feed
-                        li Redshift query
-                    | into a JSON endpoint
+                  ul
+                    li
+                      | Turn any
+                      #ticker-div
+                        ul#ticker
+                          li piece of data
+                          li SQL query
+                          li MongoDb Query
+                          li HTTP API
+                          li Redis Command
+                          li Google Sheet
+                          li RSS Feed
+                          li Redshift query
+                      | into a JSON endpoint
                     li Turn any JSON endpoint into a pubsub publisher
                     li Combine various sources into Datagrams. Share them with colleagues
                     li Free for public data
@@ -31,18 +36,6 @@
                     | Learn More
                   a.btn.btn-primary.btn-jumbo href="/users/sign_up"
                     | Create an Account
-                /! /.masthead-actions
-            /! /.masthead-text
-            .col-md-6.masthead-img.animated.fadeInUpBig
-              form.form.masthead-form.well style="width: 90%"
-                h3.text-center
-                  | Check out the &nbsp;
-                  a href="#" github status
-                  | &nbsp; datagram
-                #github-status
-            /! /.masthead-img
-          /! /.row
-        /! /.item
 .content
   .container
     h4.content-title
@@ -53,10 +46,10 @@
           i.fa.fa-globe.mini-feature-icon.text-secondary
           .mini-feature-text
             h5.mini-feature-title Turn any SQL query into a JSON endpoint
-            p 
+            p
               | Define your SQL database connections and queries, and they'll be made available behind a URL in JSON format. Also works with
               |  HTTP, Redis, Google Sheets, Redshift, BigQuery and so on.
-              
+
         /! /.mini-feature
         .mini-feature
           i.fa.fa-eye.mini-feature-icon.text-secondary
@@ -86,7 +79,7 @@
           .mini-feature-text
             h5.mini-feature-title ... with complete control!
             p
-              | ... without providing access credentials. Generate and expire tokens 
+              | ... without providing access credentials. Generate and expire tokens
               | to control who can access which queries.
         .mini-feature
           i.fa.fa-globe.mini-feature-icon.text-secondary

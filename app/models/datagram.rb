@@ -21,8 +21,11 @@ class Datagram < ActiveRecord::Base
   # params: arbitrary hash passed on to callees
   # as_of: a datetime. we show the last response before the requested time.
   # staleness: no of seconds staleness we can accept
-  def response_json(params: {}, as_of: nil, staleness: nil)
-    {responses: Hash[response_data(params, as_of, staleness).map{|r| [r[:slug], r]}]}
+  # path: optional JSONPaths to be returned
+  def response_json(params: {}, as_of: nil, staleness: nil, path: {})
+    r = Hash[response_data(params, as_of, staleness).map{|r| [r[:slug], r]}]
+    _r = path.blank?  ? r : Hash[path.map{|k,v| [k, JsonPath.new(v).on(r.to_json)[0]]}]
+    {responses: _r}
   end
 
   # calls DatagramPublisher.publish! passing on the given hash.
