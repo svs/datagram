@@ -35,8 +35,6 @@ module Api
       def show
         datagram = policy_scope(Datagram).find(params[:id]) rescue nil
         if datagram
-          $statsd.increment('datagram.show')
-          $statsd.increment("datagram.id.#{datagram.id}")
           render json: datagram
         else
           render json: "not found", status: 404
@@ -48,18 +46,13 @@ module Api
         params[:staleness] = nil if params[:staleness] == "any"
         if params[:token]
           datagram = Datagram.find_by(token: params[:token]) rescue nil
-          $statsd.increment("datagram.token.#{params[:token]}") if datagram
         elsif params[:api_key]
           datagram = User.find_by(token: params[:api_key]).datagrams.find_by(slug: params[:slug])
-          if datagram
-            $statsd.increment("datagram.api_key.#{params[:api_key]}")
-          end
         end
         if datagram
-          $statsd.increment("datagram.slug.#{datagram.slug}")
-          $statsd.increment("datagram.t")
+          Mykeen.publish("datagram_view", {slug: datagram.slug, token: params[:token], api_key: params[:api_key]})
           rc = datagram.refresh_channel(params[:params])
-          response = datagram.response_json(params: params[:params], as_of: params[:as_of], staleness: params[:staleness] ).
+          response = datagram.response_json(params: params[:params], as_of: params[:as_of], staleness: params[:staleness], path: params[:path] ).
                      merge(refresh_channel: rc)
           if params[:refresh] && response[:responses].blank?
             if params[:sync]
@@ -78,7 +71,7 @@ module Api
                 sleep 0.2
               end
               datagram.reset!
-              response = datagram.response_json(params: params[:params], as_of: params[:as_of] ).
+              response = datagram.response_json(params: params[:params], as_of: params[:as_of], path: params[:path] ).
                 merge(refresh_channel: rc)
             end
           end
