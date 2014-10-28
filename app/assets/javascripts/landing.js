@@ -35,9 +35,9 @@ config(['PusherServiceProvider',
 
 angular.module('landingApp').controller('landingCtrl',['$scope','Restangular', function($scope, Restangular) {
   $scope.slides = [
-      {image: '/assets/screen3.png', text: 'AngularJS'},
-      {image: '/assets/screen4.png', text: 'Google Sheets'},
-      {image: '/assets/screen5.png', text: 'Command Line'}
+      {image: '/screen3.png', text: 'AngularJS'},
+      {image: '/screen4.png', text: 'Google Sheets'},
+      {image: '/screen5.png', text: 'Command Line'}
   ];
 
 }]);
