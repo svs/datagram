@@ -15,6 +15,7 @@
 //= require lodash
 //= require restangular
 //= require angular-ui-router
+//= require ui-bs.js
 //= require bootstrap.min
 //= require datagrams
 //= require_self
@@ -22,7 +23,7 @@
 //= require angular-pusher
 //= require highlight.pack.js
 //= require angular-highlightjs.js
-var landingApp = angular.module('landingApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher']).
+var landingApp = angular.module('landingApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher','ui.bootstrap']).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -33,8 +34,10 @@ config(['PusherServiceProvider',
 
 
 angular.module('landingApp').controller('landingCtrl',['$scope','Restangular', function($scope, Restangular) {
-  Restangular.one('api/v1/datagrams/z6c1m2UrkY/t').get().then(function(r) {
-    console.log(r);
-    $scope.datagram = r;
-  });
+  $scope.slides = [
+      {image: '/assets/screen3.png', text: 'AngularJS'},
+      {image: '/assets/screen4.png', text: 'Google Sheets'},
+      {image: '/assets/screen5.png', text: 'Command Line'}
+  ];
+
 }]);
