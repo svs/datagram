@@ -45,14 +45,8 @@
                 h3
                   | ... and consume anywhere
         .row
-          .col-md-2
-          .col-md-10
-            h4 We're in private beta, so leave us your email and we'll get back when we're done crushing the most egregious bugs
-            input.form-control type="email" style="width: 20em; float: left; margin: 10px;" placeholder="email address please"
-            a.btn.btn-primary href="/users/sign_up" style="margin: 10px"
-              | I &nbsp;
-              i.fa.fa-heart
-              | &nbsp; &beta;eta Software!
+          .col-md-12
+            = render 'mc'
 
 
 .content
