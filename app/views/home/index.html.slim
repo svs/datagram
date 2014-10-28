@@ -6,14 +6,15 @@
         .item.active
           .row
             .col-md-12.masthead-text style="text-align: center"
-              h1.masthead-title  The Information Infrastructure for your Organization
+              h1.masthead-title  The Information Backbone for your Organization
               h3 style="font-weight: 300"
-                | Datagram enables your data analysts to create and share analyses with the whole organisation
+                | Datagram enables seamless sharing of any information in your organisation's data stores.
           .row
-            .col-md-6
-              p class="masthead-"
-                h3 style="font-weight: 300; line-height: 1.5em"
-                  ul
+            .col-sm-6.col-md-4
+              .thumbnail
+                = image_tag 'screen1.png'
+                h3
+                  ul style="list-style-type: none; margin: 0px;"
                     li
                       | Turn any
                       #ticker-div
@@ -26,16 +27,34 @@
                           li Google Sheet
                           li RSS Feed
                           li Redshift query
-                      | into a JSON endpoint
-                    li Turn any JSON endpoint into a pubsub publisher
-                    li Combine various sources into Datagrams. Share them with colleagues
-                    li Free for public data
-              br
-                .masthead-actions
-                  a.btn.btn-transparent.btn-jumbo href="./page-features.html"
-                    | Learn More
-                  a.btn.btn-primary.btn-jumbo href="/users/sign_up"
-                    | Create an Account
+                      | ...
+            .col-sm-6.col-md-4
+              .thumbnail
+                = image_tag 'screen2.png'
+                h3
+                  | ... into a JSON endpoint
+            .col-sm-6.col-md-4
+              .thumbnail
+                div style="height:250px"
+                  carousel interval="3000"
+                    slide ng-repeat="slide in slides" active="slide.active"
+                      img ng-src="{{slide.image}}" style="margin:auto;"
+                      .carousel-caption
+                        h4
+                          | {{slide.text}}
+                h3
+                  | ... and consume anywhere
+        .row
+          .col-md-2
+          .col-md-10
+            h4 We're in private beta, so leave us your email and we'll get back when we're done crushing the most egregious bugs
+            input.form-control type="email" style="width: 20em; float: left; margin: 10px;" placeholder="email address please"
+            a.btn.btn-primary href="/users/sign_up" style="margin: 10px"
+              | I &nbsp;
+              i.fa.fa-heart
+              | &nbsp; &beta;eta Software!
+
+
 .content
   .container
     h4.content-title
@@ -45,9 +64,9 @@
         .mini-feature
           i.fa.fa-globe.mini-feature-icon.text-secondary
           .mini-feature-text
-            h5.mini-feature-title Turn any SQL query into a JSON endpoint
+            h5.mini-feature-title Turn any data into a JSON endpoint
             p
-              | Define your SQL database connections and queries, and they'll be made available behind a URL in JSON format. Also works with
+              | Define your database connections and queries, and they'll be made available behind a URL in JSON format. orks with
               |  HTTP, Redis, Google Sheets, Redshift, BigQuery and so on.
 
         /! /.mini-feature
@@ -86,154 +105,3 @@
           .mini-feature-text
             h5.mini-feature-title Free your data team
             p Let your data team concentrate on confirming hypothesis. Let datagram do the refreshing of reports and notifying interested parties.
-
-        /! /.mini-feature
-
-
-      .row-divider
-      /! /.row-divider
-      .row-divider
-      /! /.row-divider
-      .row
-        .col-sm-6
-          h4.content-title
-            span Latest News
-          .recent-news
-            .recent-news-item.clearfix
-              .recent-news-item-date
-                | 13
-                span Jan
-              .recent-news-item-description
-                h5.recent-news-item-title
-                  a href="http://inovado.mintithemes.com/this-is-a-standard-post/" title=("This is a Standard Post")  This is a Standard Post
-                span.recent-news-item-comments 7 Comments
-                .recent-news-item-excerpt
-                  | Praesent augue arcu, ornare ut tincidunt eu, mattis a libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames...
-                  a.recent-news-item-more href="http://inovado.mintithemes.com/this-is-a-standard-post/"  Read More →
-            /! /.recent-news-item
-            .recent-news-item.clearfix
-              .recent-news-item-date
-                | 04
-                span Jan
-              .recent-news-item-description
-                h5.recent-news-item-title
-                  a href="http://inovado.mintithemes.com/this-is-a-standard-post/" title=("This is a Standard Post")  This is a Standard Post
-                span.recent-news-item-comments 2 Comments
-                .recent-news-item-excerpt
-                  | Praesent augue arcu, ornare ut tincidunt eu, mattis a libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames...
-                  a.recent-news-item-more href="http://inovado.mintithemes.com/this-is-a-standard-post/"  Read More →
-            /! /.recent-news-item
-          /! /.recent-news
-          br.visible-xs
-        /! /.col
-        .col-sm-6
-          h4.content-title
-            span Testimonials
-            a.btn.btn-default.btn-sm.carousel-prev data-slide="prev" href="#clients-carousel"  &lsaquo;
-            a.btn.btn-default.btn-sm.carousel-next data-slide="next" href="#clients-carousel"  &rsaquo;
-          #clients-carousel.carousel.slide data-interval="0"
-            .carousel-inner
-              .item.active
-                .testimonial
-                  p.testimonial-text
-                    | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, sed, nulla, provident porro quaerat aperiam eum tempore fugiat dicta obcaecati itaque adipisci perspiciatis unde voluptatibus architecto vitae reiciendis distinctio incidunt! Tempore quae impedit velit voluptatum consequuntur cupiditate.
-                  .testimonials-arrow
-                  .testimonial-author
-                    .testimonial-image
-                      img alt="" src="/assets/mvpready/avatars/avatar-1-lg.jpg" /
-                    .testimonial-author-info
-                      h5
-                        a href="#"  Rod Howard
-                      | Jumpstart Themes
-                /! /.testimonial
-              /! /.item
-              .item
-                .testimonial
-                  p.testimonial-text
-                    | Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas, sed, nulla, provident porro quaerat aperiam eum tempore fugiat dicta obcaecati itaque adipisci perspiciatis unde voluptatibus architecto vitae reiciendis distinctio incidunt! Tempore quae impedit velit voluptatum consequuntur cupiditate.
-                  .testimonials-arrow
-                  .testimonial-author
-                    .testimonial-image
-                      img alt="" src="/assets/mvpready/avatars/avatar-2-lg.jpg" /
-                    .testimonial-author-info
-                      h5
-                        a href="#"  Nikita Williams
-                      | Nikita Chanel
-                /! /.testimonial
-              /! /.item
-            /! /.carousel-inner
-          /! /.carousel
-        /! /.col
-      /! /.row
-      .row-divider
-      /! /.row-divider
-      .carousel-container
-        .row
-          .col-sm-12
-            h4.content-title
-              span See Our Clients
-              a.btn.btn-default.btn-sm.carousel-prev data-slide="prev" href="#"  &lsaquo;
-              a.btn.btn-default.btn-sm.carousel-next data-slide="next" href="#"  &rsaquo;
-            ul.clients-list
-              li
-                img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo1-grayscale.png"
-              li
-                img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo2-grayscale.png"
-              li
-                img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo3-grayscale.png"
-              li
-                img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo4-grayscale.png"
-              li
-                img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo5-grayscale.png"
-              li
-                img.img-responsive alt=("Client Logo") src="/assets/mvpready/clients/logo6-grayscale.png"
-          /! /.col
-        /! /.row
-      /! /.carousel-container
-  /! /.container
-/! /.content
-/! /#wrapper
-footer.footer
-.container
-  .row
-    .col-sm-3
-      h4.content-title
-        span Datagram
-      | Aliquam fringilla, sapien egetferas scelerisque placerat, lorem libero cursus lorem, sed sodales lorem libero eu sapien. Nunc mattis feugiat justo vel faucibus. Nulla consequat feugiat malesuada.
-    /! /.col
-    .col-sm-3
-      h4.content-title
-        span Twitter Feed
-      #tweets
-    /! /.col
-    .col-sm-3
-      h4.content-title
-        span Stay Connected
-      p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, nam quae veniam optio sunt exercitationem.
-      br
-        ul.footer-social-link
-          li
-            a.ui-tooltip data-placement="bottom" href="javascript:;" title="Facebook"
-              i.fa.fa-facebook
-          li
-            a.ui-tooltip data-placement="bottom" href="javascript:;" title="Twitter"
-              i.fa.fa-twitter
-          li
-            a.ui-tooltip data-placement="bottom" href="javascript:;" title="Google+"
-              i.fa.fa-google-plus
-    /! /.col
-    .col-sm-3
-      h4.content-title
-        span Stay Updated
-      p Get emails about new theme launches &amp;  future updates.
-      form.form action="/"
-        .form-group
-          /! <label>Email: <span class="required">*</span></label
-          input#newsletter_email.form-control name="newsletter_email" placeholder=("Email Address") required="" type="text" value=""
-        /! /.form-group
-        .form-group
-          button.btn.btn-transparent Subscribe Me
-        /! /.form-group
-    /! /.col
-  /! /.row
-/! /.container
