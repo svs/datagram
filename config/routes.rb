@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'registrations' }
   root to: "home#index"
+  get '/prof', to: 'home#prof', as: 'prof'
   get '/profile', to: 'users#profile'
   resources :watches
   resources :datagrams

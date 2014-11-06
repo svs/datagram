@@ -10,4 +10,9 @@ class HomeController < ApplicationController
     render layout: 'landing'
   end
 
+  def prof
+    GC.start if params[:gc]
+    render json: ObjectSpace.count_objects
+  end
+
 end
