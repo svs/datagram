@@ -61,7 +61,7 @@ gem 'mustache'
 gem 'jsonpath'
 gem 'json2json'
 gem "pundit"
-
+gem "newrelic_rpm"
 
 # Stats
 gem "dogstatsd-ruby"

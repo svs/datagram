@@ -243,6 +243,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
     netrc (0.7.7)
+    newrelic_rpm (3.9.6.257)
     nio4r (1.0.0)
     orm_adapter (0.5.0)
     paint (0.8.7)
@@ -457,6 +458,7 @@ DEPENDENCIES
   lograge
   metric_fu
   mustache
+  newrelic_rpm
   pg
   pry-byebug
   pry-rails
