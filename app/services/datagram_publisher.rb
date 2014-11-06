@@ -24,7 +24,6 @@ class DatagramPublisher
   # Returns the channel on which updates to this datagram-param combination will be published
   def publish!
     return false if @published
-    binding.pry
     exchange.publish(payload.to_json, routing_key: routing_key)
     @published = true
     Rails.logger.info "#DatagramPublisher published datagram id: #{datagram.id} token: #{datagram.token} routing_key: #{routing_key} params: #{params} refresh_channel: #{refresh_channel}"
