@@ -64,13 +64,8 @@ gem "pundit"
 gem "newrelic_rpm"
 
 # Stats
-gem "dogstatsd-ruby"
-gem 'act-fluent-logger-rails'
-gem 'lograge'
-gem "statsmix"
 gem "keen"
-gem "less"
-gem "therubyracer"
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard-rspec'
