@@ -10,6 +10,10 @@ class Watch < ActiveRecord::Base
   friendly_id :name, use: :slugged
 
   has_many :watch_responses
+  belongs_to :source
+  def url
+    source.try(:url) || read_attribute(:url)
+  end
 
   def responses
     WatchResponse.where(watch_id: id)

@@ -1,6 +1,7 @@
 class Datagram < ActiveRecord::Base
 
   belongs_to :user
+  belongs_to :source
 
   before_save :make_token_and_slug
   include Rails.application.routes.url_helpers

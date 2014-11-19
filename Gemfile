@@ -62,7 +62,7 @@ gem 'jsonpath'
 gem 'json2json'
 gem "pundit"
 gem "newrelic_rpm"
-
+gem "ruby-jq", path: "../ruby-jq"
 # Stats
 gem "keen"
 
