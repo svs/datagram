@@ -23,7 +23,7 @@ GIT
       thor (>= 0.13.6)
 
 PATH
-  remote: ../ruby-jq
+  remote: lib/ruby-jq
   specs:
     ruby-jq (0.1.4)
       json
