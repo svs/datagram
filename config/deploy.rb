@@ -7,7 +7,7 @@ set :deploy_to, '/home/deploy/datagram'
 # set :scm, :git
 
 set :rbenv_type, :system # or :system, depends on your rbenv setup
-set :rbenv_ruby, '2.1.1'
+set :rbenv_ruby, '2.1.2'
 set :rbenv_path, "/opt/rbenv"
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RUBY_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
 set :rbenv_map_bins, %w{rake gem bundle ruby rails}

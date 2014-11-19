@@ -1,0 +1,16 @@
+script type="text/ng-template" id="index.html"
+  div ng-controller="sourcesCtrl"
+    h3.pull-left style="margin-right: 10px"  All Sources
+    a.btn.btn-success.btn-large ui-sref="new"
+      | Add a Source
+
+
+    table.table.table-striped
+      thead
+        tr
+          th Name
+      tbody
+        tr ng-repeat="source in sources"
+          td
+            a ui-sref="show({id: source.id})"
+              | {{source.name}}

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get '/profile', to: 'users#profile'
   resources :watches
   resources :datagrams
-
+  resources :sources
   namespace 'api' do
     namespace 'v1' do
       resources :watch_responses, constraints: {id: /[^\/]+/}
@@ -19,6 +19,7 @@ Rails.application.routes.draw do
           put 'refresh'
         end
       end
+      resources :sources
       get 'd/:token', to: 'datagrams#t', as: 'd'
       get 't/:slug', to: 'datagrams#t', as: 't'
     end
