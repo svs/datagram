@@ -25,6 +25,14 @@ RSpec.describe Watch, :type => :model do
     end
   end
 
+  it "should report url correctly" do
+    source = Source.create(url: "foo")
+    watch = FactoryGirl.create(:watch, url: "bar")
+    expect(watch.url).to eq  "bar"
+    watch.source = source
+    expect(watch.url).to eq  "foo"
+  end
+
 
 
 end
