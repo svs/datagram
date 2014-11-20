@@ -4,7 +4,7 @@ class WatchResponse < ActiveRecord::Base
   before_validation :check_changed
   before_create :set_timestamp
   before_create :set_token
-
+  before_save :set_bytesize
 
   validates :token, uniqueness: { scope: :watch_id }
 
@@ -90,6 +90,8 @@ class WatchResponse < ActiveRecord::Base
     self.class.where('id < ? and watch_id = ?', id, watch_id).last if id
   end
 
-
+  def set_bytesize
+    self.bytesize = self.response_json.to_json.bytesize
+  end
 
 end
