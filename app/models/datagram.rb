@@ -6,13 +6,13 @@ class Datagram < ActiveRecord::Base
   before_save :make_token_and_slug
   include Rails.application.routes.url_helpers
 
-  def as_json(include_root = false)
+  def as_json(include_root = false, max_size = Float::INFINITY)
     attributes.merge({
                        id: id.to_s,
                        private_url: private_url,
                        public_url: public_url,
                        watches: watches.map{|w| w.attributes.slice("name", "token","params","id","slug")},
-                       responses: response_data.to_a,
+                       responses: response_data({},nil,nil,10000).to_a,
                        timestamp: (Time.at(max_ts/1000) rescue Time.now),
                        publish_params: publish_params
                      }).except("_id")
@@ -23,8 +23,8 @@ class Datagram < ActiveRecord::Base
   # as_of: a datetime. we show the last response before the requested time.
   # staleness: no of seconds staleness we can accept
   # path: optional JSONPaths to be returned
-  def response_json(params: {}, as_of: nil, staleness: nil, path: {})
-    r = Hash[response_data(params, as_of, staleness).map{|r| [r[:slug], r]}]
+  def response_json(params: {}, as_of: nil, staleness: nil, path: {}, max_size: Float::INFINITY)
+    r = Hash[response_data(params, as_of, staleness, max_size).map{|r| [r[:slug], r]}]
     _r = path.blank?  ? r : Hash[path.map{|k,v| [k, JsonPath.new(v).on(r.to_json)[0]]}]
     path.blank? ? {responses: _r} : _r
   end
@@ -74,17 +74,18 @@ class Datagram < ActiveRecord::Base
   # the last available responses for this datagram for all included watches
   # edge cases abound!
   # what happens if one of the watches crashed?
-  def response_data(params = {},as_of = nil, staleness = nil)
+  def response_data(params = {},as_of = nil, staleness = nil, max_size = Float::INFINITY)
     rs = all_responses(params, as_of).
       select('distinct on (watch_id) *').
       order('watch_id, report_time desc, created_at desc')
     if staleness
       rs = rs.where('extract(epoch from (? - response_received_at)) < ?', Time.zone.now, staleness)
     end
-    @response_data ||= rs.map{|r| {
+    @response_data ||= rs.map{|r|
+      {
         slug: r.watch.slug,
         name: r.watch.name,
-        data: r.response_json,
+        data: (r.bytesize.to_i < max_size ? r.response_json : {max_size: "Data size too big. Please use the Public URL to view data"}),
         errors: r.error,
         metadata: r.metadata,
       }}

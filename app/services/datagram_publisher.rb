@@ -40,7 +40,7 @@ class DatagramPublisher
       routing_key: routing_key,
       datagram_token: datagram.token,
       timestamp: timestamp,
-      refresh_channel: refresh_channel
+      refresh_channel: refresh_channel,
       response_q: $datagram_responses.name
     }
   end
