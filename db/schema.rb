@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141119071611) do
+ActiveRecord::Schema.define(version: 20141120080358) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20141119071611) do
     t.json     "params"
     t.datetime "report_time"
     t.json     "transform"
+    t.integer  "bytesize"
   end
 
   create_table "watches", force: true do |t|
