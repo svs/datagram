@@ -1,0 +1,11 @@
+script type="text/ng-template" id="edit.html"
+  div ng-controller="editSourceCtrl"
+    .row style="margin-bottom: 10px"
+      h2.portlet-title style="margin-bottom: 0px"
+        u
+          | {{source.name | limitTo:20}}
+        a.btn.btn-large.btn-warning ng-click="save()"
+          i.fa.fa-refresh style="margin-right: 5px"
+          | Save
+    .row
+      = render 'form'
