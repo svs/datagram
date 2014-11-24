@@ -1,0 +1,19 @@
+script type="text/ng-template" id="show.html"
+  div ng-controller="sourceCtrl"
+    .col-md-5 style="border-right: 1px solid #aaa"
+      h2.portlet-title style="margin-bottom: 0px"
+        u
+          | {{source.name | limitTo:20}}
+        a.btn.btn-large.btn-warning ui-sref="edit({id: source.id})"
+          i.fa.fa-refresh style="margin-right: 5px"
+          | Edit!!
+
+      table.table
+        tr
+          th Name
+          td
+            | {{ source.name}}
+        tr
+          th URL
+          td
+            | {{ source.url}}
