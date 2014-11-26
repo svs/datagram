@@ -5,7 +5,7 @@ module Api
       before_action :authenticate_user!, except: [:t]
       def index
         @datagrams = DatagramPolicy::Scope.new(current_user, Datagram).resolve
-        render json: @datagrams
+        render json: @datagrams.map{|d| d.as_json.except(:responses)}
       end
 
       def new
