@@ -15,6 +15,10 @@ class Watch < ActiveRecord::Base
     source.try(:url) || read_attribute(:url)
   end
 
+  def source_string
+    source.try(:name) || url
+  end
+
   def responses
     WatchResponse.where(watch_id: id)
   end
@@ -37,7 +41,7 @@ class Watch < ActiveRecord::Base
         :permalink => api_v1_watch_path(self)
       }
     end
-    super.except(:url, :created_at, :updated_at, :diff).merge(uri_parts || {})
+    super.merge(source_string: source_string).except(:url, :created_at, :updated_at, :diff).merge(uri_parts || {})
   end
 
  def last_good_response
