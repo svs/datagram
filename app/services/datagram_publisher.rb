@@ -1,6 +1,6 @@
 class DatagramPublisher
 
-  # Publsihes a datagram to RabbitMQ
+  # Publishes a datagram to RabbitMQ
   #
   # if params are provided,
   #    if params is a Hash with watch_ids as keys,
