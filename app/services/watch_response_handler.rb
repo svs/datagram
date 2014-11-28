@@ -50,7 +50,7 @@ class WatchResponseHandler
       if jt.is_a?(Fixnum) #seconds since epoch
         @report_time = Time.strptime(jt.to_s,'%s')
       else
-        @report_time = DateTime.parse(jt)
+        @report_time = DateTime.parse(jt) rescue nil
       end
     else
       @report_time ||= (wr.report_time || now)
