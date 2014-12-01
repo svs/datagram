@@ -62,7 +62,7 @@ class Datagram < ActiveRecord::Base
 
   private
 
-  def publisher(params)
+  def publisher(params = nil)
     @publisher ||= DatagramPublisher.new(datagram: self, params: params)
   end
 

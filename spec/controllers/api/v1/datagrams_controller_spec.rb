@@ -27,7 +27,7 @@ describe Api::V1::DatagramsController do
       get :index, format: :json
       expect(response.status).to eql 200
       r = JSON.parse(response.body)[0].except("timestamp","updated_at", "created_at")
-      d = u1_d1.as_json.except(:timestamp).stringify_keys.except("updated_at", "created_at")
+      d = u1_d1.as_json.except(:timestamp).stringify_keys.except("updated_at", "created_at", "responses")
       expect(r).to eql d
     end
 
