@@ -4,6 +4,7 @@ describe "Models" do
 
 
   it "should do everything properly" do
+    pending
     self.use_transactional_fixtures = false
     Datagram.destroy_all
     Watch.destroy_all
