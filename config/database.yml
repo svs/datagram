@@ -23,6 +23,7 @@ default: &default
 
 development:
   <<: *default
+  username: svs
   database: dekko_dev
 
   # The specified database role being used to connect to postgres.

@@ -426,6 +426,7 @@ DEPENDENCIES
   capistrano-rbenv (~> 2.0.1)
   capistrano-sidekiq!
   capistrano3-puma!
+  chronic
   coffee-rails (~> 4.0.0)
   devise
   eye
