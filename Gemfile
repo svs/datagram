@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby "2.1.2"
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.0'
 # Use postgresql as the database for Active Record
@@ -64,6 +64,7 @@ gem 'json2json'
 gem "pundit"
 gem "newrelic_rpm"
 gem "ruby-jq", git: "https://github.com/winebarrel/ruby-jq.git"
+gem "chronic"
 # Stats
 gem "keen"
 
