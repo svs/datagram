@@ -4,6 +4,7 @@ password = Rails.application.secrets.rabbitmq_password || "guest"
 
 Rails.logger.info("#Bunny connecting to #{endpoint}")
 
+
 $conn = Bunny.new(endpoint)
 
 $conn.start

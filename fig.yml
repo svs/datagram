@@ -2,11 +2,18 @@ db:
   image: postgres
   ports:
     - "5432"
+redis:
+  image: redis
+rabbitmq:
+  image: dockerfile/rabbitmq
+  ports:
+    - "5672"
+    - "15672"
 web:
   build: .
   command: bundle exec rackup -p 3000
   volumes:
-    - .:/myapp
+    - .:/webapp
   ports:
     - "3000:3000"
   links:
