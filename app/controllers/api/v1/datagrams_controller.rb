@@ -2,7 +2,10 @@ module Api
   module V1
     class DatagramsController < ApplicationController
 
+      respond_to :xml, :json
       before_action :authenticate_user!, except: [:t]
+      before_action :set_default_response_format
+
       def index
         @datagrams = DatagramPolicy::Scope.new(current_user, Datagram).resolve
         render json: @datagrams.map{|d| d.as_json.except(:responses)}
@@ -75,7 +78,14 @@ module Api
                 merge(refresh_channel: rc)
             end
           end
-          render json: response
+          respond_to do |format|
+            format.json {
+              render json: response
+            }
+            format.xml {
+              render xml: response
+            }
+          end
         else
           render json: {404 => "not found"}, status: 404
         end
@@ -103,6 +113,10 @@ module Api
 
       def update_params
         create_params
+      end
+
+      def set_default_response_format
+        request.format = :json if request.format.html?
       end
 
 
