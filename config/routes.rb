@@ -14,14 +14,14 @@ Rails.application.routes.draw do
           put 'preview'
         end
       end
-      resources :datagrams do
+      resources :datagrams, :defaults => { :format => 'json' } do
         member do
           put 'refresh'
         end
       end
       resources :sources
       get 'd/:token', to: 'datagrams#t', as: 'd'
-      get 't/:slug', to: 'datagrams#t', as: 't'
+      get 't/:slug', to: 'datagrams#t', as: 't', defaults: { format: "json"}
     end
   end
 end
