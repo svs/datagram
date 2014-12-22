@@ -63,7 +63,7 @@ gem 'jsonpath'
 gem 'json2json'
 gem "pundit"
 gem "newrelic_rpm"
-#gem "ruby-jq", git: "https://github.com/winebarrel/ruby-jq.git"
+gem "ruby-jq", git: "https://github.com/winebarrel/ruby-jq.git"
 gem "chronic"
 # Stats
 gem "keen"
