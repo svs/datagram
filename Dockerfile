@@ -71,9 +71,12 @@ ADD Gemfile /home/deploy/datagram/Gemfile
 ADD Gemfile.lock /home/deploy/datagram/Gemfile.lock
 
 WORKDIR /home/deploy/datagram
-RUN bundle install
-
-
+RUN bundle install --without=development test
+RUN ls
+RUN rm -v /etc/nginx/nginx.conf
+ADD ./config/nginx.conf /etc/nginx/nginx.conf
 ADD . /home/deploy/datagram
-EXPOSE 3000
-CMD bundle exec rails s
+ADD ./config/database.docker /home/deploy/datagram/config/database.yml
+RUN cd /home/deploy/datagram && bundle exec rake assets:clobber && bundle exec rake assets:precompile RAILS_ENV=production
+EXPOSE 80
+CMD bundle exec puma -d -e production -b unix:///home/deploy/datagram/tmp/datagram-puma.sock --pidfile /home/deploy/datagram/tmp/puma.pid && nginx

@@ -83,7 +83,7 @@ class DatagramPublisher
   end
 
   def routing_key
-    "datagram:#{datagram.use_routing_key ? user.token : queue.name}"
+    "datagram-#{datagram.routing_key || queue.name}"
   end
 
 
