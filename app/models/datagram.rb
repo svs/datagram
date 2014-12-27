@@ -60,6 +60,10 @@ class Datagram < ActiveRecord::Base
     @response_data = nil
   end
 
+  def routing_key
+    self.use_routing_key ? self.token : (user.use_routing_key ? user.token : nil)
+  end
+
   private
 
   def publisher(params = nil)

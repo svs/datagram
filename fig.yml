@@ -11,10 +11,9 @@ rabbitmq:
     - "15672"
 web:
   build: .
-  command: bundle exec rackup -p 3000
-  volumes:
-    - .:/webapp
   ports:
-    - "3000:3000"
+    - "80:80"
   links:
     - db
+    - redis
+    - rabbitmq
