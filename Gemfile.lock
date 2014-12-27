@@ -22,13 +22,6 @@ GIT
       dotenv (>= 0.7)
       thor (>= 0.13.6)
 
-GIT
-  remote: https://github.com/winebarrel/ruby-jq.git
-  revision: 5c9e2b0528d8a76b413c49fbc1659fec25ac29e7
-  specs:
-    ruby-jq (0.1.5)
-      json
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -460,7 +453,6 @@ DEPENDENCIES
   restclient
   rspec-legacy_formatters
   rspec-rails
-  ruby-jq!
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
   shoulda-matchers
