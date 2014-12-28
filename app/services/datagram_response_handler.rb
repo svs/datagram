@@ -6,8 +6,13 @@ class DatagramResponseHandler
   end
 
   def handle!
-    datagram.update(last_update_timestamp: params[:timestamp]) if datagram
-    {token: params["datagram_id"], responses: wrs, modified: wrs.map{|w| w[:modified]}.any?, refresh_channel: params[:refresh_channel] }
+    begin
+      datagram.update(last_update_timestamp: params[:timestamp]) if datagram
+      {token: params["datagram_id"], responses: wrs, modified: wrs.map{|w| w[:modified]}.any?, refresh_channel: params[:refresh_channel] }
+    rescue Exception => e
+      Rails.logger.debug e.backtrace
+    end
+
   end
 
   private
