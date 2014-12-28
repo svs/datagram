@@ -83,7 +83,7 @@ class DatagramPublisher
   end
 
   def routing_key
-    "datagram-#{datagram.routing_key || queue.name}"
+    "datagram-#{datagram.routing_key || 'datagrams'}"
   end
 
 

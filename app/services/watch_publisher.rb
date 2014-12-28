@@ -70,7 +70,7 @@ class WatchPublisher
 
 
   def routing_key
-    "watch:#{watch.use_routing_key ? watch.user.token : "watches"}"
+    "watch-#{watch.routing_key || "watches"}"
   end
 
 
