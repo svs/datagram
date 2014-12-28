@@ -5,7 +5,9 @@ class WatchPublisher
 
   def initialize(watch, params = {})
     @watch = watch
+    params = params.stringify_keys if params
     @params = params.blank? ? (watch.params || {}) : watch.params.merge(params) # should use watch parameters when no parameters provided
+
   end
 
   def publish!(exchange: $x, queue: $watches, datagram_id: nil, timestamp: nil, args: {})
@@ -53,7 +55,7 @@ class WatchPublisher
   attr_accessor :published
 
   def watch_attributes
-    watch.attributes.stringify_keys.merge("url" => watch_url, "data" => watch_data)
+    watch.attributes.stringify_keys.merge("url" => watch_url, "data" => watch_data, "params" => params)
   end
 
   def watch_url
