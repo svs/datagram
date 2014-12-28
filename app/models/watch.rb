@@ -24,7 +24,7 @@ class Watch < ActiveRecord::Base
   end
 
   def publish(args = {})
-    args.merge(routing_key: self.user.token) if use_routing_key
+    args.merge(routing_key: routing_key) if use_routing_key
     publisher.publish!(args: args)
   end
 
@@ -46,6 +46,10 @@ class Watch < ActiveRecord::Base
 
  def last_good_response
    WatchResponse.where(watch_id: id, status_code: 200).last
+ end
+
+ def routing_key
+   self.use_routing_key ? self.token : (user.use_routing_key ? user.token : nil)
  end
 
   private
