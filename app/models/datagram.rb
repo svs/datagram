@@ -78,6 +78,7 @@ class Datagram < ActiveRecord::Base
   # the last available responses for this datagram for all included watches
   # edge cases abound!
   # what happens if one of the watches crashed?
+  # TODO - if one of the watches is deleted, then its response still shows up according to this query
   def response_data(params = {},as_of = nil, staleness = nil, max_size = Float::INFINITY)
     rs = all_responses(params, as_of).
       select('distinct on (watch_id) *').
@@ -102,7 +103,7 @@ class Datagram < ActiveRecord::Base
       v = v.gsub("'",%q(\\\')) # escape postgres single quotes
       "params->>'#{k}' = E'#{v}' "}.join(' AND ')
     # and for those where there is no response yet (crashed, timedout, still processing....)
-    @responses = WatchResponse.where(datagram_id: self.id).where('response_json is not null')
+    @responses = WatchResponse.where(watch_id: self.watch_ids).where('response_json is not null')
     # execute search filter
     if !search_params.blank?
       @responses = @responses.where(params_clause)

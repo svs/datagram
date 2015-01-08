@@ -1,3 +1,4 @@
+begin
 if ENV['RABBITMQ_PORT']
   endpoint=ENV['RABBITMQ_PORT'].gsub("tcp","amqp")
 else
@@ -23,3 +24,5 @@ $x  = $ch.topic('datagrams_topic_exchange', auto_delete: false)
 
 $watches.bind($x)
 $datagrams.bind($x)
+rescue
+end

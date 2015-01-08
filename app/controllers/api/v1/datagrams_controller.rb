@@ -35,6 +35,7 @@ module Api
         end
       end
 
+
       def show
         datagram = policy_scope(Datagram).find(params[:id]) rescue nil
         if datagram
@@ -55,8 +56,11 @@ module Api
         if datagram
           Mykeen.publish("datagram_view", {slug: datagram.slug, token: params[:token], api_key: params[:api_key]})
           rc = datagram.refresh_channel(params[:params])
-          response = datagram.response_json(params: params[:params], as_of: params[:as_of], staleness: params[:staleness], path: params[:path] ).
-                     merge(refresh_channel: rc)
+          response = datagram.response_json(params: params[:params],
+                                            as_of: params[:as_of],
+                                            staleness: params[:staleness],
+                                            path: params[:path] ).
+            merge(refresh_channel: rc)
           if params[:refresh] && response[:responses].blank?
             if params[:sync]
               $redis.setex(rc, 10, 0)
