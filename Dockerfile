@@ -13,6 +13,10 @@ RUN apt-get clean
 RUN add-apt-repository -y ppa:chris-lea/nginx-devel
 RUN apt-get install -y -q nginx-full
 RUN apt-get install -y curl
+RUN sudo apt-get install -y byacc
+RUN sudo apt-get install -y autoconf libtool flex build-essential bison libonig2 libonig-dev
+
+
 # Install rbenv
 RUN git clone https://github.com/sstephenson/rbenv.git /usr/local/rbenv
 RUN echo '# rbenv setup' > /etc/profile.d/rbenv.sh
@@ -49,8 +53,6 @@ WORKDIR /home/deploy
 RUN git clone https://github.com/stedolan/jq.git
 WORKDIR /home/deploy/jq
 RUN ls
-RUN sudo apt-get install -y byacc
-RUN sudo apt-get install -y autoconf libtool flex build-essential bison libonig2 libonig-dev
 
 RUN autoreconf -i
 RUN ./configure --enable-shared
@@ -78,5 +80,6 @@ ADD ./config/nginx.conf /etc/nginx/nginx.conf
 ADD . /home/deploy/datagram
 ADD ./config/database.docker /home/deploy/datagram/config/database.yml
 RUN cd /home/deploy/datagram && bundle exec rake assets:clobber && bundle exec rake assets:precompile RAILS_ENV=production
-EXPOSE 80
-CMD bundle exec puma -d -e production -b unix:///home/deploy/datagram/tmp/datagram-puma.sock --pidfile /home/deploy/datagram/tmp/puma.pid && nginx
+RUN rm -rf /home/deploy/datagram/.git
+EXPOSE 3000
+CMD bundle exec rails s
