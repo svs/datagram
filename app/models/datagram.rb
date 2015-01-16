@@ -25,8 +25,13 @@ class Datagram < ActiveRecord::Base
   # path: optional JSONPaths to be returned
   def response_json(params: {}, as_of: nil, staleness: nil, path: {}, max_size: Float::INFINITY)
     r = Hash[response_data(params, as_of, staleness, max_size).map{|r| [r[:slug], r]}]
-    _r = path.blank?  ? r : Hash[path.map{|k,v| [k, JsonPath.new(v).on(r.to_json)[0]]}]
-    path.blank? ? {responses: _r} : _r
+    if path.is_a?(Hash)
+      _r = path.blank?  ? r : Hash[path.map{|k,v| [k, JsonPath.new(v).on(r.to_json)[0]]}]
+      path.blank? ? {responses: _r} : _r
+    else
+      JsonPath.new(path).on(r.to_json)
+    end
+
   end
 
   # calls DatagramPublisher.publish! passing on the given hash.

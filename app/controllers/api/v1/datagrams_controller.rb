@@ -2,7 +2,7 @@ module Api
   module V1
     class DatagramsController < ApplicationController
 
-      respond_to :xml, :json
+      respond_to :xml, :json, :csv
       before_action :authenticate_user!, except: [:t]
       before_action :set_default_response_format
 
@@ -59,8 +59,10 @@ module Api
           response = datagram.response_json(params: params[:params],
                                             as_of: params[:as_of],
                                             staleness: params[:staleness],
-                                            path: params[:path] ).
-            merge(refresh_channel: rc)
+                                            path: params[:path] )
+            if response.is_a?(Hash)
+              response = response.merge(refresh_channel: rc)
+            end
           if params[:refresh] && response[:responses].blank?
             if params[:sync]
               $redis.setex(rc, 10, 0)
@@ -78,8 +80,10 @@ module Api
                 sleep 0.2
               end
               datagram.reset!
-              response = datagram.response_json(params: params[:params], as_of: params[:as_of], path: params[:path] ).
-                merge(refresh_channel: rc)
+              response = datagram.response_json(params: params[:params], as_of: params[:as_of], path: params[:path] )
+              if response.is_a?(Hash)
+                response = response.merge(refresh_channel: rc)
+              end
             end
           end
           respond_to do |format|
@@ -88,6 +92,15 @@ module Api
             }
             format.xml {
               render xml: response
+            }
+            format.csv {
+              csv = CSV.generate do |f|
+                response[0].each do |_r|
+                  f << _r.values
+                end
+              end
+              render plain: csv
+
             }
           end
         else
