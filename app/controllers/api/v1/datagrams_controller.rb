@@ -1,3 +1,4 @@
+require 'csv'
 module Api
   module V1
     class DatagramsController < ApplicationController
