@@ -60,10 +60,7 @@ module Api
           response = datagram.response_json(params: params[:params],
                                             as_of: params[:as_of],
                                             staleness: params[:staleness],
-                                            path: params[:path] )
-            if response.is_a?(Hash)
-              response = response.merge(refresh_channel: rc)
-            end
+                                            path: params[:path] ).merge(refresh_channel: rc)
           if params[:refresh] && response[:responses].blank?
             if params[:sync]
               $redis.setex(rc, 10, 0)
@@ -81,10 +78,7 @@ module Api
                 sleep 0.2
               end
               datagram.reset!
-              response = datagram.response_json(params: params[:params], as_of: params[:as_of], path: params[:path] )
-              if response.is_a?(Hash)
-                response = response.merge(refresh_channel: rc)
-              end
+              response = datagram.response_json(params: params[:params], as_of: params[:as_of], path: params[:path] ).merge(refresh_channel: rc)
             end
           end
           respond_to do |format|
@@ -96,7 +90,7 @@ module Api
             }
             format.csv {
               csv = CSV.generate do |f|
-                response[0].each do |_r|
+                response[:responses][0].each do |_r|
                   f << _r.values
                 end
               end
