@@ -110,7 +110,7 @@ class Datagram < ActiveRecord::Base
       v = v.gsub("'",%q(\\\')) # escape postgres single quotes
       "params->>'#{k}' = E'#{v}' "}.join(' AND ')
     # and for those where there is no response yet (crashed, timedout, still processing....)
-    @responses = WatchResponse.where(watch_id: self.watch_ids).where('response_json is not null')
+    @responses = WatchResponse.where(watch_id: self.watch_ids, datagram_id: self.id).where('response_json is not null')
     # execute search filter
     if !search_params.blank?
       @responses = @responses.where(params_clause)
