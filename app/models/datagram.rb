@@ -29,7 +29,7 @@ class Datagram < ActiveRecord::Base
       _r = path.blank?  ? r : Hash[path.map{|k,v| [k, JsonPath.new(v).on(r.to_json)[0]]}]
       path.blank? ? {responses: _r} : _r
     elsif path.is_a?(String)
-      {responses: JsonPath.new(path).on(r.to_json)}
+      {responses: JsonPath.new(path).on(r.to_json)[0]}
     else
       {responses: r}
     end
