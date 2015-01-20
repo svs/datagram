@@ -83,14 +83,17 @@ module Api
           end
           respond_to do |format|
             format.json {
-              render json: response
+              render json: (params[:raw] ? response[:responses] : response)
             }
             format.xml {
               render xml: response
             }
             format.csv {
               csv = CSV.generate do |f|
-                response[:responses][0].each do |_r|
+                response[:responses].each_with_index do |_r,i|
+                  if i == 0
+                    f << _r.keys
+                  end
                   f << _r.values
                 end
               end
