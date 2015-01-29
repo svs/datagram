@@ -29,6 +29,12 @@ script type="text/ng-template" id="show.html"
             h5 Token
           td
             | {{ datagram.token }}
+            br
+            span ng-if="datagram.use_routing_key"
+              | Uses Routing Key
+            span ng-if="!datagram.use_routing_key"
+              | Does Not Routing Key
+
         tr
           th
             h5

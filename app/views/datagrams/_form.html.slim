@@ -5,7 +5,11 @@
         u
           .kv-icon.kv-icon-secondary.pull-left 1
           | Name
+
       input.form-control ng-model="datagram.name"
+      br
+      input type="checkbox"ng-model="datagram.use_routing_key"
+      | Use Routing Key
     .portlet
       h4.portlet-title
         u
