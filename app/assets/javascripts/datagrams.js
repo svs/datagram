@@ -153,7 +153,8 @@ angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','Restangu
 
   $scope.save = function() {
     $scope.datagram.save().then(function(r) {
-      $state.go('show',{id: $scope.watch.id});
+      console.log('saved datagram');
+      $state.go('show',{id: $scope.datagram.id});
     });
   };
 
