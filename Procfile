@@ -1,4 +1,4 @@
-#clock: clockwork clock.rb
+clock: clockwork clock.rb
 #web: rails s -p4000
 watch_consumer: rake watch_consumer
 datagram_consumer: rake datagram_consumer
