@@ -18,4 +18,8 @@ module Clockwork
     # Or, e.g. if your queue system just needs job names
     # Stalker.enqueue(instance_job_name)
   end
+
+  error_handler do |error|
+    Rails.logger.error "#Clock failed #{error}"
+  end
 end
