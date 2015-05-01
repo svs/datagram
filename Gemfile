@@ -63,8 +63,8 @@ gem 'jsonpath'
 gem 'json2json'
 gem "pundit"
 gem "newrelic_rpm"
-#gem "ruby-jq", git: "https://github.com/winebarrel/ruby-jq.git"
-gem "chronic"
+gem "google_drive"
+gem "omniauth-google-oauth2"
 # Stats
 gem "keen"
 
