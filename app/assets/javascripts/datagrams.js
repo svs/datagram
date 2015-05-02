@@ -7,7 +7,7 @@ var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','ch
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
-      .setToken('44c0d19c3ef1598f3721')
+      .setToken('ab5d78a0ff96a4179917')
       .setOptions({});
   }
 ]);
@@ -93,14 +93,19 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     });
   };
 
+    var subscribed = false;
+
     $scope.refresh = function() {
     console.log('PUT', $scope.datagram);
     $scope.datagram.customPUT({id:$scope.datagram.id, params: $scope.datagram.publish_params}, 'refresh' ).then(function(r) {
       console.log(r);
-      Pusher.subscribe(r,'data', function(item) {
-       console.log('Pusher received', item);
-       $scope.getDatagram($scope.datagram.id);
-      });
+      if(!subscribed) {
+	  Pusher.subscribe(r,'data', function(item) {
+	      console.log('Pusher received', item);
+	      subscribed = true;
+	      $scope.getDatagram($scope.datagram.id);
+	  });
+      };
     });
   };
 

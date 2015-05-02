@@ -24,31 +24,18 @@ class DatagramPublisher
   # Returns the channel on which updates to this datagram-param combination will be published
   def publish!
     return false if @published
-    exchange.publish(payload.to_json, routing_key: routing_key)
+    watches.map{|w| WatchPublisher.new(watch: w, params: publish_params[w.id.to_s],
+                                       exchange: exchange,
+                                       queue: queue,
+                                       datagram: datagram,
+                                       timestamp: timestamp,
+                                       refresh_channel: refresh_channel
+                                       ).publish!
+    }
     @published = true
     Rails.logger.info "#DatagramPublisher published datagram id: #{datagram.id} token: #{datagram.token} routing_key: #{routing_key} params: #{params} refresh_channel: #{refresh_channel}"
-    return refresh_channel
+      return refresh_channel
   end
-
-
-  def payload
-    return @payload if @payload
-    watch_publishers.map{|wp| wp.make_new_response!(datagram_id: datagram.id, timestamp: timestamp)}
-    @payload ||= {
-      datagram_id: datagram.token.to_s,
-      watches: watches_payload,
-      routing_key: routing_key,
-      datagram_token: datagram.token,
-      timestamp: timestamp,
-      refresh_channel: refresh_channel,
-      response_q: $datagram_responses.name
-    }
-  end
-
-  def channel_name
-    datagram.refresh_channel(params)
-  end
-
 
   private
 
@@ -68,15 +55,6 @@ class DatagramPublisher
     param_keys.subset?(watch_ids)
   end
 
-  def watch_publishers
-    @watch_publishers ||= datagram.watches.map{|w|
-      WatchPublisher.new(w, publish_params[w.id.to_s])
-    }
-  end
-
-  def watches_payload
-    watch_publishers.map(&:payload)
-  end
 
   def watches
     @watches ||= datagram.watches

@@ -20,8 +20,9 @@ class WatchResponseHandler
           watch.update_column(:last_response_token, params[:id])
           watch_token = watch.token
         end
-        return {watch_token: watch_token || nil, watch_response_token: wr.token, modified: wr.modified}
-        end
+        $redis.hincrby(tracking_key, watch.id, (wr.modified ? -2 : -1)) if tracking_key
+        return {watch_token: watch_token || nil, watch_response_token: wr.token, modified: modified?, complete: complete?, datagram: datagram, refresh_channel: wr.refresh_channel}
+      end
     else
       Rails.logger.info "#WatchResponseHandler No such watch_response #{params[:id]}"
     end
@@ -64,5 +65,26 @@ class WatchResponseHandler
   def watch
     @watch ||= wr.watch
   end
+
+  def tracking_key
+    params["datagram_id"] ? "#{params["datagram_id"]}:#{params["timestamp"]}" : nil
+  end
+
+  def tracking_data
+    Hash[$redis.hgetall(tracking_key).map{|k,v| [k,v.to_i]}] rescue {}
+  end
+
+  def datagram
+     @datagram ||= (Datagram.find_by(token: params["datagram_id"]) rescue nil)
+  end
+
+  def complete?
+    datagram ? tracking_data.values.select{|x| x <= 0}.all? : true
+  end
+
+  def modified?
+    datagram ? tracking_data.values.select{|x| x < 0}.any? : true
+  end
+
 
 end
