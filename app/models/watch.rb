@@ -24,8 +24,7 @@ class Watch < ActiveRecord::Base
   end
 
   def publish(args = {})
-    args.merge(routing_key: routing_key) if use_routing_key
-    publisher.publish!(args: args)
+    publisher(args).publish!
   end
 
   def payload
@@ -52,14 +51,23 @@ class Watch < ActiveRecord::Base
    self.use_routing_key ? self.token : (user.use_routing_key ? user.token : nil)
  end
 
+  def refresh_channel(params)
+    params = {token: self.token}.merge(params || {})
+    Base64.urlsafe_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::Digest.new('sha256'), "secret", params.to_json)).strip
+  end
+
+
   private
 
   def set_token
     self.token = SecureRandom.urlsafe_base64
   end
 
-  def publisher
-    @publisher ||= WatchPublisher.new(self)
+  def publisher(args = {})
+    p = {args: args}
+    p.merge!(routing_key: routing_key) if use_routing_key
+    p.merge!(watch: self)
+    @publisher ||= WatchPublisher.new(p)
   end
 
 
