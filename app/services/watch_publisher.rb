@@ -9,7 +9,7 @@ class WatchPublisher
     @params = params.blank? ? (watch.params || {}) : watch.params.merge(params) # should use watch parameters when no parameters provided
     @exchange = exchange
     @queue = queue
-    @datagram = datagram
+    @datagram = datagram || null_datagram
     @timestamp = timestamp
     @args = {}
     @routing_key = routing_key || default_routing_key
@@ -26,13 +26,13 @@ class WatchPublisher
       Rails.logger.info "#WatchPublisher published watch #{watch.id} with routing_key #{routing_key}"
     end
     self.published = true
-    @token
+    refresh_channel
   end
 
   private
   attr_reader :watch, :params
   attr_accessor :published
-  attr_reader :datagram, :timestamp, :args, :exchange, :refresh_channel, :routing_key
+  attr_reader :datagram, :timestamp, :args, :exchange, :routing_key
 
   def make_new_response!
     return false if published
@@ -75,5 +75,13 @@ class WatchPublisher
 
   def default_routing_key
     "watch-#{watch.routing_key || "watches"}"
+  end
+
+  def refresh_channel
+    @refresh_channel || watch.refresh_channel(params)
+  end
+
+  def null_datagram
+    OpenStruct.new(id: nil, token: nil)
   end
 end

@@ -11,8 +11,8 @@ task :watch_consumer => :environment do
           Rails.logger.info "ResponseConsumer#Datagram #{w[:datagram].token} pushed on channel #{w[:refresh_channel]}"
         end
       else
-        Pusher.trigger(w[:watch_token] || w[:watch_response_token], 'data', w)
-        Rails.logger.info "ResponseConsumer#watch_consumer on channel #{w[:token]}"
+        Pusher.trigger(w[:refresh_channel], 'data', w)
+        Rails.logger.info "ResponseConsumer#Watch #{w[:watch_token]} pushed on channel #{w[:refresh_channel]}"
       end
     rescue Exception => e
       puts e.message

@@ -5,7 +5,7 @@ var watchesApp = angular.module('watchesApp', ['restangular','ui.router','doowb.
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
-      .setToken('44c0d19c3ef1598f3721')
+      .setToken('ab5d78a0ff96a4179917')
       .setOptions({});
   }
 ]);
@@ -53,20 +53,13 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
   if ($stateParams.id) {
     Restangular.one('api/v1/watches',$stateParams.id).get().then(function(r) {
       $scope.watch = r;
-      $scope.watchDataStr = $scope.watch.data ? JSON.stringify($scope.watch.data, null, 2) : "";
-      $scope.watchStripKeysStr = $scope.watch.strip_keys ? JSON.stringify($scope.watch.strip_keys, null, 2) : "";
-      $scope.watchKeepKeysStr = $scope.watch.keep_keys ? JSON.stringify($scope.watch.keep_keys, null, 2) : "";
       $scope.showing = true;
       $scope.checkSql();
       getPreview(r.token);
-      subscribe();
     });
   } else {
     Restangular.one('api/v1/watches/new').get().then(function(r) {
       $scope.watch = r;
-      $scope.watchDataStr = $scope.watch.data ? JSON.stringify($scope.watch.data, null, 2) : "";
-      $scope.watchStripKeysStr = $scope.watch.strip_keys ? JSON.stringify($scope.watch.strip_keys, null, 2) : "";
-      $scope.watchKeepKeysStr = $scope.watch.keep_keys ? JSON.stringify($scope.watch.keep_keys, null, 2) : "";
       subscribe();
     });
   };
@@ -121,15 +114,16 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     $scope.loading = true;
     console.log('loading', $scope.loading);
     beforeSave();
-    $scope.watch.protocol = getProtocol();
     $scope.watch.customPUT($scope.watch,'preview').then(function(r,s) {
-      Pusher.subscribe(r, 'data', function(item) {
-	Restangular.one('api/v1/watch_responses',item.watch_response_token).get().then(function(r) {
-	  $scope.loading = false;
-	  console.log(r);
-	  $scope.watch_response = r;
+	console.log('preview',r);
+	Pusher.subscribe(r, 'data', function(item) {
+	    console.log(item);
+	    Restangular.one('api/v1/watch_responses',item.watch_response_token).get().then(function(r) {
+		$scope.loading = false;
+		console.log(r);
+		$scope.watch_response = r;
+	    });
 	});
-      });
     });
   };
 
@@ -142,6 +136,7 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
   var getPreview = function(token) {
     Restangular.one('api/v1/watches', token).get().then(function(r) {
       $scope.watch_response = r;
+	console.log(r);
     });
   };
 
