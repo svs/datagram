@@ -40,12 +40,28 @@ angular.module('sourcesApp').controller('sourceCtrl',['$scope','Restangular','$s
 }]);
 
 angular.module('sourcesApp').controller('editSourceCtrl',['$scope','Restangular','$stateParams', '$state',function($scope, Restangular,$stateParams, $state) {
+
     $scope.id = $stateParams.id;
     Restangular.one('api/v1/sources',$scope.id).get().then(function(r) {
 	$scope.source = r;
     });
     $scope.save = function() {
 	$scope.source.save().then(function(d) {
+	    $state.go('show',{id: $scope.watch.id});
+	});
+    };
+}]);
+
+
+angular.module('sourcesApp').controller('newSourceCtrl',['$scope','Restangular','$stateParams', '$state',function($scope, Restangular,$stateParams, $state) {
+    var baseSources = Restangular.all('api/v1/sources');
+
+    $scope.id = $stateParams.id;
+    Restangular.one('api/v1/sources/new').get().then(function(r) {
+	$scope.source = r;
+    });
+    $scope.save = function() {
+	baseSources.post($scope.source).then(function(d) {
 	    $state.go('show',{id: $scope.watch.id});
 	});
     };

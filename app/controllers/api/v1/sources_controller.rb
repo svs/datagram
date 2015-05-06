@@ -12,6 +12,10 @@ module Api
         render json: policy_scope(Source).find(params[:id])
       end
 
+      def new
+        @source = Source.new
+        render json: @source
+      end
 
       def update
         source = policy_scope(Source).find(params[:id])
