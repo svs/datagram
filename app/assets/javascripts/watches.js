@@ -54,7 +54,11 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     Restangular.one('api/v1/watches',$stateParams.id).get().then(function(r) {
       $scope.watch = r;
       $scope.showing = true;
-      $scope.checkSql();
+	Restangular.all('api/v1/sources').getList().then(function(r) {
+	    $scope.sources = r;
+	    $scope.checkSql();
+	});
+
       getPreview(r.token);
     });
   } else {
@@ -78,20 +82,7 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
 
   $scope.state = $stateParams;
 
-  // gets the protocol (mysql|http|) etc from the URL provided
-  var getProtocol = function() {
-    var url = document.createElement('a');
-    url.href = $scope.watch.url;
-    return url.protocol.replace(":","");
-  };
-
-
-  var beforeSave = function() {
-    $scope.watch.protocol = getProtocol();
-  };
-
   $scope.update = function() {
-    beforeSave();
     console.log($scope.watch);
     $scope.watch.put().then(function(r,s) {
       $state.go('show',{id: $scope.watch.id});
@@ -99,7 +90,6 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
   };
 
   $scope.save = function() {
-    beforeSave();
     baseWatches.post($scope.watch).then(function(r) {
       $state.go('show',{id: $scope.watch.id});
     });
@@ -113,25 +103,18 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
   $scope.preview = function() {
     $scope.loading = true;
     console.log('loading', $scope.loading);
-    beforeSave();
     $scope.watch.customPUT($scope.watch,'preview').then(function(r,s) {
 	console.log('preview',r);
 	Pusher.subscribe(r, 'data', function(item) {
 	    console.log(item);
 	    Restangular.one('api/v1/watch_responses',item.watch_response_token).get().then(function(r) {
 		$scope.loading = false;
-		console.log(r);
 		$scope.watch_response = r;
 	    });
 	});
     });
   };
 
-  $scope.checkSql = function() {
-    if ($scope.watch.url) {
-      $scope.isSql = $scope.watch.url.match(/^[mysql|postgres]/);
-    }
-  };
 
   var getPreview = function(token) {
     Restangular.one('api/v1/watches', token).get().then(function(r) {
@@ -143,6 +126,13 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     $scope.aceLoaded = function(_editor) {
 	// Options
 	_editor.setHighlightActiveLine(false);
+    };
+
+    $scope.checkSql = function() {
+	var source = _.find($scope.sources, function(i) { return i.id == $scope.watch.source_id;});
+	console.log("source",source);
+	$scope.watch.protocol = source.protocol;
+	$scope.isSql =  $scope.watch.protocol == "mysql" || $scope.watch.protocol == "postgres";
     };
 
 }]);
