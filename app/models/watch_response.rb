@@ -51,7 +51,7 @@ class WatchResponse < ActiveRecord::Base
   end
 
   def sig_data
-    ((response_json || {}).merge(status_code: status_code)).to_json
+    (({data: response_json}).merge(status_code: status_code)).to_json
   end
 
   def json2json!

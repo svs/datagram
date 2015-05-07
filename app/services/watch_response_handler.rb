@@ -30,8 +30,10 @@ class WatchResponseHandler
 
   def data
     data = params[:data]
-    data = data.is_a?(Array) ? {data: data} : data
     data.is_a?(String) ? JSON.parse(data) : data
+    if data.is_a?(Array) && data.length == 1
+      data = data[0]
+    end
   end
 
   private
