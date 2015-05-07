@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.2.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.0'
+gem 'rails', '4.2.1'
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use SCSS for stylesheets
@@ -65,6 +65,8 @@ gem "pundit"
 gem "newrelic_rpm"
 gem "google_drive"
 gem "omniauth-google-oauth2"
+gem 'angular_rails_csrf'
+
 # Stats
 gem "keen"
 
