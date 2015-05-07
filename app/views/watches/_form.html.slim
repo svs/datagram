@@ -5,7 +5,7 @@
 .form-group
   label.col-md-1 URL
   .col-md-7
-    input.form-control.ace_editor ng-model="watch.url" ng-change="checkSql()"
+    select.form-control ng-options="s.id as s.name for s in sources" ng-model="watch.source_id" ng-change="checkSql()"
 .form-group
   label.col-md-1
     span ng-show="isSql" Query

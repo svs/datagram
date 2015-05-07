@@ -62,7 +62,7 @@ module Api
       private
 
       def watch_params
-        params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at, :strip_keys, :use_routing_key).tap do |wl|
+        params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at, :strip_keys, :use_routing_key, :source_id).tap do |wl|
           wl[:data] = params[:watch][:data]
           wl[:strip_keys] = params[:watch][:strip_keys]
           wl[:keep_keys] = params[:watch][:keep_keys]
@@ -74,7 +74,7 @@ module Api
 
       def preview_params
         params[:watch][:data] = JSON.parse(params[:watch][:data]) if params[:watch][:data].is_a? String
-        params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at, :id, :user_id, :webhook_url, :created_at, :updated_at, :strip_keys, :use_routing_key).tap do |whitelisted|
+        params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at, :id, :user_id, :webhook_url, :created_at, :updated_at, :strip_keys, :use_routing_key, :source_id).tap do |whitelisted|
           whitelisted[:data] = params[:watch][:data]
           whitelisted[:strip_keys] = params[:watch][:strip_keys]
           whitelisted[:keep_keys] = params[:watch][:keep_keys]

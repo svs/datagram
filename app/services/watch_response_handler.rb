@@ -12,7 +12,7 @@ class WatchResponseHandler
         status_code: params[:status_code],
         elapsed: params[:elapsed],
         response_received_at: now,
-        error: params[:errors],
+        error: params[:error],
         report_time: report_time
       }
       if wr.update(update_attrs)
