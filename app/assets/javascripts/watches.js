@@ -50,20 +50,24 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
   console.log($stateParams);
   var baseWatches = Restangular.all('api/v1/watches');
 
-  if ($stateParams.id) {
-    Restangular.one('api/v1/watches',$stateParams.id).get().then(function(r) {
-      $scope.watch = r;
-      $scope.showing = true;
+    var loadSources = function() {
 	Restangular.all('api/v1/sources').getList().then(function(r) {
 	    $scope.sources = r;
 	    $scope.checkSql();
 	});
+    };
 
+  if ($stateParams.id) {
+    Restangular.one('api/v1/watches',$stateParams.id).get().then(function(r) {
+      $scope.watch = r;
+      $scope.showing = true;
+	loadSources();
       getPreview(r.token);
     });
   } else {
     Restangular.one('api/v1/watches/new').get().then(function(r) {
       $scope.watch = r;
+	loadSources();
       subscribe();
     });
   };
