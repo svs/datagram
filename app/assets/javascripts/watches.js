@@ -49,7 +49,8 @@ angular.module('watchesApp').controller('watchesCtrl',['$scope','Restangular','$
 angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$stateParams', 'Pusher','$state', function($scope, Restangular,$stateParams, Pusher, $state) {
   console.log($stateParams);
   var baseWatches = Restangular.all('api/v1/watches');
-
+    var subscribed = false;
+    var previewSubscribed = false;
     var loadSources = function() {
 	Restangular.all('api/v1/sources').getList().then(function(r) {
 	    $scope.sources = r;
@@ -62,26 +63,28 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
       $scope.watch = r;
       $scope.showing = true;
 	loadSources();
-      getPreview(r.token);
+	getPreview(r.token);
     });
   } else {
     Restangular.one('api/v1/watches/new').get().then(function(r) {
       $scope.watch = r;
 	loadSources();
-      subscribe();
+	subscribe();
     });
   };
 
   var subscribe = function() {
-    console.log('#Pusher subscribe to', $scope.watch.token);
-    Pusher.subscribe($scope.watch.token,'data', function(item) {
-      console.log("pusher sent",item);
-      Restangular.one('api/v1/watch_responses',item.watch_response_token).get().then(function(r) {
-	$scope.loading = false;
-	console.log(r);
-	$scope.watch_response = r;
-      });
-    });
+    if (!subscribed) {
+	console.log('#Pusher subscribe to', $scope.watch.token);
+	subscribed = true;
+	Pusher.subscribe($scope.watch.token,'data', function(item) {
+	    console.log("pusher sent",item);
+	    Restangular.one('api/v1/watch_responses',item.watch_response_token).get().then(function(r) {
+		$scope.loading = false;
+		$scope.watch_response = r;
+	    });
+	});
+    }
   };
 
   $scope.state = $stateParams;
@@ -108,14 +111,16 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     $scope.loading = true;
     console.log('loading', $scope.loading);
     $scope.watch.customPUT($scope.watch,'preview').then(function(r,s) {
-	console.log('preview',r);
-	Pusher.subscribe(r, 'data', function(item) {
-	    console.log(item);
-	    Restangular.one('api/v1/watch_responses',item.watch_response_token).get().then(function(r) {
-		$scope.loading = false;
-		$scope.watch_response = r;
+	if (!previewSubscribed) {
+	    previewSubscribed = true;
+	    Pusher.subscribe(r, 'data', function(item) {
+		console.log(item);
+		Restangular.one('api/v1/watch_responses',item.watch_response_token).get().then(function(r) {
+		    $scope.loading = false;
+		    $scope.watch_response = r;
+		});
 	    });
-	});
+	}
     });
   };
 
