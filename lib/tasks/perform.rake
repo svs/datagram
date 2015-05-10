@@ -5,7 +5,7 @@ task perform: :environment do
       payload = JSON.parse(payload)
       Rails.logger.info "#Perform processing watch #{payload["key"]}"
       url = payload["url"].gsub("mysql://","mysql2://")
-      db = Sequel.connect(url, pool_class: :em_synchrony)
+      db = Sequel.connect(url)
       q = payload["data"]["query"]
       r = db.fetch(q).all
       elapsed = Time.now.to_i - t
