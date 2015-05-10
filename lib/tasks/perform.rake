@@ -13,7 +13,8 @@ task perform: :environment do
         elapsed: elapsed,
         status_code: 200,
         data: r,
-        id: payload["key"]
+        id: payload["key"],
+        datagram_id: payload["datagram_id"]
       }
       $watch_responses.publish(response.to_json)
       Rails.logger.info "#Perform finished #{payload["key"]} in #{elapsed} seconds"
@@ -23,7 +24,8 @@ task perform: :environment do
         status_code: 422,
         data: {},
         error: e.message,
-        id: payload["key"]
+        id: payload["key"],
+        datagram_id: payload["datagram_id"]
       }
       $watch_responses.publish(response.to_json)
       Rails.logger.error "#Perform finished #{payload["key"]} in #{elapsed} seconds with error #{e.message}"
