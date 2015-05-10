@@ -30,8 +30,6 @@ class WatchResponse < ActiveRecord::Base
     diff = HashDiff.diff(self.response_json, wr.response_json)
   end
 
-
-
   private
 
   def check_changed

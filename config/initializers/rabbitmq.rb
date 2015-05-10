@@ -18,8 +18,6 @@ $conn.start
 $ch = $conn.create_channel
 $watches  = $ch.queue("watches", :durable => true)
 $watch_responses  = $ch.queue(Rails.application.secrets["watch_response_q"] || "watch_responses", :durable => true)
-$datagrams =  $ch.queue("datagrams", :durable => true)
-$datagram_responses =  $ch.queue(Rails.application.secrets["datagram_response_q"] || "datagram_responses", :durable => true)
 $x  = $ch.topic('datagrams_topic_exchange', auto_delete: false)
 
 $watches.bind($x)

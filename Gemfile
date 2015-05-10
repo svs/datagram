@@ -4,6 +4,13 @@ ruby '2.2.0'
 gem 'rails', '4.2.1'
 # Use postgresql as the database for Active Record
 gem 'pg'
+
+# gems for consumers
+gem 'sequel'
+gem "mysql2"
+gem 'em-pg-sequel'
+gem 'em-synchrony'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 gem 'less'

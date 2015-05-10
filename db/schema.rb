@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150507183211) do
+ActiveRecord::Schema.define(version: 20150510145520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 20150507183211) do
     t.datetime "response_received_at"
     t.integer  "round_trip_time"
     t.json     "response_json"
-    t.json     "error"
+    t.json     "error_json"
     t.string   "signature",            limit: 255
     t.boolean  "modified"
     t.integer  "elapsed"
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 20150507183211) do
     t.json     "transform"
     t.integer  "bytesize"
     t.string   "refresh_channel",      limit: 255
+    t.text     "error"
   end
 
   create_table "watches", force: :cascade do |t|

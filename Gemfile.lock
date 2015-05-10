@@ -146,8 +146,17 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.0.1)
     effin_utf8 (1.0)
+    em-pg-client (0.3.4)
+      eventmachine (~> 1.0.0)
+      pg (>= 0.17.0)
+    em-pg-sequel (0.0.4)
+      em-pg-client (>= 0.3.0)
+      sequel
+    em-synchrony (1.0.4)
+      eventmachine (>= 1.0.0.beta.1)
     equalizer (0.0.11)
     erubis (2.7.0)
+    eventmachine (1.0.7)
     execjs (2.5.2)
     extlib (0.9.16)
     eye (0.6.4)
@@ -296,6 +305,7 @@ GEM
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     mustache (1.0.1)
+    mysql2 (0.3.18)
     nenv (0.2.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -459,6 +469,7 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    sequel (4.22.0)
     sexp_processor (4.5.1)
     shellany (0.0.1)
     shoulda-matchers (2.8.0)
@@ -542,6 +553,8 @@ DEPENDENCIES
   clockwork
   coffee-rails (~> 4.0.0)
   devise
+  em-pg-sequel
+  em-synchrony
   eye
   factory_girl_rails
   foreman!
@@ -559,6 +572,7 @@ DEPENDENCIES
   less
   metric_fu
   mustache
+  mysql2
   newrelic_rpm
   omniauth-google-oauth2
   pg
@@ -577,6 +591,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
+  sequel
   shoulda-matchers
   sidekiq
   slim
