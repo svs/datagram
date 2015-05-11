@@ -1,6 +1,7 @@
 module Api
   module V1
     class WatchesController < ApplicationController
+      before_action :authenticate_user!, except: [:t]
 
       def index
         @watches = policy_scope(Watch)
@@ -57,6 +58,11 @@ module Api
         @watch = Watch.new(preview_params)
         token = @watch.publish(preview: true)
         render json: token and return
+      end
+
+      def t
+        @watch = Watch.find_by(token: params[:token])
+        render json: @watch.last_good_response
       end
 
       private
