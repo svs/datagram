@@ -37,7 +37,8 @@ class Watch < ActiveRecord::Base
       uri_parts = {
         :hostname => (uri.hostname rescue ''),
         :pathname => (uri.path.gsub("/ /","") rescue ''),
-        :permalink => api_v1_watch_path(self)
+        :permalink => api_v1_watch_path(self),
+        :data_link => api_v1_w_path(self.token)
       }
     end
     super.merge(source_string: source_string).except(:url, :created_at, :updated_at, :diff).merge(uri_parts || {})

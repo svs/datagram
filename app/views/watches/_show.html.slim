@@ -32,6 +32,11 @@ script type="text/ng-template" id="show.html"
           tr
             th Params
             td hljs-to-json="watch.params"
+          tr
+            th DataLink
+            td
+              a href="{{watch.data_link}}" target="_blank"
+                | {{watch.data_link}}
           tr ng-show="watch.keep_keys"
             th Keep Keys
             td hljs-to-json="watch.keep_keys"
