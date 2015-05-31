@@ -24,16 +24,17 @@ class Datagram < ActiveRecord::Base
   # as_of: a datetime. we show the last response before the requested time.
   # staleness: no of seconds staleness we can accept
   # path: optional JSONPaths to be returned
-  def response_json(params: {}, as_of: nil, staleness: nil, path: {}, max_size: Float::INFINITY)
+  def response_json(params: {}, as_of: nil, staleness: nil, path: {}, max_size: Float::INFINITY, jq: nil)
     r = Hash[response_data(params, as_of, staleness, max_size).map{|r| [r[:slug], r]}]
     if path.is_a?(Hash)
       _r = path.blank?  ? r : Hash[path.map{|k,v| [k, JsonPath.new(v).on(r.to_json)[0]]}]
-      path.blank? ? {responses: _r} : _r
+      r = path.blank? ? {responses: _r} : _r
     elsif path.is_a?(String)
-      {responses: JsonPath.new(path).on(r.to_json)[0]}
+      r = {responses: JsonPath.new(path).on(r.to_json)[0]}
     else
-      {responses: r}
+      r = {responses: r}
     end
+
 
   end
 
