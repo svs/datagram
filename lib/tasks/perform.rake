@@ -14,7 +14,8 @@ task perform: :environment do
         status_code: 200,
         data: r,
         id: payload["key"],
-        datagram_id: payload["datagram_id"]
+        datagram_id: payload["datagram_id"],
+        timestamp: payload["timestamp"]
       }
       $watch_responses.publish(response.to_json)
       Rails.logger.info "#Perform finished #{payload["key"]} in #{elapsed} seconds"

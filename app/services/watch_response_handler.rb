@@ -21,6 +21,10 @@ class WatchResponseHandler
           watch_token = watch.token
         end
         $redis.hincrby(tracking_key, watch.id, (wr.modified ? -2 : -1)) if tracking_key
+        if datagram
+          datagram.update(last_update_timestamp: params[:timestamp])
+        end
+
         return {watch_token: watch_token || nil, watch_response_token: wr.token, modified: modified?, complete: complete?, datagram: datagram, refresh_channel: wr.refresh_channel}
       end
     else
@@ -75,7 +79,7 @@ class WatchResponseHandler
   end
 
   def datagram
-     @datagram ||= (Datagram.find_by(token: params["datagram_id"]) rescue nil)
+    @datagram ||= Datagram.where('token = ? AND (last_update_timestamp < ? OR last_update_timestamp is null)', params[:datagram_id], params[:timestamp]).last
   end
 
   def complete?
