@@ -72,6 +72,8 @@ RUN apt-get install -y libpq-dev
 ADD Gemfile /home/deploy/datagram/Gemfile
 ADD Gemfile.lock /home/deploy/datagram/Gemfile.lock
 
+RUN apt-get -y update
+RUN apt-get install -y --force-yes libmysqlclient-dev
 WORKDIR /home/deploy/datagram
 RUN bundle install --without=development test
 RUN ls
@@ -82,4 +84,4 @@ ADD ./config/database.docker /home/deploy/datagram/config/database.yml
 RUN cd /home/deploy/datagram && bundle exec rake assets:clobber && bundle exec rake assets:precompile RAILS_ENV=production
 RUN rm -rf /home/deploy/datagram/.git
 EXPOSE 3000
-CMD bundle exec rails s
+CMD foreman start

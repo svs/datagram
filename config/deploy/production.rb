@@ -4,9 +4,11 @@
 # is considered to be the first unless any hosts have the primary
 # property set.  Don't declare `role :all`, it's a meta role.
 
-role :app, %w{datagram-p1-deploy}
-role :web, %w{datagram-p1-deploy}
-role :db,  %w{datagram-p1-deploy}
+role :app, %w{datagram-prod-1-deploy}
+role :web, %w{datagram-prod-1-deploy}
+role :db,  %w{datagram-prod-1-deploy}
+
+set :rails_env, 'production'
 
 
 # Extended Server Syntax

@@ -1,10 +1,9 @@
 source 'https://rubygems.org'
-ruby '2.2.0'
+ruby '2.1.2'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
 # Use postgresql as the database for Active Record
 gem 'pg'
-
 # gems for consumers
 gem 'sequel'
 gem "mysql2"
@@ -73,7 +72,7 @@ gem "newrelic_rpm"
 gem "google_drive"
 gem "omniauth-google-oauth2"
 gem 'angular_rails_csrf'
-
+gem 'ruby-jq'
 # Stats
 gem "keen"
 

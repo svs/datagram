@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150510145520) do
+ActiveRecord::Schema.define(version: 20150512112549) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20150510145520) do
     t.datetime "updated_at"
     t.string   "slug",                  limit: 255
     t.json     "publish_params"
+    t.datetime "deleted_at"
   end
 
   create_table "sources", force: :cascade do |t|
