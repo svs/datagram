@@ -5,7 +5,7 @@ task :watch_consumer => :environment do
       pl = JSON.parse(payload)
       w = WatchResponseHandler.new(pl).handle!
       if w[:datagram]
-        if w[:modified]
+        if true #w[:modified]
           Pusher.trigger(w[:refresh_channel], 'data', w)
           Rails.logger.info "ResponseConsumer#Datagram #{w[:datagram].token} pushed on channel #{w[:refresh_channel]}"
         end
