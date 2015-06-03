@@ -2,6 +2,15 @@ module Api
   module V1
     class SourcesController < ApplicationController
 
+      def create
+        @source = Source.create(source_params.merge(user_id: current_user.id))
+        if @source
+          render json: "200"
+        else
+          render json: @source.errors, status: 422
+        end
+      end
+
 
       def index
         @sources = SourcePolicy::Scope.new(current_user, Source).resolve

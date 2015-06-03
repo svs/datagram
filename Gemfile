@@ -73,6 +73,7 @@ gem "google_drive"
 gem "omniauth-google-oauth2"
 gem 'angular_rails_csrf'
 gem 'ruby-jq'
+gem 'chronic'
 # Stats
 gem "keen"
 
