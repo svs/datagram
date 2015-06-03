@@ -61,6 +61,10 @@ module Api
                                             as_of: params[:as_of],
                                             staleness: params[:staleness],
                                             path: params[:path] ).merge(refresh_channel: rc)
+          response = (params[:view] ? response.jq(datagram.views[params[:view]]) : response) rescue response
+          response = (params[:jq] ? response.jq(params[:jq]) : response) rescue response
+
+
           if params[:refresh] && response[:responses].blank?
             if params[:sync]
               $redis.setex(rc, 10, 0)
