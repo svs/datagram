@@ -16,7 +16,7 @@ set :rbenv_roles, :all # default value
 set :rails_env, 'production'
 
 set :format, :pretty
-set :log_level, :debug
+set :log_level, :info
 set :pty, true
 
 set :linked_files, %w{config/puma.rb config/database.yml config/secrets.yml Procfile config/config.eye.erb }

@@ -260,6 +260,7 @@ GEM
     less (2.6.0)
       commonjs (~> 0.2.7)
     libv8 (3.16.14.7)
+    liquid (3.0.3)
     listen (2.9.0)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
@@ -573,6 +574,7 @@ DEPENDENCIES
   jsonpath
   keen
   less
+  liquid
   metric_fu
   mustache
   mysql2

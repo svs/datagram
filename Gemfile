@@ -74,6 +74,7 @@ gem "omniauth-google-oauth2"
 gem 'angular_rails_csrf'
 gem 'ruby-jq'
 gem 'chronic'
+gem 'liquid'
 # Stats
 gem "keen"
 

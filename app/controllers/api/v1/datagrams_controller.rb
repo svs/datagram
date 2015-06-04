@@ -3,9 +3,8 @@ module Api
   module V1
     class DatagramsController < ApplicationController
 
-      respond_to :xml, :json, :csv
+      respond_to :xml, :json, :csv, :html
       before_action :authenticate_user!, except: [:t]
-      before_action :set_default_response_format
 
       def index
         @datagrams = DatagramPolicy::Scope.new(current_user, Datagram).resolve
@@ -61,7 +60,7 @@ module Api
                                             as_of: params[:as_of],
                                             staleness: params[:staleness],
                                             path: params[:path] ).merge(refresh_channel: rc)
-          response = (params[:view] ? response.jq(datagram.views[params[:view]]) : response) rescue response
+          response = (params[:view] ? response.jq(datagram.views[params[:view]])[0] : response) rescue response
           response = (params[:jq] ? response.jq(params[:jq]) : response) rescue response
 
 
@@ -85,12 +84,17 @@ module Api
               response = datagram.response_json(params: params[:params], as_of: params[:as_of], path: params[:path] ).merge(refresh_channel: rc)
             end
           end
+
           respond_to do |format|
             format.json {
               render json: (params[:raw] ? response[:responses] : response)
             }
             format.xml {
               render xml: response
+            }
+            format.html {
+              h = params[:template] ? Liquid::Template.parse(datagram.views[params[:template]]).render(response).html_safe : response
+              render html: h
             }
             format.csv {
               csv = CSV.generate do |f|
@@ -134,9 +138,6 @@ module Api
         create_params
       end
 
-      def set_default_response_format
-        request.format = :json if request.format.html?
-      end
 
 
     end
