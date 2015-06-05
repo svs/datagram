@@ -56,49 +56,15 @@ module Api
         if datagram
           Mykeen.publish("datagram_view", {slug: datagram.slug, token: params[:token], api_key: params[:api_key]})
           rc = datagram.refresh_channel(params[:params])
-          response = datagram.response_json(params: params[:params],
-                                            as_of: params[:as_of],
-                                            staleness: params[:staleness],
-                                            path: params[:path] ).merge(refresh_channel: rc)
-          response = (params[:view] ? response.jq(datagram.views[params[:view]])[0] : response) rescue response
-          response = (params[:jq] ? response.jq(params[:jq]) : response) rescue response
-
-
-          if params[:refresh] && response[:responses].blank?
-            if params[:sync]
-              $redis.setex(rc, 10, 0)
-            end
-            datagram.publish(params[:params] || {})
-            if params[:sync]
-              done = false
-              while (!done) do
-                t = Time.now
-                v = $redis.get(rc)
-                if v == nil
-                  Rails.logger.info "#DatagramController TIMEOUT #{rc}"
-                end
-                done = v != "0"
-                sleep 0.2
-              end
-              datagram.reset!
-              response = datagram.response_json(params: params[:params], as_of: params[:as_of], path: params[:path] ).merge(refresh_channel: rc)
-            end
-          end
-
+          ds = DatagramService.new(datagram, params)
+          response = ds.render(params[:views])
           respond_to do |format|
-            format.json {
-              render json: (params[:raw] ? response[:responses] : response)
-            }
-            format.xml {
-              render xml: response
-            }
-            format.html {
-              h = params[:template] ? Liquid::Template.parse(datagram.views[params[:template]]).render(response).html_safe : response
-              render html: h
-            }
+            format.json { render json: response }
+            format.xml { render xml: response }
+            format.html { render html: response }
             format.csv {
               csv = CSV.generate do |f|
-                response[:responses].each_with_index do |_r,i|
+                response.each_with_index do |_r,i|
                   if i == 0
                     f << _r.keys
                   end
@@ -106,7 +72,6 @@ module Api
                 end
               end
               render plain: csv
-
             }
           end
         else
