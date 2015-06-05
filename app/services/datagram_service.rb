@@ -49,6 +49,10 @@ class DatagramService
     if v["type"] == "liquid"
       return Liquid::Template.parse(v["template"]).render(json).html_safe
     end
+    if v["type"] == "pivot"
+      pt = PivotTable.new(json)
+      pt.render(v["template"].symbolize_keys)
+    end
   end
 
 end
