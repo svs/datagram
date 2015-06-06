@@ -47,7 +47,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 
 gem 'clockwork'
 gem 'sidekiq'
-gem 'restclient', require: 'rest-client'
+gem 'rest-client'
 gem 'slim'
 gem 'devise'
 gem 'bunny'
