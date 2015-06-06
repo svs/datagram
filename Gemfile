@@ -75,6 +75,7 @@ gem 'angular_rails_csrf'
 gem 'ruby-jq'
 gem 'chronic'
 gem 'liquid'
+gem 'aws-s3'
 # Stats
 gem "keen"
 
