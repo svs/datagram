@@ -27,5 +27,5 @@ Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
 require 'capistrano/rails'
 require 'capistrano/rbenv'
 require 'capistrano/bundler'
-require 'capistrano/sidekiq'
+#require 'capistrano/sidekiq'
 require 'capistrano/puma'

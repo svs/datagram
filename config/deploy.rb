@@ -57,7 +57,7 @@ namespace :deploy do
   task :restart do
     on roles(:app) do
       within current_path do
-        # execute :bundle, "exec pumactl -F config/puma.rb restart"
+        execute :bundle, "exec pumactl -F config/puma.rb restart"
       end
     end
   end
@@ -73,7 +73,7 @@ task :force_stop do
     end
   end
 end
-before :force_stop, 'sidekiq:stop'
+#before :force_stop, 'sidekiq:stop'
 
 task :restart do
   on roles(:app) do
@@ -84,8 +84,8 @@ task :restart do
   end
 end
 
-before :restart, 'sidekiq:stop'
-after :restart, 'sidekiq:start'
+#before :restart, 'sidekiq:stop'
+#after :restart, 'sidekiq:start'
 
 task :soft_restart do
   on roles(:app) do
@@ -95,9 +95,9 @@ task :soft_restart do
   end
 end
 
-before :soft_restart, 'sidekiq:stop'
+#before :soft_restart, 'sidekiq:stop'
 before :soft_restart, 'puma:restart'
-after :soft_restart, 'sidekiq:start'
+#after :soft_restart, 'sidekiq:start'
 
 
 namespace :foreman do

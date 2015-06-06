@@ -3,7 +3,7 @@ module Api
   module V1
     class DatagramsController < ApplicationController
 
-      respond_to :xml, :json, :csv, :html
+      respond_to :xml, :json, :csv, :html, :png
       before_action :authenticate_user!, except: [:t]
 
       def index
@@ -62,6 +62,7 @@ module Api
             format.json { render json: response }
             format.xml { render xml: response }
             format.html { render html: response }
+            format.png { redirect_to response[:url] }
             format.csv {
               csv = CSV.generate do |f|
                 response.each_with_index do |_r,i|
