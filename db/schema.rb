@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150603181416) do
+ActiveRecord::Schema.define(version: 20150606205327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -60,6 +60,8 @@ ActiveRecord::Schema.define(version: 20150603181416) do
     t.integer  "linked_account_id"
     t.string   "role",                   limit: 255
     t.boolean  "use_routing_key"
+    t.string   "google_token"
+    t.string   "google_refresh_token"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

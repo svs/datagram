@@ -55,7 +55,7 @@ class Datagram < ActiveRecord::Base
   end
 
   def public_url
-    api_v1_d_path(token: token) rescue ""
+    api_v1_d_path(token: token, format: :json) rescue ""
   end
 
   def refresh_channel(params)

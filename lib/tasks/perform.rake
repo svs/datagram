@@ -4,10 +4,22 @@ task perform: :environment do
       t = Time.now.to_i
       payload = JSON.parse(payload)
       Rails.logger.info "#Perform processing watch #{payload["key"]}"
-      url = payload["url"].gsub("mysql://","mysql2://")
-      db = Sequel.connect(url)
-      q = payload["data"]["query"]
-      r = db.fetch(q).all
+      url = payload["url"]
+      if url =~ /\Ahttp/
+      elsif url =~ /\Adrive/
+        u = URI.parse(url)
+        token = u.user
+        sheet_key = u.host
+        worksheet = u.path[1..-1]
+        session = GoogleDrive.login_with_oauth(token)
+        data = session.spreadsheet_by_key(sheet_key).worksheets[worksheet.to_i].rows
+        r = data[1..-1].map{|r| Hash[data[0].zip(r)]}
+      else
+        url = url.gsub("mysql://","mysql2://")
+        db = Sequel.connect(url)
+        q = payload["data"]["query"]
+        r = db.fetch(q).all
+      end
       elapsed = Time.now.to_i - t
       response = {
         elapsed: elapsed,
