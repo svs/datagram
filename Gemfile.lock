@@ -77,6 +77,10 @@ GEM
       extlib (>= 0.9.15)
       multi_json (>= 1.0.0)
     awesome_print (1.6.1)
+    aws-s3 (0.6.3)
+      builder
+      mime-types
+      xml-simple
     bcrypt (3.1.10)
     builder (3.2.2)
     bunny (1.7.0)
@@ -538,6 +542,7 @@ GEM
       procto (~> 0.0.2)
     warden (1.2.3)
       rack (>= 1.0)
+    xml-simple (1.1.5)
 
 PLATFORMS
   ruby
@@ -546,6 +551,7 @@ DEPENDENCIES
   ace-rails-ap
   angular_rails_csrf
   awesome_print
+  aws-s3
   bunny
   capistrano (~> 3.1)
   capistrano-bundler (= 1.1.1)

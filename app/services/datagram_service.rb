@@ -42,7 +42,7 @@ class DatagramService
   end
 
   def _render(json, view)
-    v = datagram.views[view] || view
+    v = (datagram.views[view] || view).with_indifferent_access
     if v["type"] == "jq"
       return json.jq(v["template"])[0]
     end
@@ -53,6 +53,20 @@ class DatagramService
       pt = PivotTable.new(json)
       pt.render(v["template"].symbolize_keys)
     end
+    if v["type"] == "chart"
+      begin
+        d = _render(json,v["template"])
+        i = RestClient.post('http://export.highcharts.com/',"content=options&options=#{JSON.dump(d)}&type=image/png")
+        AWS::S3::S3Object.store(filename(view),i,'dg-tmp')
+        "https://s3.amazonaws.com/dg-tmp/#{filename(view)}"
+      rescue Exception => e
+        ap e
+      end
+    end
+  end
+
+  def filename(view)
+    "#{datagram.refresh_channel(params)}-#{view}.png"
   end
 
 end
