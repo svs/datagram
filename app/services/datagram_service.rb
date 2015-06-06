@@ -42,7 +42,7 @@ class DatagramService
   end
 
   def _render(json, view)
-    v = (datagram.views[view] || view).with_indifferent_access
+    v = ((datagram.views[view] || view) rescue (JSON.parse(datagram.views[view]))).with_indifferent_access
     if v["type"] == "jq"
       return json.jq(v["template"])[0]
     end
@@ -57,7 +57,7 @@ class DatagramService
       d = _render(json,v["template"])
       i = ::RestClient.post('http://export.highcharts.com/',"content=options&options=#{JSON.dump(d)}&type=image/png")
       AWS::S3::S3Object.store(filename(view),i,'dg-tmp')
-      {url: "https://s3.amazonaws.com/dg-tmp/#{filename(view)}"}
+      {url: "https://s3.amazonaws.com/dg-tmp/#{filename(view)}?rand=#{rand(100000)}"}
     end
   end
 
