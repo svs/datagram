@@ -1,3 +1,4 @@
+
 class DatagramService
 
   def initialize(datagram, params = {})
@@ -17,7 +18,7 @@ class DatagramService
     rc = datagram.refresh_channel(params[:params])
     response = datagram.response_json(params: params[:params],
                                       as_of: params[:as_of],
-                                      staleness: params[:staleness]).merge(refresh_channel: rc)
+                                      staleness: params[:staleness], path: params[:path]).merge(refresh_channel: rc)
     if params[:refresh] && response[:responses].blank?
       if params[:sync]
         $redis.setex(rc, 10, 0)

@@ -97,6 +97,7 @@ module Api
           wl[:watch_ids] = params[:datagram][:watch_ids]
           wl[:user_id] = current_user.id
           wl[:publish_params] = params[:datagram][:publish_params]
+          wl[:views] = params[:datagram][:views]
         }
       end
 

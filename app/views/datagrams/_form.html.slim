@@ -39,6 +39,17 @@
         form.form-horizontal role="form"
           .form-group
             textarea.form-control rows=5 json=true ng-model="datagram.publish_params"
+    .portlet
+      h4.portlet-title
+        u
+          .kv-icon.kv-icon-secondary.pull-left 3
+          | Define Views
+      .portlet-body
+        p Views
+        form.form-horizontal role="form"
+          .form-group
+            textarea.form-control rows=5 json=true ng-model="datagram.views"
+
 
   .col-md-5
     .portlet
