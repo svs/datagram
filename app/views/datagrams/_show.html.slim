@@ -51,6 +51,12 @@ script type="text/ng-template" id="show.html"
           td
             a href="{{datagram.public_url}}"
               | {{ datagram.public_url }}
+        tr
+          th
+            h5
+              | Views
+          td
+            div hljs-to-json="datagram.views"
 
 
     .col-md-7
