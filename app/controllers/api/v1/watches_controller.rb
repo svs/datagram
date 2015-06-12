@@ -2,6 +2,7 @@ module Api
   module V1
     class WatchesController < ApplicationController
       before_action :authenticate_user!, except: [:t]
+      respond_to :xml, :json, :csv, :html, :png
 
       def index
         @watches = policy_scope(Watch)
@@ -51,6 +52,7 @@ module Api
 
       def details
         @watch = policy_scope(Watch).find(params[:id]).responses.last
+
         render json: @watch.response_json["data"]
       end
 
@@ -62,7 +64,15 @@ module Api
 
       def t
         @watch = Watch.find_by(token: params[:token])
-        render json: @watch.last_good_response
+        respond_to do |format|
+          format.json {
+            render json: @watch.last_good_response
+          }
+          format.xml {
+            render xml: @watch.last_good_response
+          }
+        end
+
       end
 
       private
