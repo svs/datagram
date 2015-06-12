@@ -66,10 +66,10 @@ module Api
         @watch = Watch.find_by(token: params[:token])
         respond_to do |format|
           format.json {
-            render json: @watch.last_good_response
+            render json: @watch.last_good_response.response_json
           }
           format.xml {
-            render xml: @watch.last_good_response
+            render xml: @watch.last_good_response.response_json
           }
         end
 
