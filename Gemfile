@@ -101,3 +101,5 @@ group :development do
   gem 'capistrano3-puma', github: "seuros/capistrano-puma"
   gem 'capistrano-sidekiq' , github: 'seuros/capistrano-sidekiq'
 end
+
+gem 'lograge'
