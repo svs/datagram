@@ -58,7 +58,7 @@ class DatagramService
       d = _render(json,v["template"])
       i = ::RestClient.post('http://export.highcharts.com/',"content=options&options=#{JSON.dump(d)}&type=image/png")
       AWS::S3::S3Object.store(filename(view),i,'dg-tmp')
-      {url: "https://s3.amazonaws.com/dg-tmp/#{filename(view)}?rand=#{rand(100000)}"}
+      {url: "https://s3.amazonaws.com/dg-tmp/#{filename(view)}"}
     end
   end
 
