@@ -13,7 +13,7 @@ module Clockwork
   sync_database_events model: DatagramFinder, every: 1.minute do |instance_job_name|
     Rails.logger.info("#Clock queuing #{instance_job_name}")
     datagram = Datagram.find_by_name(instance_job_name)
-    datagram.publish
+    datagram.publish rescue nil
 
     # Or, e.g. if your queue system just needs job names
     # Stalker.enqueue(instance_job_name)
