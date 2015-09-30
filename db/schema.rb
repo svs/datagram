@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150615182514) do
+ActiveRecord::Schema.define(version: 20150930031835) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20150615182514) do
     t.json     "publish_params"
     t.datetime "deleted_at"
     t.jsonb    "views"
+    t.boolean  "archived"
   end
 
   create_table "sources", force: :cascade do |t|
