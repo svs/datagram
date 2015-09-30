@@ -14,29 +14,28 @@
 ActiveRecord::Schema.define(version: 20150615182514) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "datagrams", force: :cascade do |t|
-    t.string   "name",                  limit: 255
-    t.integer  "watch_ids",                         array: true
-    t.string   "at",                    limit: 255
+    t.string   "name"
+    t.integer  "watch_ids",                       array: true
+    t.string   "at"
     t.integer  "frequency"
     t.integer  "user_id"
-    t.string   "token",                 limit: 255
+    t.string   "token"
     t.boolean  "use_routing_key"
     t.integer  "last_update_timestamp", limit: 8
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "slug",                  limit: 255
+    t.string   "slug"
     t.json     "publish_params"
     t.datetime "deleted_at"
     t.jsonb    "views"
   end
 
   create_table "sources", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.string   "url",        limit: 255
+    t.string   "name"
+    t.string   "url"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -46,19 +45,19 @@ ActiveRecord::Schema.define(version: 20150615182514) do
   create_table "users", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email",                  limit: 255, default: "", null: false
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
-    t.string   "reset_password_token",   limit: 255
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                      default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
-    t.string   "token",                  limit: 255
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "token"
     t.integer  "linked_account_id"
-    t.string   "role",                   limit: 255
+    t.string   "role"
     t.boolean  "use_routing_key"
     t.string   "google_token"
     t.string   "google_refresh_token"
@@ -75,14 +74,14 @@ ActiveRecord::Schema.define(version: 20150615182514) do
     t.integer  "round_trip_time"
     t.json     "response_json"
     t.json     "error_json"
-    t.string   "signature",            limit: 255
+    t.string   "signature"
     t.boolean  "modified"
     t.integer  "elapsed"
     t.json     "strip_keys"
     t.json     "keep_keys"
     t.integer  "started_at"
     t.integer  "ended_at"
-    t.string   "token",                limit: 255
+    t.string   "token"
     t.boolean  "preview"
     t.integer  "timestamp",            limit: 8
     t.datetime "created_at"
@@ -91,7 +90,7 @@ ActiveRecord::Schema.define(version: 20150615182514) do
     t.datetime "report_time"
     t.json     "transform"
     t.integer  "bytesize"
-    t.string   "refresh_channel",      limit: 255
+    t.string   "refresh_channel"
     t.text     "error"
   end
 
@@ -99,22 +98,22 @@ ActiveRecord::Schema.define(version: 20150615182514) do
     t.integer  "user_id"
     t.json     "data"
     t.integer  "frequency"
-    t.string   "at",                  limit: 255
-    t.string   "name",                limit: 255
-    t.string   "url",                 limit: 255
-    t.string   "method",              limit: 255, default: "get"
-    t.string   "webhook_url",         limit: 255
-    t.string   "protocol",            limit: 255, default: "http"
-    t.string   "token",               limit: 255
+    t.string   "at"
+    t.string   "name"
+    t.string   "url"
+    t.string   "method",              default: "get"
+    t.string   "webhook_url"
+    t.string   "protocol",            default: "http"
+    t.string   "token"
     t.json     "strip_keys"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.json     "keep_keys"
-    t.string   "last_response_token", limit: 255
+    t.string   "last_response_token"
     t.boolean  "use_routing_key"
-    t.string   "slug",                limit: 255
+    t.string   "slug"
     t.json     "params"
-    t.string   "report_time",         limit: 255
+    t.string   "report_time"
     t.json     "transform"
     t.integer  "source_id"
     t.text     "description"

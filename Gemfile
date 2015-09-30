@@ -70,6 +70,7 @@ gem 'json2json'
 gem "pundit"
 gem "newrelic_rpm"
 gem "google_drive"
+gem "legato"
 gem "omniauth-google-oauth2"
 gem 'angular_rails_csrf'
 gem 'ruby-jq'
