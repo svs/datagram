@@ -16,9 +16,10 @@ task perform: :environment do
         r = data[1..-1].map{|r| Hash[data[0].zip(r)]}
       else
         url = url.gsub("mysql://","mysql2://")
-        db = Sequel.connect(url)
-        q = payload["data"]["query"]
-        r = db.fetch(q).all
+        Sequel.connect(url) do |db|
+          q = payload["data"]["query"]
+          r = db.fetch(q).all
+        end
       end
       elapsed = Time.now.to_i - t
       response = {
