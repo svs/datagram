@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150930031835) do
+ActiveRecord::Schema.define(version: 20151023041520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "datagrams", force: :cascade do |t|
     t.string   "name"
-    t.integer  "watch_ids",                       array: true
+    t.integer  "watch_ids",                                       array: true
     t.string   "at"
     t.integer  "frequency"
     t.integer  "user_id"
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20150930031835) do
     t.json     "publish_params"
     t.datetime "deleted_at"
     t.jsonb    "views"
-    t.boolean  "archived"
+    t.boolean  "archived",                        default: false
   end
 
   create_table "sources", force: :cascade do |t|
