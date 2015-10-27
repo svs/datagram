@@ -1,7 +1,7 @@
 class DatagramFinder
 
   def self.all
-    Datagram.where(('(frequency > 0 AND frequency is not null) OR (at is not null AND frequency > 0 AND frequency is not null) AND archived IS DISTINCT FROM true')
+    Datagram.where('(frequency > 0 AND frequency is not null) OR (at is not null AND frequency > 0 AND frequency is not null) AND archived IS DISTINCT FROM true')
   end
 
 end
