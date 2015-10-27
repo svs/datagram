@@ -17,7 +17,7 @@ class WatchPublisher
   end
 
   def publish!()
-    return false if published
+    #return false if published
     if make_new_response!
       exchange.publish(payload.to_json, routing_key: routing_key)
       if datagram
@@ -35,7 +35,7 @@ class WatchPublisher
   attr_reader :datagram, :timestamp, :args, :exchange, :routing_key
 
   def make_new_response!
-    return false if published
+    #return false if published
     ts = timestamp || (Time.now.to_f)
     uniquifiers = {watch_id: watch.id, timestamp: ts, token: token, datagram_id: datagram.id, refresh_channel: refresh_channel}
     watch_response_data = watch.attributes.slice("strip_keys","keep_keys","transform").merge(started_at: ts, params: params)

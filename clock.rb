@@ -10,9 +10,7 @@ module Clockwork
   # required to enable database syncing support
   Clockwork.manager = DatabaseEvents::Manager.new
 
-  sync_database_events model: DatagramFinder, every: 1.minute do |instance_job_name|
-
-    datagram = Datagram.find_by_name(instance_job_name)
+  sync_database_events model: DatagramFinder, every: 1.minute do |datagram|
     Rails.logger.info "Clock publishing #{datagram.name}"
     begin
       datagram.publish

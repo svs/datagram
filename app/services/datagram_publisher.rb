@@ -23,7 +23,7 @@ class DatagramPublisher
 
   # Returns the channel on which updates to this datagram-param combination will be published
   def publish!
-    return false if @published
+    #return false if @published
     watches.map{|w| WatchPublisher.new(watch: w, params: publish_params[w.id.to_s],
                                        exchange: exchange,
                                        queue: queue,
