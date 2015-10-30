@@ -46,7 +46,6 @@ module Api
       end
 
       def t
-        Rails.logger.info "#DatagramsController requested for #{params}"
         params[:staleness] = nil if params[:staleness] == "any"
         if params[:token]
           datagram = Datagram.find_by(token: params[:token]) rescue nil

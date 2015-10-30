@@ -33,8 +33,8 @@ class DatagramPublisher
                                        ).publish!
     }
     @published = true
-    Rails.logger.info "#DatagramPublisher published datagram id: #{datagram.id} token: #{datagram.token} routing_key: #{routing_key} params: #{params} refresh_channel: #{refresh_channel}"
-      return refresh_channel
+    DgLog.new("#DatagramPublisher published datagram routing_key: #{routing_key} params: #{params} refresh_channel: #{refresh_channel}")
+    return refresh_channel
   end
 
   private

@@ -3,7 +3,8 @@ task perform: :environment do
     begin
       t = Time.now.to_i
       payload = JSON.parse(payload)
-      Rails.logger.info "#Perform processing watch #{payload["key"]}"
+      context = {datagram: payload["datagram_id"], watch: payload["token"], timestamp: payload["timestamp"]}
+      DgLog.new("#Perform processing watch #{payload["key"]}", context).log
       url = payload["url"]
       if url =~ /\Ahttp/
       elsif url =~ /\Adrive/
@@ -31,7 +32,7 @@ task perform: :environment do
         timestamp: payload["timestamp"]
       }
       $watch_responses.publish(response.to_json)
-      Rails.logger.info "#Perform finished #{payload["key"]} in #{elapsed} seconds"
+      DgLog.new("#Perform finished #{payload["key"]} in #{elapsed} seconds", context).log
     rescue Exception => e
         response = {
         elapsed: Time.now.to_i - t,

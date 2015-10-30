@@ -1,17 +1,12 @@
 task :watch_consumer => :environment do
   Rails.logger.info 'Started #WatchConsumer'
   $watch_responses.subscribe(block: true) do |di, md, payload|
-    Rails.logger.info "#WatchConsumer processing..."
-      pl = JSON.parse(payload)
-      w = WatchResponseHandler.new(pl).handle!
-      if w[:datagram]
-        if true #w[:modified]
-          Pusher.trigger(w[:refresh_channel], 'data', w)
-          Rails.logger.info "ResponseConsumer#Datagram #{w[:datagram].token} pushed on channel #{w[:refresh_channel]}"
-        end
-      else
-        Pusher.trigger(w[:refresh_channel], 'data', w)
-        Rails.logger.info "ResponseConsumer#Watch #{w[:watch_token]} pushed on channel #{w[:refresh_channel]}"
-      end
+    pl = JSON.parse(payload)
+    w = WatchResponseHandler.new(pl).handle!
+    context = {datagram: w[:datagram].token, watch: w[:watch_token], timestamp: w[:timestamp]}
+    if w[:modified]
+      Pusher.trigger(w[:refresh_channel], 'data', w)
+      DgLog.new("#ResponseConsumer Push", context).log
+    end
   end
 end

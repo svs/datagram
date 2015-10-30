@@ -5,7 +5,7 @@ class WatchResponseHandler
   end
 
   def handle!
-    Rails.logger.info "#WatchResponseHandler processing: #{params[:id]}"
+    watch && datagram && timestamp && DgLog.new("#WatchResponseHandler processing: #{params[:id]}", binding).log
     if wr
       update_attrs = {
         response_json: data,
@@ -22,10 +22,17 @@ class WatchResponseHandler
         end
         $redis.hincrby(tracking_key, watch.id, (wr.modified ? -2 : -1)) if tracking_key
         if datagram
+          DgLog.new("#WatchResponseHandler updating last_updated on #{datagram.id} to #{params[:timestamp]}", binding).log
           datagram.update(last_update_timestamp: params[:timestamp])
         end
 
-        return {watch_token: watch_token || nil, watch_response_token: wr.token, modified: modified?, complete: complete?, datagram: datagram, refresh_channel: wr.refresh_channel}
+        return {watch_token: watch_token || nil,
+                timestamp: params[:timestamp],
+                watch_response_token: wr.token,
+                modified: modified?,
+                complete: complete?,
+                datagram: datagram,
+                refresh_channel: wr.refresh_channel}
       end
     else
       Rails.logger.info "#WatchResponseHandler No such watch_response #{params[:id]}"
@@ -88,6 +95,10 @@ class WatchResponseHandler
 
   def modified?
     datagram ? tracking_data.values.select{|x| x < 0}.any? : true
+  end
+
+  def timestamp
+    @timestamp ||= params[:timestamp]
   end
 
 

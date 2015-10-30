@@ -10,7 +10,7 @@ class WatchPublisher
     @exchange = exchange
     @queue = queue
     @datagram = datagram || null_datagram
-    @timestamp = timestamp
+    @timestamp = (timestamp || Time.now).to_f
     @args = {}
     @routing_key = routing_key || default_routing_key
     @refresh_channel = refresh_channel
@@ -23,7 +23,7 @@ class WatchPublisher
       if datagram
         $redis.hincrby("#{datagram.token}:#{timestamp}",watch.id,1)
       end
-      Rails.logger.info "#WatchPublisher published watch #{watch.id} with routing_key #{routing_key}"
+      DgLog.new("#WatchPublisher published watch token: #{@response.token}, rkey: #{routing_key}", binding).log
     end
     self.published = true
     refresh_channel
@@ -36,9 +36,8 @@ class WatchPublisher
 
   def make_new_response!
     #return false if published
-    ts = timestamp || (Time.now.to_f)
-    uniquifiers = {watch_id: watch.id, timestamp: ts, token: token, datagram_id: datagram.id, refresh_channel: refresh_channel}
-    watch_response_data = watch.attributes.slice("strip_keys","keep_keys","transform").merge(started_at: ts, params: params)
+    uniquifiers = {watch_id: watch.id, timestamp: timestamp, token: token, datagram_id: datagram.id, refresh_channel: refresh_channel}
+    watch_response_data = watch.attributes.slice("strip_keys","keep_keys","transform").merge(started_at: timestamp, params: params)
     if !args[:preview]
       @response ||= WatchResponse.where(uniquifiers).first_or_create(watch_response_data)
     else
