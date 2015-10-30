@@ -17,10 +17,18 @@ script type="text/ng-template" id="new.html"
             a.btn.btn-info ng-click="preview()" style="margin: 8px"
               i.fa.fa-eye
               | Preview
+            span ng-if="loading"
+              | Loading...
+
         .row
           form#watch_form.form-horizontal role="form"
             = render "form"
       .col-md-1
       .col-md-5
-        = render 'tabs'
-        div hljs="true" language="json" source="preview_response"
+        tabset
+          tab heading="Data"
+            div hljs-to-json="watch_response.data"
+          tab heading="Errors"
+            div hljs-to-json="watch_response.errors"
+          tab heading="MetaData"
+            div hljs-to-json="watch_response.metadata"

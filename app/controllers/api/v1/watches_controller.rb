@@ -37,7 +37,7 @@ module Api
 
       def update
         if params[:id] == "preview"
-          @watch = Watch.new(preview_params.except(:id))
+          @watch = Watch.new(preview_params.except(:id).merge(user_id: current_user.id))
           @watch.publish
           render json: "ok" and return
         else
@@ -57,7 +57,7 @@ module Api
       end
 
       def preview
-        @watch = Watch.new(preview_params)
+        @watch = Watch.new(preview_params.merge(user_id: current_user.id))
         token = @watch.publish(preview: true)
         render json: token and return
       end

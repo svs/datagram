@@ -5,7 +5,8 @@ class WatchResponseHandler
   end
 
   def handle!
-    watch && datagram && timestamp && DgLog.new("#WatchResponseHandler processing: #{params[:id]}", binding).log
+    context = {datagram: datagram, watch: watch, timestamp: timestamp}
+    DgLog.new("#WatchResponseHandler processing: #{params[:id]}", context).log
     if wr
       update_attrs = {
         response_json: data,
@@ -13,7 +14,7 @@ class WatchResponseHandler
         elapsed: params[:elapsed],
         response_received_at: now,
         error: params[:error],
-        report_time: report_time
+        report_time: nil
       }
       if wr.update(update_attrs)
         if watch
@@ -21,7 +22,7 @@ class WatchResponseHandler
           watch_token = watch.token
         end
         $redis.hincrby(tracking_key, watch.id, (wr.modified ? -2 : -1)) if tracking_key
-        if datagram
+        if datagram?
           DgLog.new("#WatchResponseHandler updating last_updated on #{datagram.id} to #{params[:timestamp]}", binding).log
           datagram.update(last_update_timestamp: params[:timestamp])
         end
@@ -31,7 +32,7 @@ class WatchResponseHandler
                 watch_response_token: wr.token,
                 modified: modified?,
                 complete: complete?,
-                datagram: datagram,
+                datagram_token: (datagram? ? datagram.token : nil),
                 refresh_channel: wr.refresh_channel}
       end
     else
@@ -55,19 +56,6 @@ class WatchResponseHandler
     @now ||= Time.zone.now
   end
 
-  def report_time
-    return @report_time if @report_time
-    if watch.report_time
-      jt = JsonPath.new(watch.report_time).on(data.to_json)[0]
-      if jt.is_a?(Fixnum) #seconds since epoch
-        @report_time = Time.strptime(jt.to_s,'%s')
-      else
-        @report_time = DateTime.parse(jt) rescue nil
-      end
-    else
-      @report_time ||= (wr.report_time || now)
-    end
-  end
 
   def wr
     @wr ||= WatchResponse.find_by(token: params[:id]) rescue nil
@@ -83,6 +71,10 @@ class WatchResponseHandler
 
   def tracking_data
     Hash[$redis.hgetall(tracking_key).map{|k,v| [k,v.to_i]}] rescue {}
+  end
+
+  def datagram?
+    !params[:datagram_id].blank?
   end
 
   def datagram

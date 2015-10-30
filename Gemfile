@@ -9,7 +9,7 @@ gem 'sequel'
 gem "mysql2"
 gem 'em-pg-sequel'
 gem 'em-synchrony'
-
+gem 'rethinkdb'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 gem 'less'
