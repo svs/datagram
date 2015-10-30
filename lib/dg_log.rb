@@ -1,7 +1,6 @@
 class DgLog
 
   def initialize(string, context,level="info")
-    ap context
     @string = string
     @context = context
     @level = level
