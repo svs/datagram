@@ -21,7 +21,5 @@ begin
   $x  = $ch.topic('datagrams_topic_exchange', auto_delete: false)
 
   $watches.bind($x)
-  $datagrams.bind($x)
-rescue Exception => e
-  Rails.logger.error e.message
+
 end

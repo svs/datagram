@@ -14,11 +14,5 @@ describe Datagram do
   end
 
 
-  it "should have a payload" do
-    expect(datagram.payload).to be_a Hash
-    expect(datagram.payload.keys).to eq [:datagram_id, :watches, :routing_key, :datagram_token, :timestamp, :refresh_channel, :response_q]
-    expect(datagram.payload[:datagram_id]).to eq datagram.token
-    expect(datagram.payload[:watches].count).to eq 2
-  end
 
 end

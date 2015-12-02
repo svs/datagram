@@ -85,13 +85,22 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 
 }]);
 
-angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', function($scope, Restangular, $stateParams, $state, Pusher) {
+angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http', function($scope, Restangular, $stateParams, $state, Pusher, $http) {
 
   $scope.getDatagram = function(id) {
     Restangular.one('api/v1/datagrams',id).get().then(function(r) {
       $scope.datagram = r;
     });
   };
+
+  $scope.archive = function() {
+    console.log($scope.datagram);
+    $http({method: 'PATCH', url: 'api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: {archived: true}}}).then(function(r) {
+      console.log('saved datagram');
+      $state.go('index');
+    });
+  };
+
 
     var subscribed = false;
 
@@ -124,19 +133,20 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
 }]);
 
-angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', function($scope, Restangular, $stateParams, $state, Pusher) {
+angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','$http','$stateParams', '$state', 'Pusher', function($scope, $http, $stateParams, $state, Pusher) {
   var loaded = false;
     $scope.getDatagram = function(id) {
-      Restangular.one('api/v1/datagrams',id).get().then(function(r) {
-	$scope.datagram = r;
+      $http.get('api/v1/datagrams/' + id).then(function(r) {
+	console.log(r);
+	$scope.datagram = r.data;
     });
   };
 
   if ($stateParams.id) {
     $scope.getDatagram($stateParams.id);
   };
-  Restangular.all('api/v1/watches').getList().then(function(r) {
-    $scope.watches = r;
+  $http.get('api/v1/watches').then(function(r) {
+    $scope.watches = r.data;
   });
 
     $scope.$watch('datagram.watch_ids.length', function(n,o) {
@@ -157,12 +167,11 @@ angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','Restangu
     });
 
   $scope.save = function() {
-    $scope.datagram.save().then(function(r) {
+    console.log($scope.datagram);
+    $http({method: 'PATCH', url: 'api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: $scope.datagram}}).then(function(r) {
       console.log('saved datagram');
       $state.go('show',{id: $scope.datagram.id});
     });
   };
-
-
 
 }]);

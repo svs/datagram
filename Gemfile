@@ -77,6 +77,9 @@ gem 'ruby-jq'
 gem 'chronic'
 gem 'liquid'
 gem 'aws-s3'
+gem 'imgkit'
+gem 'wkhtmltoimage-binary'
+
 # Stats
 gem "keen"
 

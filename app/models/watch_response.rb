@@ -16,7 +16,8 @@ class WatchResponse < ActiveRecord::Base
     {
       data: response_json,
       errors: error,
-      metadata: metadata
+      metadata: metadata,
+      params: params
     }
   end
 

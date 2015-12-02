@@ -33,7 +33,7 @@ class DatagramPublisher
                                        ).publish!
     }
     @published = true
-    DgLog.new("#DatagramPublisher published datagram routing_key: #{routing_key} params: #{params} refresh_channel: #{refresh_channel}")
+    DgLog.new("#DatagramPublisher published datagram routing_key: #{routing_key} params: #{params} refresh_channel: #{refresh_channel}",{})
     return refresh_channel
   end
 
