@@ -61,7 +61,13 @@ module Api
             format.json { render json: response }
             format.xml { render xml: response }
             format.html { render html: response }
-            format.png { redirect_to response[:url] }
+            format.png {
+              if response.is_a?(Hash)
+                redirect_to(response[:url])
+              else
+                send_file response, type: 'image/png', disposition: 'inline'
+              end
+            }
             format.csv {
               csv = CSV.generate do |f|
                 response.each_with_index do |_r,i|

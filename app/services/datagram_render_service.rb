@@ -4,6 +4,7 @@ class DatagramRenderService
   def initialize(datagram, params = {})
     @datagram = datagram
     @params = params
+    ap params
   end
 
   def render(views = [])
@@ -43,12 +44,26 @@ class DatagramRenderService
   end
 
   def _render(json, view)
+    ap view
+    ap Dir.pwd
+    json.deep_stringify_keys!
     v = ((datagram.views[view] || view) rescue (JSON.parse(datagram.views[view]))).with_indifferent_access
+    if v["template"] =~ URI::regexp
+      v["template"] = open(v["template"].gsub("file://","")).read
+    end
     if v["type"] == "jq"
       return json.jq(v["template"])[0]
     end
     if v["type"] == "liquid"
-      return Liquid::Template.parse(v["template"]).render(json).html_safe
+      html = Liquid::Template.parse(v["template"]).render(json).html_safe
+      if params["format"] == "html"
+        return html
+      elsif params["format"] == "png"
+        x = SecureRandom.urlsafe_base64(5)
+        File.open("/tmp/#{x}.html","w") {|f| f.write(html) }
+        `wkhtmltoimage /tmp/#{x}.html /tmp/#{x}.png`
+        return "/tmp/#{x}.png"
+      end
     end
     if v["type"] == "pivot"
       pt = PivotTable.new(json)

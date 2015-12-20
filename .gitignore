@@ -16,6 +16,6 @@
 /tmp
 .ruby-*
 config/secrets.yml
-*dump
+*dump*
 .env
 *\#*
