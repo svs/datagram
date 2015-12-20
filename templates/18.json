@@ -1,0 +1,26 @@
+{
+    title: {
+	text: "Campaigns",    x: -20
+    },
+    subtitle: {
+	text: .responses["promo-codes"].metadata.report_time,
+	x: -20
+    },
+    xAxis: {
+	categories: .responses["promo-codes"].data|map(.signup_promo)
+    },
+    yAxis: [
+	{
+	    title: "Promo Code Usage",
+	    floor: 0
+	}
+    ],
+    series: [
+	{
+	    data: .responses["promo-codes"].data|map(.count),
+	    type: "column",
+	    name: "Number of Signups"
+	}
+
+    ]
+}

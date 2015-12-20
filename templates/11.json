@@ -1,0 +1,37 @@
+{
+    title: {
+	text: "Tickets / Day",    x: -20
+    },
+    subtitle: {
+	text: .responses["tickets-by-date"].metadata.report_time,
+	x: -20
+    },
+    xAxis: {
+	categories: .responses["tickets-by-date"].data|map(.date)
+    },
+    yAxis: [
+	{
+	    title: "Number of Bookings",
+	    floor: 0
+	},
+	{
+	    title: "Revenue",
+	    floor: 0
+	}
+    ],
+    series: [
+	{
+	    data: .responses["tickets-by-date"].data|map(.count),
+	    type: "column",
+	    name: "Number of tickets"
+	},
+	{
+	    data: .responses["tickets-by-date"].data|map(.sum),
+	    type: "line",
+	    name: "Revenue in Rs.",
+	    yAxis: 1
+	}
+
+
+    ]
+}

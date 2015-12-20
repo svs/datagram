@@ -1,0 +1,12 @@
+.responses["ridership-cohorts"] as $in | {
+    title: {
+	text: "Cohorts",    x: -20
+    },
+    chart: {
+            type: "line"
+    },
+    series: .responses["ridership-cohorts"].data|map(.signup_week)|unique|map(. as $n | {
+	name: .,
+	data: ($in.data|map(.ride_week)|unique) | map(. as $d | ($in.data | map(select(.ride_week == $d and .signup_week == $n))) | map(.count)[0])
+    })
+}
