@@ -12,8 +12,8 @@ class DatagramViewLoader
   private
   attr_reader :datagram, :view
   def datagram_view_of_same_name
-    v = datagram.views[view]
-    (v["template"] =~ URI::regexp || v.blank? || v["template"].blank?) ? nil : v
+    v = datagram.views[view] rescue nil
+    (v.blank? || (v["template"] =~ /file/) == 0  || v["template"].blank?) ? nil : v
   end
 
   def view_is_the_view
@@ -22,17 +22,18 @@ class DatagramViewLoader
 
   def read_from_file
     begin
-      (datagram.views[view] || {}).tap {|v|
-        if v["template"] =~ URI::regexp
-          file_name = v["template"].gsub("file://","").gsub(/^A\./,Rails.root.to_s)
-        else
-          file_name = File.join(Rails.root, "templates", datagram.id, "-", view)
-        end
-        v["template"] = open(file_name).read
-        v["type"] ||= view.split(".")[1]
-      }
+      v = ((datagram.views[view] || {}) rescue {})
+      if v["template"] =~ URI::regexp
+        file_name = v["template"].gsub("file://","").gsub(/^A\./,Rails.root.to_s)
+      else
+        file_name = File.join(Rails.root, "templates", "#{datagram.id.to_s}-#{view}")
+      end
+      v["template"] = open(file_name).read
+      v["type"] ||= view.split(".")[1]
+      return v
     rescue Exception => e
       ap e.message
+      ap e.backtrace
       nil
     end
   end

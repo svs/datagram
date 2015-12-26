@@ -45,7 +45,7 @@ class DatagramRenderService
 
   def _render(json, view)
     v = DatagramViewLoader.new(datagram, view).load
-    return ViewRenderer.new(v, json, params).render
+    return ViewRenderer.new(v, json, params, filename(view)).render
   end
 
   def filename(view)

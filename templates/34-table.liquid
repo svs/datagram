@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Cohort Performance</h1>
+      <table class="table table-striped">
+	<thead>
+	  <tr>
+	    <th></th>
+	    {% for d in dates %}
+	    <th>{{d}}</th>
+	    {% endfor %}
+	  </tr>
+	</thead>
+	<tbody>
+	  {% for d in data %}
+	  <tr>
+	    <td>{{d[0]}}</td>
+	    {% for e in d[1] %}
+	    <td>{{e}}</td>
+	    {% endfor %}
+	  </tr>
+	  {% endfor %}
+
+	</tbody>
+
+      </table>
+    </div>
+  </body>
+</html>
