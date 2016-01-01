@@ -27,6 +27,8 @@ class WatchResponseHandler
           datagram.update(last_update_timestamp: params[:timestamp])
         end
 
+        if datagram? && !datagram.keep && complete?
+        end
         return {watch_token: watch_token || nil,
                 timestamp: params[:timestamp],
                 watch_response_token: wr.token,

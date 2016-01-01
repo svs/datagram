@@ -22,6 +22,14 @@ GIT
       dotenv (>= 0.7)
       thor (>= 0.13.6)
 
+GIT
+  remote: https://github.com/svs/sequel-redshift.git
+  revision: 1b89c88c3f41cc2465597e6ff19df70eb3eb17e2
+  specs:
+    sequel-redshift (0.0.1)
+      pg
+      sequel
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -150,17 +158,8 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.0.1)
     effin_utf8 (1.0)
-    em-pg-client (0.3.4)
-      eventmachine (~> 1.0.0)
-      pg (>= 0.17.0)
-    em-pg-sequel (0.0.4)
-      em-pg-client (>= 0.3.0)
-      sequel
-    em-synchrony (1.0.4)
-      eventmachine (>= 1.0.0.beta.1)
     equalizer (0.0.11)
     erubis (2.7.0)
-    eventmachine (1.0.7)
     execjs (2.5.2)
     extlib (0.9.16)
     eye (0.6.4)
@@ -242,6 +241,7 @@ GEM
     httpclient (2.6.0.1)
     i18n (0.7.0)
     ice_nine (0.11.1)
+    imgkit (1.6.1)
     jbuilder (2.2.13)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -467,8 +467,8 @@ GEM
       rspec-mocks (~> 3.2.0)
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
-    ruby-jq (0.1.5)
-      json
+    ruby-jq (0.1.6)
+      multi_json
     ruby-progressbar (1.7.5)
     ruby_parser (3.6.6)
       sexp_processor (~> 4.1)
@@ -568,8 +568,6 @@ DEPENDENCIES
   clockwork
   coffee-rails (~> 4.0.0)
   devise
-  em-pg-sequel
-  em-synchrony
   eye
   factory_girl_rails
   foreman!
@@ -579,6 +577,7 @@ DEPENDENCIES
   hashdiff
   hashfilter
   html2slim
+  imgkit
   jbuilder (~> 2.0)
   jquery-rails
   json2json
@@ -608,10 +607,11 @@ DEPENDENCIES
   rethinkdb
   rspec-legacy_formatters
   rspec-rails
-  ruby-jq
+  ruby-jq (~> 0.1.6)
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
   sequel
+  sequel-redshift!
   shoulda-matchers
   sidekiq
   slim

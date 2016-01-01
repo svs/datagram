@@ -1,0 +1,6 @@
+<h1>Bookings By Month</h1>
+<ul>
+  {% for d in responses["bookings-by-month"]["data"] %}
+  <li>{{ d["date"] }}</li>
+  {% endfor %}
+</ul>

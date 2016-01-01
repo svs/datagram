@@ -1,0 +1,38 @@
+{
+    title: {
+	text: "Tickets and Revenue",    x: -20
+    },
+    subtitle: {
+	text: .responses["bookings-by-month"].metadata.report_time,
+	x: -20
+    },
+    xAxis: {
+	categories: .responses["bookings-by-month"].data|map(.date)
+    },
+    yAxis: [
+	{
+	    title: "Number of Tickets",
+	    floor: 0
+	},
+	{
+	    title: "Revenue (Rs.)",
+	    opposite: true,
+	    floor: 0
+	}
+    ],
+    series: [
+	{
+	    data: .responses["bookings-by-month"].data|map(.count),
+	    type: "column",
+	    name: "Number of Tickets"
+	},
+	{
+	    data: .responses["bookings-by-month"].data|map(.sum),
+	    yAxis: 1,
+	    type: "line",
+	    name: "Revenue in Rs."
+
+	}
+
+    ]
+}

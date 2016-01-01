@@ -17,7 +17,8 @@ task perform: :environment do
         r = data[1..-1].map{|r| Hash[data[0].zip(r)]}
       else
         url = url.gsub("mysql://","mysql2://")
-        Sequel.connect(url) do |db|
+        options = url =~ /redshift/ ? {client_min_messages: false, force_standard_strings: false} : {}
+        Sequel.connect(url, options) do |db|
           q = payload["data"]["query"]
           r = db.fetch(q).all
         end

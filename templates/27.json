@@ -1,0 +1,26 @@
+{
+    title: {
+	text: "Signups",    x: -20
+    },
+    subtitle: {
+	text: .responses["signup-growth"].metadata.report_time,
+	x: -20
+    },
+    xAxis: {
+	categories: .responses["signup-growth"].data|map(.date)
+    },
+    yAxis: [
+	{
+	    title: "Signups",
+	    floor: 0
+	}
+    ],
+    series: [
+	{
+	    data: .responses["signup-growth"].data|map(.count),
+	    type: "column",
+	    name: "Number of Signups"
+	}
+
+    ]
+}

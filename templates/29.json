@@ -1,0 +1,26 @@
+{
+    title: {
+	text: "Wishlist Weekly",    x: -20
+    },
+    subtitle: {
+	text: .responses["wishlist-weekly"].metadata.report_time,
+	x: -20
+    },
+    xAxis: {
+	categories: .responses["wishlist-weekly"].data|map(.week)
+    },
+    yAxis: [
+	{
+	    title: "Wishlist Growth (weekly)",
+	    floor: 0
+	}
+    ],
+    series: [
+	{
+	    data: .responses["wishlist-weekly"].data|map(.count),
+	    type: "column",
+	    name: "Number of Wishlists"
+	}
+
+    ]
+}

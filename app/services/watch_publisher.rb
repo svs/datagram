@@ -37,7 +37,7 @@ class WatchPublisher
   def make_new_response!
     #return false if published
     uniquifiers = {watch_id: watch.id, timestamp: timestamp, token: token, datagram_id: datagram.id, refresh_channel: refresh_channel}
-    watch_response_data = watch.attributes.slice("strip_keys","keep_keys","transform").merge(started_at: timestamp, params: params)
+    watch_response_data = watch.attributes.slice("strip_keys","keep_keys","transform").merge(started_at: timestamp, params: real_params)
     if !args[:preview]
       @response ||= WatchResponse.where(uniquifiers).first_or_create(watch_response_data)
     else
@@ -60,13 +60,17 @@ class WatchPublisher
     watch.attributes.stringify_keys.merge("url" => watch_url, "data" => watch_data, "params" => params)
   end
 
+  def real_params
+    WatchParamsRenderer.new(watch, params).real_params
+  end
+
   def watch_url
     u = watch.url ? (::Mustache.render(watch.url, params)) : watch.url
     u.gsub('drive://',"drive://#{watch.user.google_token}@")
   end
 
   def watch_data
-    watch.data ? JSON.parse(::Mustache.render(JSON.dump(watch.data), params).gsub("\\n"," ").gsub("&#39;","'")) : watch.data
+    WatchParamsRenderer.new(watch, params).render
   end
 
   def token

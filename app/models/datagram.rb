@@ -100,6 +100,7 @@ class Datagram < ActiveRecord::Base
         data: (r.bytesize.to_i < max_size ? r.response_json : {max_size: "Data size too big. Please use the Public URL to view data"}),
         errors: r.error,
         metadata: r.metadata,
+        params: r.params
       }}
   end
 
@@ -114,14 +115,6 @@ class Datagram < ActiveRecord::Base
     # execute search filter
     if !search_params.blank?
       @responses = @responses.where(params_clause)
-    end
-    # execute report_time filter
-    if as_of
-      as_of_date = DateTime.parse(as_of)
-      if as_of_date.seconds_until_end_of_day == 86399
-        as_of_date = as_of_date.end_of_day
-      end
-      @responses = @responses.where('report_time <= ?',as_of_date)
     end
     @responses
   end

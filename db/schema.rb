@@ -11,32 +11,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151023041520) do
+ActiveRecord::Schema.define(version: 20151128081338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "datagrams", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "watch_ids",                                       array: true
-    t.string   "at"
+    t.string   "name",                  limit: 255
+    t.integer  "watch_ids",                                         array: true
+    t.string   "at",                    limit: 255
     t.integer  "frequency"
     t.integer  "user_id"
-    t.string   "token"
+    t.string   "token",                 limit: 255
     t.boolean  "use_routing_key"
     t.integer  "last_update_timestamp", limit: 8
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "slug"
+    t.string   "slug",                  limit: 255
     t.json     "publish_params"
     t.datetime "deleted_at"
     t.jsonb    "views"
-    t.boolean  "archived",                        default: false
+    t.boolean  "archived",                          default: false
+    t.boolean  "keep",                              default: false
+    t.text     "description"
   end
 
   create_table "sources", force: :cascade do |t|
-    t.string   "name"
-    t.string   "url"
+    t.string   "name",       limit: 255
+    t.string   "url",        limit: 255
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -46,19 +48,19 @@ ActiveRecord::Schema.define(version: 20151023041520) do
   create_table "users", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
-    t.string   "reset_password_token"
+    t.string   "email",                  limit: 255, default: "", null: false
+    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",                      default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.string   "token"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
+    t.string   "token",                  limit: 255
     t.integer  "linked_account_id"
-    t.string   "role"
+    t.string   "role",                   limit: 255
     t.boolean  "use_routing_key"
     t.string   "google_token"
     t.string   "google_refresh_token"
@@ -99,22 +101,22 @@ ActiveRecord::Schema.define(version: 20151023041520) do
     t.integer  "user_id"
     t.json     "data"
     t.integer  "frequency"
-    t.string   "at"
-    t.string   "name"
-    t.string   "url"
-    t.string   "method",              default: "get"
-    t.string   "webhook_url"
-    t.string   "protocol",            default: "http"
-    t.string   "token"
+    t.string   "at",                  limit: 255
+    t.string   "name",                limit: 255
+    t.string   "url",                 limit: 255
+    t.string   "method",              limit: 255, default: "get"
+    t.string   "webhook_url",         limit: 255
+    t.string   "protocol",            limit: 255, default: "http"
+    t.string   "token",               limit: 255
     t.json     "strip_keys"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.json     "keep_keys"
-    t.string   "last_response_token"
+    t.string   "last_response_token", limit: 255
     t.boolean  "use_routing_key"
-    t.string   "slug"
+    t.string   "slug",                limit: 255
     t.json     "params"
-    t.string   "report_time"
+    t.string   "report_time",         limit: 255
     t.json     "transform"
     t.integer  "source_id"
     t.text     "description"

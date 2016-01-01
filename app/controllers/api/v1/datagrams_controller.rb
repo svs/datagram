@@ -61,7 +61,13 @@ module Api
             format.json { render json: response }
             format.xml { render xml: response }
             format.html { render html: response }
-            format.png { redirect_to response[:url] }
+            format.png {
+              if response.is_a?(Hash)
+                redirect_to(response[:url])
+              else
+                send_file response, type: 'image/png', disposition: 'inline'
+              end
+            }
             format.csv {
               csv = CSV.generate do |f|
                 response.each_with_index do |_r,i|
@@ -92,7 +98,7 @@ module Api
       private
 
       def create_params
-        params.require(:datagram).permit(:at, :frequency, :name, :use_routing_key).tap{|wl|
+        params.require(:datagram).permit(:at, :frequency, :name, :use_routing_key, :archived, :description).tap{|wl|
           wl[:watch_ids] = params[:datagram][:watch_ids]
           wl[:user_id] = current_user.id
           wl[:publish_params] = params[:datagram][:publish_params]

@@ -7,8 +7,9 @@ gem 'pg'
 # gems for consumers
 gem 'sequel'
 gem "mysql2"
-gem 'em-pg-sequel'
-gem 'em-synchrony'
+#gem 'em-pg-sequel'
+#gem 'em-synchrony'
+gem 'sequel-redshift', git: 'https://github.com/svs/sequel-redshift.git'
 gem 'rethinkdb'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
@@ -73,10 +74,13 @@ gem "google_drive"
 gem "legato"
 gem "omniauth-google-oauth2"
 gem 'angular_rails_csrf'
-gem 'ruby-jq'
+gem 'ruby-jq', '~> 0.1.6'
 gem 'chronic'
 gem 'liquid'
 gem 'aws-s3'
+gem 'imgkit'
+
+
 # Stats
 gem "keen"
 

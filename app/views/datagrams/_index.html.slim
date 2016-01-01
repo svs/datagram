@@ -18,6 +18,8 @@ script type="text/ng-template" id="index.html"
           td
             a ui-sref="show({id: datagram.id})"
               | {{datagram.name}}
+            br
+              | {{datagram.description}}
           td
             ul
               li ng-repeat="watch in datagram.watches"

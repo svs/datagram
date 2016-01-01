@@ -10,6 +10,10 @@
       br
       input type="checkbox"ng-model="datagram.use_routing_key"
       | Use Routing Key
+      .form-group
+        label.col-md-3 Description
+        textarea.form-control rows=5 ng-model="datagram.description"
+
     .portlet
       h4.portlet-title
         u
