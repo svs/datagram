@@ -142,7 +142,7 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
 	var source = _.find($scope.sources, function(i) { return i.id == $scope.watch.source_id;});
 	console.log("source",source);
 	$scope.watch.protocol = source.protocol;
-	$scope.isSql =  $scope.watch.protocol == "mysql" || $scope.watch.protocol == "postgres";
+	$scope.isSql =  $scope.watch.protocol == "mysql" || $scope.watch.protocol == "postgres" || $scope.watch.protocol == "redshift";
     };
 
 }]);

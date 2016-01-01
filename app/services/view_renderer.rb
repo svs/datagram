@@ -15,7 +15,8 @@ class ViewRenderer
   private
   attr_reader :view, :json, :params, :filename
   def renderer
-    Kernel.const_get("ViewRenderer::" + view["type"].titleize)
+    type = view == "chart" ? "chart" : view["type"]
+    Kernel.const_get("ViewRenderer::" + type.titleize)
   end
 
   class Jq
