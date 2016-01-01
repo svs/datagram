@@ -1,0 +1,16 @@
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+<div id="container" style="height: 400px"></div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+    // Get the CSV and create the chart
+    $.getJSON('/api/v1/d/RqAXxHR16Rj_e2pn9nornw.json?views[]=hc', function (d) {
+      console.log(d);
+        $('#container').highcharts(d);
+    });
+
+});
+</script>
