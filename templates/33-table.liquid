@@ -22,7 +22,7 @@
       {% for d in series %}
       <tr>
 	<th style="background: #DC9EE6">
-	  <a href="/api/v1/d/wVfv4got47jer7T7PHQVMw.html?params[format]=YYYY-MM&signup_period={{d.signup_week}}&refresh=600&views[]=table.jq&views[]=table.liquid">{{d.signup_week}}</a>
+	  <a href="/api/v1/d/wVfv4got47jer7T7PHQVMw.html?params[format]=YYYY-MM&params[signup_period]={{d.signup_week}}&refresh=600&views[]=table.jq&views[]=table.liquid">{{d.signup_week}}</a>
 	</th>
 	<td>{{ d.signups }}</td>
 	{% for e in d.data %}
