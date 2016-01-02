@@ -29,7 +29,8 @@ class DatagramPublisher
                                        queue: queue,
                                        datagram: datagram,
                                        timestamp: timestamp,
-                                       refresh_channel: refresh_channel
+                                       refresh_channel: refresh_channel,
+                                       routing_key: routing_key
                                        ).publish!
     }
     @published = true
@@ -61,7 +62,11 @@ class DatagramPublisher
   end
 
   def routing_key
-    "datagram-#{datagram.routing_key || 'datagrams'}"
+    if datagram.use_routing_key
+      "datagram-#{datagram.routing_key}"
+    else
+      nil
+    end
   end
 
 

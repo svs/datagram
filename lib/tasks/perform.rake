@@ -1,5 +1,6 @@
 task perform: :environment do
   $watches.bind($x, routing_key: "watch-watches").subscribe(block: true) do |di, md, payload|
+    ap payload
     begin
       t = Time.now.to_i
       payload = JSON.parse(payload)

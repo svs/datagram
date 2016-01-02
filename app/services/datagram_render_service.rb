@@ -17,15 +17,17 @@ class DatagramRenderService
 
   def raw_json
     rc = datagram.refresh_channel(params[:params])
+    staleness = (Integer(params[:refresh]) rescue nil) || params[:staleness]
+    sync = params[:sync] != "false"
     response = datagram.response_json(params: params[:params],
                                       as_of: params[:as_of],
-                                      staleness: params[:staleness], path: params[:path]).merge(refresh_channel: rc)
+                                      staleness: staleness, path: params[:path]).merge(refresh_channel: rc)
     if params[:refresh] && response[:responses].blank?
-      if params[:sync]
+      if sync
         $redis.setex(rc, 10, 0)
       end
       datagram.publish(params[:params] || {})
-      if params[:sync]
+      if sync
         done = false
         while (!done) do
           t = Time.now
