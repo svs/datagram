@@ -5,7 +5,7 @@ class WatchParamsRenderer
   def initialize(watch, params = {})
     params = params.stringify_keys if params
     @watch, @params = watch, params
-    @params = params.blank? ? (watch.params || {}) : watch.params.merge(params) # should use watch parameters when no parameters provided
+    @params = params.blank? ? (watch.params || {}) : (watch.params || {}).merge(params) # should use watch parameters when no parameters provided
 
   end
 

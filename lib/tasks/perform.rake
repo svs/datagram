@@ -1,6 +1,5 @@
 task perform: :environment do
   $watches.bind($x, routing_key: "watch-watches").subscribe(block: true) do |di, md, payload|
-    ap payload
     begin
       t = Time.now.to_i
       payload = JSON.parse(payload)
@@ -8,6 +7,7 @@ task perform: :environment do
       DgLog.new("#Perform processing watch #{payload["key"]}", context).log
       url = payload["url"]
       if url =~ /\Ahttp/
+        r = JSON.parse(RestClient.get(payload["url"], {params: payload["data"]}))
       elsif url =~ /\Adrive/
         u = URI.parse(url)
         token = u.user
