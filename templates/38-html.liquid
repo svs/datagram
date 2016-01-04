@@ -4,10 +4,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <style>.ok{color: green}</style>
   </head>
-  <body style="width: 1000px; margin: auto">
-    <div class="container">
+  <body >
+    <div class="container" style="width: 640px; margin: auto">
       <h1>{{trip.code}} {{trip.route}} ({{trip.category}})</h1>
       <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ping.latitude}},{{ping.longitude}}&size=640x300&maptype=roadmap&format=png&visual_refresh=true&markers=color:black%7Csize:mid%7C{{ping.latitude}},{{ping.longitude}}&visible={{trip.lat}},{{trip.lon}}&markers=color:green%7C{{trip.lat}},{{trip.lon}}"/>
+      <h3>Bus is at {{ping.location}}</h3>
       <table class="table" style="width:640px">
 	<thead>
 	  <tr>
@@ -23,5 +24,18 @@
 	    <td><h2 class="{{status}}">{{status}}</h2></td>
 	  </tr>
 	</tbody>
+	<thead>
+	  <tr>
+	    <th><h1>ETA</h1></th>
+	    <th><h1>Distance</h1></th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr>
+	    <td><h2>{{eta}}</h2></td>
+	    <td><h2>{{distance}}</h2></td>
+	  </tr>
+	</tbody>
+
       </table>
     </div>

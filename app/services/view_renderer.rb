@@ -35,7 +35,7 @@ class ViewRenderer
         x = SecureRandom.urlsafe_base64(5)
         File.open("/tmp/#{x}.html","w") {|f| f.write(html) }
         if params["width"]
-          `wkhtmltoimage --width #{params["width"]} --disable-smart-width /tmp/#{x}.html /tmp/#{x}.png`
+          `wkhtmltoimage --width #{params["width"]} --disable-smart-width --quality 50 /tmp/#{x}.html /tmp/#{x}.png`
         else
           `wkhtmltoimage /tmp/#{x}.html /tmp/#{x}.png`
         end
