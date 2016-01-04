@@ -39,7 +39,8 @@ class ViewRenderer
         else
           `wkhtmltoimage /tmp/#{x}.html /tmp/#{x}.png`
         end
-        return "/tmp/#{x}.png"
+        AWS::S3::S3Object.store(filename,open("/tmp/#{x}.png"),'dg-tmp')
+        return {url: "https://s3.amazonaws.com/dg-tmp/#{filename}"}
       end
     end
   end
