@@ -7,7 +7,8 @@ task perform: :environment do
       DgLog.new("#Perform processing watch #{payload["key"]}", context).log
       url = payload["url"]
       if url =~ /\Ahttp/
-        r = JSON.parse(RestClient.get(payload["url"], {params: payload["data"]}))
+        d = payload["params"].slice(*payload["data"].keys)
+        r = JSON.parse(RestClient.get(payload["url"], {params: d}))
       elsif url =~ /\Adrive/
         u = URI.parse(url)
         token = u.user

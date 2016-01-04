@@ -17,7 +17,6 @@ class WatchPublisher
   end
 
   def publish!()
-    #return false if published
     if make_new_response!
       exchange.publish(payload.to_json, routing_key: routing_key)
       if datagram
