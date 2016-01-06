@@ -28,7 +28,9 @@ class ViewRenderer
 
   class Liquid
     def self.render(v, json, params, filename)
-      html = ::Liquid::Template.parse(v["template"]).render(json, params).html_safe
+      ap json
+      ap params
+      html = ::Liquid::Template.parse(v["template"]).render(json.merge("_params" => params)).html_safe
       if params["format"] != "png"
         return html
       elsif params["format"] == "png"

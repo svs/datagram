@@ -6,7 +6,6 @@
   <body>
     <div class="container">
     <h1>Limo Cohort Analysis</h1>
-
     <table class="table table-striped table-condensed">
       <thead>
 	<tr>
@@ -22,7 +21,7 @@
       {% for d in series %}
       <tr>
 	<th style="background: #DC9EE6">
-	  <a href="/api/v1/d/wVfv4got47jer7T7PHQVMw.html?params[format]=YYYY-MM&params[signup_period]={{d.first_ride_p}}&refresh=600&views[]=table.jq&views[]=table.liquid">{{d.first_ride_p}}</a>
+	  <a href="/api/v1/d/wVfv4got47jer7T7PHQVMw.html?params[format]={{_params.params.format}}&params[first_ride_period]={{d.first_ride_p}}&refresh=600&views[]=table.jq&views[]=table.liquid">{{d.first_ride_p}}</a>
 	</th>
 	<td>{{ d.first_rides }}</td>
 	{% for e in d.data %}
