@@ -441,6 +441,8 @@ GEM
     rethinkdb (2.1.0.2)
       json
     retriable (1.4.1)
+    rollbar (2.5.2)
+      multi_json
     roodi (3.3.1)
       ruby_parser (~> 3.2, >= 3.2.2)
     rspec (3.2.0)
@@ -605,6 +607,7 @@ DEPENDENCIES
   redis
   rest-client
   rethinkdb
+  rollbar (~> 2.5.0)
   rspec-legacy_formatters
   rspec-rails
   ruby-jq (~> 0.1.6)

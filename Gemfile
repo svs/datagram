@@ -79,7 +79,7 @@ gem 'chronic'
 gem 'liquid'
 gem 'aws-s3'
 gem 'imgkit'
-
+gem 'rollbar', '~> 2.5.0'
 
 # Stats
 gem "keen"
