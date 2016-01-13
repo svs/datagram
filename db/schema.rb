@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151128081338) do
+ActiveRecord::Schema.define(version: 20160112191013) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,16 @@ ActiveRecord::Schema.define(version: 20151128081338) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "protocol"
+  end
+
+  create_table "streams", force: :cascade do |t|
+    t.string   "url"
+    t.string   "at"
+    t.integer  "every"
+    t.integer  "notify_every"
+    t.boolean  "notify_if_changed"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -95,6 +105,7 @@ ActiveRecord::Schema.define(version: 20151128081338) do
     t.integer  "bytesize"
     t.string   "refresh_channel"
     t.text     "error"
+    t.integer  "update_num"
   end
 
   create_table "watches", force: :cascade do |t|

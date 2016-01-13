@@ -42,11 +42,12 @@ class WatchParamsRenderer
       }
     )
 
-    date = dur.send({"+" => "since", "-" => "ago"}[direction]).tap{|dt|
-      if ["<",">"].include?(snap)
-        dt = dt.send({"<" => "beginning", ">" => "end"}[snap] + "_of_" + {"w" => "week", "m" => "month"}[type])
-      end
-    }.strftime('%Y-%m-%d')
+    dt = dur.send({"+" => "since", "-" => "ago"}[direction])
+    if ["<",">"].include?(snap)
+      dt = dt.send({"<" => "beginning", ">" => "end"}[snap] + "_of_" + {"w" => "week", "m" => "month"}[type])
+    end
+
+     dt.strftime('%Y-%m-%d')
 
   end
 
