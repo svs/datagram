@@ -7,7 +7,7 @@
   <body >
     <div class="container" style="width: 640px; margin: auto">
       <h1>{{trip.code}} {{trip.route}} ({{trip.category}})</h1>
-      <h2>{{status}}</h2>
+      <h2>{{message}}</h2>
       <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ping.latitude}},{{ping.longitude}}&size=640x300&maptype=roadmap&format=png&visual_refresh=true&markers=color:black%7Csize:mid%7C{{ping.latitude}},{{ping.longitude}}&visible={{trip.lat}},{{trip.lon}}&markers=color:green%7C{{trip.lat}},{{trip.lon}}"/>
       <h3>Bus is at {{ping.location}}</h3>
       <table class="table" style="width:640px">
