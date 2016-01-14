@@ -5,5 +5,5 @@
  eta: .responses["latest-ping"].params.eta,
  distance: .responses["latest-ping"].params.distance,
  errors: .responses["latest-ping"].params.errors,
- lag: .responses["latest-ping"].params.last_ping_diff
+ lag: .responses["latest-ping"].params.lag
  }
