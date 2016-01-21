@@ -1,0 +1,41 @@
+<div class="col-md-6">
+  <div class="card small">
+      <div class="pull-right">
+        <div>
+          <i class="md md-trending-up text-rgb-5"></i>
+          3%
+        </div>
+      </div>
+
+      <div class="f11" style="opacity:0.8">
+        <i class="md md-star-outline"></i> Latest 10 May, 10:00
+      </div>
+
+      <div class="p-10 p-t-30">
+        <c3chart bindto-id="chart-line-2">
+	  {% for s in series %}
+          <chart-column column-id="{{s.name}}"
+                        column-values="{{s.data | join: ', '}}"
+                        column-type="bar" />
+	  {% endfor %}
+	  <chart-group group-values="{{groups}}"/>
+	  <chart-legend show-legend="false"/>
+        </c3chart>
+
+      </div>
+
+    </div>
+
+    <div class="card-content p-10">
+      <div class="row">
+        <div class="col-md-6 text-center" style="border-right: 1px #F0F0F0 solid;">
+          <h3 class="no-margin w300">$4181,-</h3>
+          <p class="grey-text w600">Total revenue</p>
+        </div>
+        <div class="col-md-6 text-center">
+          <h3 class="no-margin w300">233</h3>
+          <p class="grey-text w600">Today sales</p>
+        </div>
+      </div>
+  </div>
+</div>

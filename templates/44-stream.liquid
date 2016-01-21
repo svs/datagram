@@ -1,0 +1,39 @@
+<div class="col-md-6">
+  <div class="card small">
+    <div class="theme-lighten p-10">
+      <div class="pull-right">
+	<div>
+          <i class="md {%if trend < 1 %}md-trending-down{% else %}md-trending-up{%endif%} text-rgb-5"></i>
+          {{trend | times: 100 | minus: 100 | round}}%
+	</div>
+      </div>
+      <h4 class="no-margin w600">NKP today</h4>
+
+      <div class="f11" style="opacity:0.8">
+	<i class="md md-star-outline"></i> Latest 10 May, 10:00
+      </div>
+
+      <div class="p-10 p-t-30">
+	<c3chart bindto-id="chart-line-2">
+	  {% for s in series %}
+	  <chart-column column-id="{{s.name}}"
+			column-values="{{s.data | join: ', '}}"
+			column-type="bar" />
+	  {% endfor %}
+	  <chart-group group-values="{{groups}}"/>
+	  <chart-legend show-legend="false"/>
+	  <chart-size chart-height="200"/>
+	</c3chart>
+
+      </div>
+
+      <div class="card-content p-10">
+	<div class="row">
+	  <div class="col-md-6 text-center" style="border-right: 1px #F0F0F0 solid;">
+	    <h3 class="no-margin w300">{{total}}</h3>
+	    <p class="grey-text w600">Passengers</p>
+	  </div>
+	</div>
+      </div>
+    </div>
+  </div>

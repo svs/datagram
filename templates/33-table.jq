@@ -11,5 +11,6 @@
 										ride_period: $ride_p,
 										count: "-"
 										}))
-    })
+					     }),
+     params: .responses["ridership-cohorts"].params
 }
