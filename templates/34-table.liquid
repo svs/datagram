@@ -1,7 +1,9 @@
 <html>
   <head>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
   </head>
   <body>
     <div class="container">
@@ -9,6 +11,8 @@
       <table class="table table-striped">
 	<thead>
 	  <tr>
+	    <th></th>
+	    <th></th>
 	    <th></th>
 	    {% for d in dates %}
 	    <th>{{d}}</th>
@@ -18,8 +22,10 @@
 	<tbody>
 	  {% for d in data %}
 	  <tr>
-	    <td>{{d[0]}}</td>
-	    {% for e in d[1] %}
+	    <td><a href="https://raftaartech.in/#/app/profile/{{d.profile}}" target="_blank">{{d.profile}}</a></td>
+	    <td>{{d.from_area}}</td>
+	    <td>{{d.to_area}}</td>
+	    {% for e in d.data %}
 	    <td>{{e}}</td>
 	    {% endfor %}
 	  </tr>
