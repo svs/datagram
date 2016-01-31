@@ -1,7 +1,6 @@
 class ViewRenderer
 
   def initialize(view, json, params, filename)
-    ap view
     @view = view
     @json = json.deep_stringify_keys!
     @params = params
@@ -21,15 +20,12 @@ class ViewRenderer
 
   class Jq
     def self.render(v, json, params, filename)
-      ap v, json
       json.jq(v["template"])[0]
     end
   end
 
   class Liquid
     def self.render(v, json, params, filename)
-      ap json
-      ap params
       html = ::Liquid::Template.parse(v["template"]).render(json.merge("_params" => params)).html_safe
       if params["format"] != "png"
         return html

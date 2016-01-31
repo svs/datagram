@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160112191013) do
+ActiveRecord::Schema.define(version: 20160131124206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,14 @@ ActiveRecord::Schema.define(version: 20160112191013) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "protocol"
+  end
+
+  create_table "streamers", force: :cascade do |t|
+    t.integer  "datagram_id"
+    t.string   "stream_sink"
+    t.json     "stream_data"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "streams", force: :cascade do |t|

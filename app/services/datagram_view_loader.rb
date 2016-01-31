@@ -32,9 +32,6 @@ class DatagramViewLoader
       v["type"] ||= view.split(".")[1]
       return v
     rescue Exception => e
-      ap e.message
-      ap e.backtrace
-      nil
     end
   end
 

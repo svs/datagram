@@ -188,6 +188,7 @@ GEM
     formatador (0.2.5)
     friendly_id (5.0.5)
       activerecord (>= 4.0.0)
+    gli (2.13.4)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
     google-api-client (0.8.6)
@@ -502,6 +503,15 @@ GEM
       faraday (~> 0.9)
       jwt (~> 1.0)
       multi_json (~> 1.10)
+    slack-notify (0.4.1)
+      faraday (~> 0.9)
+      json (~> 1.8)
+    slack-ruby-client (0.5.4)
+      faraday
+      faraday_middleware
+      gli
+      json
+      websocket-driver
     slim (3.0.3)
       temple (~> 0.7.3)
       tilt (>= 1.3.3, < 2.1)
@@ -549,6 +559,9 @@ GEM
       procto (~> 0.0.2)
     warden (1.2.3)
       rack (>= 1.0)
+    websocket-driver (0.6.3)
+      websocket-extensions (>= 0.1.0)
+    websocket-extensions (0.1.2)
     xml-simple (1.1.5)
 
 PLATFORMS
@@ -617,6 +630,8 @@ DEPENDENCIES
   sequel-redshift!
   shoulda-matchers
   sidekiq
+  slack-notify
+  slack-ruby-client
   slim
   spring-commands-rspec
   therubyracer
