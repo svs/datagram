@@ -51,7 +51,7 @@ class DatagramRenderService
   end
 
   def filename(view)
-    "#{datagram.refresh_channel(params)}-#{view}.png"
+    "#{datagram.refresh_channel(params)}-#{view}-#{datagram.last_update_timestamp}.png"
   end
 
 end
