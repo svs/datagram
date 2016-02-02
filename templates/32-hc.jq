@@ -15,7 +15,7 @@
             }
     },
     xAxis: {
-	categories: .responses["nkp-ridership-by-tod"].data|map(.date)|unique
+	categories: .responses["nkp-ridership-by-tod"].data|map(.ride_on)|unique
     },
     yAxis: [
 	{
@@ -25,6 +25,6 @@
     ],
     series: .responses["nkp-ridership-by-tod"].data|map(.tod)|unique|map(. as $n | {
 	name: .,
-	data: ($in.data|map(.ride_on)|unique) | map(. as $d | ($in.data | map(select(.ride_on == $d and .tod == $n))) | map(.count)[0])[-5:]
+	data: ($in.data|map(.ride_on)|unique) | map(. as $d | ($in.data | map(select(.ride_on == $d and .tod == $n))) | map(.count)[0])
     })
 }
