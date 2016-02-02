@@ -44,7 +44,7 @@ class Streamer < ActiveRecord::Base
     end
 
     def channel_names
-      ["#datagrams","#dg-#{datagram.slug}"]
+      stream_data["channels"] || ["#datagrams","#dg-#{datagram.slug}"[0..20]]
     end
 
     def message
