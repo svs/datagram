@@ -11,7 +11,7 @@
 	    x: -20
 	    },
  xAxis: {
-	 categories: $in.data|map(.cohort)
+	 categories: $in.data|map(.cohort)|unique
 	 },
  yAxis: [
 	 {

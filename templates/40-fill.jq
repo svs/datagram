@@ -1,6 +1,6 @@
 .responses["today-s-trips"] as $in | {
     title: {
-	text: ("Occupancy For" + $in.params.name),    x: -20
+	text: ("Occupancy For " + ($in.params.name // "Everywhere")),    x: -20
     },
     subtitle: {
 	text: ($in.params.start_date + "-" + $in.params.end_date),
