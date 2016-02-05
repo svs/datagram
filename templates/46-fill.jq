@@ -15,7 +15,7 @@
             }
     },
     xAxis: {
-	categories: $in.data|map(.code)
+	categories: $in.data|map(.code + " " + .tod)
     },
     yAxis: [
 	{
