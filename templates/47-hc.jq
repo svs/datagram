@@ -1,6 +1,6 @@
 .responses["nkp-ridership"] as $in | {
     title: {
-	text: "NKP Tickets / Day",    x: -20
+	text: "Free week bookings",    x: -20
     },
     subtitle: {
 	text: .responses["nkp-ridership"].metadata.report_time,
