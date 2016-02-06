@@ -7,7 +7,8 @@
 	x: -20
     },
     chart: {
-            type: "bar"
+            type: "bar",
+	    height: 1000
     },
     plotOptions: {
             series: {
@@ -15,7 +16,7 @@
             }
     },
     xAxis: {
-	categories: $in.data|map(.code + " " + .tod)
+	categories: $in.data|map(.code + " " + .tod + "\n" + .name)
     },
     yAxis: [
 	{

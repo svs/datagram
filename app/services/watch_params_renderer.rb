@@ -33,7 +33,9 @@ class WatchParamsRenderer
   end
 
   def render_date(v)
-    match_data, direction, value, type, snap = v.match(/\A\[\[([[+-]])(\d+)([[dwm]])([[\<\>]]?)\]\]/).to_a # extracts [[-1w<]] into ["-","1","w","<"]
+    return v unless m = v.match(/\A\[\[(.*)\]\]\Z/)
+    v = m[0]
+    match_data, direction, value, type, snap, business = v.match(/([+-])(\d+)(wd|[mwd])([[\<\>]]?)([+-]?)/).to_a # extracts [[-1w<]] into ["-","1","w","<"]
     return v unless match_data
     dur = ActiveSupport::Duration.new(
       Time.now,
@@ -45,6 +47,12 @@ class WatchParamsRenderer
     dt = dur.send({"+" => "since", "-" => "ago"}[direction])
     if ["<",">"].include?(snap)
       dt = dt.send({"<" => "beginning", ">" => "end"}[snap] + "_of_" + {"w" => "week", "m" => "month"}[type])
+    end
+    if business == "-"
+      dt = 0.business_days.before(dt)
+    end
+    if business == "+"
+      dt = 0.business_days.after(dt)
     end
 
      dt.strftime('%Y-%m-%d')
