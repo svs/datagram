@@ -53,6 +53,10 @@ class WatchResponse < ActiveRecord::Base
     (({data: response_json}).merge(status_code: status_code)).to_json
   end
 
+  def uid_data
+    {watch_id: watch_id, datagram_id: datagram_id, params: params}.to_json
+  end
+
   def json2json!
     return if response_json.blank?
     return unless self.transform
@@ -83,10 +87,12 @@ class WatchResponse < ActiveRecord::Base
 
   def set_token
     self.token ||= SecureRandom.base64(20)
+    self.uid ||=   "v1>" + Base64.encode64(hmac("secret", uid_data))
+
   end
 
   def previous_response
-    self.class.where('id < ? and watch_id = ?', id, watch_id).last if id
+    self.class.where('id < ? and uid = ?', id, uid).last if id
   end
 
   def set_bytesize

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160131124206) do
+ActiveRecord::Schema.define(version: 20160206132124) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 20160131124206) do
     t.string   "refresh_channel"
     t.text     "error"
     t.integer  "update_num"
+    t.string   "uid"
   end
 
   create_table "watches", force: :cascade do |t|
