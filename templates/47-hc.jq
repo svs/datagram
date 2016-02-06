@@ -11,7 +11,7 @@
     },
     plotOptions: {
             column: {
-                stacking: "normal",
+                     stacking: "normal"
             }
     },
     xAxis: {
@@ -20,7 +20,10 @@
     yAxis: [
 	{
 	    title: "Number of Bookings",
-	    floor: 0
+	 floor: 0,
+	 stackLabels: {
+		       enabled: true
+		       }
 	}
     ],
     series: .responses["nkp-ridership"].data|map(.area)|unique|map(. as $n | {
