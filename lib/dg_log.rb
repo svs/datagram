@@ -49,7 +49,7 @@ class DgLog
   end
 
   def log_line
-    "#{datagram} #{watch} #{ts} #{string}"
+    "l/#{datagram} #{watch} #{ts} #{string}"
   end
 
 

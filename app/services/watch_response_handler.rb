@@ -6,7 +6,7 @@ class WatchResponseHandler
 
   def handle!
 
-    context = {datagram: datagram, watch: watch, timestamp: timestamp}
+    context = {datagram: datagram.token, watch: watch.token, timestamp: timestamp}
     DgLog.new("#WatchResponseHandler processing: #{params[:id]}", context).log
     if wr
       update_attrs = {
@@ -23,13 +23,11 @@ class WatchResponseHandler
           watch_token = watch.token
         end
         $redis.hincrby(tracking_key, watch.id, (wr.modified ? -2 : -1)) if tracking_key
-        if datagram?
+        if datagram
           DgLog.new("#WatchResponseHandler updating last_updated on #{datagram.id} to #{params[:timestamp]}", binding).log
           datagram.update(last_update_timestamp: params[:timestamp])
         end
 
-        if datagram? && !datagram.keep && complete?
-        end
         return {watch_token: watch_token || nil,
                 timestamp: params[:timestamp],
                 watch_response_token: wr.token,
@@ -77,7 +75,7 @@ class WatchResponseHandler
   end
 
   def datagram?
-    !params[:datagram_id].blank?
+    datagram
   end
 
   def datagram
