@@ -20,7 +20,6 @@ class Streamer < ActiveRecord::Base
 
     def stream!
       channel_names.each do |channel_name|
-        ap channel_name
         slack.channels_create(name: channel_name) rescue nil
         slack.chat_postMessage(channel: channel_name, text: message)
       end
