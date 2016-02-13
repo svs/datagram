@@ -59,7 +59,7 @@ class Datagram < ActiveRecord::Base
   end
 
   def refresh_channel(params)
-    params = {token: self.token}.merge(params || {})
+    params = {token: self.token}.merge(params || {}).deep_sort
     Base64.urlsafe_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::Digest.new('sha256'), "secret", params.to_json)).strip
   end
 

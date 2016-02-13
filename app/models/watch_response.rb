@@ -54,7 +54,7 @@ class WatchResponse < ActiveRecord::Base
   end
 
   def uid_data
-    {watch_id: watch_id, datagram_id: datagram_id, params: params}.to_json
+    {watch_id: watch_id, datagram_id: datagram_id, params: params.deep_sort}.deep_sort.to_json
   end
 
   def json2json!

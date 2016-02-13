@@ -30,7 +30,8 @@ class DatagramPublisher
                                        datagram: datagram,
                                        timestamp: timestamp,
                                        refresh_channel: refresh_channel,
-                                       routing_key: routing_key
+                                       routing_key: routing_key,
+                                       datagram_uid: datagram_uid
                                        ).publish!
     }
     @published = true
@@ -69,5 +70,12 @@ class DatagramPublisher
     end
   end
 
+  def datagram_uid
+    "v1>" + Base64.encode64(hmac("secret",{datagram_id: datagram.id, params: params.deep_sort}.deep_sort.to_json))
+  end
+
+  def hmac(key, value, digest = 'sha256')
+    OpenSSL::HMAC.digest(OpenSSL::Digest::Digest.new(digest), key, value)
+  end
 
 end

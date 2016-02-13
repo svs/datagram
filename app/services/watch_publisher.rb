@@ -3,7 +3,7 @@ class WatchPublisher
   # Creates a WatchResponse object to log the fact that a Watch was published
   # and to store the response when it is received
 
-  def initialize(watch:, params: {},exchange: $x, queue: $watches, datagram: nil, timestamp: nil, args: {}, routing_key: nil, refresh_channel: nil)
+  def initialize(watch:, params: {},exchange: $x, queue: $watches, datagram: nil, timestamp: nil, args: {}, routing_key: nil, refresh_channel: nil, datagram_uid: nil)
     @watch = watch
     params = params.stringify_keys if params
     @params = params.blank? ? (watch.params || {}) : (watch.params || {}).merge(params) # should use watch parameters when no parameters provided
@@ -14,6 +14,7 @@ class WatchPublisher
     @args = {}
     @routing_key = routing_key || default_routing_key
     @refresh_channel = refresh_channel
+    @datagram_uid = datagram_uid
   end
 
   def publish!()
@@ -31,11 +32,11 @@ class WatchPublisher
   private
   attr_reader :watch, :params
   attr_accessor :published
-  attr_reader :datagram, :timestamp, :args, :exchange, :routing_key
+  attr_reader :datagram, :timestamp, :args, :exchange, :routing_key, :datagram_uid
 
   def make_new_response!
     #return false if published
-    uniquifiers = {watch_id: watch.id, timestamp: timestamp, token: token, datagram_id: datagram.id, refresh_channel: refresh_channel}
+    uniquifiers = {watch_id: watch.id, timestamp: timestamp, token: token, datagram_id: datagram.id, refresh_channel: refresh_channel, datagram_uid: datagram_uid}
     watch_response_data = watch.attributes.slice("strip_keys","keep_keys","transform").merge(started_at: timestamp, params: real_params)
     if !args[:preview]
       @response ||= WatchResponse.where(uniquifiers).first_or_create(watch_response_data)

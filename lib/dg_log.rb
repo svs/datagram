@@ -18,7 +18,7 @@ class DgLog
 
   def datagram
     if context.is_a? Binding
-      d = eval("@datagram",context).try(:token) || "                      "
+      d = eval("@datagram",context).try(:slug) || "                      "
     else
       context[:datagram]
     end
@@ -26,7 +26,7 @@ class DgLog
 
   def watch
     if context.is_a? Binding
-      eval("@watch", context).try(:token) || "                      "
+      eval("@watch", context).try(:slug) || "                      "
     else
       context[:watch]
     end

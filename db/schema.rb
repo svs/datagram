@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160206132124) do
+ActiveRecord::Schema.define(version: 20160212135600) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,8 @@ ActiveRecord::Schema.define(version: 20160206132124) do
     t.boolean  "archived",                          default: false
     t.boolean  "keep",                              default: false
     t.text     "description"
+    t.string   "chart_url"
+    t.string   "default_views"
   end
 
   create_table "sources", force: :cascade do |t|
@@ -115,6 +117,7 @@ ActiveRecord::Schema.define(version: 20160206132124) do
     t.text     "error"
     t.integer  "update_num"
     t.string   "uid"
+    t.string   "datagram_uid"
   end
 
   create_table "watches", force: :cascade do |t|
