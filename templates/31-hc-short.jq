@@ -15,12 +15,16 @@
             }
     },
     xAxis: {
-	categories: .responses["nkp-ridership"].data|map(.date)|unique
+	categories: (.responses["nkp-ridership"].data|map(.date)|unique)[-5:]
     },
     yAxis: [
 	{
 	    title: "Number of Bookings",
-	    floor: 0
+	 floor: 0,
+	 	 stackLabels: {
+		       enabled: true
+		       }
+
 	}
     ],
     series: .responses["nkp-ridership"].data|map(.area)|unique|map(. as $n | {
