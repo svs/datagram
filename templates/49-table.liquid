@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+    <h1>Limo Cohort Analysis</h1>
+    <table class="table table-striped table-condensed">
+      <thead>
+	<tr>
+	  <th></th>
+	  <th></th>
+	  {% for d in series %}
+	  <th>
+	    {{d.first_ride_p}}
+	  </th>
+	  {% endfor %}
+	</tr>
+      </thead>
+      {% for d in series %}
+      <tr>
+	<th style="background: #DC9EE6">
+	  <a href="/api/v1/d/wVfv4got47jer7T7PHQVMw.html?params[format]={{params.format}}&params[first_ride_period]={{d.first_ride_p}}&params[name]={{params.name}}&refresh=86400&views[]=table.jq&views[]=table.liquid">{{d.first_ride_p}}</a>
+	</th>
+	<td>{{ d.first_rides }}</td>
+	{% for e in d.data %}
+	<td>
+	  {{ e.count }}
+	</td>
+	{% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+    </div>
+  </body>
+</html>
