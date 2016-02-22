@@ -1,5 +1,5 @@
 class WatchResponse < ActiveRecord::Base
-
+  include Hmac
   belongs_to :watch
   before_validation :check_changed
   before_create :set_timestamp
@@ -24,11 +24,6 @@ class WatchResponse < ActiveRecord::Base
   def metadata
     attributes.slice("elapsed", "status_code", "token", "response_received_at", "report_time").
       merge("staleness" => Time.zone.now - response_received_at)
-  end
-
-  def diff_with(token)
-    wr = WatchResponse.find_by(token: token)
-    diff = HashDiff.diff(self.response_json, wr.response_json)
   end
 
   private
@@ -67,9 +62,6 @@ class WatchResponse < ActiveRecord::Base
     previous_response.signature rescue {}
   end
 
-  def hmac(key, value, digest = 'sha256')
-    OpenSSL::HMAC.digest(OpenSSL::Digest::Digest.new(digest), key, value)
-  end
 
   def strip_keys!
     return if response_json.blank?

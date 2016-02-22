@@ -21,7 +21,7 @@ class DatagramRenderService
     sync = params[:sync] != "false"
     response = datagram.response_json(params: params[:params],
                                       as_of: params[:as_of],
-                                      staleness: staleness, path: params[:path]).merge(refresh_channel: rc)
+                                      staleness: staleness).merge(refresh_channel: rc)
     if params[:refresh] && response[:responses].blank?
       if sync
         $redis.setex(rc, 10, 0)
@@ -39,7 +39,7 @@ class DatagramRenderService
           sleep 0.2
         end
         datagram.reset!
-        response = datagram.response_json(params: params[:params], as_of: params[:as_of], path: params[:path]).merge(refresh_channel: rc)
+        response = datagram.response_json(params: params[:params], as_of: params[:as_of]).merge(refresh_channel: rc)
       end
     end
     response

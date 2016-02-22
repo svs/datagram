@@ -1,5 +1,5 @@
 class Datagram < ActiveRecord::Base
-
+  include Hmac
   belongs_to :user
   belongs_to :source
 
@@ -23,17 +23,8 @@ class Datagram < ActiveRecord::Base
   # params: arbitrary hash passed on to callees
   # as_of: a datetime. we show the last response before the requested time.
   # staleness: no of seconds staleness we can accept
-  # path: optional JSONPaths to be returned
-  def response_json(params: {}, as_of: nil, staleness: nil, path: {}, max_size: Float::INFINITY)
-    r = Hash[response_data(params, as_of, staleness, max_size).map{|r| [r[:slug], r]}]
-    if path.is_a?(Hash)
-      _r = path.blank?  ? r : Hash[path.map{|k,v| [k, JsonPath.new(v).on(r.to_json)[0]]}]
-      r = path.blank? ? {responses: _r} : _r
-    elsif path.is_a?(String)
-      r = {responses: JsonPath.new(path).on(r.to_json)[0]}
-    else
-      r = {responses: r}
-    end
+  def response_json(params: {}, as_of: nil, staleness: nil, max_size: Float::INFINITY)
+    {responses: Hash[response_data(params, as_of, staleness, max_size).map{|r| [r[:slug], r]}]}
   end
 
   # calls DatagramPublisher.publish! passing on the given hash.
@@ -60,7 +51,7 @@ class Datagram < ActiveRecord::Base
 
   def refresh_channel(params)
     params = {token: self.token}.merge(params || {}).deep_sort
-    Base64.urlsafe_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest::Digest.new('sha256'), "secret", params.to_json)).strip
+    Base64.urlsafe_encode64(hmac("secret", params.to_json)).strip
   end
 
   def reset!
@@ -70,6 +61,11 @@ class Datagram < ActiveRecord::Base
   def routing_key
     self.use_routing_key ? self.token : (user.use_routing_key ? user.token : nil)
   end
+
+  def uid
+    "v1>" + Base64.encode64(hmac("secret",{datagram_id: datagram.id, params: params.deep_sort}.deep_sort.to_json))
+  end
+
 
   private
 

@@ -20,6 +20,7 @@ class ViewRenderer
 
   class Jq
     def self.render(v, json, params, filename)
+      ap v["template"]
       json.jq(v["template"])[0]
     end
   end
