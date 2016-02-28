@@ -15,7 +15,7 @@
             }
     },
     xAxis: {
-	categories: .responses["nkp-ridership"].data|map(.date)|unique
+	categories: .responses["nkp-ridership"].data|map(.date)|unique[30:-1]
     },
     yAxis: [
 	{
@@ -25,6 +25,6 @@
     ],
     series: .responses["nkp-ridership"].data|map(.area)|unique|map(. as $n | {
 	name: .,
-	data: ($in.data|map(.date)|unique) | map(. as $d | ($in.data | map(select(.date == $d and .area == $n))) | map(.count)[0])
+	data: (($in.data|map(.date)|unique) | map(. as $d | ($in.data | map(select(.date == $d and .area == $n))) | map(.count)[0]))[30:-1]
     })
 }
