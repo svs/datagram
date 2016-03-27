@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160212135600) do
+ActiveRecord::Schema.define(version: 20160327023923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,8 +34,6 @@ ActiveRecord::Schema.define(version: 20160212135600) do
     t.boolean  "archived",                          default: false
     t.boolean  "keep",                              default: false
     t.text     "description"
-    t.string   "chart_url"
-    t.string   "default_views"
   end
 
   create_table "sources", force: :cascade do |t|
@@ -53,16 +51,6 @@ ActiveRecord::Schema.define(version: 20160212135600) do
     t.json     "stream_data"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-  end
-
-  create_table "streams", force: :cascade do |t|
-    t.string   "url"
-    t.string   "at"
-    t.integer  "every"
-    t.integer  "notify_every"
-    t.boolean  "notify_if_changed"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -109,13 +97,12 @@ ActiveRecord::Schema.define(version: 20160212135600) do
     t.integer  "timestamp",            limit: 8
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.json     "params"
+    t.jsonb    "params"
     t.datetime "report_time"
     t.json     "transform"
     t.integer  "bytesize"
     t.string   "refresh_channel"
     t.text     "error"
-    t.integer  "update_num"
     t.string   "uid"
     t.string   "datagram_uid"
   end

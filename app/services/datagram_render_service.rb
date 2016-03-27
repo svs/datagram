@@ -1,5 +1,8 @@
-
 class DatagramRenderService
+
+  # Given a datagram and params, this class renders the response.
+  # It calls the appropriate view loader and view renderers to do this.
+  # If a synchronous refresh is required it handles the complexity around that.
 
   def initialize(datagram, params = {})
     @datagram = datagram

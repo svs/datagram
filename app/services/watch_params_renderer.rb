@@ -1,7 +1,4 @@
 class WatchParamsRenderer
-  # renders watch data to a hash, replacing params with provided data
-  # and rendering dates where required
-
   def initialize(watch, params = {})
     params = params.stringify_keys if params
     @watch, @params = watch, params
@@ -10,53 +7,18 @@ class WatchParamsRenderer
   end
 
   def render
-    replace_dates && render_mustache
+    param_renderer.render
   end
 
   def real_params
-    replace_dates
+    param_renderer.real_data
   end
+
   private
 
   attr_reader :watch, :params
 
-  def render_mustache
-    @result = watch.data ?JSON.parse(::Mustache.render(JSON.dump(watch.data), params).gsub("\\n"," ").gsub("&#39;","'")) : watch.data
+  def param_renderer
+    @param_renderer ||= ParamsRenderer.new(watch.data, params)
   end
-
-  def replace_dates
-    @params = Hash[
-      params.map{|k,v|
-        [k, render_date(v)]
-      }
-    ]
-  end
-
-  def render_date(v)
-    return v unless m = v.match(/\A\[\[(.*)\]\]\Z/)
-    v = m[0]
-    match_data, direction, value, type, snap, business = v.match(/([+-])(\d+)(wd|[mwd])([[\<\>]]?)([+-]?)/).to_a # extracts [[-1w<]] into ["-","1","w","<"]
-    return v unless match_data
-    dur = ActiveSupport::Duration.new(
-      Time.now,
-      {
-        {"w" => :weeks, "m" => :months, "d" => :days}[type] => value.to_i
-      }
-    )
-
-    dt = dur.send({"+" => "since", "-" => "ago"}[direction])
-    if ["<",">"].include?(snap)
-      dt = dt.send({"<" => "beginning", ">" => "end"}[snap] + "_of_" + {"w" => "week", "m" => "month"}[type])
-    end
-    if business == "-"
-      dt = 0.business_days.before(dt)
-    end
-    if business == "+"
-      dt = 0.business_days.after(dt)
-    end
-
-     dt.strftime('%Y-%m-%d')
-
-  end
-
 end

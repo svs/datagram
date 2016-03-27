@@ -22,7 +22,7 @@ class WatchResponse < ActiveRecord::Base
   end
 
   def metadata
-    attributes.slice("elapsed", "status_code", "token", "response_received_at", "report_time").
+    attributes.slice("elapsed", "status_code", "token", "response_received_at", "timestamp").
       merge("staleness" => Time.zone.now - response_received_at)
   end
 

@@ -63,7 +63,7 @@ class Datagram < ActiveRecord::Base
   end
 
   def uid
-    "v1>" + Base64.encode64(hmac("secret",{datagram_id: datagram.id, params: params.deep_sort}.deep_sort.to_json))
+    uid_for_params(params)
   end
 
 
@@ -83,21 +83,7 @@ class Datagram < ActiveRecord::Base
   # what happens if one of the watches crashed?
   # TODO - if one of the watches is deleted, then its response still shows up according to this query
   def response_data(params = {},as_of = nil, staleness = nil, max_size = Float::INFINITY)
-    rs = all_responses(params, as_of).
-      select('distinct on (watch_id) *').
-      order('watch_id, report_time desc, created_at desc')
-    if staleness
-      rs = rs.where('extract(epoch from (? - response_received_at)) < ?', Time.zone.now, staleness)
-    end
-    @response_data ||= rs.map{|r|
-      {
-        slug: r.watch.slug,
-        name: r.watch.name,
-        data: (r.bytesize.to_i < max_size ? r.response_json : {max_size: "Data size too big. Please use the Public URL to view data"}),
-        errors: r.error,
-        metadata: r.metadata,
-        params: r.params
-      }}
+    DatagramResponseFinder.new(datagram:self, params:params, staleness:staleness, max_size:max_size).response
   end
 
   def all_responses(search_params, as_of)
@@ -118,6 +104,10 @@ class Datagram < ActiveRecord::Base
   def make_token_and_slug
     self.token ||= SecureRandom.urlsafe_base64
     self.slug ||= name.parameterize
+  end
+
+  def uid_for_params(params)
+    "v1>" + Base64.encode64(hmac("secret",{datagram_id: datagram.id, params: params.deep_sort}.deep_sort.to_json))
   end
 
 end

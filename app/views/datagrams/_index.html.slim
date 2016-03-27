@@ -10,23 +10,29 @@ script type="text/ng-template" id="index.html"
         tr
           th Name
           th Watches
-          th Token
+          th Params
           th Refresh
-          th Last Update
       tbody
         tr ng-repeat="datagram in datagrams"
           td
-            a ui-sref="show({id: datagram.id})"
-              | {{datagram.name}}
+            h4 style="font-weight: 300; padding: 0px; margin: 3px"
+              a ui-sref="show({id: datagram.id})" target="_blank"
+                | {{datagram.name}}
+            div style="color: #999"
+              | {{datagram.token}}
+              br
+              | {{ (datagram.last_update_timestamp  * 1000) | fromNow }}
             br
               | {{datagram.description}}
           td
             ul
               li ng-repeat="watch in datagram.watches"
-                a href="/watches/\#{{watch.id}}"
+                a href="/watches/\#{{watch.id}}" target="_blank"
                   | {{ watch.name}}
+
           td
-            | {{datagram.token}}
+            pre style="font-size: 0.6em"
+              | {{datagram.publish_params|json}}
           td
             span ng-if="datagram.frequency"
               | every
@@ -34,5 +40,3 @@ script type="text/ng-template" id="index.html"
               span ng-if="datagram.at"
                 |  @
                 |  {{ datagram.at }}
-          td
-            | {{ (datagram.last_update_timestamp  * 1000) | fromNow }}

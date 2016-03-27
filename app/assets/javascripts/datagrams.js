@@ -155,9 +155,10 @@ angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','$http','
         if (loaded) {
             var selected_watches = _.filter($scope.watches, function(w) {
 		return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params));
-              });
+            });
+	  var selected_params = _.map(selected_watches,function(w) { return w.params});
             console.log('selected_watches', selected_watches);
-            $scope.datagram.publish_params = _.zipObject(_.map(selected_watches,function(w) { return [w.id, w.params]}));
+          $scope.datagram.publish_params = _.reduce(selected_params, function(r,o) { return _.merge(r,o)}, {});
 
 	} else {
 	    if (!(_.isUndefined(n))) {

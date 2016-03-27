@@ -17,7 +17,7 @@ describe DatagramPublisher do
       expect { publisher.publish! }.to change(WatchResponse, :count).by(2)
     end
   end
-  
+
   context "with params" do
     context "watch has params" do
       let!(:w1) { FactoryGirl.create(:watch, :has_sql_params) }
@@ -36,10 +36,11 @@ describe DatagramPublisher do
       let!(:datagram) { FactoryGirl.create(:datagram, watch_ids: [w1.id, w2.id], publish_params: {"a" => "moo"})}
       it "should merge provided params with watch params" do
         datagram.publish
+        ap datagram.publish_params
         expect(WatchResponse.first.params).to eq({"a" => "moo"})
         expect(WatchResponse.last.params).to eq({"a" => "moo"}.merge(w2.params))
       end
-      
+
     end
 
     context "datagram published with params" do

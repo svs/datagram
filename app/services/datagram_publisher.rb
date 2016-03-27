@@ -1,15 +1,9 @@
 class DatagramPublisher
   include Hmac
   # Publishes a datagram to RabbitMQ
-  #
-  # if params are provided,
-  #    if params is a Hash with watch_ids as keys,
-  #      then each watch is published with the corresponding params
-  #    else each watch is published with the given params merged with its own default params
-  # else each watch is published with the datagrams default params
-  # if the datagram does not have default params
-  #   the watches params are used
-  #
+  # Datagram#publish_params are merged with @params and sent to each WatchPublisher.
+  # Name conflicts in Watch params are not yet handled
+
   def initialize(datagram:, exchange: $x, queue: $datagrams, params: {})
     @datagram = datagram
     @exchange = exchange
@@ -24,7 +18,7 @@ class DatagramPublisher
   # Returns the channel on which updates to this datagram-param combination will be published
   def publish!
     #return false if @published
-    watches.map{|w| WatchPublisher.new(watch: w, params: publish_params[w.id.to_s],
+    watches.map{|w| WatchPublisher.new(watch: w, params: params,
                                        exchange: exchange,
                                        queue: queue,
                                        datagram: datagram,
@@ -42,19 +36,11 @@ class DatagramPublisher
 
   attr_reader :datagram, :exchange, :queue, :timestamp, :user, :refresh_channel
 
-  def publish_params
-    params_keys_are_subset_of_watch_ids? ? params.stringify_keys : Hash[datagram.watches.map{|w| [w.id.to_s, params]}]
-  end
 
   def params
-    @params.blank? ? (datagram.publish_params || {}) : @params
+    (datagram.publish_params || {}).merge(@params)
   end
 
-  def params_keys_are_subset_of_watch_ids?
-    param_keys = Set.new(params.keys.map(&:to_i))
-    watch_ids = Set.new(datagram.watches.map(&:id))
-    param_keys.subset?(watch_ids)
-  end
 
 
   def watches
