@@ -39,8 +39,8 @@ class DatagramResponseFinder
   def all_responses(search_params)
     # filters responses for watch params
     return @responses if @responses
-    @responses = WatchResponse.where(watch_id: datagram.watch_ids, datagram_id: datagram.id, status_code: 200).where('response_json is not null')
-    # execute search filter
+    @responses = WatchResponse.where(watch_id: datagram.watch_ids, datagram_id: datagram.id, status_code: 200, complete: true).
+                 where('response_json is not null')
     if !search_params.blank?
       @responses = @responses.where('params @> ?', params.to_json)
     end

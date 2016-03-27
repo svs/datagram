@@ -29,8 +29,6 @@ class WatchResponse < ActiveRecord::Base
   private
 
   def check_changed
-    strip_keys!
-    json2json!
     self.signature = sig
     if (id && status_code)
       self.modified = (self.signature != previous_response_signature)
@@ -52,25 +50,8 @@ class WatchResponse < ActiveRecord::Base
     {watch_id: watch_id, datagram_id: datagram_id, params: params.deep_sort}.deep_sort.to_json
   end
 
-  def json2json!
-    return if response_json.blank?
-    return unless self.transform
-    self.response_json = Json2Json.transform(self.response_json, self.transform)
-  end
-
   def previous_response_signature
     previous_response.signature rescue {}
-  end
-
-
-  def strip_keys!
-    return if response_json.blank?
-    if keep_keys && !keep_keys.empty?
-      self.response_json = HashFilter.keep(self.response_json, keep_keys)
-    end
-    if strip_keys
-      self.response_json = HashFilter.drop(response_json, strip_keys)
-    end
   end
 
   def set_timestamp
