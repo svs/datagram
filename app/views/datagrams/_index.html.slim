@@ -16,7 +16,7 @@ script type="text/ng-template" id="index.html"
         tr ng-repeat="datagram in datagrams"
           td
             h4 style="font-weight: 300; padding: 0px; margin: 3px"
-              a ui-sref="show({id: datagram.id})" target="_blank"
+              a ui-sref="show({id: datagram.id})"
                 | {{datagram.name}}
             div style="color: #999"
               | {{datagram.token}}
@@ -31,8 +31,7 @@ script type="text/ng-template" id="index.html"
                   | {{ watch.name}}
 
           td
-            pre style="font-size: 0.6em"
-              | {{datagram.publish_params|json}}
+            img src="{{datagram.thumbnail_url}}" width="300px"
           td
             span ng-if="datagram.frequency"
               | every

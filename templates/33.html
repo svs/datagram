@@ -1,34 +1,45 @@
-<html>
-  <head>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  </head>
-  <body>
-    <div class="container">
-    <h1>Limo Cohort Analysis</h1>
+<pre>
+  {{data}}
+</pre>
+<div class="md-inline-form">
+  <md-input-container>
+    <label>Name</label><input  mg-model="data.params.name"/>
+  </md-input-container>
+  <md-input-container>
+    <input type="text" id="format" value="{{data.params.format}}"/>
+  </md-input-container>
+  <md-button class="md-icon-button" ng-click="loadStuff()">
+    <md-icon>refresh</md-icon>
+  </md-button>
+</div>
 
-    <table class="table table-striped table-condensed">
-      <thead>
-	<tr>
-	  <th></th>
-	  <th></th>
-	  {% for d in series %}
-	  <th>{{ d.signup_week }}</th>
-	  {% endfor %}
-	</tr>
-      </thead>
+<md-table-container>
+  <table md-table>
+    <thead md-head>
+      <tr md-row>
+	<th md-column></th>
+	<th md-column></th>
+	{% for d in series %}
+	<th md-column>
+	  {{d.first_ride_p}}
+	</th>
+	{% endfor %}
+      </tr>
+    </thead>
+    <tbody md-body>
       {% for d in series %}
-      <tr>
-	<th style="background: #DC9EE6"> {{d.signup_week}}</th>
-	<td>{{ d.signups }}</td>
+      <tr md-row>
+	<th md-cell>
+	  <a href="/api/v1/d/wVfv4got47jer7T7PHQVMw.html?params[format]={{params.format}}&params[first_ride_period]={{d.first_ride_p}}&params[name]={{params.name}}&refresh=86400&views[]=table.jq&views[]=table.liquid">{{d.first_ride_p}}</a>
+	</th>
+	<td md-cell>{{ d.first_rides }}</td>
 	{% for e in d.data %}
-	<td>
+	<td md-cell>
 	  {{ e.count }}
-	</td>
+	</td md-cell>
 	{% endfor %}
       </tr>
       {% endfor %}
-    </table>
-    </div>
-  </body>
-</html>
+    </tbody>
+  </table>
+</md-table-container>

@@ -18,15 +18,7 @@ class DatagramPublisher
   # Returns the channel on which updates to this datagram-param combination will be published
   def publish!
     #return false if @published
-    watches.map{|w| WatchPublisher.new(watch: w, params: params,
-                                       exchange: exchange,
-                                       queue: queue,
-                                       datagram: datagram,
-                                       timestamp: timestamp,
-                                       refresh_channel: refresh_channel,
-                                       routing_key: routing_key
-                                       ).publish!
-    }
+    publishers.map(&:publish!)
     @published = true
     DgLog.new("#DatagramPublisher published datagram routing_key: #{routing_key} params: #{params} refresh_channel: #{refresh_channel}", binding).log
     return refresh_channel
@@ -36,9 +28,19 @@ class DatagramPublisher
 
   attr_reader :datagram, :exchange, :queue, :timestamp, :user, :refresh_channel
 
+  def publishers
+    watches.map{|w| WatchPublisher.new(watch: w, params: params,
+                                       exchange: exchange,
+                                       queue: queue,
+                                       datagram: datagram,
+                                       timestamp: timestamp,
+                                       refresh_channel: refresh_channel,
+                                       routing_key: routing_key
+                                       )}
+  end
 
   def params
-    (datagram.publish_params || {}).merge(@params)
+    (datagram.publish_params || {}).merge(@params || {})
   end
 
 

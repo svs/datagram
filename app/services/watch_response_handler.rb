@@ -26,8 +26,16 @@ class WatchResponseHandler
         if datagram
           DgLog.new("#WatchResponseHandler updating last_updated on #{datagram.id} to #{params[:timestamp]}", binding).log
           datagram.update(last_update_timestamp: params[:timestamp])
+          p "complete is #{complete?}"
           if complete?
-            WatchResponse.where(datagram_id: datagram.id, timestamp: params[:timestamp]).update_all(complete:true)
+            begin
+              v = DatagramService.new(datagram,{format: datagram.default_view_format}).render(datagram.default_view)
+              p "v is..."
+              ap v
+              tu = v[:url]
+            rescue
+            end
+            WatchResponse.where(datagram_id: datagram.id, timestamp: params[:timestamp]).update_all(complete:true, thumbnail_url: tu)
           end
         end
 

@@ -1,0 +1,20 @@
+html[lang="en" ng-app="liquidApp"]
+  head
+    meta[charset="utf-8"]
+    meta[http-equiv="X-UA-Compatible" content="IE=edge"]
+    meta[name="viewport" content="width=device-width, initial-scale=1"]
+    title
+      | Demo
+    link[rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css"]
+    link[href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"]
+    link[rel="stylesheet" href="http://rawgit.com/daniel-nagy/md-data-table/master/dist/md-data-table.css"]
+  body[layout="column"]
+    md-content[layout="column" flex ng-controller="tableController"]
+      md-card
+        = yield
+    script[src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"]
+    script[src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"]
+    script[src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"]
+    script[src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"]
+    script[src="http://rawgit.com/daniel-nagy/md-data-table/master/dist/md-data-table.js"]
+    = javascript_include_tag 'liquid'

@@ -1,0 +1,34 @@
+{
+  "name": "Datagram",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "latest",
+    "ace": "latest",
+    "angular-highlightjs": "latest",
+    "angular-humanSeconds": "^0.1.2",
+    "angular-pusher": "latest",
+    "angular-translate": "^2.11.0",
+    "angular-ui-router": "latest",
+    "angular-ui-select2": "latest",
+    "bootstrap": "latest",
+    "checklist-model": "latest",
+    "highlight": "latest",
+    "json-tree": "latest",
+    "json-edit": "latest",
+    "lodash": "~3.0",
+    "moment": "^2.12.0",
+    "ng-table": "latest",
+    "prism": "latest",
+    "select2": "latest",
+    "materialize": "latest",
+    "angular-ui-ace": "^0.2.3",
+    "angular-bootstrap": "^1.2.5",
+    "angular-material-data-table": "^0.10.2"
+  }
+}

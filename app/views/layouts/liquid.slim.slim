@@ -1,0 +1,113 @@
+html[lang="en" ng-app="demoApp"]
+  head
+    meta[charset="utf-8"]
+    meta[http-equiv="X-UA-Compatible" content="IE=edge"]
+    meta[name="viewport" content="width=device-width, initial-scale=1"]
+    title
+      | Demo
+    link[rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css"]
+    link[href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"]
+    link[rel="stylesheet" href="http://rawgit.com/daniel-nagy/md-data-table/master/dist/md-data-table.css"]
+  body[layout="column"]
+    md-toolbar.md-whiteframe-1dp
+      .md-toolbar-tools
+        .md-title
+          | Material Design Data Table
+    md-content[laout="column" flex ng-controller="nutritionController"]
+      md-card
+        .checkboxes[layout="row" layout-wrap]
+          md-checkbox[ng-model="options.rowSelection"]
+            | Row Selection
+          md-checkbox[ng-model="options.multiSelect"]
+            | Multiple Selection
+          md-checkbox[ng-model="options.autoSelect"]
+            | Auto Selection
+          md-checkbox[ng-model="options.decapitate"]
+            | Decapitate
+          md-checkbox[ng-model="options.largeEditDialog"]
+            | Lard Edit Dialogs
+          md-checkbox[ng-model="options.boundaryLinks"]
+            | Pagination Boundary Links
+          md-checkbox[ng-model="options.limitSelect" ng-click="toggleLimitOptions()"]
+            | Pagination Limit Select
+          md-checkbox[ng-model="options.pageSelect"]
+            | Pagination Page Select
+      md-card
+        md-toolbar.md-table-toolbar.md-default[ng-hide="options.rowSelection && selected.length"]
+          .md-toolbar-tools
+            span
+              | Nutrition
+            div[flex]
+            md-button.md-icon-button[ng-click="loadStuff()"]
+              md-icon
+                | refresh
+        md-toolbar.md-table-toolbar.alternate[ng-show="options.rowSelection && selected.length"]
+          .md-toolbar-tools
+            span
+              | {{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected
+        md-table-container
+          table[md-table md-row-select="options.rowSelection" multiple="{{options.multiSelect}}" ng-model="selected" md-progress="promise"]
+            thead[ng-if="!options.decapitate" md-head md-order="query.order" md-on-reorder="logOrder"]
+              tr[md-row]
+                th[md-column md-order-by="name"]
+                  span
+                    | Dessert (100g serving)
+                th[md-column md-order-by="type"]
+                  span
+                    | Type
+                th[md-column md-numeric md-order-by="calories.value" md-desc]
+                  span
+                    | Calories
+                th[md-column md-numeric md-order-by="fat.value"]
+                  span
+                    | Fat (g)
+                th[md-column md-numeric md-order-by="carbs.value"]
+                  span
+                    | Carbs (g)
+                th[md-column md-numeric md-order-by="protein.value"]
+                  span
+                    | Protein (g)
+                th[md-column md-numeric md-order-by="sodium.value" hide-gt-xs show-gt-md]
+                  span
+                    | Sodium (mg)
+                th[md-column md-numeric md-order-by="calcium.value" hide-gt-xs show-gt-lg]
+                  span
+                    | Calcium (%)
+                th[md-column md-numeric md-order-by="iron.value" hide-gt-xs show-gt-lg]
+                  span
+                    | Iron (%)
+                th[md-column md-order-by="comment"]
+                  md-icon
+                    | comments
+                  span
+                    | Comments
+            tbody[md-body]
+              tr[md-row md-select="dessert" md-on-select="logItem" md-auto-select="options.autoSelect" ng-disabled="dessert.calories.value > 400" ng-repeat="dessert in desserts.data | filter: filter.search | orderBy: query.order | limitTo: query.limit : (query.page -1) * query.limit"]
+                td[md-cell]
+                  | {{dessert.name}}
+                td[md-cell]
+                  md-select[ng-model="dessert.type" placeholder="Other"]
+                    md-option[ng-value="type" ng-repeat="type in getTypes()"]
+                      | {{type}}
+                td[md-cell]
+                  | {{dessert.calories.value}}
+                td[md-cell]
+                  | {{dessert.fat.value | number: 2}}
+                td[md-cell]
+                  | {{dessert.carbs.value}}
+                td[md-cell]
+                  | {{dessert.protein.value | number: 2}}
+                td[md-cell hide-gt-xs show-gt-md]
+                  | {{dessert.sodium.value}}
+                td[md-cell hide-gt-xs show-gt-lg]
+                  | {{dessert.calcium.value}}%
+                td[md-cell hide-gt-xs show-gt-lg]
+                  | {{dessert.iron.value}}%
+                td[md-cell ng-click="editComment($event, dessert)" ng-class="{'md-placeholder': !dessert.comment}"]
+                  |  {{dessert.comment || 'Add a comment'}} 
+        md-table-pagination[md-limit="query.limit" md-limit-options="limitOptions" md-page="query.page" md-total="{{desserts.count}}" md-page-select="options.pageSelect" md-boundary-links="options.boundaryLinks" md-on-paginate="logPagination"]
+    script[src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"]
+    script[src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"]
+    script[src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"]
+    script[src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"]
+    script[src="http://rawgit.com/daniel-nagy/md-data-table/master/dist/md-data-table.js"]

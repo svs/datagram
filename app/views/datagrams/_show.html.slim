@@ -37,6 +37,9 @@ script type="text/ng-template" id="show.html"
             h5 Updated At
           td
             | {{ datagram.updated_at }}
+            br
+            b
+              | {{ datagram.responses[0].metadata.staleness | number : 0}}
         tr
           th
             h5 Token
@@ -46,7 +49,7 @@ script type="text/ng-template" id="show.html"
             span ng-if="datagram.use_routing_key"
               | Uses Routing Key
             span ng-if="!datagram.use_routing_key"
-              | Does Not Routing Key
+              | Does Not Use Routing Key
 
         tr
           th
@@ -77,6 +80,8 @@ script type="text/ng-template" id="show.html"
         tabset
           tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
             tabset
+              tab ng-if="response.metadata.thumbnail_url" heading="Chart"
+                img src="{{response.metadata.thumbnail_url}}"
               tab heading="Data"
                 div hljs-to-json="response.data"
               tab heading="Errors"

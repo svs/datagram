@@ -8,13 +8,15 @@ class Datagram < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
   def as_json(include_root = false, max_size = Float::INFINITY)
+    r = response_data({},nil,nil,10000).to_a
     attributes.merge({
                        id: id.to_s,
                        private_url: private_url,
                        public_url: public_url,
                        watches: watches.map{|w| w.attributes.slice("name", "token","params","id","slug")},
-                       responses: response_data({},nil,nil,10000).to_a,
+                       responses: r,
                        timestamp: (Time.at(max_ts/1000) rescue Time.now),
+                       thumbnail_url: r.map{|_r| _r[:metadata]["thumbnail_url"]}[0],
                        publish_params: publish_params
                      }).except("_id")
   end
@@ -83,22 +85,7 @@ class Datagram < ActiveRecord::Base
   # what happens if one of the watches crashed?
   # TODO - if one of the watches is deleted, then its response still shows up according to this query
   def response_data(params = {},as_of = nil, staleness = nil, max_size = Float::INFINITY)
-    DatagramResponseFinder.new(datagram:self, params:params, staleness:staleness, max_size:max_size).response
-  end
-
-  def all_responses(search_params, as_of)
-    # filters responses for watch params
-    return @responses if @responses
-    params_clause = (search_params || {}).map{|k,v|
-      v = v.gsub("'",%q(\\\')) # escape postgres single quotes
-      "params->>'#{k}' = E'#{v}' "}.join(' AND ')
-    # and for those where there is no response yet (crashed, timedout, still processing....)
-    @responses = WatchResponse.where(watch_id: self.watch_ids, datagram_id: self.id).where('response_json is not null')
-    # execute search filter
-    if !search_params.blank?
-      @responses = @responses.where(params_clause)
-    end
-    @responses
+    @response_data ||= DatagramResponseFinder.new(datagram:self, params:params, staleness:staleness, max_size:max_size).response
   end
 
   def make_token_and_slug

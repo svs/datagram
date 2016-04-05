@@ -1,0 +1,11 @@
+script type="text/ng-template" id="index.html"
+  div ng-controller="datagramsCtrl"
+    md-content class="md-padding" layout-xs="column" layout="row"
+      div flex-xs='' flex-gt-xs="50" layout="column"
+        md-card ng-repeat="datagram in datagrams"
+          md-card-title
+            md-card-title-text
+              span.md-headline
+                | {{datagram.name}}
+          md-card-actions layout="row" layout-align="end center"
+            md-button More

@@ -60,7 +60,7 @@ module Api
           respond_to do |format|
             format.json { render json: response }
             format.xml { render xml: response }
-            format.html { render html: response }
+            format.html { render file: "./templates/#{datagram.id}.html", layout: 'liquid' }
             format.png {
               if response.is_a?(Hash)
                 redirect_to(response[:url])

@@ -3,7 +3,7 @@
 //= require highlight.pack.js
 //= require angular-highlightjs.js
 //= require directives.js
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ngMaterial"]).
+var streamsApp = angular.module('streamsApp', ['restangular','ui.router','doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ngMaterial"]).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -12,46 +12,30 @@ config(['PusherServiceProvider',
   }
 ]);
 
-angular.module('datagramsApp').filter('fromNow', function() {
+angular.module('streamsApp').filter('fromNow', function() {
   return function(date) {
     return moment(date).fromNow();
   };
 });
 
 
-datagramsApp.config(function($stateProvider,$urlRouterProvider) {
+streamsApp.config(function($stateProvider,$urlRouterProvider) {
   $urlRouterProvider.otherwise('/');
 
   $stateProvider.
     state('index',
 	  {url: '/', templateUrl: "index.html"}
-	 ).
-    state('new',
-	  {
-	    url: '/new',
-	    templateUrl: 'new.html'
-	  }).
-    state('show',
-	  {
-	    url: '/:id',
-	    templateUrl: 'show.html'
-	  }).
-    state('edit',
-	  {
-	    url: '/:id/edit',
-	    templateUrl: 'edit.html'
-	  });
-
+	 );
 });
 
-angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams', function($scope, Restangular,$stateParams) {
+angular.module('streamsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams', function($scope, Restangular,$stateParams) {
   Restangular.all('api/v1/datagrams').getList().then(function(r) {
     console.log(r);
     $scope.datagrams = _.sortBy(r, function(s) { return s.name});
   });
 }]);
 
-angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangular','$stateParams', '$state', function($scope, Restangular, $stateParams, $state) {
+angular.module('streamsApp').controller('newDatagramCtrl',['$scope','Restangular','$stateParams', '$state', function($scope, Restangular, $stateParams, $state) {
   Restangular.all('api/v1/watches').getList().then(function(r) {
     $scope.watches = r;
   });
@@ -85,7 +69,7 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 
 }]);
 
-angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http', function($scope, Restangular, $stateParams, $state, Pusher, $http) {
+angular.module('streamsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http', function($scope, Restangular, $stateParams, $state, Pusher, $http) {
 
   $scope.getDatagram = function(id) {
     Restangular.one('api/v1/datagrams',id).get().then(function(r) {
@@ -133,7 +117,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
 }]);
 
-angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','$http','$stateParams', '$state', 'Pusher', function($scope, $http, $stateParams, $state, Pusher) {
+angular.module('streamsApp').controller('editDatagramCtrl',['$scope','$http','$stateParams', '$state', 'Pusher', function($scope, $http, $stateParams, $state, Pusher) {
   var loaded = false;
     $scope.getDatagram = function(id) {
       $http.get('api/v1/datagrams/' + id).then(function(r) {

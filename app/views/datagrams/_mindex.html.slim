@@ -1,0 +1,8 @@
+script type="text/ng-template" id="index.html"
+  div ng-controller="datagramsCtrl"
+    md-card ng-repeat="datagram in datagrams"
+      img src="{{datagram.responses[0].metadata.thumbnail_url}}"
+      md-card-title
+        md-card-title-text
+          span.md-headline
+            | {{datagram.name}}
