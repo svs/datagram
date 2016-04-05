@@ -38,7 +38,7 @@ class DatagramPublisher
 
 
   def params
-    (datagram.publish_params || {}).merge(@params)
+    (datagram.publish_params || {}).merge(@params || {})
   end
 
 
