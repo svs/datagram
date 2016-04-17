@@ -1,6 +1,3 @@
-<pre>
-  {{data}}
-</pre>
 <div class="md-inline-form">
   <md-input-container>
     <label>Name</label><input  mg-model="data.params.name"/>
@@ -19,27 +16,21 @@
       <tr md-row>
 	<th md-column></th>
 	<th md-column></th>
-	{% for d in series %}
-	<th md-column>
+	<th md-column ng-repeat="d in data.series">
 	  {{d.first_ride_p}}
 	</th>
-	{% endfor %}
       </tr>
     </thead>
     <tbody md-body>
-      {% for d in series %}
-      <tr md-row>
+      <tr md-row ng-repeat="d in data.series">
 	<th md-cell>
 	  <a href="/api/v1/d/wVfv4got47jer7T7PHQVMw.html?params[format]={{params.format}}&params[first_ride_period]={{d.first_ride_p}}&params[name]={{params.name}}&refresh=86400&views[]=table.jq&views[]=table.liquid">{{d.first_ride_p}}</a>
 	</th>
 	<td md-cell>{{ d.first_rides }}</td>
-	{% for e in d.data %}
-	<td md-cell>
+	<td md-cell ng-repeat="e in d.data">
 	  {{ e.count }}
 	</td md-cell>
-	{% endfor %}
       </tr>
-      {% endfor %}
     </tbody>
   </table>
 </md-table-container>
