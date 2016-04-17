@@ -8,7 +8,7 @@ task :watch_consumer => :environment do
       Pusher.trigger(w[:refresh_channel], 'data', w)
       DgLog.new("#ResponseConsumer Push", context).log
       datagram = Datagram.find_by(token: w[:datagram_token])
-      Streamer.where(datagram_id: datagram.id).each{|s| s.render}
+      #Streamer.where(datagram_id: datagram.id).each{|s| s.render}
     end
   end
 end

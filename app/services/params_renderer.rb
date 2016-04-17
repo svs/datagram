@@ -22,7 +22,7 @@ class ParamsRenderer
   attr_reader :data, :params
 
   def render_mustache
-    @result = params ?JSON.parse(::Mustache.render(JSON.dump(params), data).gsub("\\n"," ").gsub("&#39;","'")) : params
+    @result = params ?JSON.parse(CGI.unescapeHTML(::Mustache.render(JSON.dump(params), data).gsub("\\n"," "))) : params
   end
 
   def replace_dates
