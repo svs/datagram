@@ -3,7 +3,7 @@
 //= require highlight.pack.js
 //= require angular-highlightjs.js
 //= require directives.js
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds"]).
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace"]).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -140,6 +140,11 @@ angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','$http','
 	console.log(r);
 	$scope.datagram = r.data;
     });
+  };
+
+  $scope.aceLoaded = function(_editor) {
+    // Options
+    _editor.setHighlightActiveLine(false);
   };
 
   if ($stateParams.id) {

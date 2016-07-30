@@ -52,7 +52,9 @@
         p Views
         form.form-horizontal role="form"
           .form-group
-            textarea.form-control rows=5 json=true ng-model="datagram.views"
+            section
+              div ui-ace="{mode: 'javascript'}" ng-model="datagram.views"
+              div ui-ace="{mode: 'json', theme: 'eclipse'}" json=true ng-model="datagram.views" style="height: 100px;width: 100%"
 
 
   .col-md-5
