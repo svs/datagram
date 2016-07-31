@@ -1,6 +1,7 @@
 class ViewRenderer
 
   def initialize(view, json, params, filename)
+    binding.pry
     @view = view
     @json = json.deep_stringify_keys!
     @params = params
@@ -8,6 +9,7 @@ class ViewRenderer
   end
 
   def render
+    binding.pry
     renderer.render(view, json, params, filename)
   end
 
