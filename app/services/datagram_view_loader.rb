@@ -6,7 +6,6 @@ class DatagramViewLoader
   end
 
   def load
-    binding.pry
     datagram_view_of_same_name || read_from_file || view_is_the_view
   end
 

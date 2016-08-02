@@ -28,6 +28,7 @@ class WatchResponseHandler
           datagram.update(last_update_timestamp: params[:timestamp])
           if complete?
             WatchResponse.where(datagram_id: datagram.id, timestamp: params[:timestamp]).update_all(complete:true)
+            WatchResponse.where('datagram_id = ? AND  timestamp < ?', datagram.id, params[:timestamp]).destroy_all
           end
         end
 
