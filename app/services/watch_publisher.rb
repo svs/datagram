@@ -21,7 +21,7 @@ class WatchPublisher
     if make_new_response!
       exchange.publish(payload.to_json, routing_key: routing_key)
       if datagram
-        $redis.hincrby("#{datagram.token}:#{timestamp}",watch.id,1)
+        $redis.hincrby(redis_tracking_key,watch.id,1)
       end
       DgLog.new("#WatchPublisher published watch token: #{@response.token}, rkey: #{routing_key}", binding).log
     end
@@ -87,5 +87,9 @@ class WatchPublisher
 
   def null_datagram
     OpenStruct.new(id: nil, token: nil)
+  end
+
+  def redis_tracking_key
+    "#{datagram.token}:#{timestamp.to_i}"
   end
 end
