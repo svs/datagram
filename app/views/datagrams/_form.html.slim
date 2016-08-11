@@ -1,85 +1,89 @@
-.row
-  .col-md-5
-    .portlet
-      h4.portlet-title
-        u
-          .kv-icon.kv-icon-secondary.pull-left 1
-          | Name
+tabset
+  tab heading="Setup"
+    .row
+      .col-md-10
+        .portlet
+          h4.portlet-title
+            u
+              .kv-icon.kv-icon-secondary.pull-left 1
+              | Name
 
-      input.form-control ng-model="datagram.name"
-      br
-      input type="checkbox"ng-model="datagram.use_routing_key"
-      | Use Routing Key
-      .form-group
-        label.col-md-3 Description
-        textarea.form-control rows=5 ng-model="datagram.description"
+          input.form-control ng-model="datagram.name"
+          br
+          input type="checkbox"ng-model="datagram.use_routing_key"
+          | Use Routing Key
+          .form-group
+            label.col-md-3 Description
+            textarea.form-control rows=5 ng-model="datagram.description"
 
-    .portlet
-      h4.portlet-title
-        u
-          .kv-icon.kv-icon-secondary.pull-left 3
-          | Set up schedule
-      .portlet-body
-        p When would you like this datagram to refresh?
-        form.form-horizontal role="form"
-          .form-group
-            label.col-md-3 At
-            .col-md-4
-              input.form-control ng-model="datagram.at"
-          .form-group
-            label.col-md-3 Every
-            .col-md-6
-              input.form-control.pull-left style="width: 6em; margin-right: 5px" ng-model="datagram.frequency"
-              select.form-control style="width: 9em; margin-right: 5px"
-                option ng-repeat="o in ['seconds']" ng-model="datagram.frequency_unit"
-                  | {{o}}
-    .portlet
-      h4.portlet-title
-        u
-          .kv-icon.kv-icon-secondary.pull-left 3
-          | Set up default params
-      .portlet-body
-        p What params would you like to refresh tis datagram with?
-        form.form-horizontal role="form"
-          .form-group
-            textarea.form-control rows=5 json=true ng-model="datagram.publish_params"
-    .portlet
-      h4.portlet-title
-        u
-          .kv-icon.kv-icon-secondary.pull-left 3
-          | Define Views
-      .portlet-body
-        p Views
-        form.form-horizontal role="form"
-          .form-group
-            section
-              div ui-ace="{mode: 'javascript'}" ng-model="datagram.views"
-              div ui-ace="{mode: 'json', theme: 'eclipse'}" json=true ng-model="datagram.views" style="height: 100px;width: 100%"
-
-
-  .col-md-5
-    .portlet
-      h4.portlet-title
-        u
-          .kv-icon.kv-icon-secondary.pull-left 2
-          | Choose Watches
-      .portlet-body
-        p Please choose which watches you would like to add to this datagram
-        table.table.table-striped
-          thead
-            tr
-              th &nbsp;
-              th Name
-              th Protocol
-              th Host
-          tbody
-            tr ng-repeat="w in watches"
-              td
-                input type="checkbox" checklist-model="datagram.watch_ids" checklist-value="w.id"
-              td
-                a ui-sref="show({id: w.id})"
-                  | {{w.name}}
-              td
-                | {{w.protocol}}
-              td
-                | {{w.hostname}}{{w.pathname}}
+        .portlet
+          h4.portlet-title
+            u
+              .kv-icon.kv-icon-secondary.pull-left 3
+              | Set up schedule
+          .portlet-body
+            p When would you like this datagram to refresh?
+            form.form-horizontal role="form"
+              .form-group
+                label.col-md-3 At
+                .col-md-4
+                  input.form-control ng-model="datagram.at"
+              .form-group
+                label.col-md-3 Every
+                .col-md-6
+                  input.form-control.pull-left style="width: 6em; margin-right: 5px" ng-model="datagram.frequency"
+                  select.form-control style="width: 9em; margin-right: 5px"
+                    option ng-repeat="o in ['seconds']" ng-model="datagram.frequency_unit"
+                      | {{o}}
+        .portlet
+          h4.portlet-title
+            u
+              .kv-icon.kv-icon-secondary.pull-left 3
+              | Set up default params
+          .portlet-body
+            p What params would you like to refresh tis datagram with?
+            form.form-horizontal role="form"
+              .form-group
+                textarea.form-control rows=5 json=true ng-model="datagram.publish_params"
+  tab heading="Watches"
+      .col-md-10
+        .portlet
+          h4.portlet-title
+            u
+              .kv-icon.kv-icon-secondary.pull-left 2
+              | Choose Watches
+          .portlet-body
+            p Please choose which watches you would like to add to this datagram
+            table.table.table-striped
+              thead
+                tr
+                  th &nbsp;
+                  th Name
+                  th Protocol
+                  th Host
+              tbody
+                tr ng-repeat="w in watches"
+                  td
+                    input type="checkbox" checklist-model="datagram.watch_ids" checklist-value="w.id"
+                  td
+                    a ui-sref="show({id: w.id})"
+                      | {{w.name}}
+                  td
+                    | {{w.protocol}}
+                  td
+                    | {{w.hostname}}{{w.pathname}}
+  tab heading="Views"
+    .col-md-10
+      .portlet
+        h4.portlet-title
+          u
+            .kv-icon.kv-icon-secondary.pull-left 3
+            | Define Views
+        .portlet-body
+          p Views
+          form.form-horizontal role="form"
+            tabset
+              tab ng-repeat="(n,v) in datagram.views" heading="{{n}}"
+                .form-group
+                  section
+                  div ui-ace="{mode: 'json', theme: 'eclipse'}" json=true ng-model="v" style="height: 500px;width: 100%"

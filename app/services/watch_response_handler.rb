@@ -27,6 +27,7 @@ class WatchResponseHandler
           DgLog.new("#WatchResponseHandler updating last_updated on #{datagram.id} to #{params[:timestamp]}", binding).log
           datagram.update(last_update_timestamp: params[:timestamp])
           if complete?
+            DgLog.new("#WatchResponseHandler complete - deleting all watch responses for datagram #{datagram.id} before #{params[:timestamp]}")
             WatchResponse.where(datagram_id: datagram.id, timestamp: params[:timestamp]).update_all(complete:true)
             WatchResponse.where('datagram_id = ? AND  timestamp < ?', datagram.id, params[:timestamp]).destroy_all
           end
