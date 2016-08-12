@@ -104,6 +104,6 @@ class WatchResponseHandler
   end
 
   def redis_tracking_key
-    "#{datagram.token}:#{timestamp.to_i}"
+    "#{datagram.token}:#{timestamp.to_i}" rescue nil
   end
 end
