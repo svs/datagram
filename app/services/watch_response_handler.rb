@@ -83,7 +83,8 @@ class WatchResponseHandler
   end
 
   def datagram
-    @datagram ||= Datagram.where('token = ? AND (last_update_timestamp < ? OR last_update_timestamp is null)', params[:datagram_id], params[:timestamp]).last
+    @datagram ||= (Datagram.where('token = ? AND (last_update_timestamp < ? OR last_update_timestamp is null)', params[:datagram_id], params[:timestamp]).last
+                   || null_datagram)
   end
 
   def complete?
