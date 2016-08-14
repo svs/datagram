@@ -22,8 +22,8 @@ class WatchResponseHandler
           watch.update_column(:last_response_token, params[:id])
           watch_token = watch.token
         end
-        $redis.hincrby(redis_tracking_key, watch.id, (wr.modified ? -2 : -1)) if redis_tracking_key
         if datagram
+          $redis.hincrby(redis_tracking_key, watch.id, (wr.modified ? -2 : -1)) if redis_tracking_key
           DgLog.new("#WatchResponseHandler updating last_updated on #{datagram.id} to #{params[:timestamp]}", binding).log
           datagram.update(last_update_timestamp: params[:timestamp])
           Rails.logger.info("#Complete? #{complete?}")
@@ -83,7 +83,7 @@ class WatchResponseHandler
   end
 
   def datagram
-    @datagram ||= (Datagram.where('token = ? AND (last_update_timestamp < ? OR last_update_timestamp is null)', params[:datagram_id], params[:timestamp]).last || null_datagram)
+    @datagram ||= (Datagram.where('token = ? AND (last_update_timestamp < ? OR last_update_timestamp is null)', params[:datagram_id], params[:timestamp]).last)
   end
 
   def complete?
