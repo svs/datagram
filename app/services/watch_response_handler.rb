@@ -29,7 +29,7 @@ class WatchResponseHandler
           if complete?
             DgLog.new("#WatchResponseHandler complete - deleting all watch responses for datagram #{datagram.id} before #{params[:timestamp]}", binding).log
             WatchResponse.where(datagram_id: datagram.id, timestamp: params[:timestamp]).update_all(complete:true)
-            WatchResponse.where('datagram_id = ? AND  timestamp < ?', datagram.id, params[:timestamp]).destroy_all
+            WatchResponse.where('datagram_id = ? AND  timestamp < ? AND params @> ?', datagram.id, params[:timestamp], wr.params.to_json).destroy_all
             $redis.del(redis_tracking_key)
           end
         end
