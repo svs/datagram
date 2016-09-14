@@ -44,11 +44,18 @@ datagramsApp.config(function($stateProvider,$urlRouterProvider) {
 
 });
 
-angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams', function($scope, Restangular,$stateParams) {
-  Restangular.all('api/v1/datagrams').getList().then(function(r) {
-    console.log(r);
-    $scope.datagrams = _.sortBy(r, function(s) { return s.name});
-  });
+angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams','$timeout', function($scope, Restangular,$stateParams, $timeout) {
+  var load = function() {
+    $('#loading').show();
+    Restangular.all('api/v1/datagrams').getList().then(function(r) {
+      console.log(r);
+      $scope.datagrams = _.sortBy(r, function(s) { return s.name});
+      $('#loading').hide();
+      $timeout(load, 60000);
+
+    });
+  };
+  load();
 }]);
 
 angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangular','$stateParams', '$state', function($scope, Restangular, $stateParams, $state) {
