@@ -1,7 +1,6 @@
-tabset
-  div layout="column"
+wizard
+  wz-step wz-title="Setup" canexit="datagram.name.length > 0"
     div layout="column"
-      h4 Setup
       md-input-container
         label Name
         input ng-model="datagram.name"
@@ -11,9 +10,12 @@ tabset
       md-input-container
         md-checkbox ng-model="datagram.use_routing_key"
           | Use Routing Key
+      md-button.md-raised.md-primary wz-next="true" ng-disabled="{{datagram.name.length == 0}}"
+        | Next
+  wz-step wz-title="Choose Watches"
     div layout="column"
       h4
-        | Watches
+        | Choose your data sources
       table md-table="true" md-row-select="true" multiple="true" ng-model="selectedWatches"
         thead md-head="true"
           tr md-row="true"
@@ -23,6 +25,30 @@ tabset
             td md-cell="true"
               a ui-sref="show({id: w.id})"
                 | {{w.name}}
+      md-button.md-raised.md-primary wz-next="true"
+        | Next
 
+  wz-step wz-title="Parameters"
+    div layout="column"
       h4
-        | Refresh
+        | Select Parameters
+      textarea rows=10 json=true ng-model="datagram.publish_params"
+      md-button.md-raised.md-primary wz-next="true"
+        | Next
+  wz-step wz-title="Refresh Interval"
+    div layout="column"
+      h4 Choose Refresh Interval
+      md-input-container
+        label At
+        input ng-model="datagram.at"
+    div layout="row"
+      md-input-container
+        label Every
+        input ng-model="datagram.frequency"
+      md-input-container
+        md-select ng-model="datagram.frequency_unit"
+          md-option ng-repeat="o in ['seconds']"
+            | {{o}}
+    div layout="row"
+      md-button.md-raised.md-primary wz-next="true"
+        | Next

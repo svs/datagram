@@ -3,7 +3,7 @@
 //= require highlight.pack.js
 //= require angular-highlightjs.js
 //= require directives.js
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ngMaterial","ui.ace","md.data.table"]).
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ngMaterial","ui.ace","md.data.table","mgo-angular-wizard"]).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -70,29 +70,23 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
   var loaded = false;
   $scope.save = function() {
     baseDatagrams.post({datagram: $scope.datagram}).then(function(r) {
-      $state.go('show',{id: $scope.watch.id});
+      $state.go('show',{id: r.id});
     });
   };
   $scope.selectedWatches = [];
   $scope.onSelect = function(a) {
     $scope.datagram.watch_ids = _.map($scope.selectedWatches, function(w) { return w.id;});
     console.log($scope.datagram.watch_ids);
+    var ps = _.map($scope.selectedWatches,function(w) { return w.params});
+    console.log(ps);
+    $scope.datagram.publish_params = _.reduce(ps, function(sum, n) {
+      console.log('n',n);
+      console.log('sum',sum);
+      if (!sum) { sum = {}};
+      return _.merge(sum,n);
+    });
+
   };
-  $scope.$watch('datagram.watch_ids.length', function(n,o) {
-        if (loaded) {
-            var selected_watches = _.filter($scope.watches, function(w) {
-		return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params));
-              });
-            console.log('selected_watches', selected_watches);
-            $scope.datagram.publish_params = _.zipObject(_.map(selected_watches,function(w) { return [w.id, w.params]}));
-
-	} else {
-	    if (!(_.isUndefined(n))) {
-		loaded = true;
-	    }
-	}
-
-  });
 
 }]);
 
@@ -115,15 +109,18 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
     var subscribed = false;
 
-    $scope.refresh = function() {
+  $scope.refresh = function() {
+    $scope.loading = true;
     console.log('PUT', $scope.datagram);
     $scope.datagram.customPUT({id:$scope.datagram.id, params: $scope.datagram.publish_params}, 'refresh' ).then(function(r) {
       console.log(r);
       if(!subscribed) {
-	  Pusher.subscribe(r,'data', function(item) {
+	console.log('subscribing to ' + r.channel);
+	Pusher.subscribe(r.channel,'data', function(item) {
 	      console.log('Pusher received', item);
 	      subscribed = true;
 	      $scope.getDatagram($scope.datagram.id);
+	  $scope.loading = false;
 	  });
       };
     });
@@ -165,23 +162,6 @@ angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','$http','
     $scope.watches = r.data;
   });
 
-    $scope.$watch('datagram.watch_ids.length', function(n,o) {
-	console.log(o,n);
-	console.log(loaded);
-        if (loaded) {
-            var selected_watches = _.filter($scope.watches, function(w) {
-		return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params));
-            });
-	  var selected_params = _.map(selected_watches,function(w) { return w.params});
-            console.log('selected_watches', selected_watches);
-          $scope.datagram.publish_params = _.reduce(selected_params, function(r,o) { return _.merge(r,o)}, {});
-
-	} else {
-	    if (!(_.isUndefined(n))) {
-		loaded = true;
-	    }
-	}
-    });
 
   $scope.save = function() {
     console.log($scope.datagram);

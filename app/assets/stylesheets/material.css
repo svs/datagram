@@ -13,6 +13,7 @@
  *= require 'bootstrap.min.css'
  *= require 'angular-material.min.css'
  *= require 'md-data-table.min.css'
+ *= require 'angular-wizard.min.css'
  *= require 'datagram.css'
  *= require_self
  */

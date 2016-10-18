@@ -1,13 +1,14 @@
 = stylesheet_link_tag 'highlight'
 script type="text/ng-template" id="show.html"
   div ng-controller="datagramCtrl"
-    .col-md-5 style="border-right: 1px solid #aaa"
+    .col-md-12 style="border-right: 1px solid #aaa"
       h2.portlet-title style="margin-bottom: 0px"
         | {{datagram.name}}
-      h3
-        a.btn.btn-large.btn-warning ng-click="refresh()"
-          i.fa.fa-refresh style="margin-right: 5px"
-          | Refresh!!
+      a href="{{datagram.public_url}}"
+        | &#8250 {{ datagram.token}}
+      | &nbsp;
+      | &#8250 {{ datagram.updated_at }}
+      div
         a.btn.btn-success ui-sref="edit({id: datagram.id})" style="margin: 8px"
           i.fa.fa-edit
           | Edit
@@ -15,57 +16,17 @@ script type="text/ng-template" id="show.html"
           i.fa.fa-destroy
           | Archive
 
-      a ng-click="showParams=!showParams" style="cursor:pointer" Show Params
-      textarea.form-control rows=5 json=true ng-model="datagram.publish_params" ng-show="showParams"
-      table.table
-        tr
-          th
-            h5 Description
-          td
-            | {{datagram.description}}
-        tr
-          th
-            h5 Sources
-          td
-            ul
-              li ng-repeat="watch in datagram.watches"
-                a href="/watches/\#{{watch.id}}"
-                  | {{watch.name}}
-        tr
-          th
-            h5 Updated At
-          td
-            | {{ datagram.updated_at }}
-            br
-            b
-              | {{ datagram.responses[0].metadata.staleness | number : 0}}
-        tr
-          th
-            h5 Token
-          td
-            | {{ datagram.token }}
-            br
-            span ng-if="datagram.use_routing_key"
-              | Uses Routing Key
-            span ng-if="!datagram.use_routing_key"
-              | Does Not Use Routing Key
+    .col-md-12 style="padding-top: 10px"
+      div layout="row"
+        .col-md-8
+          md-input-container  ng-repeat="(k,v) in datagram.publish_params"
+            label
+              | {{k}}
+            input ng-model="datagram.publish_params[k]"
+        md-button.md-raised ng-click="refresh()" style="height: 10px !important; position: relative; top: 5px;"
+          i#refresh.fa.fa-refresh style="margin-right: 5px" ng-class="loading ? 'fa-spin' : ''"
+          | Refresh!!
 
-        tr
-          th
-            h5
-              | Public URL
-          td
-            a href="{{datagram.public_url}}"
-              | {{ datagram.public_url }}
-        tr
-          th
-            h5
-              | Views
-          td
-            div hljs-to-json="datagram.views"
-
-
-    .col-md-7 style="padding-top: 10px"
       ul.nav.nav-pills
         tabset
           tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
@@ -74,13 +35,7 @@ script type="text/ng-template" id="show.html"
                 img src="{{response.metadata.thumbnail_url}}"
               tab heading="Data"
                 md-card
-                  md-card-content
-                    div ng-if="response.data.max_size"
-                      | Data size too big. Please click
-                      a href="{{datagram.public_url}}" target="_blank"
-                        | {{ datagram.public_url }}
-
-                  div ng-if="!response.data.max_size"
+                  div
                     table md-table="true"
                       thead md-head="true"
                         tr md-row="true"

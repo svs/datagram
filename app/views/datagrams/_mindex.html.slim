@@ -1,7 +1,9 @@
 script type="text/ng-template" id="index.html"
   div ng-controller="datagramsCtrl"
-    a.btn.btn-success.btn-large ui-sref="new"
-      | Add a Datagram
+    md-button.md-icon-button.md-primary.md-raised ui-sref="new"
+      span
+        i.material-icons.md24
+          | add
     md-card
       md-table-container
         table md-table="true" ng-model="selected"

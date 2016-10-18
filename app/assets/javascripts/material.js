@@ -30,6 +30,7 @@
 //= require angular-messages.min.js
 //= require angular-material.min.js
 //= require md-data-table.min.js
+//= require angular-wizard.min.js
 //= require bootstrap.min
 
 
