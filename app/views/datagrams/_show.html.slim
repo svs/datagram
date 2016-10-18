@@ -3,8 +3,7 @@ script type="text/ng-template" id="show.html"
   div ng-controller="datagramCtrl"
     .col-md-5 style="border-right: 1px solid #aaa"
       h2.portlet-title style="margin-bottom: 0px"
-        u
-          | {{datagram.name}}
+        | {{datagram.name}}
       h3
         a.btn.btn-large.btn-warning ng-click="refresh()"
           i.fa.fa-refresh style="margin-right: 5px"
@@ -54,15 +53,6 @@ script type="text/ng-template" id="show.html"
         tr
           th
             h5
-              | Private URL
-              button.btn-danger popover-placement="right" popover="Do not share this URL with anyone as it contains your private key. To share datagrams, generate shareable tokens" class="btn btn-default" popover-trigger="mouseenter"
-                i.fa.fa-exclamation-circle
-          td
-            a href="{{datagram.private_url}}"
-              | {{ datagram.private_url }}
-        tr
-          th
-            h5
               | Public URL
           td
             a href="{{datagram.public_url}}"
@@ -75,7 +65,7 @@ script type="text/ng-template" id="show.html"
             div hljs-to-json="datagram.views"
 
 
-    .col-md-7
+    .col-md-7 style="padding-top: 10px"
       ul.nav.nav-pills
         tabset
           tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
@@ -83,10 +73,27 @@ script type="text/ng-template" id="show.html"
               tab ng-if="response.metadata.thumbnail_url" heading="Chart"
                 img src="{{response.metadata.thumbnail_url}}"
               tab heading="Data"
-                div hljs-to-json="response.data"
-              tab heading="Errors"
-                div hljs-to-json="response.errors"
-              tab heading="MetaData"
-                div hljs-to-json="response.metadata"
+                md-card
+                  md-card-content
+                    div ng-if="response.data.max_size"
+                      | Data size too big. Please click
+                      a href="{{datagram.public_url}}" target="_blank"
+                        | {{ datagram.public_url }}
+
+                  div ng-if="!response.data.max_size"
+                    table md-table="true"
+                      thead md-head="true"
+                        tr md-row="true"
+                          th md-column="true" ng-repeat="(k,v) in response.data[0]"
+                            | {{k}}
+                      tbody md-body="true"
+                        tr md-row="true" ng-repeat="data in response.data"
+                          td md-cell="true" ng-repeat = "(k,v) in data"
+                            | {{v}}
+
+              tab heading="Errors" ng-if="response.errors"
+                div style="margin: 10px" hljs-to-json="response.errors"
               tab heading="Params"
-                div hljs-to-json="response.params"
+                div style="margin: 10px" hljs-to-json="response.params"
+              tab heading="MetaData"
+                div style="margin: 10px" hljs-to-json="response.metadata"

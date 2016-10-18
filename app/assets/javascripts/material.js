@@ -29,6 +29,7 @@
 //= require angular-aria.min.js
 //= require angular-messages.min.js
 //= require angular-material.min.js
+//= require md-data-table.min.js
 //= require bootstrap.min
 
 

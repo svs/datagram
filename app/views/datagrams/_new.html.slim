@@ -1,5 +1,10 @@
 script type="text/ng-template" id="new.html"
   div ng-controller="newDatagramCtrl"
-    h3 New Datagram
-    = render 'form'
-    .btn.btn-primary ng-click="save()" Create Datagram!
+    md-content layout-padding="true"
+      md-card
+        md-card-header
+          md-card-header-text
+            h3 New Datagram
+        md-card-content
+          = render 'form'
+          .btn.btn-primary ng-click="save()" Create Datagram!

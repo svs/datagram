@@ -13,7 +13,6 @@ class DatagramViewLoader
   attr_reader :datagram, :view
   def datagram_view_of_same_name
     v = datagram.views[view] rescue nil
-    (v.blank? || (v["template"] =~ /file/) == 0  || v["template"].blank?) ? nil : v
   end
 
   def view_is_the_view

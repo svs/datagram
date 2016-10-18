@@ -3,7 +3,7 @@
 //= require highlight.pack.js
 //= require angular-highlightjs.js
 //= require directives.js
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ngMaterial"]).
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ngMaterial","ui.ace","md.data.table"]).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -44,11 +44,18 @@ datagramsApp.config(function($stateProvider,$urlRouterProvider) {
 
 });
 
-angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams', function($scope, Restangular,$stateParams) {
-  Restangular.all('api/v1/datagrams').getList().then(function(r) {
-    console.log(r);
-    $scope.datagrams = _.sortBy(r, function(s) { return s.name});
-  });
+angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams','$timeout', function($scope, Restangular,$stateParams, $timeout) {
+  var load = function() {
+    $('#loading').show();
+    Restangular.all('api/v1/datagrams').getList().then(function(r) {
+      console.log(r);
+      $scope.datagrams = _.sortBy(r, function(s) { return s.name});
+      $('#loading').hide();
+      $timeout(load, 60000);
+
+    });
+  };
+  load();
 }]);
 
 angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangular','$stateParams', '$state', function($scope, Restangular, $stateParams, $state) {
@@ -66,7 +73,11 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
       $state.go('show',{id: $scope.watch.id});
     });
   };
-
+  $scope.selectedWatches = [];
+  $scope.onSelect = function(a) {
+    $scope.datagram.watch_ids = _.map($scope.selectedWatches, function(w) { return w.id;});
+    console.log($scope.datagram.watch_ids);
+  };
   $scope.$watch('datagram.watch_ids.length', function(n,o) {
         if (loaded) {
             var selected_watches = _.filter($scope.watches, function(w) {
@@ -140,6 +151,11 @@ angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','$http','
 	console.log(r);
 	$scope.datagram = r.data;
     });
+  };
+
+  $scope.aceLoaded = function(_editor) {
+    // Options
+    _editor.setHighlightActiveLine(false);
   };
 
   if ($stateParams.id) {

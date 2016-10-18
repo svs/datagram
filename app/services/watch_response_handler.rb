@@ -5,7 +5,6 @@ class WatchResponseHandler
   end
 
   def handle!
-
     context = {datagram: (datagram.token rescue ""), watch: watch.token, timestamp: timestamp}
     DgLog.new("#WatchResponseHandler processing: #{params[:id]}", context).log
     if wr
@@ -22,20 +21,16 @@ class WatchResponseHandler
           watch.update_column(:last_response_token, params[:id])
           watch_token = watch.token
         end
-        $redis.hincrby(tracking_key, watch.id, (wr.modified ? -2 : -1)) if tracking_key
         if datagram
+          $redis.hincrby(redis_tracking_key, watch.id, (wr.modified ? -2 : -1)) if redis_tracking_key
           DgLog.new("#WatchResponseHandler updating last_updated on #{datagram.id} to #{params[:timestamp]}", binding).log
           datagram.update(last_update_timestamp: params[:timestamp])
-          p "complete is #{complete?}"
+          Rails.logger.info("#Complete? #{complete?}")
           if complete?
-            begin
-              v = DatagramService.new(datagram,{format: datagram.default_view_format}).render(datagram.default_view)
-              p "v is..."
-              ap v
-              tu = v[:url]
-            rescue
-            end
-            WatchResponse.where(datagram_id: datagram.id, timestamp: params[:timestamp]).update_all(complete:true, thumbnail_url: tu)
+            DgLog.new("#WatchResponseHandler complete - deleting all watch responses for datagram #{datagram.id} before #{params[:timestamp]}", binding).log
+            WatchResponse.where(datagram_id: datagram.id, timestamp: params[:timestamp]).update_all(complete:true)
+            WatchResponse.where('datagram_id = ? AND  timestamp < ? AND params @> ?', datagram.id, params[:timestamp], wr.params.to_json).destroy_all
+            $redis.del(redis_tracking_key)
           end
         end
 
@@ -77,12 +72,9 @@ class WatchResponseHandler
     @watch ||= wr.watch
   end
 
-  def tracking_key
-    params["datagram_id"] ? "#{params["datagram_id"]}:#{params["timestamp"]}" : nil
-  end
 
   def tracking_data
-    Hash[$redis.hgetall(tracking_key).map{|k,v| [k,v.to_i]}] rescue {}
+    Hash[$redis.hgetall(redis_tracking_key).map{|k,v| [k,v.to_i]}] rescue {}
   end
 
   def datagram?
@@ -90,11 +82,12 @@ class WatchResponseHandler
   end
 
   def datagram
-    @datagram ||= Datagram.where('token = ? AND (last_update_timestamp < ? OR last_update_timestamp is null)', params[:datagram_id], params[:timestamp]).last
+    @datagram ||= (Datagram.where('token = ? AND (last_update_timestamp < ? OR last_update_timestamp is null)', params[:datagram_id], params[:timestamp]).last)
   end
 
   def complete?
-    datagram ? tracking_data.values.select{|x| x <= 0}.all? : true
+    DgLog.new("#WatchResponseHandler tracking data #{redis_tracking_key} => #{tracking_data}", binding).log
+    datagram ? tracking_data.values.select{|x| x.to_i <= 0}.all? : true
   end
 
   def modified?
@@ -105,5 +98,11 @@ class WatchResponseHandler
     @timestamp ||= params[:timestamp]
   end
 
+  def null_datagram
+    OpenStruct.new(id: nil, token: nil)
+  end
 
+  def redis_tracking_key
+    "#{datagram.token}:#{timestamp.to_i}" rescue nil
+  end
 end

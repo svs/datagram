@@ -12,6 +12,7 @@
  *= require 'font-awesome.css'
  *= require 'bootstrap.min.css'
  *= require 'angular-material.min.css'
+ *= require 'md-data-table.min.css'
  *= require 'datagram.css'
  *= require_self
  */

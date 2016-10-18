@@ -1,8 +1,25 @@
 script type="text/ng-template" id="index.html"
   div ng-controller="datagramsCtrl"
-    md-card ng-repeat="datagram in datagrams"
-      img src="{{datagram.responses[0].metadata.thumbnail_url}}"
-      md-card-title
-        md-card-title-text
-          span.md-headline
-            | {{datagram.name}}
+    a.btn.btn-success.btn-large ui-sref="new"
+      | Add a Datagram
+    md-card
+      md-table-container
+        table md-table="true" ng-model="selected"
+          thead md-head="true"
+            tr md-row="true"
+              th md-column="true"
+                | Name
+              th md-column="true"
+                | Updated
+              th md-column="true"
+                | Token
+
+          tbody md-body="true"
+            tr md-row="true" ng-repeat="datagram in datagrams"
+              td md-cell="true"
+                a ui-sref="show({id: datagram.id})"
+                  | {{datagram.name}}
+              td md-cell="true"
+                | {{(datagram.last_update_timestamp  * 1000) | fromNow }}
+              td md-cell="true"
+                | {{datagram.token}}

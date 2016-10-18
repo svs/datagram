@@ -1,7 +1,7 @@
 class DatagramsController < ApplicationController
 
   def index
-    render layout: 'app'
+    render layout: 'material'
   end
 
 end

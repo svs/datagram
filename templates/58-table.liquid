@@ -1,0 +1,18 @@
+
+<div class="monospace">
+  {{responses["today-s-trips"].metadata}}
+</pre>
+<table class="table table-striped monospace">
+{% for d in responses["today-s-trips"].data %}
+<tr>
+  <td>{{d.id}}</td>
+  <td>{{d.code}}</td>
+  <td>{{d.route}}</td>
+  <td>{{d.licence_number}}</td>
+  <td>{{d.category}}</td>
+  <td>{{d.tod}}</td>
+  <td>{{d.reservations}}</td>
+  <td>{{d.capacity}}</td>
+</tr>
+{%endfor %}
+</table>
