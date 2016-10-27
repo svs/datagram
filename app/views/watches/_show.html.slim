@@ -10,7 +10,7 @@ script type="text/ng-template" id="show.html"
             i.fa.fa-edit
             | Edit
         a.btn.btn-info ng-click="preview()" style="margin: 8px"
-          i.fa.fa-eye
+          i.fa.fa-refresh ng-class="loading ? 'fa-spin' : ''"
           | Preview
 
         table.table ng-show="showing"

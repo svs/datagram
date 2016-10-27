@@ -1,5 +1,5 @@
 script type="text/ng-template" id="index.html"
-  div ng-controller="watchesCtrl"
+  md-content layout-padding="true" ng-controller="watchesCtrl"
     h2.portlet-title style="margin-right: 10px"
       u
         span  style="padding: 10px" Watches
@@ -7,14 +7,15 @@ script type="text/ng-template" id="index.html"
           i.fa.fa-plus
           | Add a watch
 
-
-    table.table.table-striped
-      thead
-        tr
-          th Name
-          th Description
-      tbody
-        tr ng-repeat="w in watches"
-          td
-            a ui-sref="show({id: w.id})"
-              | {{w.name}}
+    md-card
+      md-table-container
+        table md-table="true"
+          thead md-head="true"
+            tr md-row="true"
+              th md-column="true"
+                | Name
+          tbody md-body="true"
+            tr md-row="true" ng-repeat="w in watches"
+              td md-cell="true"
+                a ui-sref="show({id: w.id})"
+                  | {{w.name}}

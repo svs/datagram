@@ -18,21 +18,35 @@ script type="text/ng-template" id="show.html"
 
     .col-md-12 style="padding-top: 10px"
       div layout="row"
-        .col-md-8
+        .col-md-10
           md-input-container  ng-repeat="(k,v) in datagram.publish_params"
             label
               | {{k}}
             input ng-model="datagram.publish_params[k]"
-        md-button.md-raised ng-click="refresh()" style="height: 10px !important; position: relative; top: 5px;"
-          i#refresh.fa.fa-refresh style="margin-right: 5px" ng-class="loading ? 'fa-spin' : ''"
-          | Refresh!!
-
+        .col-md-2
+          md-button.md-raised.pull-right ng-click="refresh()" style="height: 10px !important; position: relative; top: 5px;"
+            i#refresh.fa.fa-refresh style="margin-right: 5px" ng-class="loading ? 'fa-spin' : ''"
+            | Refresh!!
       ul.nav.nav-pills
         tabset
+          tab heading="{{view.name}}" ng-repeat="view in views"
+            .md-col-12 layout="row" width="100%"
+              md-input-container
+                label Name
+                input type="text" ng-model = "view.name"
+              md-input-container
+                md-select ng-model="view.type"
+                  md-option ng-repeat="o in ['table','json','liquid','chart']"
+                    | {{o}}
+            .row
+              .col-md-6
+                div ui-ace="{mode: 'javasscript', theme: 'eclipse'}" style="min-height: 400px; height: 100%" ng-model="view.template" ng-change="render(view)"
+              .col-md-6
+                highchart id="chart1" config="renderedData" ng-if="view.type=='chart'"
+                div hljs-to-json="renderedData" ng-if="view.type=='json'"
+
           tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
             tabset
-              tab ng-if="response.metadata.thumbnail_url" heading="Chart"
-                img src="{{response.metadata.thumbnail_url}}"
               tab heading="Data"
                 md-card
                   div
@@ -52,3 +66,11 @@ script type="text/ng-template" id="show.html"
                 div style="margin: 10px" hljs-to-json="response.params"
               tab heading="MetaData"
                 div style="margin: 10px" hljs-to-json="response.metadata"
+          md-button.md-icon-button.md-primary.md-raised ng-click="addTab()"
+            span
+              i.material-icons.md24
+                | add
+          md-button.md-icon-button.md-primary.md-raised ng-click="update()" ng-class="updating ? 'fa-spin' : ''"
+            span
+              i.material-icons.md24
+                | save

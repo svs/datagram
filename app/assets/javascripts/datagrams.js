@@ -3,7 +3,7 @@
 //= require highlight.pack.js
 //= require angular-highlightjs.js
 //= require directives.js
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ngMaterial","ui.ace","md.data.table","mgo-angular-wizard"]).
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ngMaterial","ui.ace","md.data.table","mgo-angular-wizard","highcharts-ng"]).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -56,6 +56,8 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
     });
   };
   load();
+
+
 }]);
 
 angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangular','$stateParams', '$state', function($scope, Restangular, $stateParams, $state) {
@@ -95,6 +97,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   $scope.getDatagram = function(id) {
     Restangular.one('api/v1/datagrams',id).get().then(function(r) {
       $scope.datagram = r;
+      $scope.views = $scope.datagram.views;
+      _.map($scope.views, function(v) {$scope.render(v)});
     });
   };
 
@@ -138,6 +142,28 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     $scope.getDatagram($stateParams.id);
   };
 
+  $scope.addTab = function() {
+    $scope.views.push({name: 'Foo', type: 'jq', template:null});
+  };
+
+  $scope.renderedData = {};
+  $scope.render = function(view) {
+    console.log($scope.datagram)
+    $scope.renderedData = jmespath.search($scope.datagram,view.template);
+    console.log($scope.renderedData);
+  };
+
+  $scope.update = function() {
+    $scope.updating = true;
+    $scope.datagram.views = $scope.views;
+    console.log($scope.datagram);
+    $http({method: 'PATCH', url: 'api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: $scope.datagram}}).then(function(r) {
+      console.log('saved datagram');
+      $scope.updating = false;
+
+    });
+
+  };
 
 }]);
 

@@ -21,6 +21,8 @@
 //= require angular-highlightjs.js
 //= require ui-ace.js
 //= require ui-bs.js
+//= require highcharts.js
+//= require highcharts-ng.min.js
 //= require checklist-model.js
 //= require moment.min.js
 //= require angular-translate.min.js
@@ -31,6 +33,7 @@
 //= require angular-material.min.js
 //= require md-data-table.min.js
 //= require angular-wizard.min.js
+//= require jmespath.js
 //= require bootstrap.min
 
 
