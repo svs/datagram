@@ -3,7 +3,7 @@
 //= require highlight.pack.js
 //= require angular-highlightjs.js
 //= require directives.js
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ngMaterial","ui.ace","md.data.table","mgo-angular-wizard","highcharts-ng"]).
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ngMaterial","ui.ace","md.data.table","mgo-angular-wizard","highcharts-ng","ngSanitize"]).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -92,7 +92,7 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 
 }]);
 
-angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http', function($scope, Restangular, $stateParams, $state, Pusher, $http) {
+angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http', '$sce', function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce) {
 
   $scope.getDatagram = function(id) {
     Restangular.one('api/v1/datagrams',id).get().then(function(r) {
@@ -149,8 +149,15 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   $scope.renderedData = {};
   $scope.render = function(view) {
     console.log($scope.datagram)
-    $scope.renderedData = jmespath.search($scope.datagram,view.template);
-    console.log($scope.renderedData);
+    if (view.type === 'json' || view.type === 'chart') {
+      $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
+    } else if (view.type === 'mustache') {
+      $scope.renderedData[view.name] = Mustache.render(view.template, $scope.datagram)
+    } else if (view.type === 'liquid') {
+      var tmpl = Liquid.parse(view.template);
+      $scope.renderedData[view.name] = $sce.trustAsHtml(tmpl.render($scope.datagram));
+    }
+    console.log($scope.renderedData[view.name]);
   };
 
   $scope.update = function() {

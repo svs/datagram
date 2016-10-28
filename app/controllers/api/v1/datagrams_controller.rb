@@ -53,7 +53,6 @@ module Api
           datagram = User.find_by(token: params[:api_key]).datagrams.find_by(slug: params[:slug])
         end
         if datagram
-          Mykeen.publish("datagram_view", {slug: datagram.slug, token: params[:token], api_key: params[:api_key]})
           rc = datagram.refresh_channel(params[:params])
           ds = DatagramService.new(datagram, params)
           response = ds.render(params[:views])

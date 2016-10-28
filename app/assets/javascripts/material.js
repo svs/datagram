@@ -34,6 +34,9 @@
 //= require md-data-table.min.js
 //= require angular-wizard.min.js
 //= require jmespath.js
+//= require mustache.min.js
+//= require angular-sanitize.min.js
+//= require liquid.min.js
 //= require bootstrap.min
 
 
