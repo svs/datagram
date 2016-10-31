@@ -39,7 +39,8 @@ module Api
       def show
         datagram = policy_scope(Datagram).find(params[:id]) rescue nil
         if datagram
-          render json: datagram
+          ds = DatagramService.new(datagram, params)
+          render json: datagram.as_json.merge(ds.render)
         else
           render json: "not found", status: 404
         end

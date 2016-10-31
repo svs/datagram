@@ -97,7 +97,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   $scope.getDatagram = function(id) {
     Restangular.one('api/v1/datagrams',id).get().then(function(r) {
       $scope.datagram = r;
-      $scope.views = $scope.datagram.views;
+      $scope.views = ($scope.datagram.views || []);
       _.map($scope.views, function(v) {$scope.render(v)});
     });
   };

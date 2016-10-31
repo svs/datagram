@@ -8,15 +8,13 @@ class Datagram < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
   def as_json(include_root = false, max_size = Float::INFINITY)
-    r = response_data({},nil,nil,10000).to_a
+    r = response_json(params: {},as_of: nil,staleness: nil,max_size: 10000).to_a
     attributes.merge({
                        id: id.to_s,
                        private_url: private_url,
                        public_url: public_url,
                        watches: watches.map{|w| w.attributes.slice("name", "token","params","id","slug")},
-                       responses: r,
                        timestamp: (Time.at(max_ts/1000) rescue Time.now),
-                       thumbnail_url: r.map{|_r| _r[:metadata]["thumbnail_url"]}[0],
                        publish_params: publish_params
                      }).except("_id")
   end
@@ -26,7 +24,7 @@ class Datagram < ActiveRecord::Base
   # as_of: a datetime. we show the last response before the requested time.
   # staleness: no of seconds staleness we can accept
   def response_json(params: {}, as_of: nil, staleness: nil, max_size: Float::INFINITY)
-    {responses: Hash[response_data(params, as_of, staleness, max_size).map{|r| [r[:slug], r]}]}
+    {responses: Hash[response_data(params, as_of, staleness, max_size).map{|r| [r[:slug].to_s.gsub("-","_"), r]}]}
   end
 
   # calls DatagramPublisher.publish! passing on the given hash.

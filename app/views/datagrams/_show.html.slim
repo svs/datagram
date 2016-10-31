@@ -2,13 +2,9 @@
 script type="text/ng-template" id="show.html"
   div ng-controller="datagramCtrl"
     .col-md-12 style="border-right: 1px solid #aaa"
-      h2.portlet-title style="margin-bottom: 0px"
-        | {{datagram.name}}
-      a href="{{datagram.public_url}}"
-        | &#8250 {{ datagram.token}}
-      | &nbsp;
-      | &#8250 {{ datagram.updated_at }}
       div
+        h2.portlet-title.clearfix style="margin-bottom: 0px; float: left"
+          | {{datagram.name}}
         a.btn.btn-success ui-sref="edit({id: datagram.id})" style="margin: 8px"
           i.fa.fa-edit
           | Edit
@@ -16,6 +12,11 @@ script type="text/ng-template" id="show.html"
           i.fa.fa-destroy
           | Archive
 
+      br
+      a href="{{datagram.public_url}}"
+        | &#8250 {{ datagram.token}}
+      | &nbsp;
+      | &#8250 {{ datagram.updated_at }}
     .col-md-12 style="padding-top: 10px"
       div layout="row"
         .col-md-10
