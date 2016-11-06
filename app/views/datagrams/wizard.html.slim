@@ -2,7 +2,7 @@
 
 div ng-app="wizardApp"
   .row ng-controller="wizardCtrl"
-    .col-md-12
+    .col-md-6
       wizard
         wz-step wz-title="Where's your data?"
           div layout="column" id="chooseSource" ng-if="sources.length > 0"
@@ -19,7 +19,13 @@ div ng-app="wizardApp"
             md-input-container
               label URL
               input type="text" ng-model="source.url" ng-change="checkSql()"
-            div ui-ace="{useWrapMode : true,mode: 'sql',theme:'eclipse'}" rows="3" ng-model="watch.data.query" style="height: 200px" ng-show="isSql"
+            md-input-container ng-show="isSql"
+              label Query
+              div ui-ace="{useWrapMode : true,mode: 'sql',theme:'eclipse'}" rows="3" ng-model="watch.data.query" style="height: 200px"
+            md-input-container
+              label Params
+              div ui-ace="{mode: 'json', theme:'eclipse'}" json=true ng-model="watch.params" style="height: 100px;width: 100%"
+
             md-button ng-click="preview()"
               | Preview
             div ng-if="watches.length > 0"
@@ -34,9 +40,21 @@ div ng-app="wizardApp"
                       a ui-sref="show({id: w.id})"
                         | {{w.name}}
 
+          md-button.md-raised.md-primary ng-click="saveAndProceed()"
+            | Next
 
 
 
-    div
-      div hljs-to-json="source.url"
-      div hljs-to-json="datagram"
+    .col-md-6
+      div style="max-height: 200px"
+        a href="/api/v1/wr/{{watch_response.metadata.token}}"
+          | {{watch_response.metadata.token}}
+      tabset
+        tab heading="result"
+          div hljs-to-json="watch_response.data"
+        tab heading="metadata"
+          div hljs-to-json="watch_response.metadata"
+        tab heading="params"
+          div hljs-to-json="watch_response.params"
+        tab heading="errors"
+          div hljs-to-json="watch_response.errors"

@@ -11,7 +11,7 @@ config(['PusherServiceProvider',
       .setOptions({});
   }
        ]).config(['$mdThemingProvider',function($mdThemingProvider) {
-  $mdThemingProvider.setDefaultTheme('amber');
+  $mdThemingProvider.setDefaultTheme('');
 }]);;
 
 angular.module('wizardApp').filter('fromNow', function() {
@@ -48,11 +48,18 @@ wizardApp.config(function($stateProvider,$urlRouterProvider) {
 
 
 angular.module('wizardApp').controller('wizardCtrl',['$scope','$http','$stateParams', '$state', 'Pusher',function($scope, $http, $stateParams, $state, Pusher) {
+  $scope.watch = {};
+  $scope.source = {};
+  $scope.datagram = {};
+
   $http.get('api/v1/watches').then(function(r) {
     $scope.watches = r.data;
   });
   $http.get('api/v1/datagrams/new').then(function(r) {
     $scope.datagram = r.data;
+  });
+  $http.get('api/v1/watches/new').then(function(r) {
+    $scope.watch = r.data;
   });
   $http.get('api/v1/sources').then(function(r) {
     $scope.sources = r.data;
@@ -63,9 +70,6 @@ angular.module('wizardApp').controller('wizardCtrl',['$scope','$http','$statePar
     $scope.checkSql();
   });
 
-  $scope.watch = {};
-  $scope.source = {};
-  $scope.datagram = {};
 
   $scope.checkSql = function() {
     $scope.source.protocol = $scope.source.url.split(":")[0];
@@ -77,12 +81,12 @@ angular.module('wizardApp').controller('wizardCtrl',['$scope','$http','$statePar
     $scope.loading = true;
     console.log('loading', $scope.loading);
     $scope.watch.url=$scope.source.url;
-    $http.put('api/v1/watches/preview', {watch: $scope.watch}).then(function(r,s) {
+    $http.put('api/v1/w/preview', {watch: $scope.watch}).then(function(r,s) {
       console.log(r);
-      console.log('subscribing to previews on ',r.data.token);
-      Pusher.subscribe(r.data.token, 'data', function(item) {
-	console.log(item);
-	$http.get('api/v1/watch_responses',item.watch_response_token).then(function(r) {
+      console.log('subscribing to previews on ',r.data.refresh_channel);
+      Pusher.subscribe(r.data.refresh_channel, 'data', function(item) {
+	console.log('wr token',item.watch_response_token);
+	$http.get('api/v1/watch_responses/' + item.watch_response_token).then(function(r) {
 	  $scope.loading = false;
 	  $scope.watch_response = r.data;
 	});
@@ -90,7 +94,9 @@ angular.module('wizardApp').controller('wizardCtrl',['$scope','$http','$statePar
     });
   };
 
-
+  $scope.$watch('watch',function(o,n,s) {
+    console.log(n);
+  });
 
   var loaded = false;
   $scope.save = function() {

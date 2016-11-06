@@ -58,8 +58,8 @@ module Api
 
       def preview
         @watch = Watch.new(preview_params.merge(user_id: current_user.id))
-        token = @watch.publish(preview: true)
-        render json: {token: token} and return
+        refresh_channel = @watch.publish(preview: true)
+        render json: {refresh_channel: refresh_channel} and return
       end
 
       def t

@@ -6,7 +6,7 @@ class WatchResponseHandler
   end
 
   def handle!
-    context = {datagram: (datagram.token rescue ""), watch: watch.token, timestamp: timestamp}
+    context = {datagram: (datagram.token rescue ""), watch: (watch.token rescue ""), timestamp: timestamp}
     DgLog.new("#WatchResponseHandler processing: #{params[:id]}", context).log
     if wr
       update_attrs = {
@@ -70,7 +70,7 @@ class WatchResponseHandler
   end
 
   def watch
-    @watch ||= wr.watch
+    @watch ||= wr.watch || $redis.get(params[:id])
   end
 
 
