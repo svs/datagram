@@ -70,11 +70,14 @@ module Api
             }
             format.csv {
               csv = CSV.generate do |f|
-                response.each_with_index do |_r,i|
-                  if i == 0
-                    f << _r.keys
+                binding.pry
+                response[:responses].each do |k,v|
+                  v[:data].each_with_index do |_r,i|
+                    if i == 0
+                      f << _r.keys
+                    end
+                    f << _r.values
                   end
-                  f << _r.values
                 end
               end
               render plain: csv

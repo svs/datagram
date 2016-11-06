@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
 
   has_many :watches
   has_many :watch_responses, through: :watches
+  has_many :sources
   before_create :create_token
 
   def datagrams

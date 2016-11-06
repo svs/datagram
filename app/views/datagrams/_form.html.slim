@@ -1,4 +1,22 @@
 wizard
+  wz-step wz-title="Choose Watches"
+    div layout="column"
+      tabset
+        tab heading="Choose your data sources"
+          table md-table="true" md-row-select="true" multiple="true" ng-model="selectedWatches"
+            thead md-head="true"
+              tr md-row="true"
+                th md-column="true" Name
+            tbody md-body="true"
+              tr md-row="true" md-select="w" md-select-id="id" ng-repeat="w in watches" md-on-select="onSelect" md-on-deselect="onSelect"
+                td md-cell="true"
+                  a ui-sref="show({id: w.id})"
+                    | {{w.name}}
+          md-button.md-raised.md-primary wz-next="true"
+            | Next
+        tab heading="New data source"
+          = render 'watches/form'
+
   wz-step wz-title="Setup" canexit="datagram.name.length > 0"
     div layout="column"
       md-input-container
@@ -12,22 +30,6 @@ wizard
           | Use Routing Key
       md-button.md-raised.md-primary wz-next="true" ng-disabled="{{datagram.name.length == 0}}"
         | Next
-  wz-step wz-title="Choose Watches"
-    div layout="column"
-      h4
-        | Choose your data sources
-      table md-table="true" md-row-select="true" multiple="true" ng-model="selectedWatches"
-        thead md-head="true"
-          tr md-row="true"
-            th md-column="true" Name
-        tbody md-body="true"
-          tr md-row="true" md-select="w" md-select-id="id" ng-repeat="w in watches" md-on-select="onSelect" md-on-deselect="onSelect"
-            td md-cell="true"
-              a ui-sref="show({id: w.id})"
-                | {{w.name}}
-      md-button.md-raised.md-primary wz-next="true"
-        | Next
-
   wz-step wz-title="Parameters"
     div layout="column"
       h4

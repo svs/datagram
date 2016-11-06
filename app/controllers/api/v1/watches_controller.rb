@@ -38,8 +38,8 @@ module Api
       def update
         if params[:id] == "preview"
           @watch = Watch.new(preview_params.except(:id).merge(user_id: current_user.id))
-          @watch.publish
-          render json: "ok" and return
+          token = @watch.publish(preview: true)
+          render json: {status: "ok", token: token} and return
         else
           @watch = policy_scope(Watch).find(params[:id])
           if @watch.update(watch_params)
@@ -80,11 +80,8 @@ module Api
       def watch_params
         params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at, :strip_keys, :use_routing_key, :source_id).tap do |wl|
           wl[:data] = params[:watch][:data]
-          wl[:strip_keys] = params[:watch][:strip_keys]
-          wl[:keep_keys] = params[:watch][:keep_keys]
           wl[:params] = params[:watch][:params]
           wl[:transform] = params[:watch][:transform]
-          wl[:report_time] = params[:watch][:report_time]
         end
       end
 
@@ -92,11 +89,8 @@ module Api
         params[:watch][:data] = JSON.parse(params[:watch][:data]) if params[:watch][:data].is_a? String
         params.require(:watch).permit(:name, :url, :method, :protocol, :frequency, :at, :id, :user_id, :webhook_url, :created_at, :updated_at, :strip_keys, :use_routing_key, :source_id).tap do |whitelisted|
           whitelisted[:data] = params[:watch][:data]
-          whitelisted[:strip_keys] = params[:watch][:strip_keys]
-          whitelisted[:keep_keys] = params[:watch][:keep_keys]
           whitelisted[:params] = params[:watch][:params]
           whitelisted[:transform] = params[:watch][:transform]
-          whitelisted[:report_time] = params[:watch][:report_time]
         end
       end
 

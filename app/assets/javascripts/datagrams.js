@@ -10,7 +10,9 @@ config(['PusherServiceProvider',
       .setToken('ab5d78a0ff96a4179917')
       .setOptions({});
   }
-]);
+       ]).config(['$mdThemingProvider',function($mdThemingProvider) {
+  $mdThemingProvider.setDefaultTheme('amber');
+}]);;
 
 angular.module('datagramsApp').filter('fromNow', function() {
   return function(date) {
@@ -67,6 +69,9 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
   Restangular.one('api/v1/datagrams/new').get().then(function(r) {
     $scope.datagram = r;
   });
+  Restangular.all('api/v1/sources').getList().then(function(r) {
+    $scope.sources = r;
+  });
 
   var baseDatagrams = Restangular.all('api/v1/datagrams');
   var loaded = false;
@@ -94,8 +99,8 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http', '$sce', function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce) {
 
-  $scope.getDatagram = function(id) {
-    Restangular.one('api/v1/datagrams',id).get().then(function(r) {
+  $scope.getDatagram = function(id, params) {
+    Restangular.one('api/v1/datagrams',id, params).get().then(function(r) {
       $scope.datagram = r;
       $scope.views = ($scope.datagram.views || []);
       _.map($scope.views, function(v) {$scope.render(v)});
@@ -115,15 +120,14 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.refresh = function() {
     $scope.loading = true;
-    console.log('PUT', $scope.datagram);
     $scope.datagram.customPUT({id:$scope.datagram.id, params: $scope.datagram.publish_params}, 'refresh' ).then(function(r) {
       console.log(r);
-      if(!subscribed) {
+      if(true) {
 	console.log('subscribing to ' + r.channel);
 	Pusher.subscribe(r.channel,'data', function(item) {
 	      console.log('Pusher received', item);
 	      subscribed = true;
-	      $scope.getDatagram($scope.datagram.id);
+	  $scope.getDatagram($scope.datagram.id, {params: $scope.datagram.publish_params});
 	  $scope.loading = false;
 	  });
       };

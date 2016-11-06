@@ -1,0 +1,42 @@
+= javascript_include_tag 'wizard'
+
+div ng-app="wizardApp"
+  .row ng-controller="wizardCtrl"
+    .col-md-12
+      wizard
+        wz-step wz-title="Where's your data?"
+          div layout="column" id="chooseSource" ng-if="sources.length > 0"
+            h2 Choose a data source
+            div layout="column"
+              md-input-container
+                label URL
+                md-select ng-model="watch.source_id" ng-change="checkSql()"
+                  md-option ng-repeat="s in sources"
+                    | {{s.name}}
+
+          div layout="column"
+            h4 Add a new data source
+            md-input-container
+              label URL
+              input type="text" ng-model="source.url" ng-change="checkSql()"
+            div ui-ace="{useWrapMode : true,mode: 'sql',theme:'eclipse'}" rows="3" ng-model="watch.data.query" style="height: 200px" ng-show="isSql"
+            md-button ng-click="preview()"
+              | Preview
+            div ng-if="watches.length > 0"
+              h2 Choose your data sources
+              table md-table="true" md-row-select="true" multiple="true" ng-model="selectedWatches"
+                thead md-head="true"
+                  tr md-row="true"
+                    th md-column="true" Name
+                tbody md-body="true"
+                  tr md-row="true" md-select="w" md-select-id="id" ng-repeat="w in watches" md-on-select="onSelect" md-on-deselect="onSelect"
+                    td md-cell="true"
+                      a ui-sref="show({id: w.id})"
+                        | {{w.name}}
+
+
+
+
+    div
+      div hljs-to-json="source.url"
+      div hljs-to-json="datagram"

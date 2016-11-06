@@ -1,46 +1,30 @@
-.form-group
-  label.col-md-1 Name
-  .col-md-7
-    input.form-control ng-model="watch.name"
-.form-group
-  label.col-md-1 URL
-  .col-md-7
-    select.form-control ng-options="s.id as s.name for s in sources" ng-model="watch.source_id" ng-change="checkSql()"
-.form-group
-  label.col-md-1
+div layout="column"
+  md-input-container
+  label Name
+  input ng-model="watch.name"
+div layout="column"
+  md-input-container
+    label URL
+    md-select  ng-model="watch.source_id" ng-change="checkSql()"
+      md-option ng-repeat="s in sources"
+        | {{s.name}}
+
+div layout="column"
+  md-input-container
     span ng-show="isSql" Query
     span ng-show="!isSql" Data
-  .col-md-10
     div ui-ace="{useWrapMode : true,mode: 'sql',theme:'eclipse'}" rows="3" ng-model="watch.data.query" style="height: 200px" ng-show="isSql"
     textarea.form-control rows="3" ng-model="watchDataStr" style="height: 100px" ng-show="!isSql"
-.form-group
-  label.col-md-1
-    span Use Routing Key
-  .col-md-8
-    input type="checkbox" ng-model="watch.use_routing_key"
-.form-group
-  label.col-md-1
-    span Params
-  .col-md-8
+div layout="column"
+  md-input-container
+    md-checkbox ng-model="watch.use_routing_key"
+      | Use Routing Key?
+div layout="column"
+  md-input-container
+    label Params
     div ui-ace="{mode: 'json', theme:'eclipse'}" json=true ng-model="watch.params" style="height: 100px;width: 100%"
-.form-group
-  label.col-md-1
-    span Report Time
-  .col-md-8
-    div ui-ace="{mode: 'json', theme:'eclipse'}" ng-model="watch.report_time" style="height: 1.5em;width: 100%"
 .form-group
   label.col-md-1
     span Transform
   .col-md-8
     div ui-ace="{mode: 'json', theme: 'eclipse'}" json=true ng-model="watch.transform" style="height: 100px;width: 100%"
-
-.form-group
-  label.col-md-1
-    span Keep Keys
-  .col-md-8
-    div ui-ace="{mode: 'json', theme: 'eclipse'}" json=true ng-model="watch.keep_keys" style="height: 100px;width: 100%"
-.form-group
-  label.col-md-1
-    span Strip Keys
-  .col-md-8
-    div ui-ace="{mode: 'json', theme: 'eclipse'}" json=true ng-model="watch.strip_keys" style="height: 100px;width: 100%"
