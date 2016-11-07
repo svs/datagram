@@ -1,11 +1,13 @@
 class DatagramsController < ApplicationController
 
   def index
-    if current_user.datagrams.empty?
-      render 'wizard', layout: 'material'
-    else
-      render layout: 'material'
-    end
+    render layout: 'material'
   end
+
+
+  def new
+    render 'wizard', layout: 'material'
+  end
+
 
 end

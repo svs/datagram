@@ -52,28 +52,47 @@ angular.module('wizardApp').controller('wizardCtrl',['$scope','$http','$statePar
   $scope.source = {};
   $scope.datagram = {};
 
-  $http.get('api/v1/watches').then(function(r) {
+  $http.get('/api/v1/watches').then(function(r) {
     $scope.watches = r.data;
   });
-  $http.get('api/v1/datagrams/new').then(function(r) {
+  $http.get('/api/v1/datagrams/new').then(function(r) {
     $scope.datagram = r.data;
   });
-  $http.get('api/v1/watches/new').then(function(r) {
-    $scope.watch = r.data;
-  });
-  $http.get('api/v1/sources').then(function(r) {
+  $http.get('/api/v1/sources').then(function(r) {
+    console.log('sources',r);
     $scope.sources = r.data;
   });
-  $http.get('api/v1/sources/new').then(function(r) {
+  $http.get('/api/v1/sources/new').then(function(r) {
     $scope.source = r.data;
-    $scope.source.url="postgres://api:api@localhost/api_development";
-    $scope.checkSql();
+    $scope.setSource();
   });
 
+  $scope.newSource = {url: null};
+
+  $scope.setSource = function() {
+    console.log('sourceId',$scope.watch.source_id);
+    if ($scope.watch.source_id) {
+      $scope.source = _.find($scope.sources, function(s) { return s.id = $scope.watch.source_id});
+      console.log('source selected', $scope.watch.source_id, $scope.source);
+    } else {
+      $scope.source = $scope.newSource;
+    }
+    $scope.checkSql();
+
+  }
 
   $scope.checkSql = function() {
-    $scope.source.protocol = $scope.source.url.split(":")[0];
+    console.log($scope.newSource);
+    console.log($scope.source);
+    $scope.source.protocol = ($scope.source._id ? $scope.source.protocol : $scope.source.url.split(":")[0]);
     $scope.isSql =  $scope.source.protocol == "mysql" || $scope.source.protocol == "postgres" || $scope.source.protocol == "redshift";
+    console.log('isSql', $scope.isSql);
+  };
+
+  $scope.saveAndProceed = function() {
+    $http.post('api/v1/wizard',{wizard: {watch: $scope.watch, source: $scope.source}}).then(function(r) {
+      console.log(r);
+    }, function(e) { console.log(e)});
   };
 
 
@@ -81,12 +100,12 @@ angular.module('wizardApp').controller('wizardCtrl',['$scope','$http','$statePar
     $scope.loading = true;
     console.log('loading', $scope.loading);
     $scope.watch.url=$scope.source.url;
-    $http.put('api/v1/w/preview', {watch: $scope.watch}).then(function(r,s) {
+    $http.put('/api/v1/w/preview', {watch: $scope.watch}).then(function(r,s) {
       console.log(r);
       console.log('subscribing to previews on ',r.data.refresh_channel);
       Pusher.subscribe(r.data.refresh_channel, 'data', function(item) {
 	console.log('wr token',item.watch_response_token);
-	$http.get('api/v1/watch_responses/' + item.watch_response_token).then(function(r) {
+	$http.get('/api/v1/watch_responses/' + item.watch_response_token).then(function(r) {
 	  $scope.loading = false;
 	  $scope.watch_response = r.data;
 	});
@@ -99,24 +118,6 @@ angular.module('wizardApp').controller('wizardCtrl',['$scope','$http','$statePar
   });
 
   var loaded = false;
-  $scope.save = function() {
-    baseDatagrams.post({datagram: $scope.datagram}).then(function(r) {
-      $state.go('show',{id: r.id});
-    });
-  };
   $scope.selectedWatches = [];
-  $scope.onSelect = function(a) {
-    $scope.datagram.watch_ids = _.map($scope.selectedWatches, function(w) { return w.id;});
-    console.log($scope.datagram.watch_ids);
-    var ps = _.map($scope.selectedWatches,function(w) { return w.params});
-    console.log(ps);
-    $scope.datagram.publish_params = _.reduce(ps, function(sum, n) {
-      console.log('n',n);
-      console.log('sum',sum);
-      if (!sum) { sum = {}};
-      return _.merge(sum,n);
-    });
-
-  };
 
 }]);

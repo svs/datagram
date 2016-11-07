@@ -98,6 +98,19 @@ module Api
         end
       end
 
+      def wizard
+        sources = SourcePolicy::Scope.new(current_user, Source).resolve
+        source = sources.where(url: wizard_params[:source][:url]).first_or_create
+        ap wizard_params[:watch]
+        watch = Watch.new(wizard_params[:watch])
+        watch.source = source
+        watch.user = current_user
+        watch.save
+        ap watch.errors
+        render json: {source: source, watch: watch}
+      end
+
+
       private
 
       def create_params
@@ -113,6 +126,10 @@ module Api
         create_params
       end
 
+
+      def wizard_params
+        params.require(:wizard).permit!
+      end
 
 
     end

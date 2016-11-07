@@ -27,7 +27,7 @@ Rails.application.routes.draw do
       get 'w/:token', to: 'watches#t', as: 'w', defaults: { format: "json"}
       get 'wr/:token', to: 'watch_responses#t', as: 'wr', defaults: { format: "json"}
       put 'w/preview', to: 'watches#preview', as: 'p', defaults: { format: "json"}
-
+      post 'wizard', to: 'datagrams#wizard', as: 'wizard', defaults: {format: "json"}
     end
   end
 end

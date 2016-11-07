@@ -9,16 +9,19 @@ div ng-app="wizardApp"
             h2 Choose a data source
             div layout="column"
               md-input-container
-                label URL
-                md-select ng-model="watch.source_id" ng-change="checkSql()"
-                  md-option ng-repeat="s in sources"
+                label Source
+                md-select ng-model="watch.source_id" ng-change="setSource()"
+                  md-option ng-value="" selected="true"
+                    | New Data Source
+                  md-option ng-value="s._id" ng-repeat="s in sources"
                     | {{s.name}}
 
           div layout="column"
-            h4 Add a new data source
-            md-input-container
-              label URL
-              input type="text" ng-model="source.url" ng-change="checkSql()"
+            div ng-if="watch.source_id === undefined"
+              h4 Add a new data source
+              md-input-container style="width: 100%"
+                label URL
+                input type="text" ng-model="newSource.url" ng-change="checkSql()"
             md-input-container ng-show="isSql"
               label Query
               div ui-ace="{useWrapMode : true,mode: 'sql',theme:'eclipse'}" rows="3" ng-model="watch.data.query" style="height: 200px"
@@ -46,6 +49,10 @@ div ng-app="wizardApp"
 
 
     .col-md-6
+      pre
+        div hljs-to-json="source"
+        div hljs-to-json="newSource"
+
       div style="max-height: 200px"
         a href="/api/v1/wr/{{watch_response.metadata.token}}"
           | {{watch_response.metadata.token}}
