@@ -25,7 +25,9 @@
 //= require moment.min.js
 //= require angular-translate.min.js
 //= require angular-humanSeconds.min.js
-
+//= require jmespath.js
+//= require highcharts/highcharts.js
+//= require highcharts-ng.min.js
 //= require bootstrap.min
 
 

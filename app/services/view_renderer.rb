@@ -25,6 +25,12 @@ class ViewRenderer
     end
   end
 
+  class Json
+    def self.render(v, json, params, filename)
+      JMESPath.search(v["template"], json)
+    end
+  end
+
   class Liquid
     def self.render(v, json, params, filename)
       html = ::Liquid::Template.parse(v["template"]).render(json.merge("_params" => params)).html_safe
@@ -53,7 +59,11 @@ class ViewRenderer
 
   class Chart
     def self.render(v, json, params, filename)
-      i = ::RestClient.post('http://export.highcharts.com/',"content=options&options=#{JSON.dump(json)}&type=image/png")
+      ap v
+      jp = JMESPath.search(v["template"], json)
+      ap jp
+      j = JSON.dump(jp)
+      i = ::RestClient.post('http://export.highcharts.com/',"content=options&options=#{j}&type=image/png")
       AWS::S3::S3Object.store(filename,i,'dg-tmp')
       {url: "https://s3.amazonaws.com/dg-tmp/#{filename}"}
     end

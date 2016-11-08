@@ -75,6 +75,7 @@ gem "legato"
 gem "omniauth-google-oauth2"
 gem 'angular_rails_csrf'
 gem 'ruby-jq', '~> 0.1.6'
+gem 'jmespath'
 gem 'chronic'
 gem 'liquid'
 gem 'aws-s3'

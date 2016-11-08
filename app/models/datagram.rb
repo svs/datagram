@@ -13,7 +13,6 @@ class Datagram < ActiveRecord::Base
                        private_url: private_url,
                        public_url: public_url,
                        watches: watches.map{|w| w.attributes.slice("name", "token","params","id","slug")},
-                       responses: response_data({},nil,nil,10000).to_a,
                        timestamp: (Time.at(max_ts/1000) rescue Time.now),
                        publish_params: publish_params
                      }).except("_id")
@@ -24,7 +23,7 @@ class Datagram < ActiveRecord::Base
   # as_of: a datetime. we show the last response before the requested time.
   # staleness: no of seconds staleness we can accept
   def response_json(params: {}, as_of: nil, staleness: nil, max_size: Float::INFINITY)
-    {responses: Hash[response_data(params, as_of, staleness, max_size).map{|r| [r[:slug], r]}]}
+    {responses: Hash[response_data(params, as_of, staleness, max_size).map{|r| [r[:slug].gsub("-","_"), r]}]}
   end
 
   # calls DatagramPublisher.publish! passing on the given hash.

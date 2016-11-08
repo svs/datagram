@@ -62,7 +62,7 @@ angular.module('sourcesApp').controller('newSourceCtrl',['$scope','Restangular',
     });
     $scope.save = function() {
 	baseSources.post($scope.source).then(function(d) {
-	    $state.go('show',{id: $scope.watch.id});
+	    $state.go('index');
 	});
     };
 }]);

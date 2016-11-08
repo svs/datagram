@@ -3,7 +3,7 @@
 //= require highlight.pack.js
 //= require angular-highlightjs.js
 //= require directives.js
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace"]).
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng"]).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -80,7 +80,7 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 		return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params));
               });
             console.log('selected_watches', selected_watches);
-            $scope.datagram.publish_params = _.zipObject(_.map(selected_watches,function(w) { return [w.id, w.params]}));
+          $scope.datagram.publish_params = _.reduce(_.map(selected_watches,function(w) { return w.params}), function(a,b) { return _.merge(a,b)});
 
 	} else {
 	    if (!(_.isUndefined(n))) {
@@ -94,9 +94,19 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http', function($scope, Restangular, $stateParams, $state, Pusher, $http) {
 
-  $scope.getDatagram = function(id) {
-    Restangular.one('api/v1/datagrams',id).get().then(function(r) {
-      $scope.datagram = r;
+
+  var getDatagram = function() {
+    var p = _.zipObject(_.map($scope.datagram.publish_params, function(v,k) { return ["params[" + k + "]", v]}));
+    console.log(p);
+    $http({
+      url: $scope.datagram.public_url,
+      paramSerializer: '$httpParamSerializerJQLike',
+      method: 'GET',
+      params: p
+    }).then(function(d) {
+      console.log(d);
+      $scope.datagram.responses = d.data.responses;
+      _.each($scope.datagram.views, function(v,k) { $scope.render(v)});
     });
   };
 
@@ -112,19 +122,38 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     var subscribed = false;
 
     $scope.refresh = function() {
-    console.log('PUT', $scope.datagram);
-    $scope.datagram.customPUT({id:$scope.datagram.id, params: $scope.datagram.publish_params}, 'refresh' ).then(function(r) {
-      console.log(r);
-      if(!subscribed) {
-	  Pusher.subscribe(r,'data', function(item) {
-	      console.log('Pusher received', item);
-	      subscribed = true;
-	      $scope.getDatagram($scope.datagram.id);
-	  });
-      };
-    });
+      console.log('PUT', $scope.datagram);
+      $scope.datagram.customPUT({id:$scope.datagram.id, params: $scope.datagram.publish_params}, 'refresh' ).then(function(r) {
+	console.log(r);
+	Pusher.subscribe(r,'data', function(item) {
+	  console.log('Pusher received', item);
+	  getDatagram();
+	});
+      });
+    };
+
+  $scope.addView = function() {
+    if (!$scope.datagram.views) {
+      $scope.datagram.views = [];
+    };
+    $scope.viewsChanged = true;
+    $scope.datagram.views.push({name: 'New View', type: null, template: null});
+    console.log($scope.datagram.views);
   };
 
+  $scope.renderedData = {};
+  $scope.render = function(view) {
+    console.log($scope.datagram);
+    if (view.type === 'json' || view.type === 'chart') {
+      $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
+    } else if (view.type === 'mustache') {
+      $scope.renderedData[view.name] = Mustache.render(view.template, $scope.datagram)
+    } else if (view.type === 'liquid') {
+      var tmpl = Liquid.parse(view.template);
+      $scope.renderedData[view.name] = $sce.trustAsHtml(tmpl.render($scope.datagram));
+    }
+    console.log($scope.renderedData[view.name]);
+  };
 
   var refreshWatchResponses = function() {
     _.each($scope.datagram.watches, function(w,i) {
@@ -134,8 +163,20 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   if ($stateParams.id) {
-    $scope.getDatagram($stateParams.id);
+    Restangular.one('api/v1/datagrams',$stateParams.id).get().then(function(r) {
+      $scope.datagram = r;
+      console.log(r);
+      getDatagram();
+    });
   };
+
+  $scope.save = function() {
+    console.log($scope.datagram);
+    var d = {views: $scope.datagram.views};
+    $http({method: 'PATCH', url: '/api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: d}}).then(function(r) {
+    });
+  };
+
 
 
 }]);
@@ -161,23 +202,23 @@ angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','$http','
     $scope.watches = r.data;
   });
 
-    $scope.$watch('datagram.watch_ids.length', function(n,o) {
-	console.log(o,n);
-	console.log(loaded);
-        if (loaded) {
-            var selected_watches = _.filter($scope.watches, function(w) {
-		return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params));
-            });
-	  var selected_params = _.map(selected_watches,function(w) { return w.params});
-            console.log('selected_watches', selected_watches);
-          $scope.datagram.publish_params = _.reduce(selected_params, function(r,o) { return _.merge(r,o)}, {});
+  $scope.$watch('datagram.watch_ids.length', function(n,o) {
+    console.log(o,n);
+    console.log(loaded);
+    if (loaded) {
+      var selected_watches = _.filter($scope.watches, function(w) {
+	return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params));
+      });
+      var selected_params = _.map(selected_watches,function(w) { return w.params});
+      console.log('selected_watches', selected_watches);
+      $scope.datagram.publish_params = _.reduce(selected_params, function(r,o) { return _.merge(r,o)}, {});
 
-	} else {
-	    if (!(_.isUndefined(n))) {
+    } else {
+      if (!(_.isUndefined(n))) {
 		loaded = true;
-	    }
-	}
-    });
+      }
+    }
+  });
 
   $scope.save = function() {
     console.log($scope.datagram);

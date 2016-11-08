@@ -1,10 +1,18 @@
 script type="text/ng-template" id="index.html"
   div ng-controller="datagramsCtrl"
-    h3.pull-left style="margin-right: 10px"  All Datagrams
-    a.btn.btn-success.btn-large ui-sref="new"
-      | Add a Datagram
-    span#loading
-      | loading
+    .row
+      h3.pull-left style="margin-right: 10px"  All Datagrams
+      a.btn.btn-success.btn-large ui-sref="new"
+        | Add a Datagram
+      span#loading
+        | loading
+    .row
+      - if @source_count == 0
+        h4
+          | No Sources Found!
+        h5
+          | Add a
+          = link_to 'data source', '/sources#/new'
 
     table.table.table-striped
       thead

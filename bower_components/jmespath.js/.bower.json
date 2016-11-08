@@ -1,0 +1,34 @@
+{
+  "name": "jmespath.js",
+  "main": "jmespath.js",
+  "version": "0.15.0",
+  "homepage": "https://github.com/jmespath/jmespath.js",
+  "authors": [
+    "James Saryerwinnie <js@jamesls.com>"
+  ],
+  "description": "JMESPath implementation in javascript",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "jmespath"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "0.15.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.15.0",
+    "commit": "cdf34ab8f5ae8033147e6816451b0aeea4820652"
+  },
+  "_source": "https://github.com/jmespath/jmespath.js.git",
+  "_target": "^0.15.0",
+  "_originalSource": "jmespath.js",
+  "_direct": true
+}

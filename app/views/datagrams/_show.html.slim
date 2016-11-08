@@ -1,87 +1,65 @@
 = stylesheet_link_tag 'highlight'
 script type="text/ng-template" id="show.html"
   div ng-controller="datagramCtrl"
-    .col-md-5 style="border-right: 1px solid #aaa"
-      h2.portlet-title style="margin-bottom: 0px"
-        u
-          | {{datagram.name}}
-      h3
+    .row
+      .col-md-5 style="border-right: 1px solid #aaa"
+        h2.portlet-title style="margin-bottom: 0px"
+          u
+            | {{datagram.name}}
+        | {{ datagram.updated_at | fromNow}} &bull; &nbsp;
+        a href="{{datagram.public_url}}"
+          | {{ datagram.token }}
+        | &nbsp; &bull; &nbsp;
+        span ng-if="datagram.use_routing_key"
+          | Uses Routing Key
+
+
+        h3
+          a.btn.btn-success ui-sref="edit({id: datagram.id})" style="margin: 8px"
+            i.fa.fa-edit
+            | Edit
+          a.btn.btn-danger ng-click="archive()" style="margin: 8px"
+            i.fa.fa-destroy
+            | Archive
+      .col-md-7
+        table.table
+          tr ng-repeat="(k,v) in datagram.publish_params" style="border: 0px"
+            td style="border: 0px"
+              |{{k}}
+            td style="border: 0px"
+              input.form-control type="text" ng-model="datagram.publish_params[k]"
         a.btn.btn-large.btn-warning ng-click="refresh()"
           i.fa.fa-refresh style="margin-right: 5px"
           | Refresh!!
-        a.btn.btn-success ui-sref="edit({id: datagram.id})" style="margin: 8px"
-          i.fa.fa-edit
-          | Edit
-        a.btn.btn-danger ng-click="archive()" style="margin: 8px"
-          i.fa.fa-destroy
-          | Archive
 
-      a ng-click="showParams=!showParams" style="cursor:pointer" Show Params
-      textarea.form-control rows=5 json=true ng-model="datagram.publish_params" ng-show="showParams"
-      table.table
-        tr
-          th
-            h5 Description
-          td
-            | {{datagram.description}}
-        tr
-          th
-            h5 Sources
-          td
-            ul
-              li ng-repeat="watch in datagram.watches"
-                a href="/watches/\#{{watch.id}}"
-                  | {{watch.name}}
-        tr
-          th
-            h5 Updated At
-          td
-            | {{ datagram.updated_at }}
-        tr
-          th
-            h5 Token
-          td
-            | {{ datagram.token }}
-            br
-            span ng-if="datagram.use_routing_key"
-              | Uses Routing Key
-            span ng-if="!datagram.use_routing_key"
-              | Does Not Routing Key
-
-        tr
-          th
-            h5
-              | Private URL
-              button.btn-danger popover-placement="right" popover="Do not share this URL with anyone as it contains your private key. To share datagrams, generate shareable tokens" class="btn btn-default" popover-trigger="mouseenter"
-                i.fa.fa-exclamation-circle
-          td
-            a href="{{datagram.private_url}}"
-              | {{ datagram.private_url }}
-        tr
-          th
-            h5
-              | Public URL
-          td
-            a href="{{datagram.public_url}}"
-              | {{ datagram.public_url }}
-        tr
-          th
-            h5
-              | Views
-          td
-            div hljs-to-json="datagram.views"
-
-
-    .col-md-7
-      ul.nav.nav-pills
-        tabset
-          tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
-            tabset
-              tab heading="Data"
-                div hljs-to-json="response.data"
-              tab heading="Errors"
-                div hljs-to-json="response.errors"
-              tab heading="MetaData"
-                div hljs-to-json="response.metadata"
-              tab heading="Params"
-                div hljs-to-json="response.params"
+    .row
+      .col-md-12
+        ul.nav.nav-pills
+          a  ng-click="addView()"
+            | Add a view
+          a ng-click="save()"
+            | Save Views
+          tabset
+            tab heading="{{view.name}}" ng-repeat="view in datagram.views"
+              .md-col-12 layout="row" width="100%"
+                input type="text" ng-model = "view.name" style="width: 200px"
+                select ng-model="view.type"
+                  option ng-repeat="o in ['table','json','liquid','mustache','chart']"
+                    | {{o}}
+              .row
+                .col-md-6
+                  div ui-ace="{mode: 'javascript', theme: 'eclipse'}" style="min-height: 400px; height: 100%" ng-model="view.template" ng-change="render(view)"
+                .col-md-6
+                  highchart id="chart1" config="renderedData[view.name]" ng-if="view.type=='chart'"
+                  div hljs-to-json="renderedData[view.name]" ng-if="view.type=='json'"
+                  div ng-if="view.type=='liquid'" ng-bind-html="renderedData[view.name]"
+            tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
+              tabset
+                tab heading="Data"
+                  div hljs-to-json="response.data"
+                tab heading="Errors"
+                  div hljs-to-json="response.errors"
+                tab heading="MetaData"
+                  div hljs-to-json="response.metadata"
+                tab heading="Params"
+                  div hljs-to-json="response.params"

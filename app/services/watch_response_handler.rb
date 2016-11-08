@@ -5,7 +5,7 @@ class WatchResponseHandler
   end
 
   def handle!
-    context = {datagram: (datagram.token rescue ""), watch: watch.token, timestamp: timestamp}
+    context = {datagram: (datagram.token rescue ""), watch: (watch.token rescue nil), timestamp: timestamp}
     DgLog.new("#WatchResponseHandler processing: #{params[:id]}", context).log
     if wr
       update_attrs = {

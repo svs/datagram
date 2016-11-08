@@ -12,7 +12,7 @@ class DatagramViewLoader
   private
   attr_reader :datagram, :view
   def datagram_view_of_same_name
-    v = datagram.views[view] rescue nil
+    v = datagram.views.find{|v| v["name"] == view} rescue nil
   end
 
   def view_is_the_view
