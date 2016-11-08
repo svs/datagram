@@ -79,6 +79,9 @@ module Api
               end
               render plain: csv
             }
+            format.uri {
+              render plain: response[:url]
+            }
           end
         else
           render json: {404 => "not found"}, status: 404

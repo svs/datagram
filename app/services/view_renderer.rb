@@ -59,13 +59,14 @@ class ViewRenderer
 
   class Chart
     def self.render(v, json, params, filename)
-      ap v
       jp = JMESPath.search(v["template"], json)
-      ap jp
-      j = JSON.dump(jp)
-      i = ::RestClient.post('http://export.highcharts.com/',"content=options&options=#{j}&type=image/png")
-      AWS::S3::S3Object.store(filename,i,'dg-tmp')
-      {url: "https://s3.amazonaws.com/dg-tmp/#{filename}"}
+      if ["png","uri"].include?(params["format"])
+        j = JSON.dump(jp)
+        i = ::RestClient.post('http://export.highcharts.com/',"content=options&options=#{j}&type=image/png")
+        AWS::S3::S3Object.store(filename,i,'dg-tmp')
+        return {url: "https://s3.amazonaws.com/dg-tmp/#{filename}"}
+      end
+      return jp
     end
   end
 

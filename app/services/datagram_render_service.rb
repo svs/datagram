@@ -4,7 +4,7 @@ class DatagramRenderService
   # It calls the appropriate view loader and view renderers to do this.
   # If a synchronous refresh is required it handles the complexity around that.
 
-  def initialize(datagram, params = {})
+  def initialize(datagram, params = {}, format = :json)
     @datagram = datagram
     @params = params
     ap params
