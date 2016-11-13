@@ -12,7 +12,7 @@
 //
 //= require ace.js
 //= require jquery
-//= require angular
+//= require angular-1.5.8.min.js
 //= require lodash
 //= require restangular
 //= require angular-ui-router
@@ -29,7 +29,9 @@
 //= require highcharts/highcharts.js
 //= require highcharts-ng.min.js
 //= require bootstrap.min
-
+//= require liquid.min.js
+//= require mustache.min.js
+//= require angular-sanitize.min.js
 
 $(document).ready(function() {
   $('a[href="' + window.location.pathname + '"]').parent().addClass('active');

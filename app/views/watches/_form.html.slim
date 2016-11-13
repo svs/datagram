@@ -3,9 +3,11 @@
   .col-md-7
     input.form-control ng-model="watch.name"
 .form-group
-  label.col-md-1 URL
+  label.col-md-1 Source
   .col-md-7
     select.form-control ng-options="s.id as s.name for s in sources" ng-model="watch.source_id" ng-change="checkSql()"
+    h4 style=" padding:3px; margin: 4px; align: center" OR
+    input.form-control ng-model="watch.url" placeholder="URL"
 .form-group
   label.col-md-1
     span ng-show="isSql" Query

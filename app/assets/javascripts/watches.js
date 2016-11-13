@@ -109,7 +109,7 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
 
   $scope.preview = function() {
     $scope.loading = true;
-    console.log('loading', $scope.loading);
+    console.log('loading', $scope.watch);
     $scope.watch.customPUT($scope.watch,'preview').then(function(r,s) {
 	if (!previewSubscribed) {
 	    previewSubscribed = true;

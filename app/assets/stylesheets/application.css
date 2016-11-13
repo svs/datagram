@@ -48,6 +48,15 @@ td {
   }
 }
 
+#preview {
+  all: initial;
+  * {
+    all: unset;
+  }
+}
+
+
+
 #ticker-div {
     position: relative;
     top: 5px;

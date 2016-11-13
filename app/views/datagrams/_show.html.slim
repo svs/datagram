@@ -44,15 +44,15 @@ script type="text/ng-template" id="show.html"
               .md-col-12 layout="row" width="100%"
                 input type="text" ng-model = "view.name" style="width: 200px"
                 select ng-model="view.type"
-                  option ng-repeat="o in ['table','json','liquid','mustache','chart']"
+                  option ng-repeat="o in ['table','jq','jmespath','liquid','mustache','chart']"
                     | {{o}}
               .row
                 .col-md-6
                   div ui-ace="{mode: 'javascript', theme: 'eclipse'}" style="min-height: 400px; height: 100%" ng-model="view.template" ng-change="render(view)"
                 .col-md-6
                   highchart id="chart1" config="renderedData[view.name]" ng-if="view.type=='chart'"
-                  div hljs-to-json="renderedData[view.name]" ng-if="view.type=='json'"
-                  div ng-if="view.type=='liquid'" ng-bind-html="renderedData[view.name]"
+                  div hljs-to-json="renderedData[view.name]" ng-if="view.type=='jq' || view.type=='jmespath'"
+                  div#preview ng-if="view.type=='liquid' || view.type=='mustache'" ng-bind-html="renderedData[view.name]"
             tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
               tabset
                 tab heading="Data"

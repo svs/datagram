@@ -3,7 +3,7 @@
 //= require highlight.pack.js
 //= require angular-highlightjs.js
 //= require directives.js
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng"]).
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng","ngSanitize"]).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -50,6 +50,8 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
     Restangular.all('api/v1/datagrams').getList().then(function(r) {
       console.log(r);
       $scope.datagrams = _.sortBy(r, function(s) { return s.name});
+      $scope.groupedDatagrams = _.groupBy($scope.datagrams, function(d) { return d.name.match(":") ? d.name.split(":")[0] : "Z";});
+      console.log($scope.groupedDatagrams);
       $('#loading').hide();
       $timeout(load, 60000);
 
@@ -92,7 +94,7 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 
 }]);
 
-angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http', function($scope, Restangular, $stateParams, $state, Pusher, $http) {
+angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce) {
 
 
   var getDatagram = function() {
@@ -146,8 +148,9 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     console.log($scope.datagram);
     if (view.type === 'json' || view.type === 'chart') {
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
+      console.log($scope.renderedData[view.name]);
     } else if (view.type === 'mustache') {
-      $scope.renderedData[view.name] = Mustache.render(view.template, $scope.datagram)
+      $scope.renderedData[view.name] = Mustache.render(view.template, $scope.datagram);
     } else if (view.type === 'liquid') {
       var tmpl = Liquid.parse(view.template);
       $scope.renderedData[view.name] = $sce.trustAsHtml(tmpl.render($scope.datagram));

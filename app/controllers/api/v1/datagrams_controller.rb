@@ -27,6 +27,7 @@ module Api
       def update
         datagram = (policy_scope(Datagram).find(params[:id]) rescue nil)
         if datagram
+          ap update_params
           if datagram.update(update_params)
             render json: datagram
           else
@@ -102,10 +103,10 @@ module Api
 
       def create_params
         params.require(:datagram).permit(:at, :frequency, :name, :use_routing_key, :archived, :description).tap{|wl|
-          wl[:watch_ids] = params[:datagram][:watch_ids]
+          wl[:watch_ids] = params[:datagram][:watch_ids] if params[:datagram][:watch_ids]
           wl[:user_id] = current_user.id
-          wl[:publish_params] = params[:datagram][:publish_params]
-          wl[:views] = params[:datagram][:views]
+          wl[:publish_params] = params[:datagram][:publish_params] if params[:datagram][:publish_params]
+          wl[:views] = params[:datagram][:views] if params[:datagram][:views]
         }
       end
 
