@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   end
 
 
+
   private
   def create_token
     self.token = SecureRandom.urlsafe_base64(10)

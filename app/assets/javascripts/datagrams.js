@@ -144,9 +144,11 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   $scope.renderedData = {};
+
   $scope.render = function(view) {
     console.log($scope.datagram);
-    if (view.type === 'json' || view.type === 'chart') {
+    if (view.type === 'jq' || view.type === 'chart' || view.type === 'jmespath') {
+      console.log(view);
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
       console.log($scope.renderedData[view.name]);
     } else if (view.type === 'mustache') {

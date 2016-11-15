@@ -32,7 +32,6 @@
 //= require liquid.min.js
 //= require mustache.min.js
 //= require angular-sanitize.min.js
-
 $(document).ready(function() {
   $('a[href="' + window.location.pathname + '"]').parent().addClass('active');
 });

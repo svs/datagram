@@ -111,10 +111,11 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     $scope.loading = true;
     console.log('loading', $scope.watch);
     $scope.watch.customPUT($scope.watch,'preview').then(function(r,s) {
+      console.log(r,s);
 	if (!previewSubscribed) {
 	    previewSubscribed = true;
-	    console.log('subscribing to previews on ',r);
-	    Pusher.subscribe(r, 'data', function(item) {
+	    console.log('subscribing to previews on ',r.token);
+	    Pusher.subscribe(r.token, 'data', function(item) {
 		console.log(item);
 		Restangular.one('api/v1/watch_responses',item.watch_response_token).get().then(function(r) {
 		    $scope.loading = false;

@@ -59,7 +59,7 @@ module Api
       def preview
         @watch = Watch.new(preview_params.merge(user_id: current_user.id))
         token = @watch.publish(preview: true)
-        render json: token and return
+        render json: {token: token} and return
       end
 
       def t

@@ -3,20 +3,17 @@ task perform: :environment do
     begin
       t = Time.now.to_i
       payload = JSON.parse(payload)
+      ap payload
       context = {datagram: payload["datagram_id"], watch: payload["token"], timestamp: payload["timestamp"]}
       DgLog.new("#Perform processing watch #{payload["key"]}", context).log
       url = payload["url"]
-      if url =~ /\Ahttp/
+      if url =~ /docs.google.com\/spreadsheets/
+        ap "Sheet!"
+        c = Clients::GoogleDrive.new(url, payload)
+        r = c.data
+      elsif url =~ /\Ahttp/
         d = payload["params"].slice(*payload["data"].keys) if payload["data"]
         r = JSON.parse(RestClient.get(payload["url"], {params: d}))
-      elsif url =~ /\Adrive/
-        u = URI.parse(url)
-        token = u.user
-        sheet_key = u.host
-        worksheet = u.path[1..-1]
-        session = GoogleDrive.login_with_oauth(token)
-        data = session.spreadsheet_by_key(sheet_key).worksheets[worksheet.to_i].rows
-        r = data[1..-1].map{|r| Hash[data[0].zip(r)]}
       else
         url = url.gsub("mysql://","mysql2://")
         options = url =~ /redshift/ ? {client_min_messages: false, force_standard_strings: false} : {}
@@ -37,7 +34,8 @@ task perform: :environment do
       $watch_responses.publish(response.to_json)
       DgLog.new("#Perform finished #{payload["key"]} in #{elapsed} seconds", context).log
     rescue Exception => e
-        response = {
+      Rails.logger.error(e.message)
+      response = {
         elapsed: Time.now.to_i - t,
         status_code: 422,
         data: {},

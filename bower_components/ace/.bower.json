@@ -9,6 +9,7 @@
     "commit": "0b7504dae1efe06e058c7fba777e3485cd9294ec"
   },
   "_source": "https://github.com/ajaxorg/ace.git",
-  "_target": "*",
-  "_originalSource": "ace"
+  "_target": "^1.2.5",
+  "_originalSource": "ace",
+  "_direct": true
 }
