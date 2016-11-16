@@ -93,7 +93,7 @@ module Api
         @datagram = policy_scope(Datagram).find(params[:id]) rescue nil
         if @datagram
           channel = @datagram.publish(params[:params])
-          render json: channel
+          render json: {token: channel}
         else
           render json: "not found", status: 404
         end

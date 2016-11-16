@@ -34,7 +34,7 @@ task perform: :environment do
       $watch_responses.publish(response.to_json)
       DgLog.new("#Perform finished #{payload["key"]} in #{elapsed} seconds", context).log
     rescue Exception => e
-      Rails.logger.error(e.message)
+      Rails.logger.error("#Perform #{e.message}")
       response = {
         elapsed: Time.now.to_i - t,
         status_code: 422,

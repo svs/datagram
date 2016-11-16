@@ -48,10 +48,8 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
   var load = function() {
     $('#loading').show();
     Restangular.all('api/v1/datagrams').getList().then(function(r) {
-      console.log(r);
       $scope.datagrams = _.sortBy(r, function(s) { return s.name});
       $scope.groupedDatagrams = _.groupBy($scope.datagrams, function(d) { return d.name.match(":") ? d.name.split(":")[0] : "Z";});
-      console.log($scope.groupedDatagrams);
       $('#loading').hide();
       $timeout(load, 60000);
 
@@ -81,7 +79,6 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
             var selected_watches = _.filter($scope.watches, function(w) {
 		return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params));
               });
-            console.log('selected_watches', selected_watches);
           $scope.datagram.publish_params = _.reduce(_.map(selected_watches,function(w) { return w.params}), function(a,b) { return _.merge(a,b)});
 
 	} else {
@@ -97,16 +94,16 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce) {
 
 
-  var getDatagram = function() {
+  var getDatagram = function(np) {
+    console.log('getDatagram', np);
+    np = np ? np : {};
     var p = _.zipObject(_.map($scope.datagram.publish_params, function(v,k) { return ["params[" + k + "]", v]}));
-    console.log(p);
     $http({
       url: $scope.datagram.public_url,
       paramSerializer: '$httpParamSerializerJQLike',
       method: 'GET',
-      params: p
+      params: _.merge(p, np)
     }).then(function(d) {
-      console.log(d);
       $scope.datagram.responses = d.data.responses;
       _.each($scope.datagram.views, function(v,k) { $scope.render(v)});
     });
@@ -126,13 +123,14 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     $scope.refresh = function() {
       console.log('PUT', $scope.datagram);
       $scope.datagram.customPUT({id:$scope.datagram.id, params: $scope.datagram.publish_params}, 'refresh' ).then(function(r) {
-	console.log(r);
-	Pusher.subscribe(r,'data', function(item) {
+	console.log('subscribed ',r.token);
+	Pusher.subscribe(r.token,'data', function(item) {
 	  console.log('Pusher received', item);
 	  getDatagram();
 	});
       });
     };
+
 
   $scope.addView = function() {
     if (!$scope.datagram.views) {
@@ -145,27 +143,35 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.renderedData = {};
 
+  $scope.r = function(view) {
+    $scope.save();
+    $http({
+      url: $scope.datagram.public_url,
+      paramSerializer: '$httpParamSerializerJQLike',
+      method: 'GET',
+      params: _.merge(_.clone({params: ($scope.datagram.publish_params || {})}),{"views[]": view.name})
+    }).then(function(r) {
+      $scope.renderedData[view.name] = r.data;
+    });
+  };
+
   $scope.render = function(view) {
-    console.log($scope.datagram);
-    if (view.type === 'jq' || view.type === 'chart' || view.type === 'jmespath') {
-      console.log(view);
+    if ( view.type === 'chart-jp' || view.type === 'jmespath') {
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
-      console.log($scope.renderedData[view.name]);
     } else if (view.type === 'mustache') {
       $scope.renderedData[view.name] = Mustache.render(view.template, $scope.datagram);
     } else if (view.type === 'liquid') {
       var tmpl = Liquid.parse(view.template);
       $scope.renderedData[view.name] = $sce.trustAsHtml(tmpl.render($scope.datagram));
     }
-    console.log($scope.renderedData[view.name]);
   };
 
-  var refreshWatchResponses = function() {
-    _.each($scope.datagram.watches, function(w,i) {
-      console.log('subscribing to ', w.token);
+  // var refreshWatchResponses = function() {
+  //   _.each($scope.datagram.watches, function(w,i) {
+  //     console.log('subscribing to ', w.token);
 
-    });
-  };
+  //   });
+  // };
 
   if ($stateParams.id) {
     Restangular.one('api/v1/datagrams',$stateParams.id).get().then(function(r) {
@@ -175,10 +181,10 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     });
   };
 
-  $scope.save = function() {
+  $scope.save = function(callback) {
     console.log($scope.datagram);
     var d = {views: $scope.datagram.views};
-    $http({method: 'PATCH', url: '/api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: d}}).then(function(r) {
+    $http({method: 'PATCH', url: '/api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: d}}).then(callback || function(r) {
     });
   };
 
