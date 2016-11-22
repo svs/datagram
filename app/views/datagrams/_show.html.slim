@@ -22,15 +22,30 @@ script type="text/ng-template" id="show.html"
             i.fa.fa-destroy
             | Archive
       .col-md-7
-        table.table
-          tr ng-repeat="(k,v) in datagram.publish_params" style="border: 0px"
-            td style="border: 0px"
-              |{{k}}
-            td style="border: 0px"
-              input.form-control type="text" ng-model="datagram.publish_params[k]"
-        a.btn.btn-large.btn-warning ng-click="refresh()"
-          i.fa.fa-refresh style="margin-right: 5px"
-          | Refresh!!
+        tabset
+          a  ng-click="addParamSet()"
+            | Add
+          tab ng-repeat="(name, values) in datagram.param_sets" heading="{{values.name || 'default'}}" ng-click="selectParamSet(values.name)"
+            table.table
+              tr style="border: 0px; padding: 1px" ng-if="name !== '__default'"
+                td style="border: 0px; padding: 1px"
+                  | name
+                td style="border: 0px; padding: 1px"
+                  input type="text" ng-model="values.name"
+
+              tr ng-repeat="(k,v) in values.params" style="border: 0px; padding: 1px"
+                td style="border: 0px; padding: 1px"
+                  |{{k}}
+                td style="border: 0px; padding: 1px"
+                  input type="text" ng-model="values.params[k]"
+            div hljs-to-json="selectedParamSet"
+            a.btn.btn-large.btn-success ng-click="save()" style="margin: 3px"
+              i.fa.fa-save style="margin-right: 5px"
+              | Save
+
+            a.btn.btn-large.btn-warning ng-click="refresh()" style="margin: 3px"
+              i.fa.fa-refresh style="margin-right: 5px"
+              | Refresh
 
     .row
       .col-md-12

@@ -46,7 +46,8 @@ angular.module('watchesApp').controller('watchesCtrl',['$scope','Restangular','$
   });
 }]);
 
-angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$stateParams', 'Pusher','$state', function($scope, Restangular,$stateParams, Pusher, $state) {
+angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$stateParams', 'Pusher','$state', '$http', '$location',
+						     function($scope, Restangular,$stateParams, Pusher, $state, $http, $location) {
   console.log($stateParams);
   var baseWatches = Restangular.all('api/v1/watches');
     var subscribed = false;
@@ -59,17 +60,18 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
     };
 
   if ($stateParams.id) {
-    Restangular.one('api/v1/watches',$stateParams.id).get().then(function(r) {
-      $scope.watch = r;
+    $http.get('api/v1/watches/' + $stateParams.id).then(function(r) {
+      $scope.watch = r.data;
+      console.log($scope.watch);
       $scope.showing = true;
 	loadSources();
 	getPreview(r.token);
     });
   } else {
-    Restangular.one('api/v1/watches/new').get().then(function(r) {
-      $scope.watch = r;
-	loadSources();
-	subscribe();
+    $http.get('api/v1/watches/new').then(function(r) {
+      $scope.watch = r.data;
+      loadSources();
+      subscribe();
     });
   };
 
@@ -91,14 +93,21 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
 
   $scope.update = function() {
     console.log($scope.watch);
-    $scope.watch.put().then(function(r,s) {
+    $http.put('/api/v1/watches/'+$scope.watch.id, {watch: _.clone($scope.watch)}).then(function(r) {
+
       $state.go('show',{id: $scope.watch.id});
     });
   };
 
-  $scope.save = function() {
-    baseWatches.post($scope.watch).then(function(r) {
-      $state.go('show',{id: $scope.watch.id});
+  $scope.save = function(asDatagram) {
+    $http.post('/api/v1/watches',{watch: _.clone($scope.watch), asDatagram: asDatagram}).then(function(r) {
+      console.log(r);
+      if (asDatagram) {
+	window.location = "/datagrams#/" + r.data.datagram.id;
+      } else {
+	$scope.watch.id = r.data.watch.id;
+	$state.go('show',{id: $scope.watch.id});
+      }
     });
   };
 
@@ -110,12 +119,12 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
   $scope.preview = function() {
     $scope.loading = true;
     console.log('loading', $scope.watch);
-    $scope.watch.customPUT($scope.watch,'preview').then(function(r,s) {
+    $http.put('/api/v1/watches/'+$scope.watch.id + '/preview', {watch: _.clone($scope.watch)}).then(function(r,s) {
       console.log(r,s);
 	if (!previewSubscribed) {
 	    previewSubscribed = true;
-	    console.log('subscribing to previews on ',r.token);
-	    Pusher.subscribe(r.token, 'data', function(item) {
+	    console.log('subscribing to previews on ',r.data.token);
+	    Pusher.subscribe(r.data.token, 'data', function(item) {
 		console.log(item);
 		Restangular.one('api/v1/watch_responses',item.watch_response_token).get().then(function(r) {
 		    $scope.loading = false;

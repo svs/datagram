@@ -94,15 +94,23 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce) {
 
 
-  var getDatagram = function(np) {
-    console.log('getDatagram', np);
-    np = np ? np : {};
-    var p = _.zipObject(_.map($scope.datagram.publish_params, function(v,k) { return ["params[" + k + "]", v]}));
+  $scope.selectParamSet = function(name) {
+    if (name) {
+      $scope.selectedParamSet =  $scope.datagram.param_sets[name];
+    } else {
+      $scope.selectedParamSet =  $scope.datagram.param_sets["__default"];
+    }
+    getDatagram($scope.selectedParamSet.params);
+  };
+
+  var getDatagram = function(params) {
+    console.log('getDatagram', params);
+    var p = _.zipObject(_.map(params, function(v,k) { return ["params[" + k + "]", v]}));
     $http({
       url: $scope.datagram.public_url,
       paramSerializer: '$httpParamSerializerJQLike',
       method: 'GET',
-      params: _.merge(p, np)
+      params: p
     }).then(function(d) {
       $scope.datagram.responses = d.data.responses;
       _.each($scope.datagram.views, function(v,k) { $scope.render(v)});
@@ -122,11 +130,12 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
     $scope.refresh = function() {
       console.log('PUT', $scope.datagram);
-      $scope.datagram.customPUT({id:$scope.datagram.id, params: $scope.datagram.publish_params}, 'refresh' ).then(function(r) {
-	console.log('subscribed ',r.token);
-	Pusher.subscribe(r.token,'data', function(item) {
+      console.log(name);
+      $http.put('/api/v1/datagrams/' + $scope.datagram.id + '/refresh', {param_set: $scope.selectedParamSet.name} ).then(function(r) {
+	console.log('subscribed ',r.data.token);
+	Pusher.subscribe(r.data.token,'data', function(item) {
 	  console.log('Pusher received', item);
-	  getDatagram();
+	  getDatagram({param_set: $scope.selectedParamSet.name});
 	});
       });
     };
@@ -143,13 +152,13 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.renderedData = {};
 
-  $scope.r = function(view) {
+  $scope.r = function(view, param_set) {
     $scope.save();
     $http({
       url: $scope.datagram.public_url,
       paramSerializer: '$httpParamSerializerJQLike',
       method: 'GET',
-      params: _.merge(_.clone({params: ($scope.datagram.publish_params || {})}),{"views[]": view.name})
+      params: _.merge(_.clone({params: ($scope.selectedParamSet.params || {})}),{"views[]": view.name})
     }).then(function(r) {
       $scope.renderedData[view.name] = r.data;
     });
@@ -166,6 +175,10 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     }
   };
 
+
+  $scope.addParamSet = function() {
+    $scope.datagram.param_sets["__new"] = {name: "", params: _.clone($scope.datagram.publish_params), frequency: null, at: null};
+  };
   // var refreshWatchResponses = function() {
   //   _.each($scope.datagram.watches, function(w,i) {
   //     console.log('subscribing to ', w.token);
@@ -177,13 +190,19 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     Restangular.one('api/v1/datagrams',$stateParams.id).get().then(function(r) {
       $scope.datagram = r;
       console.log(r);
-      getDatagram();
+      $scope.selectParamSet("__default");
     });
   };
 
   $scope.save = function(callback) {
     console.log($scope.datagram);
-    var d = {views: $scope.datagram.views};
+    var newSet = $scope.datagram.param_sets["__new"];
+    if (newSet) {
+      console.log(newSet);
+      $scope.datagram.param_sets[newSet.name] = _.clone(newSet);
+      delete $scope.datagram.param_sets["__new"];
+    }
+    var d = {views: $scope.datagram.views, param_sets: $scope.datagram.param_sets};
     $http({method: 'PATCH', url: '/api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: d}}).then(callback || function(r) {
     });
   };

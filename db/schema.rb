@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160327061704) do
+ActiveRecord::Schema.define(version: 20161121051101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,11 @@ ActiveRecord::Schema.define(version: 20160327061704) do
     t.boolean  "archived",                          default: false
     t.boolean  "keep",                              default: false
     t.text     "description"
+    t.json     "default_view"
+    t.string   "default_view_format"
+    t.string   "default_view_url"
+    t.text     "default_view_body"
+    t.json     "param_sets"
   end
 
   create_table "sources", force: :cascade do |t|
@@ -51,6 +56,7 @@ ActiveRecord::Schema.define(version: 20160327061704) do
     t.json     "stream_data"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.string   "token"
   end
 
   create_table "users", force: :cascade do |t|
@@ -106,6 +112,7 @@ ActiveRecord::Schema.define(version: 20160327061704) do
     t.string   "uid"
     t.string   "datagram_uid"
     t.boolean  "complete"
+    t.string   "thumbnail_url"
   end
 
   create_table "watches", force: :cascade do |t|

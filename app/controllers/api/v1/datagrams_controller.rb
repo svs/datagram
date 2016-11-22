@@ -92,7 +92,7 @@ module Api
       def refresh
         @datagram = policy_scope(Datagram).find(params[:id]) rescue nil
         if @datagram
-          channel = @datagram.publish(params[:params])
+          channel = @datagram.publish(params[:param_set])
           render json: {token: channel}
         else
           render json: "not found", status: 404
@@ -107,6 +107,7 @@ module Api
           wl[:user_id] = current_user.id
           wl[:publish_params] = params[:datagram][:publish_params] if params[:datagram][:publish_params]
           wl[:views] = params[:datagram][:views] if params[:datagram][:views]
+          wl[:param_sets] = params[:datagram][:param_sets] if params[:datagram][:param_sets]
         }
       end
 

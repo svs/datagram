@@ -15,11 +15,12 @@ module Api
       end
 
       def create
-        @watch = Watch.new(watch_params.merge(user_id: current_user.id))
-        if @watch.save
-          render json: "ok"
+        ap watch_params
+        result = WatchCreatorService.new(watch_params.merge(user_id: current_user.id), params["asDatagram"]).save
+        if result[:watch].id
+          render json: result
         else
-          render json: @watch.errors, status: 422
+          render json: result[:watch].errors, status: 422
         end
       end
 
@@ -39,8 +40,11 @@ module Api
         if params[:id] == "preview"
           @watch = Watch.new(preview_params.except(:id).merge(user_id: current_user.id))
           @watch.publish
-          render json: "ok" and return
+          render json: {status: "ok"} and return
         else
+          ap params
+          ap "---"
+          ap watch_params
           @watch = policy_scope(Watch).find(params[:id])
           if @watch.update(watch_params)
             render json: @watch

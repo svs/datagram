@@ -15,7 +15,7 @@ class ViewRenderer
   attr_reader :view, :json, :params, :filename
   def renderer
     type = view == "chart" ? "chart" : view["type"]
-    Kernel.const_get("ViewRenderer::" + type.titleize)
+    Kernel.const_get("ViewRenderer::" + type.titleize.gsub(" ",""))
   end
 
   class Jq
@@ -24,6 +24,17 @@ class ViewRenderer
       json.jq(v["template"])[0]
     end
   end
+
+  class ChartJq < Jq
+    def self.render(v, json, params, filename)
+      jq = json.jq(v["template"])[0]
+      j = JSON.dump(jq)
+      i = ::RestClient.post('http://export.highcharts.com/',"content=options&options=#{j}&type=image/png")
+      AWS::S3::S3Object.store(filename,i,'dg-tmp')
+      return {url: "https://s3.amazonaws.com/dg-tmp/#{filename}"}
+    end
+  end
+
 
   class Json
     def self.render(v, json, params, filename)
@@ -57,7 +68,7 @@ class ViewRenderer
     end
   end
 
-  class Chart
+  class ChartJp
     def self.render(v, json, params, filename)
       jp = JMESPath.search(v["template"], json)
       if ["png","uri"].include?(params["format"])

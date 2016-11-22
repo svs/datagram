@@ -11,7 +11,6 @@ class DatagramPublisher
     @timestamp = (Time.now.to_f).round
     @user = datagram.user
     @params = params
-    @refresh_channel = datagram.refresh_channel(params)
   end
 
 
@@ -36,9 +35,16 @@ class DatagramPublisher
 
   attr_reader :datagram, :exchange, :queue, :timestamp, :user, :refresh_channel
 
+  def refresh_channel
+    datagram.refresh_channel(params)
+  end
+
 
   def params
-    (datagram.publish_params || {}).merge(@params || {})
+    Rails.logger.info "#DatagramPublisher params #{@params}"
+    if !@params.is_a?(Hash)
+      @params = datagram.param_sets.fetch(@params, datagram.param_sets["__default"])["params"]
+    end
   end
 
 

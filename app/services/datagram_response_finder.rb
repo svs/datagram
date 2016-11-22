@@ -32,7 +32,7 @@ class DatagramResponseFinder
   attr_reader :datagram, :as_of, :staleness, :max_size
 
   def params
-    p = (datagram.publish_params || {}).merge(@params)
+    p = @params
     ParamsRenderer.new({},p).real_data
   end
 

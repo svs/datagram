@@ -28,6 +28,7 @@ class Datagram < ActiveRecord::Base
 
   # calls DatagramPublisher.publish! passing on the given hash.
   def publish(params = {})
+    Rails.logger.info "#Publish #{params}"
     publisher(params).publish!
   end
 

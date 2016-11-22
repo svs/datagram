@@ -10,6 +10,9 @@ script type="text/ng-template" id="edit.html"
             a.btn.btn-success ng-click="update()" style="margin: 8px"
               i.fa.fa-save
               | Save
+            a.btn.btn-success ng-click="save(true)" style="margin: 8px"
+              i.fa.fa-save
+              | Save as Datagram
             a.btn.btn-warning ui-sref="show({id: watch.id})" style="margin: 8px"
               i.fa.fa-times
               | Cancel
