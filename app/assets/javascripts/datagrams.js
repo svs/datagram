@@ -95,11 +95,13 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
 
   $scope.selectParamSet = function(name) {
+    console.log('selecting paramSet', name);
     if (name) {
       $scope.selectedParamSet =  $scope.datagram.param_sets[name];
     } else {
       $scope.selectedParamSet =  $scope.datagram.param_sets["__default"];
     }
+    console.log($scope.selectedParamSet);
     getDatagram($scope.selectedParamSet.params);
   };
 
@@ -113,7 +115,10 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       params: p
     }).then(function(d) {
       $scope.datagram.responses = d.data.responses;
-      _.each($scope.datagram.views, function(v,k) { $scope.render(v)});
+      _.each($scope.datagram.views, function(v,k) {
+	console.log('rendering ', v);
+	$scope.render(v, true);
+      });
     });
   };
 
@@ -128,8 +133,9 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
     var subscribed = false;
 
-    $scope.refresh = function() {
-      console.log('PUT', $scope.datagram);
+    $scope.refresh = function(name) {
+      console.log(name);
+      $scope.selectedParamSet = $scope.datagram.param_sets[name];
       console.log(name);
       $http.put('/api/v1/datagrams/' + $scope.datagram.id + '/refresh', {param_set: $scope.selectedParamSet.name} ).then(function(r) {
 	console.log('subscribed ',r.data.token);
@@ -152,7 +158,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.renderedData = {};
 
-  $scope.r = function(view, param_set) {
+  var renderServer = function(view) {
     $scope.save();
     $http({
       url: $scope.datagram.public_url,
@@ -164,12 +170,22 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     });
   };
 
-  $scope.render = function(view) {
-    if ( view.type === 'chart-jp' || view.type === 'jmespath') {
+  $scope.render = function(view, button) {
+    if (view.transform == 'jq' && button) {
+      renderServer(view);
+    } else {
+      renderClient(view);
+    }
+  };
+
+  var renderClient = function(view) {
+    console.log(view);
+    if ( view.transform === 'jmespath') {
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
-    } else if (view.type === 'mustache') {
+    };
+    if (view.render === 'mustache') {
       $scope.renderedData[view.name] = Mustache.render(view.template, $scope.datagram);
-    } else if (view.type === 'liquid') {
+    } else if (view.render === 'liquid') {
       var tmpl = Liquid.parse(view.template);
       $scope.renderedData[view.name] = $sce.trustAsHtml(tmpl.render($scope.datagram));
     }
@@ -177,7 +193,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
 
   $scope.addParamSet = function() {
-    $scope.datagram.param_sets["__new"] = {name: "", params: _.clone($scope.datagram.publish_params), frequency: null, at: null};
+    $scope.datagram.param_sets["__new"] = {name: "new", params: _.clone($scope.datagram.publish_params), frequency: null, at: null};
   };
   // var refreshWatchResponses = function() {
   //   _.each($scope.datagram.watches, function(w,i) {
@@ -187,8 +203,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   // };
 
   if ($stateParams.id) {
-    Restangular.one('api/v1/datagrams',$stateParams.id).get().then(function(r) {
-      $scope.datagram = r;
+    $http.get('api/v1/datagrams/' + $stateParams.id).then(function(r) {
+      $scope.datagram = r.data;
       console.log(r);
       $scope.selectParamSet("__default");
     });

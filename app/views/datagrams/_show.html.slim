@@ -22,6 +22,7 @@ script type="text/ng-template" id="show.html"
             i.fa.fa-destroy
             | Archive
       .col-md-7
+        /div hljs-to-json="selectedParamSet"
         tabset
           a  ng-click="addParamSet()"
             | Add
@@ -38,12 +39,11 @@ script type="text/ng-template" id="show.html"
                   |{{k}}
                 td style="border: 0px; padding: 1px"
                   input type="text" ng-model="values.params[k]"
-            div hljs-to-json="selectedParamSet"
             a.btn.btn-large.btn-success ng-click="save()" style="margin: 3px"
               i.fa.fa-save style="margin-right: 5px"
               | Save
 
-            a.btn.btn-large.btn-warning ng-click="refresh()" style="margin: 3px"
+            a.btn.btn-large.btn-warning ng-click="refresh(values.name || '__default')" style="margin: 3px"
               i.fa.fa-refresh style="margin-right: 5px"
               | Refresh
 
@@ -58,18 +58,20 @@ script type="text/ng-template" id="show.html"
             tab heading="{{view.name}}" ng-repeat="view in datagram.views"
               .md-col-12 layout="row" width="100%"
                 input type="text" ng-model = "view.name" style="width: 200px"
-                select ng-model="view.type"
-                  option ng-repeat="o in ['table','jq','jmespath','liquid','mustache','chart-jp', 'chart-jq']"
+                select ng-model="view.transform" ng-change="render(view)"
+                  option ng-repeat="o in ['','jq','jmespath']"
                     | {{o}}
-                button ng-click="r(view)" Render
+                select ng-model="view.render" ng-change="render(view)"
+                  option ng-repeat="o in ['json','chart','mustache']"
+                    | {{o}}
+                button ng-click="render(view, true)" Render
               .row
                 .col-md-6
-                  div ui-ace="{mode: 'javascript', theme: 'eclipse'}" style="min-height: 400px; height: 100%" ng-model="view.template" ng-change="render(view)"
+                  div ui-ace="{mode: 'javascript', theme: 'eclipse'}" style="min-height: 400px; height: 100%" ng-model="view.template" ng-change="render(view, false)"
                 .col-md-6
-                  highchart id="chart1" config="renderedData[view.name]" ng-if="view.type=='chart-jp'"
-                  highchart id="chart1" config="renderedData[view.name]" ng-if="view.type=='chart-jq'"
-                  div hljs-to-json="renderedData[view.name]" ng-if="view.type=='jq' || view.type=='jmespath'"
-                  div#preview ng-if="view.type=='liquid' || view.type=='mustache'" ng-bind-html="renderedData[view.name]"
+                  highchart id="chart1" config="renderedData[view.name]" ng-if="view.render=='chart'"
+                  div hljs-to-json="renderedData[view.name]" ng-if="view.render=='json'"
+                  div#preview ng-if="view.render=='liquid' || view.render=='mustache'" ng-bind-html="renderedData[view.name]"
             tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
               tabset
                 tab heading="Data"

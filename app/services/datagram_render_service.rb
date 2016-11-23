@@ -7,7 +7,6 @@ class DatagramRenderService
   def initialize(datagram, params = {}, format = :json)
     @datagram = datagram
     @params = params.with_indifferent_access
-    ap params
   end
 
   def render(views = [])

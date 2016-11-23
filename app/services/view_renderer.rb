@@ -7,20 +7,21 @@ class ViewRenderer
     @filename = filename
   end
 
+
+
   def render
+    ap json
     renderer.render(view, json, params, filename)
   end
 
   private
   attr_reader :view, :json, :params, :filename
   def renderer
-    type = view == "chart" ? "chart" : view["type"]
-    Kernel.const_get("ViewRenderer::" + type.titleize.gsub(" ",""))
+    Kernel.const_get("ViewRenderer::" + view["transform"].titleize.gsub(" ",""))
   end
 
   class Jq
     def self.render(v, json, params, filename)
-      ap v["template"]
       json.jq(v["template"])[0]
     end
   end
