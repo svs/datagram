@@ -26,7 +26,7 @@ script type="text/ng-template" id="show.html"
         tabset
           a  ng-click="addParamSet()"
             | Add
-          tab ng-repeat="(name, values) in datagram.param_sets" heading="{{values.name || 'default'}}" ng-click="selectParamSet(values.name)"
+          tab ng-repeat="(name, values) in (datagram.param_sets)" heading="{{values.name || 'default'}}" ng-click="selectParamSet(values.name)"
             table.table
               tr style="border: 0px; padding: 1px" ng-if="name !== '__default'"
                 td style="border: 0px; padding: 1px"
@@ -104,7 +104,6 @@ script type="text/ng-template" id="show.html"
                 .col-md-6
                   div ui-ace="{mode: 'javascript', theme: 'eclipse'}" style="min-height: 400px; height: 100%" ng-model="view.template" ng-change="render(view, false)"
                 .col-md-6
-                  div ng-if="view.render=='chart' || view.render=='liquid' || view.render=='mustache'"
                   highchart id="chart1" config="renderedData[view.name]" ng-if="view.render=='chart'"
                   div hljs-to-json="renderedData[view.name]" ng-if="view.render=='json'"
                   div#preview ng-if="view.render=='liquid' || view.render=='mustache'" ng-bind-html="renderedData[view.name]"

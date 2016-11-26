@@ -14,39 +14,14 @@ script type="text/ng-template" id="index.html"
           | Add a
           = link_to 'data source', '/sources#/new'
     tabset
-      tab ng-repeat="(g, ds) in groupedDatagrams" heading="{{g}}"
-        table.table.table-striped
-          thead
-            tr
-              th Name
-              th Watches
-              th Params
-              th Refresh
-          tbody
-            tr ng-repeat="datagram in ds"
-              td
-                h4 style="font-weight: 300; padding: 0px; margin: 3px"
-                  a ui-sref="show({id: datagram.id})"
-                    | {{datagram.name}}
-                div style="color: #999"
-                  | {{datagram.token}}
-                  br
-                  | {{ (datagram.last_update_timestamp  * 1000) | fromNow }}
-                br
-                  | {{datagram.description}}
-              td
-                ul
-                  li ng-repeat="watch in datagram.watches"
-                    a href="/watches/\#{{watch.id}}" target="_blank"
-                      | {{ watch.name}}
-
-              td
-                pre style="font-size: 0.6em"
-                  | {{datagram.publish_params|json}}
-              td
-                span ng-if="datagram.frequency"
-                  | every
-                  |  {{ datagram.frequency | humanSeconds}}
-                  span ng-if="datagram.at"
-                    |  @
-                    |  {{ datagram.at }}
+      tab ng-repeat="(k,ds) in groupedDatagrams" heading="{{k}}"
+        .row
+          .col-md-3 ng-repeat="datagram in ds"
+            .portlet.portlet-boxed
+              .portlet-heading
+                a ui-sref="show({id: datagram.id})"
+                  h4.portlet-title
+                    u
+                      | {{ datagram.name }}
+              .portlet-body
+                img src="{{datagram.default_view_url}}" style="width: 100%"

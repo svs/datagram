@@ -42,7 +42,7 @@ class DatagramPublisher
 
   def params
     Rails.logger.info "#DatagramPublisher params #{@params}"
-    if !@params.is_a?(Hash)
+    if @params && !@params.is_a?(Hash)
       @params = datagram.param_sets.fetch(@params, datagram.param_sets["__default"])["params"]
     end
   end

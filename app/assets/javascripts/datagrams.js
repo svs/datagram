@@ -207,6 +207,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     };
     if (view.render === 'mustache') {
       $scope.renderedData[view.name] = Mustache.render(view.template, $scope.datagram);
+      console.log($scope.renderedData[view.name]);
     } else if (view.render === 'liquid') {
       var tmpl = Liquid.parse(view.template);
       $scope.renderedData[view.name] = $sce.trustAsHtml(tmpl.render($scope.datagram));
@@ -227,6 +228,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   if ($stateParams.id) {
     $http.get('api/v1/datagrams/' + $stateParams.id).then(function(r) {
       $scope.datagram = r.data;
+      $scope.datagram.param_sets = $scope.datagram.param_sets || {'__default': {}};
       $scope.selectParamSet("__default");
     });
     $http.get('/api/v1/stream_sinks').then(function(r) {
