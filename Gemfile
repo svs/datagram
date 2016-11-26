@@ -7,7 +7,7 @@ gem 'pg'
 # gems for consumers
 gem 'sequel'
 gem "mysql2"
-gem "sqlite3"
+#gem "sqlite3"
 #gem 'em-pg-sequel'
 #gem 'em-synchrony'
 gem 'sequel-redshift', git: 'https://github.com/svs/sequel-redshift.git'
