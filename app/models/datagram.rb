@@ -2,8 +2,12 @@ class Datagram < ActiveRecord::Base
   include Hmac
   belongs_to :user
   belongs_to :source
-
+  has_many :streamers
+  has_many :stream_sinks, through: :streamers
   before_save :make_token_and_slug
+  before_save :make_param_sets
+  accepts_nested_attributes_for :streamers
+
 
   include Rails.application.routes.url_helpers
 
@@ -14,7 +18,8 @@ class Datagram < ActiveRecord::Base
                        public_url: public_url,
                        watches: watches.map{|w| w.attributes.slice("name", "token","params","id","slug")},
                        timestamp: (Time.at(max_ts/1000) rescue Time.now),
-                       publish_params: publish_params
+                       publish_params: publish_params,
+                       stream_sinks: streamers
                      }).except("_id")
   end
 
@@ -104,6 +109,10 @@ class Datagram < ActiveRecord::Base
   def make_token_and_slug
     self.token ||= SecureRandom.urlsafe_base64
     self.slug ||= name.parameterize
+  end
+
+  def make_param_sets
+    self.param_sets ||= {"__default" => {"name" => nil, "params" => publish_params}}
   end
 
   def uid_for_params(params)

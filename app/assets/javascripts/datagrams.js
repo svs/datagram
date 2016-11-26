@@ -93,20 +93,44 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce) {
 
+  $scope.renderedData = {};
+  $scope.selected = {streamSink: {}, streamSinkId: null};
+
 
   $scope.selectParamSet = function(name) {
-    console.log('selecting paramSet', name);
     if (name) {
       $scope.selectedParamSet =  $scope.datagram.param_sets[name];
     } else {
       $scope.selectedParamSet =  $scope.datagram.param_sets["__default"];
     }
-    console.log($scope.selectedParamSet);
     getDatagram($scope.selectedParamSet.params);
   };
 
+
+  var loadDatagram = function() {
+    $http.get('api/v1/datagrams/' + $stateParams.id).then(function(r) {
+      $scope.datagram = r.data;
+    });
+  };
+
+  $scope.setStreamSink = function(view, paramSet) {
+    //console.log(view, paramSet);
+    //console.log($scope.datagram.stream_sinks, $scope.selected.streamSink);
+    var d = [{stream_sink_id: $scope.selected.streamSink.id, view_name: view.name, param_set: (paramSet.name || '__default'), format: "png"}];
+    $http({method: 'PATCH', url: '/api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: {streamers_attributes: d}}}).then(function(r) {
+      loadDatagram();
+    });
+  };
+
+  $scope.deleteStreamer = function(id) {
+    //console.log('deleteStreamer',id);
+    $http.delete('/api/v1/streamers/' + id).then(function (r) {
+      loadDatagram();
+    });
+  }
+
   var getDatagram = function(params) {
-    console.log('getDatagram', params);
+    //console.log('getDatagram', params);
     var p = _.zipObject(_.map(params, function(v,k) { return ["params[" + k + "]", v]}));
     $http({
       url: $scope.datagram.public_url,
@@ -116,16 +140,16 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     }).then(function(d) {
       $scope.datagram.responses = d.data.responses;
       _.each($scope.datagram.views, function(v,k) {
-	console.log('rendering ', v);
+	//console.log('rendering ', v);
 	$scope.render(v, true);
       });
     });
   };
 
   $scope.archive = function() {
-    console.log($scope.datagram);
+    //console.log($scope.datagram);
     $http({method: 'PATCH', url: 'api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: {archived: true}}}).then(function(r) {
-      console.log('saved datagram');
+      //console.log('saved datagram');
       $state.go('index');
     });
   };
@@ -134,13 +158,13 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     var subscribed = false;
 
     $scope.refresh = function(name) {
-      console.log(name);
+      //console.log(name);
       $scope.selectedParamSet = $scope.datagram.param_sets[name];
-      console.log(name);
+      //console.log(name);
       $http.put('/api/v1/datagrams/' + $scope.datagram.id + '/refresh', {param_set: $scope.selectedParamSet.name} ).then(function(r) {
-	console.log('subscribed ',r.data.token);
+	//console.log('subscribed ',r.data.token);
 	Pusher.subscribe(r.data.token,'data', function(item) {
-	  console.log('Pusher received', item);
+	  //console.log('Pusher received', item);
 	  getDatagram({param_set: $scope.selectedParamSet.name});
 	});
       });
@@ -153,10 +177,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     };
     $scope.viewsChanged = true;
     $scope.datagram.views.push({name: 'New View', type: null, template: null});
-    console.log($scope.datagram.views);
+    //console.log($scope.datagram.views);
   };
-
-  $scope.renderedData = {};
 
   var renderServer = function(view) {
     $scope.save();
@@ -179,7 +201,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   var renderClient = function(view) {
-    console.log(view);
+    //console.log(view);
     if ( view.transform === 'jmespath') {
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
     };
@@ -197,7 +219,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
   // var refreshWatchResponses = function() {
   //   _.each($scope.datagram.watches, function(w,i) {
-  //     console.log('subscribing to ', w.token);
+  //     //console.log('subscribing to ', w.token);
 
   //   });
   // };
@@ -205,20 +227,23 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   if ($stateParams.id) {
     $http.get('api/v1/datagrams/' + $stateParams.id).then(function(r) {
       $scope.datagram = r.data;
-      console.log(r);
       $scope.selectParamSet("__default");
     });
+    $http.get('/api/v1/stream_sinks').then(function(r) {
+      $scope.streamSinks = _.map(r.data, function(a) { return _.merge(a, {id: a.id + ''});});;
+    });
+
   };
 
   $scope.save = function(callback) {
-    console.log($scope.datagram);
+    //console.log($scope.datagram);
     var newSet = $scope.datagram.param_sets["__new"];
     if (newSet) {
-      console.log(newSet);
+      //console.log(newSet);
       $scope.datagram.param_sets[newSet.name] = _.clone(newSet);
       delete $scope.datagram.param_sets["__new"];
     }
-    var d = {views: $scope.datagram.views, param_sets: $scope.datagram.param_sets};
+    var d = {views: $scope.datagram.views, param_sets: $scope.datagram.param_sets,};
     $http({method: 'PATCH', url: '/api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: d}}).then(callback || function(r) {
     });
   };
@@ -231,7 +256,7 @@ angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','$http','
   var loaded = false;
     $scope.getDatagram = function(id) {
       $http.get('api/v1/datagrams/' + id).then(function(r) {
-	console.log(r);
+	//console.log(r);
 	$scope.datagram = r.data;
     });
   };
@@ -249,14 +274,14 @@ angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','$http','
   });
 
   $scope.$watch('datagram.watch_ids.length', function(n,o) {
-    console.log(o,n);
-    console.log(loaded);
+    //console.log(o,n);
+    //console.log(loaded);
     if (loaded) {
       var selected_watches = _.filter($scope.watches, function(w) {
 	return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params));
       });
       var selected_params = _.map(selected_watches,function(w) { return w.params});
-      console.log('selected_watches', selected_watches);
+      //console.log('selected_watches', selected_watches);
       $scope.datagram.publish_params = _.reduce(selected_params, function(r,o) { return _.merge(r,o)}, {});
 
     } else {
@@ -267,9 +292,9 @@ angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','$http','
   });
 
   $scope.save = function() {
-    console.log($scope.datagram);
+    //console.log($scope.datagram);
     $http({method: 'PATCH', url: 'api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: $scope.datagram}}).then(function(r) {
-      console.log('saved datagram');
+      //console.log('saved datagram');
       $state.go('show',{id: $scope.datagram.id});
     });
   };

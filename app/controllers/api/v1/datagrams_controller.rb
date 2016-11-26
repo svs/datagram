@@ -102,7 +102,7 @@ module Api
       private
 
       def create_params
-        params.require(:datagram).permit(:at, :frequency, :name, :use_routing_key, :archived, :description).tap{|wl|
+        params.require(:datagram).permit(:at, :frequency, :name, :use_routing_key, :archived, :description, streamers_attributes: [:stream_sink_id, :view_name, :param_set, :format]).tap{|wl|
           wl[:watch_ids] = params[:datagram][:watch_ids] if params[:datagram][:watch_ids]
           wl[:user_id] = current_user.id
           wl[:publish_params] = params[:datagram][:publish_params] if params[:datagram][:publish_params]

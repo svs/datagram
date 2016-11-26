@@ -1,29 +1,35 @@
 class Streamer < ActiveRecord::Base
 
   belongs_to :datagram
+  belongs_to :stream_sink
+
 
   def render
-    streamer.new(self).stream!
+    streamer.stream!
   end
 
   def streamer
-    Kernel.const_get("Streamer::" + stream_sink.titleize + "Streamer")
+    streamer_class.new(self)
+  end
+
+  def streamer_class
+    Kernel.const_get("Streamer::" + stream_sink.stream_type.titleize + "Streamer")
   end
 
 
   class BaseStreamer
     def initialize(streamer)
       @streamer = streamer
-      @stream_data = streamer.stream_data.with_indifferent_access
+      @stream_sink = streamer.stream_sink
       @datagram = streamer.datagram
-      @views = streamer.stream_data["views"]
+      @view = streamer.view_name
     end
 
 
     private
-    attr_reader :datagram, :views
+    attr_reader :datagram, :view, :stream_sink, :streamer
     def message
-      @message ||= DatagramService.new(datagram, stream_data.params.merge(datagram.params_sets[ps])).render(views)
+      @message ||= DatagramService.new(datagram, {params: datagram.param_sets[streamer.param_set]["params"], format: streamer.format}).render([view])
     end
 
     def chartify_url(url)
@@ -31,11 +37,11 @@ class Streamer < ActiveRecord::Base
     end
 
     def stream_data
-      OpenStruct.new(@stream_data)
+      OpenStruct.new(streamer.stream_sink.data)
     end
 
     def format
-      stream_data.params["format"]
+      "png"
     end
 
   end
