@@ -15,6 +15,9 @@ class DatagramFetcherService
 
   def render(views = [])
     DatagramRenderService.new(self).render(Array(views)).tap{|r|
+      ap "###############"
+      ap r
+      ap is_default?
       if r[:url] && is_default?
         datagram.update(default_view_url: r[:url])
       end
@@ -92,7 +95,9 @@ class DatagramFetcherService
 
 
   def is_default?
-    params.query_params == datagram.param_sets["__default"]["params"]
+    ap params.query_params
+    ap datagram.param_sets["__default"]["params"]
+    params.query_params.stringify_keys == datagram.param_sets["__default"]["params"].stringify_keys
   end
 
   def q_params

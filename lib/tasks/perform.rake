@@ -3,12 +3,10 @@ task perform: :environment do
     begin
       t = Time.now.to_i
       payload = JSON.parse(payload)
-      ap payload
       context = {datagram: payload["datagram_id"], watch: payload["token"], timestamp: payload["timestamp"]}
       DgLog.new("#Perform processing watch #{payload["key"]}", context).log
       url = payload["url"]
       if url =~ /docs.google.com\/spreadsheets/
-        ap "Sheet!"
         c = Clients::GoogleDrive.new(url, payload)
         r = c.data
       elsif url =~ /\Ahttp/
