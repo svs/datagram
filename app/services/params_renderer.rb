@@ -6,8 +6,8 @@ class ParamsRenderer
   # {a: "foo", c: "2016-03-27"}
 
   def initialize(params, data)
-    @data = data
-    @params = params
+    @data = data || {}
+    @params = params || {}
   end
 
   def render

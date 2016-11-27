@@ -13,9 +13,9 @@ module Clockwork
   sync_database_events model: DatagramFinder, every: 1.minute do |d|
     ap d
     datagram = Datagram.find(d.id)
-    Rails.logger.info "Clock publishing #{datagram.name}"
+    Rails.logger.info "#Clock publishing #{datagram.name}"
     begin
-      datagram.publish
+      datagram.publish(d.params)
     rescue Exception => e
       Rails.logger.error e.message
       nil

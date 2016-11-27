@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe DatagramService do
+describe DatagramFetcherService do
 
   let!(:watch) {
     FactoryGirl.create(:watch, url: "sqlite://./spec/fixtures/chinook.db",

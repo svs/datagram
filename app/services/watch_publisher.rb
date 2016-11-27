@@ -19,6 +19,7 @@ class WatchPublisher
   end
 
   def publish!()
+    ap "#WatchPublisher publish!"
     if make_new_response!
       exchange.publish(payload.to_json, routing_key: routing_key)
       if datagram

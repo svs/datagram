@@ -23,13 +23,6 @@ class Datagram < ActiveRecord::Base
                      }).except("_id")
   end
 
-  # JSON representation of the latest requested responses.
-  # params: arbitrary hash passed on to callees
-  # as_of: a datetime. we show the last response before the requested time.
-  # staleness: no of seconds staleness we can accept
-  def response_json(params: {}, as_of: nil, staleness: nil, max_size: Float::INFINITY)
-    {responses: Hash[response_data(params, as_of, staleness, max_size).map{|r| [r[:slug].gsub("-","_"), r]}]}
-  end
 
   # calls DatagramPublisher.publish! passing on the given hash.
   def publish(params = {})
@@ -55,6 +48,7 @@ class Datagram < ActiveRecord::Base
   end
 
   def refresh_channel(params)
+    ap params
     params = {token: self.token}.merge(params || {}).deep_sort
     Base64.urlsafe_encode64(hmac("secret", params.to_json)).strip
   end
@@ -75,7 +69,7 @@ class Datagram < ActiveRecord::Base
   private
 
   def publisher(params = nil)
-    @publisher ||= DatagramPublisher.new(datagram: self, params: params)
+    DatagramPublisher.new(datagram: self, params: params)
   end
 
 
@@ -83,13 +77,6 @@ class Datagram < ActiveRecord::Base
     last_update_timestamp
   end
 
-  # the last available responses for this datagram for all included watches
-  # edge cases abound!
-  # what happens if one of the watches crashed?
-  # TODO - if one of the watches is deleted, then its response still shows up according to this query
-  def response_data(params = {},as_of = nil, staleness = nil, max_size = Float::INFINITY)
-    DatagramResponseFinder.new(datagram:self, params:params, staleness:staleness, max_size:max_size).response
-  end
 
   def all_responses(search_params, as_of)
     # filters responses for watch params

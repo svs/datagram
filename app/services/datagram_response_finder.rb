@@ -1,9 +1,10 @@
 class DatagramResponseFinder
 
-  def initialize(datagram:, params:{}, staleness:nil, max_size: Float::INFINITY)
+  def initialize(datagram, params = DatagramFetcherService::Params.new, max_size = Float::INFINITY)
+    raise ArgumentError unless params.is_a?(DatagramFetcherService::Params)
     @datagram = datagram
-    @params = params || {}
-    @staleness = staleness
+    @q_params = params.q_params
+    @staleness = params.staleness
     @max_size = max_size
   end
 
@@ -14,26 +15,18 @@ class DatagramResponseFinder
     if staleness
       rs = rs.where('extract(epoch from (? - response_received_at)) < ?', Time.zone.now, staleness)
     end
-    @response_data ||= rs.map{|r|
-      {
-        slug: r.watch.slug,
-        name: r.watch.name,
-        data: (r.bytesize.to_i < max_size ? r.response_json : {max_size: "Data size too big. Please use the Public URL to view data"}),
-        errors: r.error,
-        metadata: r.metadata,
-        params: r.params
-        }
-    }
+    ap rs.to_sql
+    rs
+
   end
 
 
   private
 
-  attr_reader :datagram, :as_of, :staleness, :max_size
+  attr_reader :datagram, :staleness, :max_size
 
   def params
-    p = @params
-    ParamsRenderer.new({},p).real_data
+    ParamsRenderer.new({},@params).real_data
   end
 
   def all_responses(search_params)

@@ -55,8 +55,8 @@ module Api
         end
         if datagram
           Mykeen.publish("datagram_view", {slug: datagram.slug, token: params[:token], api_key: params[:api_key]})
-          rc = datagram.refresh_channel(params[:params])
-          ds = DatagramService.new(datagram, params)
+          rc = datagram.refresh_channel(params[:q_params])
+          ds = DatagramService.new(datagram, q_params, format)
           response = ds.render(params[:views])
           respond_to do |format|
             format.json { render json: response }

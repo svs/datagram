@@ -18,10 +18,11 @@ script type="text/ng-template" id="index.html"
         .row
           .col-md-3 ng-repeat="datagram in ds"
             .portlet.portlet-boxed
-              .portlet-heading
+              .portlet-heading style="margin: 0px; border-bottom: 0px"
                 a ui-sref="show({id: datagram.id})"
-                  h4.portlet-title
-                    u
+                  h4.portlet-title style="margin: 3px"
+                    u style="padding-bottom: 4px"
                       | {{ datagram.name }}
+                |{{datagram.updated_at | fromNow}}
               .portlet-body
                 img src="{{datagram.default_view_url}}" style="width: 100%"
