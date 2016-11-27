@@ -29,7 +29,9 @@ class Streamer < ActiveRecord::Base
     private
     attr_reader :datagram, :view, :stream_sink, :streamer
     def message
-      @message ||= DatagramService.new(datagram, {params: datagram.param_sets[streamer.param_set]["params"], format: streamer.format}).render([view])
+      ps = {params: datagram.param_sets[streamer.param_set]["params"], format: streamer.format}
+      ap "#Streamer #{ps}"
+      @message ||= DatagramFetcherService.new(datagram, ps).render([view])
     end
 
     def chartify_url(url)

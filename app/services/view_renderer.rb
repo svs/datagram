@@ -41,6 +41,7 @@ class ViewRenderer
 
   class RenderChart
     def self.render(json,params,filename)
+      ap "#RenderChart #{params}"
       ap "format #{params.format}"
       if params.format == "png"
         j = JSON.dump(json)

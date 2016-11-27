@@ -33,7 +33,7 @@ class DatagramFetcherService
         elsif p.is_a?(Hash)
           p
         end
-    DatagramFetcherService::Params.new({params: r})
+    DatagramFetcherService::Params.new(@params.merge({params: r}))
   end
 
   def response_json
@@ -112,6 +112,8 @@ class DatagramFetcherService
     end
 
     def format
+      ap "#Params format"
+      ap params
       params[:format] || :json
     end
 
