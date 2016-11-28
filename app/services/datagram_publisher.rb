@@ -11,8 +11,6 @@ class DatagramPublisher
     @timestamp = (Time.now.to_f).round
     @user = datagram.user
     @params = params
-    ap "#DatagramPublisher"
-    ap params
   end
 
 
