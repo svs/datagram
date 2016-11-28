@@ -11,7 +11,7 @@ module Clockwork
   Clockwork.manager = DatabaseEvents::Manager.new
 
   sync_database_events model: DatagramFinder, every: 1.minute do |d|
-    datagram = Datagram.find(d.id)
+    datagram = Datagram.find(d.id.split("-")[0].to_i)
     Rails.logger.info "#Clock publishing #{datagram.name}"
     begin
       datagram.publish(d.params)

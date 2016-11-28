@@ -117,8 +117,6 @@ class DatagramFetcherService
     end
 
     def format
-      ap "#Params format"
-      ap params
       params[:format] || :json
     end
 
