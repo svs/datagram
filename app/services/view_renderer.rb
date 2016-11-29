@@ -10,7 +10,7 @@ class ViewRenderer
 
 
   def render
-    renderer.render(*transformer.transform(view, json), params, filename)
+    renderer.render(transformer.transform(view, json), params, filename)
   end
 
   def transform
