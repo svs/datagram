@@ -10,7 +10,7 @@ class ViewRenderer
 
 
   def render
-    renderer.render(transformer.transform(view, json), params, filename)
+    renderer.render(*transformer.transform(view, json), params, filename)
   end
 
   def transform
@@ -24,7 +24,17 @@ class ViewRenderer
   end
 
   def transformer
-    Kernel.const_get("ViewRenderer::Transform" + view["transform"].titleize.gsub(" ",""))
+    if view["transform"].blank?
+      ViewRenderer::NullTransformer
+    else
+      Kernel.const_get("ViewRenderer::Transform" + view["transform"].titleize.gsub(" ",""))
+    end
+  end
+
+  class NullTransformer
+    def self.transform(v, json)
+      [v,json]
+    end
   end
 
   class TransformJq
@@ -60,6 +70,21 @@ class ViewRenderer
     end
   end
 
+  class RenderMustache
+    def self.render(v, json, params, filename)
+      ap json
+      html = Mustache.render(v["template"],json.merge("_params" => params)).html_safe
+      if params.format != "png"
+        return html
+      elsif params.format == "png"
+        x = SecureRandom.urlsafe_base64(5)
+        File.open("/tmp/#{x}.html","w") {|f| f.write(html) }
+        `wkhtmltoimage /tmp/#{x}.html /tmp/#{x}.png`
+        AWS::S3::S3Object.store(filename,open("/tmp/#{x}.png"),'dg-tmp')
+        return {url: "https://s3.amazonaws.com/dg-tmp/#{filename}"}
+      end
+    end
+  end
 
 
   class RenderLiquid
