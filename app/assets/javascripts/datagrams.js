@@ -94,7 +94,7 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce) {
 
   $scope.renderedData = {};
-  $scope.selected = {streamSink: {}, streamSinkId: null};
+  $scope.selected = {streamSink: {}, streamSinkId: null, frequency: null};
 
 
   $scope.selectParamSet = function(name) {
@@ -116,7 +116,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   $scope.setStreamSink = function(view, paramSet) {
     //console.log(view, paramSet);
     //console.log($scope.datagram.stream_sinks, $scope.selected.streamSink);
-    var d = [{stream_sink_id: $scope.selected.streamSink.id, view_name: view.name, param_set: (paramSet.name || '__default'), format: "png"}];
+    var d = [{stream_sink_id: $scope.selected.streamSink.id, view_name: view.name, param_set: (paramSet.name || '__default'), format: "png", frequency: $scope.selected.frequency}];
     $http({method: 'PATCH', url: '/api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: {streamers_attributes: d}}}).then(function(r) {
       loadDatagram();
     });

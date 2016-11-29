@@ -11,10 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161125153934) do
+ActiveRecord::Schema.define(version: 20161129024534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "datagram_responses", force: :cascade do |t|
+    t.integer  "datagram_id"
+    t.integer  "timestamp"
+    t.string   "token"
+    t.integer  "status_code"
+    t.boolean  "complete"
+    t.boolean  "automatic"
+    t.jsonb    "params"
+    t.string   "param_set_name"
+    t.string   "view_name"
+    t.string   "thumbnail_url"
+    t.integer  "watch_response_ids",              array: true
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
 
   create_table "datagrams", force: :cascade do |t|
     t.string   "name",                  limit: 255
@@ -69,6 +85,9 @@ ActiveRecord::Schema.define(version: 20161125153934) do
     t.string   "param_set"
     t.string   "view_name"
     t.string   "format"
+    t.integer  "frequency"
+    t.string   "at"
+    t.string   "name"
   end
 
   create_table "users", force: :cascade do |t|

@@ -30,6 +30,9 @@ class WatchResponseHandler
             DgLog.new("#WatchResponseHandler complete - deleting all watch responses for datagram #{datagram.id} before #{params[:timestamp]}", binding).log
             WatchResponse.where(datagram_id: datagram.id, timestamp: params[:timestamp]).update_all(complete:true)
             WatchResponse.where('datagram_id = ? AND  timestamp < ? AND params @> ?', datagram.id, params[:timestamp], wr.params.to_json).destroy_all
+            streamer_id = $redis.hget(redis_tracking_key, "streamer_id")
+            ap "#StreamerId #{streamer_id} !!!!!!!!!!!!!!!"
+            Streamer.find(streamer_id).render
             $redis.del(redis_tracking_key)
           end
         end

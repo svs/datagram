@@ -39,12 +39,6 @@ script type="text/ng-template" id="show.html"
                   |{{k}}
                 td style="border: 0px; padding: 1px"
                   input type="text" ng-model="values.params[k]"
-            div
-              | Refresh every &nbsp;
-              input type="text" ng-model="values.frequency" style="width:4em"
-              | seconds or at &nbsp;
-              input type="text" ng-model="values.at" style="width:10em"
-
             a.btn.btn-large.btn-success ng-click="save()" style="margin: 3px"
               i.fa.fa-save style="margin-right: 5px"
               | Save
@@ -98,7 +92,10 @@ script type="text/ng-template" id="show.html"
                   div
                     | Stream updates to
                     select  ng-model="selected.streamSink" ng-options="sink as sink.name for sink in streamSinks"
-                    button ng-click="setStreamSink(view, selectedParamSet)"
+                    | every &nbsp;
+                    input ng-model="selected.frequency"
+                    | &nbsp; seconds
+                    button ng-click="setStreamSink(view, selectedParamSet, selected.frequency)"
                       | Start Streaming
               .row
                 .col-md-6

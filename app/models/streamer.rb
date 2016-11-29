@@ -3,6 +3,11 @@ class Streamer < ActiveRecord::Base
   belongs_to :datagram
   belongs_to :stream_sink
 
+  before_save :set_name
+
+  def publish!
+    datagram.publish(self.param_set, self)
+  end
 
   def render
     streamer.stream!
@@ -16,6 +21,9 @@ class Streamer < ActiveRecord::Base
     Kernel.const_get("Streamer::" + stream_sink.stream_type.titleize + "Streamer")
   end
 
+  def set_name
+    self.name = "#{datagram.name} #{param_set} #{view_name}"
+  end
 
   class BaseStreamer
     def initialize(streamer)

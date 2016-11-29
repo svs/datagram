@@ -4,19 +4,23 @@ class DatagramPublisher
   # Datagram#publish_params are merged with @params and sent to each WatchPublisher.
   # Name conflicts in Watch params are not yet handled
 
-  def initialize(datagram:, exchange: $x, queue: $datagrams, params: {})
+  def initialize(datagram:, exchange: $x, queue: $datagrams, params: {}, streamer: nil)
     @datagram = datagram
     @exchange = exchange
     @queue = queue
     @timestamp = (Time.now.to_f).round
     @user = datagram.user
     @params = params
+    @streamer = streamer
   end
 
 
   # Returns the channel on which updates to this datagram-param combination will be published
   def publish!
     #return false if @published
+    if streamer
+      $redis.hset(redis_tracking_key, "streamer_id", streamer.id)
+    end
     watches.map{|w| WatchPublisher.new(watch: w, params: params,
                                        exchange: exchange,
                                        queue: queue,
@@ -33,7 +37,7 @@ class DatagramPublisher
 
   private
 
-  attr_reader :datagram, :exchange, :queue, :timestamp, :user, :refresh_channel
+  attr_reader :datagram, :exchange, :queue, :timestamp, :user, :refresh_channel, :streamer
 
   def refresh_channel
     datagram.refresh_channel(params)
@@ -59,6 +63,10 @@ class DatagramPublisher
     else
       nil
     end
+  end
+
+    def redis_tracking_key
+    "#{datagram.token}:#{timestamp.to_i}" rescue nil
   end
 
 

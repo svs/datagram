@@ -25,9 +25,9 @@ class Datagram < ActiveRecord::Base
 
 
   # calls DatagramPublisher.publish! passing on the given hash.
-  def publish(params = {})
+  def publish(params = {}, streamer = nil)
     Rails.logger.info "#Publish #{params}"
-    publisher(params).publish!
+    publisher(params, streamer).publish!
   end
 
   def payload
@@ -48,7 +48,6 @@ class Datagram < ActiveRecord::Base
   end
 
   def refresh_channel(params)
-    ap params
     params = {token: self.token}.merge(params || {}).deep_sort
     Base64.urlsafe_encode64(hmac("secret", params.to_json)).strip
   end
@@ -68,8 +67,8 @@ class Datagram < ActiveRecord::Base
 
   private
 
-  def publisher(params = nil)
-    DatagramPublisher.new(datagram: self, params: params)
+  def publisher(params = nil, streamer = nil)
+    DatagramPublisher.new(datagram: self, params: params, streamer: streamer)
   end
 
 
