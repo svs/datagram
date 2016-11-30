@@ -32,7 +32,7 @@ class WatchResponseHandler
             WatchResponse.where('datagram_id = ? AND  timestamp < ? AND params @> ?', datagram.id, params[:timestamp], wr.params.to_json).destroy_all
             streamer_id = $redis.hget(redis_tracking_key, "streamer_id")
             ap "#StreamerId #{streamer_id} !!!!!!!!!!!!!!!"
-            Streamer.find(streamer_id).render
+            Streamer.find(streamer_id).render if streamer_id
             $redis.del(redis_tracking_key)
           end
         end
