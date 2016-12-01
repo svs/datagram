@@ -27,7 +27,6 @@ module Api
       def update
         datagram = (policy_scope(Datagram).find(params[:id]) rescue nil)
         if datagram
-          ap update_params
           if datagram.update(update_params)
             render json: datagram
           else
@@ -55,7 +54,6 @@ module Api
         end
         if datagram
           Mykeen.publish("datagram_view", {slug: datagram.slug, token: params[:token], api_key: params[:api_key]})
-          ap params
           ds = DatagramFetcherService.new(datagram, params)
           response = ds.render(params[:views])
           respond_to do |format|

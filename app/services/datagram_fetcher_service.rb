@@ -15,9 +15,6 @@ class DatagramFetcherService
 
   def render(views = [])
     DatagramRenderService.new(self).render(Array(views)).tap{|r|
-      ap "###############"
-      ap r
-      ap is_default?
       if r[:url] && is_default?
         datagram.update(default_view_url: r[:url])
       end
@@ -95,8 +92,6 @@ class DatagramFetcherService
 
 
   def is_default?
-    ap params.query_params
-    ap datagram.param_sets["__default"]["params"]
     params.query_params.stringify_keys == (datagram.param_sets["__default"]["params"] || {}).stringify_keys
   end
 
@@ -130,6 +125,10 @@ class DatagramFetcherService
 
     def staleness
       Integer(params[:refresh]) rescue nil
+    end
+
+    def inspect
+      {q_params: q_params, search_params: search_params}
     end
 
     alias :q_params :query_params

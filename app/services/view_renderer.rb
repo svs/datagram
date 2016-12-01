@@ -51,8 +51,6 @@ class ViewRenderer
 
   class RenderChart
     def self.render(json,params,filename)
-      ap "#RenderChart #{params}"
-      ap "format #{params.format}"
       if params.format == "png"
         j = JSON.dump(json)
         i = ::RestClient.post('http://export.highcharts.com/',"content=options&options=#{j}&type=image/png")
@@ -72,7 +70,6 @@ class ViewRenderer
 
   class RenderMustache
     def self.render(v, json, params, filename)
-      ap json
       html = Mustache.render(v["template"],json.merge("_params" => params)).html_safe
       if params.format != "png"
         return html
