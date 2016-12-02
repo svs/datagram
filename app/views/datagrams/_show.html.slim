@@ -14,13 +14,22 @@ script type="text/ng-template" id="show.html"
           | Uses Routing Key
 
 
-        h3
+        div
           a.btn.btn-success ui-sref="edit({id: datagram.id})" style="margin: 8px"
             i.fa.fa-edit
             | Edit
           a.btn.btn-danger ng-click="archive()" style="margin: 8px"
             i.fa.fa-destroy
             | Archive
+        .portlet.portlet-boxed
+          h4.portlet-title style="margin: 0px"
+            u style="padding: 3px"
+              | Watches
+          .portlet-body
+            a ng-repeat="w in datagram.watches" href="/watches#/{{w.id}}" target="_blank"
+              | {{w.name}} &nbsp; &bull;
+
+
       .col-md-4
         h4 Params
         tabset
