@@ -14,7 +14,8 @@ class WatchPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      Watch.where(user_id: [user.id, user.linked_account_id])
+      Watch.all
+      #Watch.where(user_id: [user.id, user.linked_account_id])
     end
   end
 

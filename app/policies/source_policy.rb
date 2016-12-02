@@ -14,7 +14,7 @@ class SourcePolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      Source.where(user_id: user.id)
+      Source.all  #where(user_id: user.id)
     end
   end
 
