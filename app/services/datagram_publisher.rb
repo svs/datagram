@@ -20,8 +20,9 @@ class DatagramPublisher
     keen_data = {slug: datagram.slug, params: params, streamer: (streamer.name rescue nil)}
     if streamer
       $redis.hset(redis_tracking_key, "streamer_id", streamer.id)
+    else
+      MyKeen.publish('datagram_publish', keen_data)
     end
-    Mykeen.publish('datagram_publish', keen_data)
 
     watches.map{|w| WatchPublisher.new(watch: w, params: params,
                                        exchange: exchange,
