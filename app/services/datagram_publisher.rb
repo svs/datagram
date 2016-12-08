@@ -17,13 +17,10 @@ class DatagramPublisher
 
   # Returns the channel on which updates to this datagram-param combination will be published
   def publish!
-    keen_data = {slug: datagram.slug, params: params, streamer: (streamer.name rescue nil)}
+    #return false if @published
     if streamer
       $redis.hset(redis_tracking_key, "streamer_id", streamer.id)
-    else
-      MyKeen.publish('datagram_publish', keen_data)
     end
-
     watches.map{|w| WatchPublisher.new(watch: w, params: params,
                                        exchange: exchange,
                                        queue: queue,
