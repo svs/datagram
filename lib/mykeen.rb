@@ -1,7 +1,11 @@
 module Mykeen
   def self.publish(name, args)
     if Rails.env.production?
-      Keen.publish(name, args) rescue nil
+      begin
+        Keen.publish(name, args)
+      rescue Exception => e
+        Rails.logger.error e.message
+      end
     end
   end
 end

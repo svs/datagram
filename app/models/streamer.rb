@@ -22,7 +22,7 @@ class Streamer < ActiveRecord::Base
   end
 
   def streamer_class
-    Kernel.const_get("Streamer::" + stream_sink.stream_type.titleize + "Streamer")
+    Kernel.const_get("Streamer::" + stream_sink.stream_type.titleize + "Streamer") rescue Streamer::NullStreamer
   end
 
   def set_name
@@ -94,6 +94,11 @@ class Streamer < ActiveRecord::Base
         end
       end
     end
-
   end
+
+  class NullStreamer < BaseStreamer
+    def stream!
+    end
+  end
+
 end
