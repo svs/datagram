@@ -30,8 +30,6 @@ class Datagram < ActiveRecord::Base
     publisher(params, streamer).publish!
   end
 
-  alias :publish! :publish
-
   def payload
     publisher.payload
   end

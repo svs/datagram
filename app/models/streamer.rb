@@ -9,10 +9,6 @@ class Streamer < ActiveRecord::Base
     datagram.publish(self.param_set, self)
   end
 
-  def archived?
-    datagram.archived?
-  end
-
   def render
     streamer.stream!
   end

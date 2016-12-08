@@ -10,11 +10,11 @@ module Clockwork
   # required to enable database syncing support
   Clockwork.manager = DatabaseEvents::Manager.new
 
-  sync_database_events model: DatagramFinder, every: 1.minute do |df|
+  sync_database_events model: DatagramFinder, every: 1.minute do |streamer|
     begin
-      if !df.archived?
-        Rails.logger.info "#Clock publishing #{df.class} #{df.name}"
-        df.publish!
+      if !streamer.datagram.archived?
+        Rails.logger.info "#Clock publishing #{streamer.name}"
+        streamer.publish!
       end
     rescue Exception => e
       Rails.logger.error e.message
