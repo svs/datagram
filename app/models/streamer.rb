@@ -5,9 +5,6 @@ class Streamer < ActiveRecord::Base
 
   before_save :set_name
 
-  def as_json(include_root = false)
-    attributes.slice("response_json","last_run_at")
-  end
 
   def publish!
     datagram.publish(self.param_set, self)
