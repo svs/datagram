@@ -131,13 +131,12 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   var getDatagram = function(params) {
     //console.log('getDatagram', params);
-    var p = _.zipObject(_.map(params, function(v,k) { return ["params[" + k + "]", v]}));
-    $http({
+    var p = params.param_set ? params : {params: _.zipObject(_.map(params, function(v,k) { return ["params[" + k + "]", v]}))};
+    $http(_.merge({
       url: $scope.datagram.public_url,
       paramSerializer: '$httpParamSerializerJQLike',
-      method: 'GET',
-      params: p
-    }).then(function(d) {
+      method: 'GET'},p)
+    ).then(function(d) {
       $scope.datagram.responses = d.data.responses;
       _.each($scope.datagram.views, function(v,k) {
 	//console.log('rendering ', v);

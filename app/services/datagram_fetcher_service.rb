@@ -9,7 +9,7 @@ class DatagramFetcherService
   # params -> params as found in the controller
   def initialize(datagram, params = nil)
     @datagram = datagram
-    @params = params || {}
+    @params = (params || {}).with_indifferent_access
     @max_size = Float::INFINITY
   end
 

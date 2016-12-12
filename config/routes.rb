@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :watches
   resources :datagrams
   resources :sources
+  resources :streams
   namespace 'api' do
     namespace 'v1' do
       resources :watch_responses, constraints: {id: /[^\/]+/}

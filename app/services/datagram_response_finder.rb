@@ -26,7 +26,8 @@ class DatagramResponseFinder
   attr_reader :datagram, :staleness, :max_size
 
   def params
-    ParamsRenderer.new({},@q_params).real_data
+    ap @q_params
+    ParamsRenderer.new({},@q_params).real_data.tap{|p| ap p}
   end
 
   def all_responses(search_params)
