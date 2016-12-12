@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       resources :sources
       resources :stream_sinks
       resources :streamers
+      resources :streams
       get 'd/:token', to: 'datagrams#t', as: 'd'
       get 't/:slug', to: 'datagrams#t', as: 't', defaults: { format: "json"}
       get 'w/:token', to: 'watches#t', as: 'w', defaults: { format: "json"}

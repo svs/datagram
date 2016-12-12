@@ -28,11 +28,12 @@ streamsApp.config(function($stateProvider,$urlRouterProvider) {
 	 );
 });
 
-angular.module('streamsApp').controller('streamsCtrl',['$scope','Restangular','$stateParams','$timeout', function($scope, Restangular,$stateParams, $timeout) {
+angular.module('streamsApp').controller('streamsCtrl',['$scope','$http','$stateParams','$timeout', function($scope, $http,$stateParams, $timeout) {
   var load = function() {
     $('#loading').show();
-    Restangular.all('api/v1/streams').getList().then(function(r) {
-      $scope.streams = _.sortBy(r, function(s) { return s.name});
+    $http.get('api/v1/streams').then(function(r) {
+      $scope.streams = _.sortBy(r.data, function(s) { return s.name});
+      console.log($scope.streams);
       $('#loading').hide();
       $timeout(load, 60000);
 

@@ -15,10 +15,11 @@ class Streamer < ActiveRecord::Base
 
   def render
     streamer.stream!
+    update(response_json: streamer.message, last_run_at: DateTime.now)
   end
 
   def streamer
-    streamer_class.new(self)
+    @streamer ||= streamer_class.new(self)
   end
 
   def streamer_class
@@ -37,14 +38,15 @@ class Streamer < ActiveRecord::Base
       @view = streamer.view_name
     end
 
-
-    private
-    attr_reader :datagram, :view, :stream_sink, :streamer
     def message
       ps = {params: datagram.param_sets[streamer.param_set]["params"], format: streamer.format}
       ap "#Streamer #{ps}"
       @message ||= DatagramFetcherService.new(datagram, ps).render([view])
     end
+
+
+    private
+    attr_reader :datagram, :view, :stream_sink, :streamer
 
     def chartify_url(url)
       url.gsub(".png",".png?rand=#{rand(10000)}")
