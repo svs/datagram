@@ -54,9 +54,6 @@ class Datagram < ActiveRecord::Base
     Base64.urlsafe_encode64(hmac("secret", params.to_json)).strip
   end
 
-  def reset!
-    @response_data = nil
-  end
 
   def routing_key
     self.use_routing_key ? self.token : (user.use_routing_key ? user.token : nil)

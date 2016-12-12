@@ -21,7 +21,7 @@ class DatagramRenderService
   attr_reader :dfs, :datagram, :format, :params
 
   def raw_json
-    dfs.response_json
+    dfs.raw_json
   end
 
   def _render(json, view)

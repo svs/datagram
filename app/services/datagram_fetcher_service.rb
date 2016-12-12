@@ -25,6 +25,7 @@ class DatagramFetcherService
   #private
   attr_reader :datagram, :views, :max_size
   def params
+    ap @params
     p = @params[:params]
     r = if p.is_a? String
           datagram.param_sets[p]["params"]
@@ -61,34 +62,36 @@ class DatagramFetcherService
   end
 
   def refresh_channel
-    datagram.refresh_channel(params.q_params)
+    @refresh_channel ||= datagram.refresh_channel(params.q_params)
   end
 
   def raw_json
-    response = response_json.merge(refresh_channel: rc)
-    if false #params.refresh? && response[:responses].blank?
-      if sync
-        $redis.setex(rc, 10, 0)
+    ap "raw json #{params}"
+    if params.refresh? && response_json[:responses].blank?
+      if params.sync?
+        $redis.setex(refresh_channel, 10, 0)
       end
-      datagram.publish(params[:params] || {})
-      if sync
+      datagram.publish(params.q_params || {})
+      if params.sync?
         done = false
         while (!done) do
           t = Time.now
-          v = $redis.get(rc)
+          v = $redis.get(refresh_channel)
           if v == nil
-            Rails.logger.info "#DatagramController TIMEOUT #{rc}"
+            Rails.logger.info "#DatagramController TIMEOUT #{refresh_channel}"
           end
           done = v != "0"
           sleep 0.2
         end
-        datagram.reset!
-        response = datagram.response_json(params: params[:params], as_of: params[:as_of]).merge(refresh_channel: rc)
+        reset!
       end
     end
-    response
+    response_json
   end
 
+  def reset!
+    @watch_responses = @response_data = nil
+  end
 
 
   def is_default?
@@ -129,6 +132,11 @@ class DatagramFetcherService
 
     def inspect
       {q_params: q_params, search_params: search_params}
+    end
+
+    def refresh?
+      ap "search params #{search_params}"
+      search_params[:refresh]
     end
 
     alias :q_params :query_params
