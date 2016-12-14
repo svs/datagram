@@ -13,7 +13,7 @@
     span ng-show="isSql" Query
     span ng-show="!isSql" Data
   .col-md-10
-    div ui-ace="{useWrapMode : true,mode: 'sql',theme:'eclipse'}" rows="3" ng-model="watch.data.query" style="height: 200px" ng-show="isSql"
+    div ui-ace="{useWrapMode : true,mode: 'sql',theme:'eclipse'}" rows="3" ng-model="watch.data.query" style="height: 200px; font-size: 1.2em" ng-show="isSql"
     textarea.form-control rows="3" ng-model="watchDataStr" style="height: 100px" ng-show="!isSql"
 .form-group
   label.col-md-1

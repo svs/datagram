@@ -180,6 +180,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   var renderServer = function(view) {
+    console.log(view);
     $scope.save();
     $http({
       url: $scope.datagram.public_url,
@@ -188,7 +189,12 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       params: _.merge(_.clone({params: ($scope.selectedParamSet.params || {})}),{"views[]": view.name})
     }).then(function(r) {
       $scope.renderedData[view.name] = r.data;
+      if (view.render=="chart") {
+	console.log($scope.renderedData.getHighcharts());
+      }
+
     });
+
   };
 
   $scope.render = function(view, button) {
@@ -200,7 +206,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   var renderClient = function(view) {
-    //console.log(view);
+    console.log(view);
     if ( view.transform === 'jmespath') {
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
     };
@@ -210,7 +216,11 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     } else if (view.render === 'liquid') {
       var tmpl = Liquid.parse(view.template);
       $scope.renderedData[view.name] = $sce.trustAsHtml(tmpl.render($scope.datagram));
+    };
+    if (view.render=="chart") {
+      console.log($scope.renderedData.getHighcharts());
     }
+
   };
 
 
@@ -244,7 +254,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       $scope.datagram.param_sets[newSet.name] = _.clone(newSet);
       delete $scope.datagram.param_sets["__new"];
     }
-    var d = {views: $scope.datagram.views, param_sets: $scope.datagram.param_sets,};
+    var d = {views: $scope.datagram.views, param_sets: $scope.datagram.param_sets, publish_params: $scope.datagram.param_sets["__default"]["params"]};
     $http({method: 'PATCH', url: '/api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: d}}).then(callback || function(r) {
     });
   };
