@@ -5,6 +5,9 @@ class Streamer < ActiveRecord::Base
 
   before_save :set_name
 
+  def as_json(include_root = false)
+    attributes.merge(stream_sink_name: stream_sink.try(:name))
+  end
 
   def publish!
     datagram.publish(self.param_set, self)
