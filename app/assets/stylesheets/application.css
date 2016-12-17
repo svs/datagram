@@ -15,6 +15,7 @@
  *= require 'mvpready-flat.css'
  *= require 'jsoneditor.min.css'
  *= require 'datagram.css'
+ *= require 'ui-grid.min.css'
  *= require_self
  */
 

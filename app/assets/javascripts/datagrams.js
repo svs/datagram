@@ -3,7 +3,10 @@
 //= require highlight.pack.js
 //= require angular-highlightjs.js
 //= require directives.js
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng","ngSanitize"]).
+//= require ui-grid.min.js
+
+
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng","ngSanitize","ui.grid"]).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -105,6 +108,10 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     }
     getDatagram($scope.selectedParamSet.params);
   };
+
+
+  $scope.gridData = [];
+
 
 
   var loadDatagram = function() {
@@ -220,7 +227,11 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     if (view.render=="chart") {
       console.log($scope.renderedData.getHighcharts());
     }
-
+    if (view.render=="ag-grid") {
+      $scope.gridData = $scope.renderedData[view.name];
+      $scope.gridApi.core.refresh();
+      console.log($scope.renderedData[view.name]);
+    }
   };
 
 
