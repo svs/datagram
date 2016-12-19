@@ -15,7 +15,6 @@ class DatagramResponseFinder
     if staleness
       rs = rs.where('extract(epoch from (? - response_received_at)) < ?', Time.zone.now, staleness)
     end
-    ap rs.to_sql
     rs
 
   end
@@ -26,8 +25,7 @@ class DatagramResponseFinder
   attr_reader :datagram, :staleness, :max_size
 
   def params
-    ap @q_params
-    ParamsRenderer.new({},@q_params).real_data.tap{|p| ap p}
+    ParamsRenderer.new({},@q_params).real_data
   end
 
   def all_responses(search_params)

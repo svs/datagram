@@ -15,7 +15,8 @@ class DatagramFetcherService
 
   def render(views = [])
     DatagramRenderService.new(self).render(Array(views)).tap{|r|
-      if r[:url] && is_default?
+      ap r
+      if r.is_a?(Hash) && r[:url] && is_default?
         datagram.update(default_view_url: r[:url])
       end
     }
@@ -25,7 +26,6 @@ class DatagramFetcherService
   #private
   attr_reader :datagram, :views, :max_size
   def params
-    ap @params
     p = @params[:params]
     r = if p.is_a? String
           datagram.param_sets[p]["params"]
@@ -66,7 +66,6 @@ class DatagramFetcherService
   end
 
   def raw_json
-    ap "raw json #{params}"
     if params.refresh? && response_json[:responses].blank?
       if params.sync?
         $redis.setex(refresh_channel, 10, 0)
@@ -135,7 +134,6 @@ class DatagramFetcherService
     end
 
     def refresh?
-      ap "search params #{search_params}"
       search_params[:refresh]
     end
 

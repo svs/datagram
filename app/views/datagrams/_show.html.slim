@@ -96,7 +96,7 @@ script type="text/ng-template" id="show.html"
                     option ng-repeat="o in ['','jq','jmespath']"
                       | {{o}}
                   select ng-model="view.render" ng-change="render(view)"
-                    option ng-repeat="o in ['json','chart','mustache','ag-grid']"
+                    option ng-repeat="o in ['json','chart','mustache','liquid','ag-grid']"
                       | {{o}}
                   button ng-click="render(view, true)" Render
                 .col-md-6
@@ -115,7 +115,7 @@ script type="text/ng-template" id="show.html"
                   highchart id="chart1" config="renderedData[view.name]" ng-if="view.render=='chart'"
                   div hljs-to-json="renderedData[view.name]" ng-if="view.render=='json'"
                   div#preview ng-if="view.render=='liquid' || view.render=='mustache'" ng-bind-html="renderedData[view.name]"
-                  div ui-grid="gridData" style="height: 500px" id="foo"
+                  div ui-grid="gridData" style="height: 500px" id="foo" ng-if="view.render == 'ag-grid'"
 
             tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
               tabset

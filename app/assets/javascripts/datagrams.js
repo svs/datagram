@@ -196,8 +196,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       params: _.merge(_.clone({params: ($scope.selectedParamSet.params || {})}),{"views[]": view.name})
     }).then(function(r) {
       $scope.renderedData[view.name] = r.data;
-      if (view.render=="chart") {
-	console.log($scope.renderedData.getHighcharts());
+      if (view.render == "liquid") {
+	$scope.renderedData[view.name] = $sce.trustAsHtml(r.data.html);
       }
 
     });
@@ -205,7 +205,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   $scope.render = function(view, button) {
-    if (view.transform == 'jq' && button) {
+    if ((view.transform == 'jq' && button) || (view.render == 'liquid' && button)){
       renderServer(view);
     } else {
       renderClient(view);
@@ -213,7 +213,6 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   var renderClient = function(view) {
-    console.log(view);
     if ( view.transform === 'jmespath') {
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
     };
@@ -221,8 +220,11 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       $scope.renderedData[view.name] = Mustache.render(view.template, $scope.datagram);
       console.log($scope.renderedData[view.name]);
     } else if (view.render === 'liquid') {
+      console.log('liquid!');
       var tmpl = Liquid.parse(view.template);
-      $scope.renderedData[view.name] = $sce.trustAsHtml(tmpl.render($scope.datagram));
+      var t = tmpl.render($scope.datagram);
+      console.log(t);
+      $scope.renderedData[view.name] = $sce.trustAsHtml(t);
     };
     if (view.render=="chart") {
       console.log($scope.renderedData.getHighcharts());

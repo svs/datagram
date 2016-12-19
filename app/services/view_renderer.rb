@@ -68,6 +68,10 @@ class ViewRenderer
     end
   end
 
+  class RenderAgGrid < RenderJson
+  end
+
+
   class RenderMustache
     def self.render(v, json, params, filename)
       html = Mustache.render(v["template"],json.merge("_params" => params)).html_safe
@@ -85,10 +89,12 @@ class ViewRenderer
 
 
   class RenderLiquid
-    def self.render(v, json, params, filename)
+    def self.render(transform, params, filename)
+      v, json = transform
+      ap v, json
       html = ::Liquid::Template.parse(v["template"]).render(json.merge("_params" => params)).html_safe
       if params.format != "png"
-        return html
+        return {html: html}
       elsif params.format == "png"
         x = SecureRandom.urlsafe_base64(5)
         File.open("/tmp/#{x}.html","w") {|f| f.write(html) }
