@@ -64,6 +64,10 @@ class Streamer < ActiveRecord::Base
       "png"
     end
 
+    def params
+      datagram.param_sets[streamer.param_set]["params"]
+    end
+
   end
 
   class SlackStreamer < BaseStreamer
@@ -96,7 +100,8 @@ class Streamer < ActiveRecord::Base
     def stream!
       Telegram::Bot::Client.run(stream_data.token) do |bot|
         if format == "png"
-          bot.api.sendPhoto(chat_id: stream_data.chat_id, photo: message[:url])
+          caption = "#{datagram.name} #{params.map{|k,v| "#{k}: #{v}"}.join(" , ")}"
+          bot.api.sendPhoto(chat_id: stream_data.chat_id, photo: message[:url], caption: caption)
         end
       end
     end
