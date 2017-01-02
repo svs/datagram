@@ -6,12 +6,14 @@ module Api
       respond_to :xml, :json, :csv, :html, :png
       before_action :authenticate_user!, except: [:t]
 
+
       def index
-        @datagrams = DatagramPolicy::Scope.new(current_user, Datagram).resolve
+        @datagrams = policy_scope(Datagram)
         render json: @datagrams.map{|d| d.as_json.except(:responses)}
       end
 
       def new
+        authorize Datagram
         render json: Datagram.new
       end
 
@@ -37,10 +39,12 @@ module Api
 
 
       def show
-        datagram = policy_scope(Datagram).find(params[:id]) rescue nil
+        datagram = Datagram.find(params[:id])
         if datagram
+          authorize Datagram
           render json: datagram
         else
+          skip_authorization
           render json: "not found", status: 404
         end
       end
@@ -90,7 +94,7 @@ module Api
       def refresh
         @datagram = policy_scope(Datagram).find(params[:id]) rescue nil
         if @datagram
-          channel = @datagram.publish(params[:param_set])
+          channel = @datagram.publish(params[:param_set] || params[:params])
           render json: {token: channel}
         else
           render json: "not found", status: 404

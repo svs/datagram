@@ -5,13 +5,14 @@ class StreamSinkPolicy < ApplicationPolicy
   def initialize(user, stream_sink)
     @user = user
     @stream_sink = stream_sink
-    @datagram = stream_sink.datagram
   end
 
   def update?
-    user.id == datagram.user_id
   end
 
+  def show?
+    true
+  end
 
   class Scope < Scope
     def resolve

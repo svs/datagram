@@ -14,8 +14,12 @@ class WatchPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      Watch.all
-      #Watch.where(user_id: [user.id, user.linked_account_id])
+      if user.ro
+        raise Pundit::NotAuthorizedError
+      else
+        Watch.all
+        #Watch.where(user_id: [user.id, user.linked_account_id])
+      end
     end
   end
 

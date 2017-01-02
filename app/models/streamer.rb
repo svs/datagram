@@ -61,7 +61,7 @@ class Streamer < ActiveRecord::Base
     end
 
     def format
-      "png"
+      streamer.format || "png"
     end
 
     def params
@@ -100,10 +100,22 @@ class Streamer < ActiveRecord::Base
     def stream!
       Telegram::Bot::Client.run(stream_data.token) do |bot|
         if format == "png"
-          caption = "#{datagram.name} #{params.map{|k,v| "#{k}: #{v}"}.join(" , ")}"
-          bot.api.sendPhoto(chat_id: stream_data.chat_id, photo: message[:url], caption: caption)
+          _p = params.map{|p| p.join(": ")}.join(", ")
+          bot.api.sendPhoto(chat_id: stream_data.chat_id, photo: message[:url], caption: "#{datagram.name} #{_p}")
         end
       end
+    end
+  end
+
+  class BasecampStreamer < BaseStreamer
+    def stream!
+      if format == "png"
+        c ="<img src='#{message[:url]}'></img>"
+      elsif format == "html"
+        c = message[:html].to_str
+      end
+      url = "https://3.basecamp.com/#{stream_data.project_id}/integrations/#{stream_data.key}/buckets/#{stream_data.bucket_id}/chats/#{stream_data.chat_id}/lines"
+      RestClient.post(url,{content: c})
     end
   end
 

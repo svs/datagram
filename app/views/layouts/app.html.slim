@@ -27,10 +27,14 @@ html.no-js[lang="en"]
             ul.mainnav-menu
               li.dropdown
                 = link_to 'Datagrams', datagrams_path
-              li.dropdown
-                = link_to 'Watches', watches_path
-              li.dropdown
-                = link_to 'Sources', sources_path
+              - if !current_user.ro
+                li.dropdown
+                  = link_to 'Watches', watches_path
+                li.dropdown
+                  = link_to 'Sources', sources_path
+              - else
+                li.dropdown
+                  = link_to 'Streams', ro_path
 
             ul.nav.navbar-nav.navbar-right
               li.dropdown.navbar-profile

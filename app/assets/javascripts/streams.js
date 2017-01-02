@@ -25,19 +25,37 @@ streamsApp.config(function($stateProvider,$urlRouterProvider) {
   $stateProvider.
     state('index',
 	  {url: '/', templateUrl: "index.html"}
-	 );
+	 ).
+    state('show',
+	  {
+	    url: '/:id', templateUrl: 'show.html'
+	  });
 });
 
 angular.module('streamsApp').controller('streamsCtrl',['$scope','$http','$stateParams','$timeout', function($scope, $http,$stateParams, $timeout) {
+
+  $scope.streams = {};
   var load = function() {
     $('#loading').show();
     $http.get('api/v1/streams').then(function(r) {
-      $scope.streams = _.sortBy(r.data, function(s) { return s.name});
-      console.log($scope.streams);
+      _.each(r.data, function(s) { loadStream(s.token) });
       $('#loading').hide();
       $timeout(load, 60000);
+    });
+  };
 
+  var loadStream = function(token) {
+    $http.get('api/v1/streams/' + token).then(function(r) {
+      $scope.streams[token] = r.data;
     });
   };
   load();
+}]);
+
+
+angular.module('streamsApp').controller('streamCtrl',['$scope','$http','$stateParams','$timeout', function($scope, $http,$stateParams, $timeout) {
+  if ($stateParams.id) {
+    alert('foo');
+  };
+
 }]);

@@ -4,9 +4,13 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
   after_filter :set_csrf_cookie_for_ng
-
+  #after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
   include Pundit
 
+  rescue_from Pundit::NotAuthorizedError do
+    redirect_to root_url
+  end
 
   def set_csrf_cookie_for_ng
     cookies['XSRF-TOKEN'] = form_authenticity_token if protect_against_forgery?
@@ -18,8 +22,8 @@ class ApplicationController < ActionController::Base
     super || form_authenticity_token == request.headers['X-XSRF-TOKEN']
   end
 
-def after_sign_in_path_for(resource)
-  datagrams_path
-end
+  def after_sign_in_path_for(resource)
+    datagrams_path
+  end
 
 end

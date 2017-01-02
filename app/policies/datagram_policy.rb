@@ -11,11 +11,17 @@ class DatagramPolicy < ApplicationPolicy
     user.id == datagram.user_id
   end
 
+  def show?
+    true
+  end
+
+  def index?
+    true
+  end
 
   class Scope < Scope
     def resolve
       Datagram.where('archived IS DISTINCT FROM true')
-      #Datagram.where(user_id: [user.id, user.linked_account_id]).
     end
   end
 

@@ -137,7 +137,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   }
 
   var getDatagram = function(params) {
-    //console.log('getDatagram', params);
+    console.log('getDatagram', params);
     var p = params.param_set ? params : {params: _.zipObject(_.map(params, function(v,k) { return ["params[" + k + "]", v]}))};
     $http(_.merge({
       url: $scope.datagram.public_url,
@@ -164,14 +164,14 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     var subscribed = false;
 
     $scope.refresh = function(name) {
-      //console.log(name);
+      console.log(name);
       $scope.selectedParamSet = $scope.datagram.param_sets[name];
-      //console.log(name);
-      $http.put('/api/v1/datagrams/' + $scope.datagram.id + '/refresh', {param_set: $scope.selectedParamSet.name} ).then(function(r) {
-	//console.log('subscribed ',r.data.token);
+      console.log('refresh with ',$scope.datagram.param_sets[name]);
+      $http.put('/api/v1/datagrams/' + $scope.datagram.id + '/refresh', {params: $scope.datagram.param_sets[name].params} ).then(function(r) {
+	console.log('subscribed ',r.data.token);
 	Pusher.subscribe(r.data.token,'data', function(item) {
-	  //console.log('Pusher received', item);
-	  getDatagram({param_set: $scope.selectedParamSet.name});
+	  console.log('Pusher received', item);
+	  getDatagram($scope.datagram.param_sets[name].params);
 	});
       });
     };
@@ -231,7 +231,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     }
     if (view.render=="ag-grid") {
       $scope.gridData = $scope.renderedData[view.name];
-      $scope.gridApi.core.refresh();
+      //$scope.gridApi.core.refresh();
       console.log($scope.renderedData[view.name]);
     }
   };

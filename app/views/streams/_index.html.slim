@@ -2,3 +2,16 @@ script type="text/ng-template" id="index.html"
   div ng-controller="streamsCtrl"
     .row
       h3.pull-left style="margin-right: 10px"  Streams
+    tabset
+      tab ng-repeat="(name, data) in streams" heading="{{data.name}}"
+        .row
+          .col-md-4 ng-repeat="(n,d) in data.data"
+            .portlet.portlet-boxed
+              .portlet-heading style="margin: 0px; border-bottom: 0px"
+                a ui-sref="show({id: datagram.id})"
+                  h4.portlet-title style="margin: 3px"
+                    u style="padding-bottom: 4px"
+                      | {{ n }}
+
+              .portlet-body
+                img src="{{d.url}}" style="width: 100%"

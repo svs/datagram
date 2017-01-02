@@ -1,8 +1,7 @@
 class DatagramsController < ApplicationController
 
   def index
-    @source_count = Source.count
-    @watch_count = Watch.count
+    @datagrams = policy_scope(Datagram)
     render layout: 'app'
   end
 

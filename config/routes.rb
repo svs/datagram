@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root to: "home#index"
   get '/prof', to: 'home#prof', as: 'prof'
   get '/profile', to: 'users#profile'
+  get '/ro', to: 'ro#index', as: 'ro'
   resources :watches
   resources :datagrams
   resources :sources
@@ -23,7 +24,7 @@ Rails.application.routes.draw do
       resources :sources
       resources :stream_sinks
       resources :streamers
-      resources :streams
+      resources :streams, defaults: { format: "json"}
       get 'd/:token', to: 'datagrams#t', as: 'd'
       get 't/:slug', to: 'datagrams#t', as: 't', defaults: { format: "json"}
       get 'w/:token', to: 'watches#t', as: 'w', defaults: { format: "json"}

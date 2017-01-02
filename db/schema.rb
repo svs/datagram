@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161212043903) do
+ActiveRecord::Schema.define(version: 20161225022227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 20161212043903) do
     t.jsonb    "data"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.string   "token"
   end
 
   create_table "streamers", force: :cascade do |t|
@@ -111,6 +112,7 @@ ActiveRecord::Schema.define(version: 20161212043903) do
     t.boolean  "use_routing_key"
     t.string   "google_token"
     t.string   "google_refresh_token"
+    t.boolean  "ro"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

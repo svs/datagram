@@ -1,0 +1,56 @@
+= stylesheet_link_tag 'highlight'
+script type="text/ng-template" id="show.html"
+  div ng-controller="datagramCtrl"
+    .row.portlet-title
+      .col-md-6
+        h2.portlet-title style="margin-bottom: 0px"
+          u
+            | {{datagram.name}}
+        | {{ datagram.updated_at | fromNow}} &bull; &nbsp;
+        a href="{{datagram.public_url}}"
+          | {{ datagram.token }}
+        | &nbsp; &bull; &nbsp;
+        span ng-if="datagram.use_routing_key"
+          | Uses Routing Key
+      .col-md-4
+        tabset
+          tab ng-repeat="(name, values) in (datagram.param_sets)" heading="{{values.name || 'default'}}" ng-click="selectParamSet(values.name)"
+            table.table
+              tr style="border: 0px; padding: 1px" ng-if="name !== '__default'"
+                td style="border: 0px; padding: 1px"
+                  | name
+                td style="border: 0px; padding: 1px"
+                  input type="text" ng-model="values.name"
+
+              tr ng-repeat="(k,v) in values.params" style="border: 0px; padding: 1px"
+                td style="border: 0px; padding: 1px"
+                  |{{k}}
+                td style="border: 0px; padding: 1px"
+                  input type="text" ng-model="values.params[k]"
+      .col-md-2
+        a.btn.btn-large.btn-warning ng-click="refresh(values.name || '__default')" style="margin: 3px"
+          i.fa.fa-refresh style="margin-right: 5px"
+          | Refresh Now
+
+
+    .row
+      .col-md-12
+          tabset
+            tab heading="{{view.name}}" ng-repeat="view in datagram.views"
+              .row
+                .col-mod-12
+                  highchart id="chart1" config="renderedData[view.name]" ng-if="view.render=='chart'"
+                  div hljs-to-json="renderedData[view.name]" ng-if="view.render=='json'"
+                  div#preview ng-if="view.render=='liquid' || view.render=='mustache'" ng-bind-html="renderedData[view.name]"
+                  div ui-grid="gridData" style="height: 500px" id="foo" ng-if="view.render == 'ag-grid'"
+
+            tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
+              tabset
+                tab heading="Data"
+                  div hljs-to-json="response.data"
+                tab heading="Errors"
+                  div hljs-to-json="response.errors"
+                tab heading="MetaData"
+                  div hljs-to-json="response.metadata"
+                tab heading="Params"
+                  div hljs-to-json="response.params"
