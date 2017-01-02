@@ -13,7 +13,7 @@ module Api
 
 
       def index
-        @sources = SourcePolicy::Scope.new(current_user, Source).resolve
+        @sources = policy_scope(Source)
         render json: @sources
       end
 

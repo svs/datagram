@@ -29,7 +29,7 @@ module Api
           watch = policy_scope(Watch).find(params[:id])
           render json: watch.to_json
         else
-          watch = current_user.watches.find_by(token: params[:id])
+          watch = Watch.find_by(token: params[:id])
           response = watch.last_good_response
           render json: response
         end

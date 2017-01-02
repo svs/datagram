@@ -64,8 +64,9 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
       $scope.watch = r.data;
       console.log($scope.watch);
       $scope.showing = true;
-	loadSources();
-	getPreview(r.token);
+      loadSources();
+      console.log('r',r);
+	getPreview(r.data.token);
     });
   } else {
     $http.get('api/v1/watches/new').then(function(r) {
@@ -137,6 +138,7 @@ angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$st
 
 
   var getPreview = function(token) {
+    console.log('getPreview', token);
     Restangular.one('api/v1/watches', token).get().then(function(r) {
       $scope.watch_response = r;
 	console.log(r);
