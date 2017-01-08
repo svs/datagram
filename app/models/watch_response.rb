@@ -12,9 +12,9 @@ class WatchResponse < ActiveRecord::Base
     modified
   end
 
-  def as_json(x = nil)
+  def as_json(max_size = Float::Infinity)
     {
-      data: response_json,
+      data: bytesize > max_size ? truncated_json : response_json,
       errors: error,
       metadata: metadata,
       params: params
@@ -24,6 +24,10 @@ class WatchResponse < ActiveRecord::Base
   def metadata
     attributes.slice("elapsed", "status_code", "token", "response_received_at", "timestamp").
       merge("staleness" => Time.zone.now - response_received_at)
+  end
+
+  def truncated_json
+    response_json.is_a?(Array) ? response_json[0..10] : {nb: 'Data too big'}
   end
 
   private
@@ -71,5 +75,6 @@ class WatchResponse < ActiveRecord::Base
   def set_bytesize
     self.bytesize = self.response_json.to_json.bytesize
   end
+
 
 end

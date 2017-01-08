@@ -94,7 +94,7 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 
 }]);
 
-angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce) {
+angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike) {
 
   $scope.renderedData = {};
   $scope.selected = {streamSink: {}, streamSinkId: null, frequency: null};
@@ -117,6 +117,14 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   var loadDatagram = function() {
     $http.get('api/v1/datagrams/' + $stateParams.id).then(function(r) {
       $scope.datagram = r.data;
+      $scope.datagram.param_sets = $scope.datagram.param_sets || {'__default': {}};
+      $scope.selectParamSet("__default");
+
+      $scope.datagram.urls = _.map(['csv','json'], function(a) {
+	var p = $httpParamSerializerJQLike($scope.selectedParamSet.params);
+	return "/api/v1/d/" + $scope.datagram.token + "." + a + '?' + p;
+      });
+      console.log('loadDatagram', $scope.datagram);
     });
   };
 
@@ -138,7 +146,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   var getDatagram = function(params) {
     console.log('getDatagram', params);
-    var p = params.param_set ? params : {params: _.zipObject(_.map(params, function(v,k) { return ["params[" + k + "]", v]}))};
+    var p = params.param_set ? params : {params: _.zipObject(_.map(params, function(v,k) { return ["params[" + k + "]", v]})), max_size: 1000};
+    p.params = _.merge(p.params, {max_size: 10000});
     $http(_.merge({
       url: $scope.datagram.public_url,
       paramSerializer: '$httpParamSerializerJQLike',
@@ -227,7 +236,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       $scope.renderedData[view.name] = $sce.trustAsHtml(t);
     };
     if (view.render=="chart") {
-      console.log($scope.renderedData.getHighcharts());
+
     }
     if (view.render=="ag-grid") {
       $scope.gridData = $scope.renderedData[view.name];
@@ -248,11 +257,10 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   // };
 
   if ($stateParams.id) {
-    $http.get('api/v1/datagrams/' + $stateParams.id).then(function(r) {
-      $scope.datagram = r.data;
-      $scope.datagram.param_sets = $scope.datagram.param_sets || {'__default': {}};
-      $scope.selectParamSet("__default");
-    });
+    // $http.get('api/v1/datagrams/' + $stateParams.id).then(function(r) {
+    //   $scope.datagram = r.data;
+    // });
+    loadDatagram();
     $http.get('/api/v1/stream_sinks').then(function(r) {
       $scope.streamSinks = _.map(r.data, function(a) { return _.merge(a, {id: a.id + ''});});;
     });

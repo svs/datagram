@@ -45,7 +45,7 @@ class Watch < ActiveRecord::Base
   end
 
  def last_good_response
-   WatchResponse.where(watch_id: id, status_code: 200).last
+   w = WatchResponse.where(watch_id: id, status_code: 200).last
  end
 
  def routing_key

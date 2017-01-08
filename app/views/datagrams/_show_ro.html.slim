@@ -8,10 +8,9 @@ script type="text/ng-template" id="show.html"
             | {{datagram.name}}
         | {{ datagram.updated_at | fromNow}} &bull; &nbsp;
         a href="{{datagram.public_url}}"
-          | {{ datagram.token }}
-        | &nbsp; &bull; &nbsp;
-        span ng-if="datagram.use_routing_key"
-          | Uses Routing Key
+          | {{datagram.public_url}}
+        a ng-repeat="u in datagram.urls" href="{{u}}"
+          | {{u}}
       .col-md-4
         tabset
           tab ng-repeat="(name, values) in (datagram.param_sets)" heading="{{values.name || 'default'}}" ng-click="selectParamSet(values.name)"

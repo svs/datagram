@@ -10,12 +10,11 @@ class DatagramFetcherService
   def initialize(datagram, params = nil)
     @datagram = datagram
     @params = (params || {}).with_indifferent_access
-    @max_size = Float::INFINITY
+    @max_size = params[:max_size] ? params[:max_size].to_i : Float::INFINITY
   end
 
   def render(views = [])
     DatagramRenderService.new(self).render(Array(views)).tap{|r|
-      ap r
       if r.is_a?(Hash) && r[:url] && is_default?
         datagram.update(default_view_url: r[:url])
       end
@@ -53,8 +52,9 @@ class DatagramFetcherService
       {
         slug: r.watch.slug,
         name: r.watch.name,
-        data: (r.bytesize.to_i < max_size ? r.response_json : {max_size: "Data size too big. Please use the Public URL to view data"}),
+        data: (r.bytesize.to_i < max_size ? r.response_json : r.truncated_json),
         errors: r.error,
+        warnings: r.bytesize.to_i < max_size ? nil : {bytesize: r.bytesize, max_size: max_size, status: 'TRUNCATED DATA'},
         metadata: r.metadata,
         params: r.params
       }
