@@ -31,6 +31,7 @@
 //= require bootstrap.min
 //= require liquid.min.js
 //= require mustache.min.js
+//= require ng-csv.min.js
 //= require angular-sanitize.min.js
 
 $(document).ready(function() {

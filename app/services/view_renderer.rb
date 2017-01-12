@@ -71,6 +71,12 @@ class ViewRenderer
   class RenderAgGrid < RenderJson
   end
 
+  class RenderCsv < RenderJson
+    def self.render(json, params, filename)
+      super
+
+    end
+  end
 
   class RenderMustache
     def self.render(v, json, params, filename)

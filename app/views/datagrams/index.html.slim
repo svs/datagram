@@ -4,7 +4,6 @@ div ng-app="datagramsApp"
   ui-view
   = render 'index'
   = render 'show_ro'
-  - if !current_user.ro
-    = render 'show'
+  = render 'show'
   = render 'new'
   = render 'edit'

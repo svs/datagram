@@ -74,6 +74,8 @@ module Api
             format.csv {
               csv = CSV.generate do |f|
                 response.each_with_index do |_r,i|
+                  ap _r
+                  _r = _r
                   if i == 0
                     f << _r.keys
                   end

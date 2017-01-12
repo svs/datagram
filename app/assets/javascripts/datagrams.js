@@ -6,7 +6,7 @@
 //= require ui-grid.min.js
 
 
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng","ngSanitize","ui.grid"]).
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng","ngSanitize","ui.grid",'ngCsv']).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -38,6 +38,11 @@ datagramsApp.config(function($stateProvider,$urlRouterProvider) {
 	  {
 	    url: '/:id',
 	    templateUrl: 'show.html'
+	  }).
+    state('show_ro',
+	  {
+	    url: '/:id/r',
+	    templateUrl: 'show_ro.html'
 	  }).
     state('edit',
 	  {
@@ -97,6 +102,7 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike) {
 
   $scope.renderedData = {};
+  $scope.renderedUrls = {};
   $scope.selected = {streamSink: {}, streamSinkId: null, frequency: null};
 
 
@@ -122,7 +128,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
       $scope.datagram.urls = _.map(['csv','json'], function(a) {
 	var p = $httpParamSerializerJQLike($scope.selectedParamSet.params);
-	return "/api/v1/d/" + $scope.datagram.token + "." + a + '?' + p;
+	return {href: "/api/v1/d/" + $scope.datagram.token + "." + a + '?' + p, l: '.' + a + '?' + decodeURIComponent(p) };
       });
       console.log('loadDatagram', $scope.datagram);
     });
@@ -241,8 +247,17 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     if (view.render=="ag-grid") {
       $scope.gridData = $scope.renderedData[view.name];
       //$scope.gridApi.core.refresh();
-      console.log($scope.renderedData[view.name]);
     }
+    if (view.render=="csv") {
+      var d = _.map($scope.renderedData[view.name], function(a) { return _.values(a)});
+      $scope.renderedData[view.name] = d;
+      console.log('csv',d);
+    }
+    var p = $httpParamSerializerJQLike($scope.selectedParamSet.params);
+    var url =  "/api/v1/d/" + $scope.datagram.token + "." + view.render + '?' + p + '&views[]=' + view.name;
+    $scope.renderedUrls[view.name] = url;
+    console.log('renderedUrls',$scope.renderedUrls);
+
   };
 
 
