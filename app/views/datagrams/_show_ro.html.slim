@@ -26,11 +26,14 @@ script type="text/ng-template" id="show_ro.html"
                 td style="border: 0px; padding: 1px"
                   |{{k}}
                 td style="border: 0px; padding: 1px"
-                  input type="text" ng-model="values.params[k]"
+                  input type="text" ng-model="values.params[k]" ng-blur="updateCurrentParams(k)"
       .col-md-2
         a.btn.btn-large.btn-warning ng-click="refresh(values.name || '__default')" style="margin: 3px"
           i.fa.fa-refresh style="margin-right: 5px"
           | Refresh Now
+        a.btn.btn-large.btn-success ng-click="reload(values.name || '__default')" style="margin: 3px"
+          i.fa.fa-refresh style="margin-right: 5px"
+          | Reload Now
 
 
     .row
@@ -39,10 +42,17 @@ script type="text/ng-template" id="show_ro.html"
             tab heading="{{view.name}}" ng-repeat="view in datagram.views"
               .row
                 .col-mod-12
+                  a href="{{renderedUrls[view.name]}}" target="_blank"
+                    | {{view.render}}
+
                   highchart id="chart1" config="renderedData[view.name]" ng-if="view.render=='chart'"
                   div hljs-to-json="renderedData[view.name]" ng-if="view.render=='json'"
                   div#preview ng-if="view.render=='liquid' || view.render=='mustache'" ng-bind-html="renderedData[view.name]"
                   div ui-grid="gridData" style="height: 500px" id="foo" ng-if="view.render == 'ag-grid'"
+                  div ng-if="view.render=='csv'"
+                    a ng-repeat="l in renderedData[view.name]"
+                      | {{l}}
+                      br
 
             tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
               tabset

@@ -74,7 +74,6 @@ class ViewRenderer
   class RenderCsv < RenderJson
     def self.render(json, params, filename)
       super
-
     end
   end
 

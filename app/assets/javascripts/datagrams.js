@@ -118,14 +118,16 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.gridData = [];
 
-
+  $scope.updateCurrentParams = function(k) {
+    alert(k);
+  };
 
   var loadDatagram = function() {
     $http.get('api/v1/datagrams/' + $stateParams.id).then(function(r) {
       $scope.datagram = r.data;
       $scope.datagram.param_sets = $scope.datagram.param_sets || {'__default': {}};
       $scope.selectParamSet("__default");
-
+      $scope.currentParams = $scope.datagram.params;
       $scope.datagram.urls = _.map(['csv','json'], function(a) {
 	var p = $httpParamSerializerJQLike($scope.selectedParamSet.params);
 	return {href: "/api/v1/d/" + $scope.datagram.token + "." + a + '?' + p, l: '.' + a + '?' + decodeURIComponent(p) };
@@ -191,6 +193,9 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       });
     };
 
+  $scope.reload = function(name) {
+    getDatagram($scope.selectedParamSet.params);
+  }
 
   $scope.addView = function() {
     if (!$scope.datagram.views) {
@@ -220,7 +225,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   $scope.render = function(view, button) {
-    if ((view.transform == 'jq' && button) || (view.render == 'liquid' && button)){
+    if ((view.transform == 'jq' && button) || (view.transform == 'liquid' && button)){
       renderServer(view);
     } else {
       renderClient(view);
@@ -231,10 +236,10 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     if ( view.transform === 'jmespath') {
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
     };
-    if (view.render === 'mustache') {
+    if (view.transform === 'mustache') {
       $scope.renderedData[view.name] = Mustache.render(view.template, $scope.datagram);
       console.log($scope.renderedData[view.name]);
-    } else if (view.render === 'liquid') {
+    } else if (view.transform === 'liquid') {
       console.log('liquid!');
       var tmpl = Liquid.parse(view.template);
       var t = tmpl.render($scope.datagram);
@@ -243,10 +248,6 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     };
     if (view.render=="chart") {
 
-    }
-    if (view.render=="ag-grid") {
-      $scope.gridData = $scope.renderedData[view.name];
-      //$scope.gridApi.core.refresh();
     }
     if (view.render=="csv") {
       var d = _.map($scope.renderedData[view.name], function(a) { return _.values(a)});
