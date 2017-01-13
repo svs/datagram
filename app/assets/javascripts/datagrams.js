@@ -249,11 +249,6 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     if (view.render=="chart") {
 
     }
-    if (view.render=="csv") {
-      var d = _.map($scope.renderedData[view.name], function(a) { return _.values(a)});
-      $scope.renderedData[view.name] = d;
-      console.log('csv',d);
-    }
     var p = $httpParamSerializerJQLike($scope.selectedParamSet.params);
     var url =  "/api/v1/d/" + $scope.datagram.token + "." + view.render + '?' + p + '&views[]=' + view.name;
     $scope.renderedUrls[view.name] = url;

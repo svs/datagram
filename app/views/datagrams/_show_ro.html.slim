@@ -48,11 +48,8 @@ script type="text/ng-template" id="show_ro.html"
                   highchart id="chart1" config="renderedData[view.name]" ng-if="view.render=='chart'"
                   div hljs-to-json="renderedData[view.name]" ng-if="view.render=='json'"
                   div#preview ng-if="view.render=='liquid' || view.render=='mustache'" ng-bind-html="renderedData[view.name]"
-                  div ui-grid="gridData" style="height: 500px" id="foo" ng-if="view.render == 'ag-grid'"
-                  div ng-if="view.render=='csv'"
-                    a ng-repeat="l in renderedData[view.name]"
-                      | {{l}}
-                      br
+                  div ui-grid="gridData" style="height: 500px" id="foo" ng-if="view.render == 'grid'"
+                  div ui-grid="{data: renderedData[view.name]}" style="height: 500px" ng-if="view.render=='csv'"
 
             tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
               tabset
