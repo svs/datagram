@@ -249,7 +249,9 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     if (view.render=="chart") {
 
     }
-    var p = $httpParamSerializerJQLike($scope.selectedParamSet.params);
+
+    var p = $httpParamSerializerJQLike(_.merge.apply(_.merge,_.map($scope.datagram.responses,'params')));
+    console.log('p',p);
     var url =  "/api/v1/d/" + $scope.datagram.token + "." + view.render + '?' + p + '&views[]=' + view.name;
     $scope.renderedUrls[view.name] = url;
     console.log('renderedUrls',$scope.renderedUrls);
