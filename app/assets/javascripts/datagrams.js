@@ -145,6 +145,10 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     });
   };
 
+  $scope.streamOnce = function(sink) {
+    console.log(sink);
+  };
+
   $scope.deleteStreamer = function(id) {
     //console.log('deleteStreamer',id);
     $http.delete('/api/v1/streamers/' + id).then(function (r) {
@@ -153,8 +157,13 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   }
 
   var getDatagram = function(params) {
+    var p;
     console.log('getDatagram', params);
-    var p = params.param_set ? params : {params: _.zipObject(_.map(params, function(v,k) { return ["params[" + k + "]", v]})), max_size: 1000};
+    if (params) {
+      p = params.param_set ? params : {params: _.zipObject(_.map(params, function(v,k) { return ["params[" + k + "]", v]})), max_size: 1000};
+    } else {
+      p = {params: {}};
+    }
     p.params = _.merge(p.params, {max_size: 10000});
     $http(_.merge({
       url: $scope.datagram.public_url,

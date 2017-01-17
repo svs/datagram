@@ -76,8 +76,8 @@ script type="text/ng-template" id="show.html"
               a href="#"
                 i.fa.fa-pause
               | &nbsp;
-              a href="#"
-                i.fa.fa-stop
+              a ng-click="streamOnce(sink)"
+                i.fa.fa-play
               | &nbsp;
               a ng-click="deleteStreamer(sink.id);"
                 i.fa.fa-times
