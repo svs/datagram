@@ -31,7 +31,7 @@ module Api
         else
           watch = Watch.find_by(token: params[:id])
           response = watch.last_good_response
-          render json: response.as_json(params[:max_size].to_i || 10000)
+          render json: response.as_json(params[:max_size].to_i > 0 ?  params[:max_size].to_i : 10000)
         end
       end
 

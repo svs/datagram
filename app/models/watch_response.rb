@@ -12,7 +12,9 @@ class WatchResponse < ActiveRecord::Base
     modified
   end
 
-  def as_json(max_size = Float::Infinity)
+  def as_json(max_size = Float::INFINITY)
+    ap bytesize
+    ap max_size
     {
       data: bytesize > max_size ? truncated_json : response_json,
       errors: error,
@@ -27,7 +29,7 @@ class WatchResponse < ActiveRecord::Base
   end
 
   def truncated_json
-    response_json.is_a?(Array) ? response_json[0..10] : {nb: 'Data too big'}
+    response_json.is_a?(Array) ? response_json[0..10] : response_json
   end
 
   private
