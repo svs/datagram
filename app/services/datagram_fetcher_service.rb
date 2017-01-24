@@ -3,6 +3,8 @@
 #   query_params -> params the help find the correct WatchResponse
 #   search_params -> additional filters for as_of, staleness, etc.
 #   format -> the desired return format
+
+# Fetches the rendered view of the datagram
 class DatagramFetcherService
 
   # datagram -> the datagram to fetch

@@ -16,7 +16,7 @@ script type="text/ng-template" id="index.html"
     tabset
       tab ng-repeat="(k,ds) in groupedDatagrams" heading="{{k}}"
         .row
-          .col-md-3 ng-repeat="datagram in ds"
+          .col-md-4 ng-repeat="datagram in ds"
             .portlet.portlet-boxed
               .portlet-heading style="margin: 0px; border-bottom: 0px"
                 a ui-sref="show({id: datagram.id})"
