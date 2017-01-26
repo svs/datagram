@@ -216,6 +216,18 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     //console.log($scope.datagram.views);
   };
 
+  var makeRenderedUrls = function(view) {
+    console.log('p', _.map($scope.datagram.responses,'params'));
+    var x = {params: _.merge.apply(_.merge,_.map($scope.datagram.responses,'params'))};
+    console.log('x',x);
+    var p = $httpParamSerializerJQLike(x);
+    console.log('p',p);
+    var render = view.render == 'chart' ? 'png' : view.render;
+    var url =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + p + '&views[]=' + view.name;
+    $scope.renderedUrls[view.name] = url;
+    console.log('renderedUrls',$scope.renderedUrls);
+  };
+
   var renderServer = function(view) {
     console.log(view);
     $scope.save();
@@ -229,7 +241,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       if (view.render == "liquid") {
 	$scope.renderedData[view.name] = $sce.trustAsHtml(r.data.html);
       }
-
+      makeRenderedUrls(view);
     });
 
   };
@@ -240,9 +252,11 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     } else {
       renderClient(view);
     }
+
   };
 
   var renderClient = function(view) {
+    console.log('renderClient');
     if ( view.transform === 'jmespath') {
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
     };
@@ -256,18 +270,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       console.log(t);
       $scope.renderedData[view.name] = $sce.trustAsHtml(t);
     };
-    if (view.render=="chart") {
-
-    }
-    var x = {params: _.merge.apply(_.merge,_.map($scope.datagram.responses,'params'))};
-    console.log('x',x);
-    var p = $httpParamSerializerJQLike(x);
-    console.log('p',p);
-    var render = view.render == 'chart' ? 'png' : view.render;
-    var url =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + p + '&views[]=' + view.name;
-    $scope.renderedUrls[view.name] = url;
-    console.log('renderedUrls',$scope.renderedUrls);
-
+    makeRenderedUrls(view);
   };
 
 
