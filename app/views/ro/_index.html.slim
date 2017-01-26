@@ -6,7 +6,7 @@ script type="text/ng-template" id="index.html"
           .col-md-4 ng-repeat="data in stream.streamers | orderBy: 'name'"
             .portlet.portlet-boxed
               .portlet-heading style="margin: 0px; border-bottom: 0px"
-                a href="/datagrams#/{{data.datagram_id}}" target="_blank"
+                a href="/datagrams#/{{data.datagram_id}}/r" target="_blank"
                   h4.portlet-title style="margin: 3px"
                     u style="padding-bottom: 4px"
                       | {{ data.name }}
