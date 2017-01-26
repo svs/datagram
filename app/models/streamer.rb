@@ -18,8 +18,8 @@ class Streamer < ActiveRecord::Base
   end
 
   def render
-    streamer.stream!
     update(response_json: streamer.message, last_run_at: DateTime.now)
+    streamer.stream!
   end
 
   def streamer
