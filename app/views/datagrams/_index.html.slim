@@ -33,7 +33,7 @@ script type="text/ng-template" id="index.html"
               .portlet-body
                 img src="{{datagram.default_view_url}}" style="width: 100%"
 
-      tab ng-repeat="(k,ds) in groupedDatagrams" heading="{{k}}"
+      tab ng-repeat="(k,ds) in groupedDatagrams" heading="{{k}} {{filtered.length > 0 ? '(' + filtered.length + ')' : ''}}"
         .row style="margin-bottom: 20px"
           .col-md-12
             .input-group
@@ -42,7 +42,7 @@ script type="text/ng-template" id="index.html"
               input.form-control type="text" ng-model="search.name" placeholder="search for..."
 
         .row
-          .col-md-4 ng-repeat="datagram in ds | filter:search:strict"
+          .col-md-4 ng-repeat="datagram in ds | filter:search:strict as filtered"
             .portlet.portlet-boxed
               .portlet-heading style="margin: 0px; border-bottom: 0px"
                 a ui-sref="show({id: datagram.id})"
