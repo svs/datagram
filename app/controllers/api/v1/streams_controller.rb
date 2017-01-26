@@ -3,12 +3,10 @@ module Api
     class StreamsController < ApplicationController
       respond_to :json
 
-      before_action :authenticate_user!, except: [:t]
+      before_action :authenticate_user!
 
       def index
-        skip_policy_scope
-        @streams = StreamPolicy::Scope.new(current_user, Datagram).resolve
-        render json: @streams.map{|d| d.as_json}
+        @streams = policy_scope(Stream)
       end
 
       def show

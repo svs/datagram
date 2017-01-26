@@ -23,7 +23,11 @@ Rails.application.routes.draw do
       end
       resources :sources
       resources :stream_sinks
-      resources :streamers
+      resources :streamers do
+        member do
+          put 'refresh'
+        end
+      end
       resources :streams, defaults: { format: "json"}
       get 'd/:token', to: 'datagrams#t', as: 'd'
       get 't/:slug', to: 'datagrams#t', as: 't', defaults: { format: "json"}

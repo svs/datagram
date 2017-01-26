@@ -32,9 +32,8 @@ html.no-js[lang="en"]
                   = link_to 'Watches', watches_path
                 li.dropdown
                   = link_to 'Sources', sources_path
-              - else
-                li.dropdown
-                  = link_to 'Streams', ro_path
+              li.dropdown
+                = link_to 'Streams', ro_path
 
             ul.nav.navbar-nav.navbar-right
               li.dropdown.navbar-profile

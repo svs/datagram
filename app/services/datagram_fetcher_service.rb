@@ -96,7 +96,11 @@ class DatagramFetcherService
 
 
   def is_default?
-    params.query_params.stringify_keys == (datagram.param_sets["__default"]["params"] || {}).stringify_keys
+    ap params.query_params
+    ap datagram.param_sets["__default"]["params"]
+    (params.query_params.stringify_keys == (datagram.param_sets["__default"]["params"] || {}).stringify_keys).tap{|q|
+      ap q
+    }
   end
 
   def q_params

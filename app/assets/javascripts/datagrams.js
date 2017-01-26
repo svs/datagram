@@ -147,6 +147,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.streamOnce = function(sink) {
     console.log(sink);
+    $http.put('/api/v1/streamers/' + sink.id + '/refresh').then(function(a) { console.log(a); });
   };
 
   $scope.deleteStreamer = function(id) {

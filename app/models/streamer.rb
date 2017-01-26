@@ -100,7 +100,7 @@ class Streamer < ActiveRecord::Base
     def stream!
       Telegram::Bot::Client.run(stream_data.token) do |bot|
         if format == "png"
-          _p = params.map{|p| p.join(": ")}.join(", ")
+          _p = (params || {}).map{|p| p.join(": ")}.join(", ")
           bot.api.sendPhoto(chat_id: stream_data.chat_id, photo: message[:url], caption: "#{datagram.name} #{_p}")
         end
       end

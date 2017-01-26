@@ -38,7 +38,8 @@ angular.module('streamsApp').controller('streamsCtrl',['$scope','$http','$stateP
   var load = function() {
     $('#loading').show();
     $http.get('api/v1/streams').then(function(r) {
-      _.each(r.data, function(s) { loadStream(s.token) });
+      console.log(r);
+      $scope.streams = r.data;
       $('#loading').hide();
       $timeout(load, 60000);
     });

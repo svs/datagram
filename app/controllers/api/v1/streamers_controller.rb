@@ -3,7 +3,6 @@ module Api
     class StreamersController < ApplicationController
       def destroy
         @streamer = (policy_scope(Streamer).find(params[:id]) rescue nil)
-        ap @streamer
         if @streamer
           @streamer.destroy
           render json: {status: "ok"}
@@ -11,6 +10,18 @@ module Api
           render json: {status: 404}, status: 404
         end
       end
+
+      def refresh
+        @streamer = (policy_scope(Streamer).find(params[:id]) rescue nil)
+        if @streamer
+          @streamer.publish!
+          render json: {status: :ok}
+        end
+      end
+
+
     end
+
+
   end
 end
