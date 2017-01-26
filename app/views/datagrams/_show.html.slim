@@ -6,8 +6,6 @@ script type="text/ng-template" id="show.html"
         h2.portlet-title style="margin-bottom: 0px"
           u
             | {{datagram.name}}
-            a ui-sref="show_ro({id: datagram.id})"
-              i.fa.fa-eye.text-muted style="margin-left: 10px; padding: 4px; background: #ccc; border-radius: 10px;"
         | {{ datagram.updated_at | fromNow}} &bull; &nbsp;
         a href="{{datagram.public_url}}"
           | {{ datagram.token }}
@@ -23,6 +21,10 @@ script type="text/ng-template" id="show.html"
           a.btn.btn-danger ng-click="archive()" style="margin: 8px"
             i.fa.fa-destroy
             | Archive
+          a.btn ui-sref="show_ro({id: datagram.id})"
+            h3 style="margin-bottom: 0px"
+              i.fa.fa-eye.text-muted
+
         .portlet.portlet-boxed
           h4.portlet-title style="margin: 0px"
             u style="padding: 3px"
