@@ -14,9 +14,35 @@ script type="text/ng-template" id="index.html"
           | Add a
           = link_to 'data source', '/sources#/new'
     tabset
-      tab ng-repeat="(k,ds) in groupedDatagrams" heading="{{k}}"
+      tab heading="All"
+        .row style="margin-bottom: 20px"
+          .col-md-12
+            .input-group
+              span.input-group-addon
+                i.fa.fa-search
+              input.form-control type="text" ng-model="search.name" placeholder="search for..."
         .row
-          .col-md-4 ng-repeat="datagram in ds"
+          .col-md-4 ng-repeat="datagram in datagrams | filter:search:strict"
+            .portlet.portlet-boxed
+              .portlet-heading style="margin: 0px; border-bottom: 0px"
+                a ui-sref="show({id: datagram.id})"
+                  h4.portlet-title style="margin: 3px"
+                    u style="padding-bottom: 4px"
+                      | {{ datagram.name }}
+                |{{datagram.updated_at | fromNow}}
+              .portlet-body
+                img src="{{datagram.default_view_url}}" style="width: 100%"
+
+      tab ng-repeat="(k,ds) in groupedDatagrams" heading="{{k}}"
+        .row style="margin-bottom: 20px"
+          .col-md-12
+            .input-group
+              span.input-group-addon
+                i.fa.fa-search
+              input.form-control type="text" ng-model="search.name" placeholder="search for..."
+
+        .row
+          .col-md-4 ng-repeat="datagram in ds | filter:search:strict"
             .portlet.portlet-boxed
               .portlet-heading style="margin: 0px; border-bottom: 0px"
                 a ui-sref="show({id: datagram.id})"
