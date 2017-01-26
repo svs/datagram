@@ -1,4 +1,4 @@
 #clock: clockwork clock.rb
-#web: bundle exec rails s -p4000
+web: bundle exec puma -C config/heroku-puma.rb
 watch_consumer: rake watch_consumer
 perform: rake perform
