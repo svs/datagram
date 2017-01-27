@@ -35,13 +35,22 @@ streamsApp.config(function($stateProvider,$urlRouterProvider) {
 angular.module('streamsApp').controller('streamsCtrl',['$scope','$http','$stateParams','$timeout', function($scope, $http,$stateParams, $timeout) {
 
   $scope.streams = {};
-  var load = function() {
-    $('#loading').show();
+  $scope.load = function() {
+    $scope.loading = true;
     $http.get('api/v1/streams').then(function(r) {
       console.log(r);
-      $scope.streams = r.data;
-      $('#loading').hide();
-      $timeout(load, 60000);
+      if (_.keys($scope.streams).length == 0) {
+	$scope.streams = r.data;
+      } else {
+	console.log('r exists');
+	_.map(r.data, function(a) {
+	  var s = _.find($scope.streams, function(_s) { return _s.token == a.token });
+	  console.log(s, a);
+	  s = a;
+	});
+      };
+      $scope.loading = false;
+      $timeout($scope.load, 6000);
     });
   };
 
@@ -50,7 +59,7 @@ angular.module('streamsApp').controller('streamsCtrl',['$scope','$http','$stateP
       $scope.streams[token] = r.data;
     });
   };
-  load();
+  $scope.load();
 }]);
 
 

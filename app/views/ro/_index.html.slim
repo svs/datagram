@@ -13,3 +13,4 @@ script type="text/ng-template" id="index.html"
                 |{{data.last_run_at | fromNow}}
               .portlet-body
                 img src="{{data.data.url}}" style="width: 100%"
+      i.fa.fa-refresh ng-class="loading ? 'fa-spin' : ''" ng-click="load()" style="font-size: 1.5em; font-weight: 300; padding-top: 12px; color: #700593"
