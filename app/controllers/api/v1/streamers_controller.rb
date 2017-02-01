@@ -14,8 +14,8 @@ module Api
       def refresh
         @streamer = (policy_scope(Streamer).find(params[:id]) rescue nil)
         if @streamer
-          @streamer.publish!
-          render json: {status: :ok}
+          d = @streamer.publish!
+          render json: {token: d}
         end
       end
 
