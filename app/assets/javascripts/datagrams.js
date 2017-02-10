@@ -262,9 +262,9 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   var renderClient = function(view) {
-    console.log('renderClient');
     if ( view.transform === 'jmespath') {
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
+      $scope.renderedData[view.name].options = $scope.renderedData[view.name].options || {a: 'foo'}; //weird new bug
     };
     if (view.transform === 'mustache') {
       $scope.renderedData[view.name] = Mustache.render(view.template, $scope.datagram);
