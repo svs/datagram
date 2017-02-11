@@ -6,7 +6,8 @@ script type="text/ng-template" id="show.html"
         h2.portlet-title style="margin-bottom: 0px"
           u
             | {{datagram.name}}
-        | {{ datagram.updated_at | fromNow}} &bull; &nbsp;
+        b
+          | {{metadata[0].response_received_at | fromNow}} &bull; &nbsp;
         a href="{{datagram.public_url}}"
           | {{ datagram.token }}
         | &nbsp; &bull; &nbsp;
@@ -109,6 +110,8 @@ script type="text/ng-template" id="show.html"
                   button.btn.btn-secondary ng-click="render(view, true)" style="margin-left: 10px;" Render
                   a href="{{renderedUrls[view.name]}}" target="_blank" style="font-size: 2.2em; position: relative; top: 7px; left: 5px"
                     i.fa.fa-bar-chart-o
+                  b style="padding-left: 10px"
+                    | {{metadata[0].response_received_at | fromNow}}
                 .col-md-6
                   div
                     | Stream updates to

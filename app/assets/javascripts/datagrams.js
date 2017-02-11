@@ -178,6 +178,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       method: 'GET'},p)
     ).then(function(d) {
       $scope.datagram.responses = d.data.responses;
+      $scope.metadata = _.map(d.data.responses, function(v,k) { return v.metadata });
       _.each($scope.datagram.views, function(v,k) {
 	//console.log('rendering ', v);
 	$scope.render(v, true);

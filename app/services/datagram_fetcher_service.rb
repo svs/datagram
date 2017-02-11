@@ -57,7 +57,7 @@ class DatagramFetcherService
         data: (r.bytesize.to_i < max_size ? r.response_json : r.truncated_json),
         errors: r.error,
         warnings: r.bytesize.to_i < max_size ? nil : {bytesize: r.bytesize, max_size: max_size, status: 'TRUNCATED DATA'},
-        metadata: r.metadata,
+        metadata: r.metadata.merge(now: Time.zone.now),
         params: r.params
       }
     }
