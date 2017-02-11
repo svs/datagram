@@ -10,11 +10,11 @@ class ViewRenderer
 
 
   def render
-    renderer.render(transformer.transform(view, json), params, filename)
+    renderer.render(transform, params, filename)
   end
 
   def transform
-    transformer.transform(view, json)
+    transformer.transform(view, json, params)
   end
 
   private
@@ -32,20 +32,26 @@ class ViewRenderer
   end
 
   class NullTransformer
-    def self.transform(v, json)
+    def self.transform(v, json, params)
       [v,json]
     end
   end
 
   class TransformJq
-    def self.transform(v, json)
+    def self.transform(v, json, params)
       json.jq(v["template"])[0]
     end
   end
 
   class TransformJmespath
-    def self.transform(v, json)
+    def self.transform(v, json, params)
       JMESPath.search(v["template"], json)
+    end
+  end
+
+  class TransformLiquid
+    def self.transform(v, json, params)
+      r = ::Liquid::Template.parse(v["template"]).render(json.merge(params: params)).html_safe
     end
   end
 
@@ -77,27 +83,8 @@ class ViewRenderer
     end
   end
 
-  class RenderMustache
-    def self.render(v, json, params, filename)
-      html = Mustache.render(v["template"],json.merge("_params" => params)).html_safe
-      if params.format != "png"
-        return html
-      elsif params.format == "png"
-        x = SecureRandom.urlsafe_base64(5)
-        File.open("/tmp/#{x}.html","w") {|f| f.write(html) }
-        `wkhtmltoimage /tmp/#{x}.html /tmp/#{x}.png`
-        AWS::S3::S3Object.store(filename,open("/tmp/#{x}.png"),'dg-tmp')
-        return {url: "https://s3.amazonaws.com/dg-tmp/#{filename}"}
-      end
-    end
-  end
-
-
-  class RenderLiquid
-    def self.render(transform, params, filename)
-      v, json = transform
-      ap v, json
-      html = ::Liquid::Template.parse(v["template"]).render(json.merge("_params" => params)).html_safe
+  class RenderHtml
+    def self.render(html, params, filename)
       if params.format != "png"
         return {html: html}
       elsif params.format == "png"
@@ -109,25 +96,4 @@ class ViewRenderer
       end
     end
   end
-
-  class Pivot
-    def self.render(v, json, params, filename)
-      pt = PivotTable.new(json, params)
-      pt.render(v["template"].symbolize_keys)
-    end
-  end
-
-  class ChartJp
-    def self.render(v, json, params, filename)
-      jp = JMESPath.search(v["template"], json)
-      if ["png","uri"].include?(params.format)
-        j = JSON.dump(jp)
-        i = ::RestClient.post('http://export.highcharts.com/',"content=options&options=#{j}&type=image/png")
-        AWS::S3::S3Object.store(filename,i,'dg-tmp')
-        return {url: "https://s3.amazonaws.com/dg-tmp/#{filename}"}
-      end
-      return jp
-    end
-  end
-
 end

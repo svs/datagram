@@ -198,7 +198,6 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     var subscribed = false;
 
     $scope.refresh = function(name) {
-      console.log(name);
       $scope.selectedParamSet = $scope.datagram.param_sets[name];
       console.log('refresh with ',$scope.datagram.param_sets[name]);
       $http.put('/api/v1/datagrams/' + $scope.datagram.id + '/refresh', {params: $scope.datagram.param_sets[name].params} ).then(function(r) {
@@ -220,23 +219,17 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     };
     $scope.viewsChanged = true;
     $scope.datagram.views.push({name: 'New View', type: null, template: null});
-    //console.log($scope.datagram.views);
   };
 
   var makeRenderedUrls = function(view) {
-    console.log('p', _.map($scope.datagram.responses,'params'));
     var x = {params: _.merge.apply(_.merge,_.map($scope.datagram.responses,'params'))};
-    console.log('x',x);
     var p = $httpParamSerializerJQLike(x);
-    console.log('p',p);
     var render = view.render == 'chart' ? 'png' : view.render;
     var url =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + p + '&views[]=' + view.name;
     $scope.renderedUrls[view.name] = url;
-    console.log('renderedUrls',$scope.renderedUrls);
   };
 
   var renderServer = function(view) {
-    console.log(view);
     $scope.save();
     $http({
       url: $scope.datagram.public_url,
@@ -245,7 +238,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       params: _.merge(_.clone({params: ($scope.selectedParamSet.params || {})}),{"views[]": view.name})
     }).then(function(r) {
       $scope.renderedData[view.name] = r.data;
-      if (view.render == "liquid") {
+      if (view.transform == "liquid") {
+	console.log('liquid', r.data);
 	$scope.renderedData[view.name] = $sce.trustAsHtml(r.data.html);
       }
       makeRenderedUrls(view);
@@ -255,6 +249,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.render = function(view, button) {
     if ((view.transform == 'jq' && button) || (view.transform == 'liquid' && button)){
+      console.log('renderServer',view);
       renderServer(view);
     } else {
       renderClient(view);

@@ -127,7 +127,7 @@ script type="text/ng-template" id="show.html"
                 .col-md-6
                   highchart id="chart1" config="renderedData[view.name]" ng-if="view.render=='chart'"
                   div hljs-to-json="renderedData[view.name]" ng-if="view.render=='json'"
-                  div#preview ng-if="view.render=='liquid' || view.render=='mustache'" ng-bind-html="renderedData[view.name]"
+                  div#preview ng-if="view.transform=='liquid' || view.transform=='mustache'" ng-bind-html="renderedData[view.name]"
                   div ui-grid="gridData" style="height: 500px" id="foo" ng-if="view.render == 'ag-grid'"
                   div ng-if="view.render=='csv'"
                     a ng-repeat="l in renderedData[view.name]"
