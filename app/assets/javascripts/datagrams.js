@@ -104,7 +104,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   $scope.renderedData = {};
   $scope.renderedUrls = {};
   $scope.selected = {streamSink: {}, streamSinkId: null, frequency: null};
-
+  $scope.options = {truncate: true};
 
   $scope.selectParamSet = function(name) {
     if (name) {
@@ -165,13 +165,14 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   var getDatagram = function(params) {
     var p;
-    console.log('getDatagram', params);
+    var max_size = $scope.options.truncate ? 1000 : 10000000;
+    console.log('getDatagram', params, $scope.options.truncate);
     if (params) {
-      p = params.param_set ? params : {params: _.zipObject(_.map(params, function(v,k) { return ["params[" + k + "]", v]})), max_size: 1000};
+      p = params.param_set ? params : {params: _.zipObject(_.map(params, function(v,k) { return ["params[" + k + "]", v]})), max_size: max_size};
     } else {
-      p = {params: {}};
+      p = {params: {}, max_size: max_size};
     }
-    p.params = _.merge(p.params, {max_size: 10000});
+    p.params = _.merge(p.params, {max_size: max_size});
     $http(_.merge({
       url: $scope.datagram.public_url,
       paramSerializer: '$httpParamSerializerJQLike',
@@ -179,6 +180,10 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     ).then(function(d) {
       $scope.datagram.responses = d.data.responses;
       $scope.metadata = _.map(d.data.responses, function(v,k) { return v.metadata });
+      $scope.warnings = _.compact(_.map(d.data.responses, function(v,k) { return v.warnings }));
+      console.log('warnings',$scope.warnings.length);
+      $scope.truncated = $scope.warnings.length > 0;
+      $scope.options.truncate = $scope.truncated;
       _.each($scope.datagram.views, function(v,k) {
 	//console.log('rendering ', v);
 	$scope.render(v, true);
@@ -227,12 +232,19 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     var render = view.render == 'chart' ? 'png' : view.render;
     var url =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + p + '&views[]=' + view.name;
     $scope.renderedUrls[view.name] = url;
+    console.log('renderedUrls', view.name, url);
   };
 
   var renderServer = function(view) {
     $scope.save();
+    var url;
+    if (view.render == 'html' && $scope.renderedUrls[view.name]) {
+      url = $scope.renderedUrls[view.name].replace('.json','.html');
+    } else {
+      url =  $scope.datagram.public_url;
+    }
     $http({
-      url: $scope.datagram.public_url,
+      url: url,
       paramSerializer: '$httpParamSerializerJQLike',
       method: 'GET',
       params: _.merge(_.clone({params: ($scope.selectedParamSet.params || {})}),{"views[]": view.name})
@@ -243,6 +255,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 	$scope.renderedData[view.name] = $sce.trustAsHtml(r.data.html);
       }
       makeRenderedUrls(view);
+
     });
 
   };

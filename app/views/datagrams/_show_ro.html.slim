@@ -35,6 +35,10 @@ script type="text/ng-template" id="show_ro.html"
         a.btn.btn-large.btn-success ng-click="reload(values.name || '__default')" style="margin: 3px"
           i.fa.fa-refresh style="margin-right: 5px"
           | Reload Now
+        br
+        input type="checkbox" ng-model="options.truncate"
+        | truncate?
+        | {{options.truncate}}
 
 
     .row

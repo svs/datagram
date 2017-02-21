@@ -63,7 +63,7 @@ module Api
           respond_to do |format|
             format.json { render json: response }
             format.xml { render xml: response }
-            format.html { render html: response, layout: 'template' }
+            format.html { render html: response, layout: nil}
             format.png {
               if response.is_a?(Hash)
                 redirect_to(response[:url])

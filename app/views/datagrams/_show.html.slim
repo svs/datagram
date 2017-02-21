@@ -63,6 +63,10 @@ script type="text/ng-template" id="show.html"
             a.btn.btn-large.btn-success ng-click="reload(values.name || '__default')" style="margin: 3px"
               i.fa.fa-refresh style="margin-right: 5px"
               | Reload
+            br
+            input type="checkbox" ng-model="options.truncate" ng-if="truncated"
+            | truncate?
+            | {{options.truncate}}
 
 
       .col-md-4

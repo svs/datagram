@@ -86,7 +86,7 @@ class ViewRenderer
   class RenderHtml
     def self.render(html, params, filename)
       if params.format != "png"
-        return {html: html}
+        return html
       elsif params.format == "png"
         x = SecureRandom.urlsafe_base64(5)
         File.open("/tmp/#{x}.html","w") {|f| f.write(html) }
