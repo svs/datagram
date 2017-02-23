@@ -16,6 +16,7 @@
  *= require 'jsoneditor.min.css'
  *= require 'datagram.css'
  *= require 'ui-grid.min.css'
+ *= require 'ag-grid.css'
  *= require_self
  */
 
@@ -131,4 +132,11 @@ ul#ticker li {
 	75%  {margin-top: -156px;}
 	88%  {margin-top: -182px;}
 	100% {margin-top: -182px;}
+}
+
+.rag_green {
+    background: lightgreen;
+}
+.rag_red {
+    background: lightpink;
 }

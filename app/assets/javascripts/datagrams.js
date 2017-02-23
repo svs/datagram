@@ -4,9 +4,11 @@
 //= require angular-highlightjs.js
 //= require directives.js
 //= require ui-grid.min.js
+//= require ag-grid.min.js
 
+agGrid.initialiseAgGridWithAngular1(angular);
 
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng","ngSanitize","ui.grid",'ngCsv']).
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng","ngSanitize","agGrid",'ngCsv']).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -99,7 +101,7 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 
 }]);
 
-angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike) {
+angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', '$timeout',function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike, $timeout) {
 
   $scope.renderedData = {};
   $scope.renderedUrls = {};
@@ -269,11 +271,28 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     }
 
   };
-
+  $scope.gridOptions = {enableSorting: true};
   var renderClient = function(view) {
     if ( view.transform === 'jmespath') {
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
       $scope.renderedData[view.name].options = $scope.renderedData[view.name].options || {a: 'foo'}; //weird new bug
+      if (view.render === 'ag-grid') {
+	$timeout(function() {
+	  //$scope.gridOptions = $scope.renderedData[view.name];
+	  var keys = _.keys($scope.renderedData[view.name].rowData[0]);
+	  var cols = _.map(keys, function(a) { return {headerName: a, field: a};});
+	  console.log('columnDefs',$scope.renderedData[view.name].columnDefs);
+	  _.map($scope.renderedData[view.name].columnDefs, function(v,k,x) {
+	    console.log(v,k,x);
+	    var c = _.find(cols, {field: k});
+	    c = _.merge(c, v);
+	    console.log(c);
+	  });
+	  console.log(cols);
+	  $scope.gridOptions.api.setColumnDefs(cols);
+	  $scope.gridOptions.api.setRowData($scope.renderedData[view.name].rowData);
+	}, 500);
+      }
     };
     if (view.transform === 'mustache') {
       $scope.renderedData[view.name] = Mustache.render(view.template, $scope.datagram);
