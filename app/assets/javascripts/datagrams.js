@@ -271,7 +271,9 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     }
 
   };
-  $scope.gridOptions = {enableSorting: true};
+
+  $scope.gridOptions = {enableSorting: true, enableFilter: true, rowData: null};
+
   var renderClient = function(view) {
     if ( view.transform === 'jmespath') {
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
@@ -281,16 +283,13 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 	  //$scope.gridOptions = $scope.renderedData[view.name];
 	  var keys = _.keys($scope.renderedData[view.name].rowData[0]);
 	  var cols = _.map(keys, function(a) { return {headerName: a, field: a};});
-	  console.log('columnDefs',$scope.renderedData[view.name].columnDefs);
 	  _.map($scope.renderedData[view.name].columnDefs, function(v,k,x) {
-	    console.log(v,k,x);
 	    var c = _.find(cols, {field: k});
 	    c = _.merge(c, v);
-	    console.log(c);
 	  });
-	  console.log(cols);
 	  $scope.gridOptions.api.setColumnDefs(cols);
 	  $scope.gridOptions.api.setRowData($scope.renderedData[view.name].rowData);
+	  $scope.gridOptions.api.sizeColumnsToFit();
 	}, 500);
       }
     };

@@ -2,7 +2,7 @@
 script type="text/ng-template" id="show_ro.html"
   div ng-controller="datagramCtrl"
     .row.portlet-title
-      .col-md-6
+      .col-md-5
         h2.portlet-title style="margin-bottom: 0px"
           u
             | {{datagram.name}}
@@ -13,7 +13,7 @@ script type="text/ng-template" id="show_ro.html"
         a ng-repeat="u in datagram.urls" href="{{u.href}}"
           | {{u.l}}
           | &bull; &nbsp;
-      .col-md-4
+      .col-md-3
         tabset
           tab ng-repeat="(name, values) in (datagram.param_sets)" heading="{{values.name || 'default'}}" ng-click="selectParamSet(values.name)"
             table.table
@@ -28,7 +28,7 @@ script type="text/ng-template" id="show_ro.html"
                   |{{k}}
                 td style="border: 0px; padding: 1px"
                   input type="text" ng-model="values.params[k]" ng-blur="updateCurrentParams(k)"
-      .col-md-2
+      .col-md-4
         a.btn.btn-large.btn-warning ng-click="refresh(values.name || '__default')" style="margin: 3px"
           i.fa.fa-refresh style="margin-right: 5px"
           | Refresh Now
