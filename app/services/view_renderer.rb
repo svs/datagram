@@ -58,8 +58,10 @@ class ViewRenderer
   class RenderChart
     def self.render(json,params,filename)
       if params.format == "png"
+        ap json
         j = JSON.dump(json)
-        i = ::RestClient.post('http://export.highcharts.com/',"content=options&options=#{j}&type=image/png")
+        p j
+        i = ::RestClient.post('http://export.highcharts.com/',"content=options&options=#{j}&type=image/jpeg")
         AWS::S3::S3Object.store(filename,i,'dg-tmp')
         return {url: "https://s3.amazonaws.com/dg-tmp/#{filename}"}
       else

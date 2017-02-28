@@ -274,23 +274,52 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.gridOptions = {enableSorting: true, enableFilter: true, rowData: null};
 
+  var doGridOp = function(view, opData,opName, col) {
+    console.log('doGridOp',arguments);
+    if (opName == 'gradient') {
+      var data = _.map($scope.renderedData[view].rowData, col.field);
+      console.log(data);
+      var max = _.max(data);
+      var min = _.min(data);
+      var scale = chroma.scale(opData).domain([min,max]).mode('lab');
+      var r = {cellStyle: function(p) {
+        return {background: scale(p.value), color: "white"};
+      }};
+      return r;
+    }
+  };
+
+  var renderAgGrid = function(view) {
+    console.log('renderAgGrid');
+    var keys = _.keys($scope.renderedData[view.name].rowData[0]);
+    var cols = _.map(keys, function(a) { return {headerName: a, field: a};});
+    var reservedWords = ['gradient'];
+    _.map($scope.renderedData[view.name].columnDefs, function(v,k,x) {
+      var col = _.find(cols, {field: k});
+      col = _.merge(col, _.omit(v, reservedWords));
+      var ops = _.pick(v, reservedWords);
+      console.log('ops',ops);
+      _.map(ops, function(opData,opName) {
+        var r = doGridOp(view.name,opData,opName,col);
+        console.log('r',r);
+        col = _.merge(col, r);
+      });
+    });
+    console.log(cols);
+    $scope.gridOptions.api.setColumnDefs(cols);
+    $scope.gridOptions.api.setRowData($scope.renderedData[view.name].rowData);
+    $scope.gridOptions.api.sizeColumnsToFit();
+  }
+
   var renderClient = function(view) {
+    console.log('renderClient',view);
     if ( view.transform === 'jmespath') {
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
       $scope.renderedData[view.name].options = $scope.renderedData[view.name].options || {a: 'foo'}; //weird new bug
       if (view.render === 'ag-grid') {
 	$timeout(function() {
-	  //$scope.gridOptions = $scope.renderedData[view.name];
-	  var keys = _.keys($scope.renderedData[view.name].rowData[0]);
-	  var cols = _.map(keys, function(a) { return {headerName: a, field: a};});
-	  _.map($scope.renderedData[view.name].columnDefs, function(v,k,x) {
-	    var c = _.find(cols, {field: k});
-	    c = _.merge(c, v);
-	  });
-	  $scope.gridOptions.api.setColumnDefs(cols);
-	  $scope.gridOptions.api.setRowData($scope.renderedData[view.name].rowData);
-	  $scope.gridOptions.api.sizeColumnsToFit();
-	}, 500);
+          renderAgGrid(view);
+        }, 500);
       }
     };
     if (view.transform === 'mustache') {
