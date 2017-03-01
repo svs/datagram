@@ -322,6 +322,9 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
         }, 500);
       }
     };
+    if (view.render === 'png') {
+      $scope.$broadcast('highchartsng.reflow');
+    }
     if (view.transform === 'mustache') {
       $scope.renderedData[view.name] = Mustache.render(view.template, $scope.datagram);
       console.log($scope.renderedData[view.name]);

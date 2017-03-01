@@ -45,7 +45,7 @@ script type="text/ng-template" id="show_ro.html"
       .col-md-12
           tabset
             tab heading="{{view.name}}" ng-repeat="view in datagram.views"
-              .row
+              .row#view
                 .col-mod-12
                   a href="{{renderedUrls[view.name]}}" target="_blank"
                     | {{view.render}}
