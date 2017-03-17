@@ -1,0 +1,10 @@
+doctype html
+
+html
+  head
+    meta name="url" content="#{@url}"
+    = javascript_include_tag 'ag-grid'
+    = stylesheet_link_tag 'ag-grid'
+
+  body
+    = yield

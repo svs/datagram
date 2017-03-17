@@ -24,6 +24,9 @@ angular.module('datagramsApp').filter('fromNow', function() {
 });
 
 
+
+
+
 datagramsApp.config(function($stateProvider,$urlRouterProvider) {
   $urlRouterProvider.otherwise('/');
 
@@ -232,6 +235,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     var x = {params: _.merge.apply(_.merge,_.map($scope.datagram.responses,'params'))};
     var p = $httpParamSerializerJQLike(x);
     var render = view.render == 'chart' ? 'png' : view.render;
+    render = render == "ag-grid" ? "aggrid" : render;
     var url =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + p + '&views[]=' + view.name;
     $scope.renderedUrls[view.name] = url;
     console.log('renderedUrls', view.name, url);

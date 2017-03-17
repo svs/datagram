@@ -57,12 +57,16 @@ module Api
           datagram = User.find_by(token: params[:api_key]).datagrams.find_by(slug: params[:slug])
         end
         if datagram
-          Mykeen.publish("datagram_view", {slug: datagram.slug, token: params[:token], api_key: params[:api_key]})
+          if params[:format]=="aggrid"
+            @url = url_for(params.merge("format" => "json"))
+            (render layout: 'ag-grid') and return
+          end
           ds = DatagramFetcherService.new(datagram, params)
           response = ds.render(params[:views])
           respond_to do |format|
             format.json { render json: response }
             format.xml { render xml: response }
+
             format.html { render html: response, layout: nil}
             format.png {
               if response.is_a?(Hash)
