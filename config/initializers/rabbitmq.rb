@@ -7,10 +7,6 @@ begin
   username = Rails.application.secrets.rabbitmq_user || "guest"
   password = Rails.application.secrets.rabbitmq_password || "guest"
 
-  p "endpoint #{endpoint}"
-  Rails.logger.info("#Bunny connecting to #{endpoint}")
-
-
   $conn = Bunny.new(endpoint)
 
   $conn.start

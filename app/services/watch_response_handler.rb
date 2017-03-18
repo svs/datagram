@@ -1,6 +1,7 @@
 class WatchResponseHandler
 
   def initialize(params)
+    ap params
     @params = params
   end
 
@@ -10,6 +11,7 @@ class WatchResponseHandler
     if wr
       update_attrs = {
         response_json: data,
+        response_filename: params[:data_filename],
         status_code: params[:status_code],
         elapsed: params[:elapsed],
         response_received_at: now,

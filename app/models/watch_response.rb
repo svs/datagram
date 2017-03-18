@@ -13,8 +13,6 @@ class WatchResponse < ActiveRecord::Base
   end
 
   def as_json(max_size = Float::INFINITY)
-    ap bytesize
-    ap max_size
     {
       data: bytesize > max_size ? truncated_json : response_json,
       errors: error,
@@ -22,6 +20,12 @@ class WatchResponse < ActiveRecord::Base
       params: params
     }
   end
+
+  def response_json
+    response_filename ? s3_file : read_attribute(:response_json)
+  end
+
+
 
   def metadata
     attributes.slice("elapsed", "status_code", "token", "response_received_at", "timestamp").
@@ -75,8 +79,12 @@ class WatchResponse < ActiveRecord::Base
   end
 
   def set_bytesize
-    self.bytesize = self.response_json.to_json.bytesize
+    self.bytesize = response_json.to_json.bytesize
   end
 
+  def s3_file
+    ap "S3!!!!!"
+    @s3_file ||= JSON.load(AWS::S3::S3Object.value(response_filename,'datagramg-cache'))
+  end
 
 end

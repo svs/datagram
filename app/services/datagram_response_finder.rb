@@ -32,7 +32,7 @@ class DatagramResponseFinder
     # filters responses for watch params
     return @responses if @responses
     @responses = WatchResponse.where(watch_id: datagram.watch_ids, datagram_id: datagram.id, status_code: 200, complete: true).
-                 where('response_json is not null')
+                 where('response_json is not null OR response_filename IS NOT NULL')
     if !search_params.blank?
       @responses = @responses.where('params @> ?', params.to_json)
     end

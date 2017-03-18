@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161225022227) do
+ActiveRecord::Schema.define(version: 20170317101138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,6 +148,7 @@ ActiveRecord::Schema.define(version: 20161225022227) do
     t.string   "datagram_uid"
     t.boolean  "complete"
     t.string   "thumbnail_url"
+    t.string   "response_filename"
   end
 
   create_table "watches", force: :cascade do |t|

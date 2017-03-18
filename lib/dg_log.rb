@@ -7,6 +7,7 @@ class DgLog
   end
 
   def log
+    #ap log_line
     Rails.logger.send(level, log_line)
   end
 

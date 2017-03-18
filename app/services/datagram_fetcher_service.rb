@@ -12,7 +12,7 @@ class DatagramFetcherService
   def initialize(datagram, params = nil)
     @datagram = datagram
     @params = (params || {}).with_indifferent_access
-    @max_size = params[:max_size] ? params[:max_size].to_i : Float::INFINITY
+    @max_size = (params && params[:max_size]) ? params[:max_size].to_i : Float::INFINITY
   end
 
   def render(views = [])
@@ -108,7 +108,7 @@ class DatagramFetcherService
     # - splits controller params hash into query_params, search_params and format
     # - symbolizes keys for easy access
     # - provides convenience methods to check sync?, etc.
-    def initialize(params)
+    def initialize(params = nil)
       @params = params
     end
 
