@@ -26,3 +26,8 @@
 .rag_red {
     background: lightpink;
 }
+
+.mute {
+    background: #ccc;
+    color: #999;
+}
