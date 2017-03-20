@@ -140,3 +140,11 @@ ul#ticker li {
 .rag_red {
     background: lightpink;
 }
+
+.portlet-title u, .content-title u {
+}
+
+.nav-tabs > li > a {
+    font-size: 1.2em;
+    border-right: 1px solid #eee;
+}

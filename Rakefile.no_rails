@@ -15,7 +15,6 @@ if !defined?(Rails)
   @logger = Logger.new(STDOUT)
   Rails = OpenStruct.new(logger: @logger, application: OpenStruct.new(secrets: OpenStruct.new(YAML.load(File.read('./config/secrets.yml'))[ENV["ENV"]])))
 end
-ap Rails.application.secrets
 require './config/initializers/rabbitmq.rb'
 require './config/initializers/s3.rb'
 task :perform  do
@@ -25,12 +24,10 @@ task :perform  do
       begin
         t = Time.now.to_i
         payload = JSON.parse(payload)
-        ap payload
         context = {datagram: payload["datagram_id"], watch: payload["token"], timestamp: payload["timestamp"]}
         #DgLog.new("#Perform processing watch #{payload["key"]}", context).log
         #ap context
         url = payload["url"]
-        ap url
         if url =~ /docs.google.com\/spreadsheets/
           c = Clients::GoogleDrive.new(url, payload)
           r = c.data
@@ -40,7 +37,6 @@ task :perform  do
         else
           url = url.gsub("mysql://","mysql2://")
           options = url =~ /redshift/ ? {client_min_messages: false, force_standard_strings: false} : {}
-          ap url
           Sequel.connect(url, options) do |db|
             q = payload["data"]["query"]
             r = db.fetch(q).all
@@ -48,20 +44,29 @@ task :perform  do
         end
         #ap [payload["key"],r, payload["datagram_id"]]
         filename = "#{payload["datagram_id"]}-#{payload["key"]}.json"
-        elapsed = Time.now.to_i - t
-        ap elapsed
-        x = AWS::S3::S3Object.store(filename,JSON.dump(r), "datagramg-cache")
-        elapsed = Time.now.to_i - t
-        ap elapsed
+        elapsed = (Time.now.to_i - t).round
+        Rails.logger.info "Finished query in #{elapsed} seconds"
+        json = JSON.dump(r)
+        bytesize = json.bytesize
+        if bytesize > 1_000_000
+          truncated_json = r[0..20]
+        end
+        Thread.new do
+          tt = Time.now
+          Rails.logger.info "Storing #{filename} #{tt}"
+          x = AWS::S3::S3Object.store(filename,json, "datagramg-cache")
+          Rails.logger.info "Done storing  #{filename} #{(Time.now - tt).round}"
+        end
         response = {
           elapsed: elapsed,
           status_code: 200,
           data_filename: filename,
           id: payload["key"],
           datagram_id: payload["datagram_id"],
-          timestamp: payload["timestamp"]
+          timestamp: payload["timestamp"],
+          bytesize: bytesize,
+          truncated_json: truncated_json
         }
-        ap response
         #ap $watch_responses
         $watch_responses.publish(response.to_json)
         DgLog.new("#Perform finished #{payload["key"]} in #{elapsed} seconds", context).log

@@ -33,7 +33,7 @@ class WatchResponse < ActiveRecord::Base
   end
 
   def truncated_json
-    response_json.is_a?(Array) ? response_json[0..10] : response_json
+    read_attribute(:truncated_json) || (truncated_json || (response_json.is_a?(Array) ? response_json[0..10] : response_json))
   end
 
   private
@@ -79,12 +79,11 @@ class WatchResponse < ActiveRecord::Base
   end
 
   def set_bytesize
-    self.bytesize = response_json.to_json.bytesize
+    self.bytesize ||= response_json.to_json.bytesize
   end
 
   def s3_file
-    ap "S3!!!!!"
-    @s3_file ||= JSON.load(AWS::S3::S3Object.value(response_filename,'datagramg-cache'))
+    @s3_file ||= JSON.load(AWS::S3::S3Object.value(response_filename,'datagramg-cache')) rescue truncated_json
   end
 
 end

@@ -1,7 +1,6 @@
 class WatchResponseHandler
 
   def initialize(params)
-    ap params
     @params = params
   end
 
@@ -16,7 +15,9 @@ class WatchResponseHandler
         elapsed: params[:elapsed],
         response_received_at: now,
         error: params[:error],
-        report_time: nil
+        report_time: nil,
+        bytesize: params[:bytesize],
+        truncated_json: params[:truncated_json]
       }
       if wr.update(update_attrs)
         if watch
@@ -33,7 +34,6 @@ class WatchResponseHandler
             WatchResponse.where(datagram_id: datagram.id, timestamp: params[:timestamp]).update_all(complete:true)
             WatchResponse.where('datagram_id = ? AND  timestamp < ? AND params @> ?', datagram.id, params[:timestamp], wr.params.to_json).destroy_all
             streamer_id = $redis.hget(redis_tracking_key, "streamer_id")
-            ap "#StreamerId #{streamer_id} !!!!!!!!!!!!!!!"
             Streamer.find(streamer_id).render if streamer_id
             $redis.del(redis_tracking_key)
           end
