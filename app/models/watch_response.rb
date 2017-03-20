@@ -33,7 +33,7 @@ class WatchResponse < ActiveRecord::Base
   end
 
   def truncated_json
-    read_attribute(:truncated_json) || (truncated_json || (response_json.is_a?(Array) ? response_json[0..10] : response_json))
+    read_attribute(:truncated_json) || ((response_json.is_a?(Array) ? response_json[0..10] : response_json))
   end
 
   private
