@@ -45,16 +45,16 @@ task :perform  do
         #ap [payload["key"],r, payload["datagram_id"]]
         filename = "#{payload["datagram_id"]}-#{payload["key"]}.json"
         elapsed = (Time.now.to_i - t).round
-        Rails.logger.info "Finished query in #{elapsed} seconds"
+        Rails.logger.info "#Perform Finished query in #{elapsed} seconds"
         json = JSON.dump(r)
         bytesize = json.bytesize
         if bytesize > 1_000_000
           truncated_json = r[0..20]
         end
         tt = Time.now
-        Rails.logger.info "Storing #{filename} #{tt}"
+        Rails.logger.info "#Perform Storing #{filename} #{tt}"
         x = AWS::S3::S3Object.store(filename,json, "datagramg-cache")
-        Rails.logger.info "Done storing  #{filename} #{(Time.now - tt).round}"
+        Rails.logger.info "#Perform Done storing  #{filename} #{(Time.now - tt).round}"
 
         response = {
           elapsed: elapsed,
