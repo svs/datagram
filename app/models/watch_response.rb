@@ -84,8 +84,12 @@ class WatchResponse < ActiveRecord::Base
 
   def s3_file
     return @s3_file if @s3_file
-    ap "#{datagram_id} #S3!!!"
+    ap "#{datagram_id} #{id} #S3!!!"
     @s3_file ||= JSON.load(AWS::S3::S3Object.value(response_filename,'datagramg-cache')) rescue truncated_json
+  end
+
+  def slug
+    @slug ||= (Datagram.find(watch.datagram_id).slug rescue "slug?")
   end
 
 end
