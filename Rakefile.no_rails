@@ -51,12 +51,11 @@ task :perform  do
         if bytesize > 1_000_000
           truncated_json = r[0..20]
         end
-        Thread.new do
-          tt = Time.now
-          Rails.logger.info "Storing #{filename} #{tt}"
-          x = AWS::S3::S3Object.store(filename,json, "datagramg-cache")
-          Rails.logger.info "Done storing  #{filename} #{(Time.now - tt).round}"
-        end
+        tt = Time.now
+        Rails.logger.info "Storing #{filename} #{tt}"
+        x = AWS::S3::S3Object.store(filename,json, "datagramg-cache")
+        Rails.logger.info "Done storing  #{filename} #{(Time.now - tt).round}"
+
         response = {
           elapsed: elapsed,
           status_code: 200,
