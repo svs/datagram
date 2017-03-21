@@ -18,35 +18,41 @@ class DgLog
   end
 
   def datagram
+    return @datagram if @datagram
     if context.is_a? Binding
-      d = eval("@datagram",context).try(:slug) || "                      "
+      @datagram = eval("@datagram",context).try(:slug) || "                      "
     else
-      context[:datagram]
+      @datagram = context[:datagram]
     end
   end
 
   def watch
-    if context.is_a? Binding
-      eval("@watch", context).try(:slug) || "                      "
-    else
-      context[:watch]
-    end
+    return @watch || (@watch =
+                      if context.is_a? Binding
+                        eval("@watch", context).try(:slug) || "                      "
+                      else
+                        context[:watch]
+                      end)
   end
 
   def user
-    if context.is_a? Binding
-      eval("@user", context).try(:token) || "                      "
-    else
-      context[:user]
-    end
+    return @user || (@user =
+                     if context.is_a? Binding
+                       eval("@user", context).try(:token) || "                      "
+                     else
+                       context[:user]
+                     end
+                    )
   end
 
   def ts
-    if context.is_a? Binding
-      eval("@timestamp", context) || "          "
-    else
-      context[:timestamp]
-    end
+    return @ts || (@ts =
+                   if context.is_a? Binding
+                     eval("@timestamp", context) || "          "
+                   else
+                     context[:timestamp]
+                   end
+                  )
   end
 
   def log_line
