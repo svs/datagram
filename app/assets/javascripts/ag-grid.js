@@ -26,10 +26,19 @@ var exportDataAsExcel = function() {
 var doGridOp = function(data, opData,opName, col) {
   console.log('doGridOp',arguments);
   if (opName == 'gradient') {
-    var data = _.map(data.rowData, col.field);
-    var max = _.max(data);
-    var min = _.min(data);
-    var scale = chroma.scale(opData).domain([min,max]).mode('lab');
+    if (opData[0][0]) {
+      var colors = opData[0];
+      var domain = opData[1];
+    } else {
+      var colors = opData;
+      var data = _.map(data.rowData, col.field);
+      var max = _.max(data);
+      var min = _.min(data);
+      var domain = [min,max];
+    }
+    console.log('colors',colors);
+    console.log('domain',domain);
+    var scale = chroma.scale(colors).domain(domain).mode('lab');
     var r = {cellStyle: function(p) {
       return {background: scale(p.value), color: "white"};
     }};
