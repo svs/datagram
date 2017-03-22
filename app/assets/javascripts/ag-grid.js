@@ -56,6 +56,7 @@ var renderAgGrid = function(data) {
     col = _.merge(col, _.omit(v, reservedWords));
     var ops = _.pick(v, reservedWords);
     console.log('ops',ops);
+    console.log('col',col);
     _.map(ops, function(opData,opName) {
       var r = doGridOp(data,opData,opName,col);
       console.log('r',r);

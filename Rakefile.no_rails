@@ -48,7 +48,7 @@ task :perform  do
         Rails.logger.info "#Perform Finished query in #{elapsed} seconds"
         json = JSON.dump(r)
         bytesize = json.bytesize
-        if bytesize > 1_000_000
+        if bytesize > 200_000
           truncated_json = r[0..20]
         end
         tt = Time.now
