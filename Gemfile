@@ -86,8 +86,9 @@ gem 'slack-notify'
 gem 'slack-ruby-client'
 gem 'telegram-bot-ruby'
 gem 'business_time'
-# Stats
+
 gem "keen"
+gem 'scout_apm'
 
 group :development, :test do
   gem 'rspec-rails'

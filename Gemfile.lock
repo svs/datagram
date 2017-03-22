@@ -493,6 +493,7 @@ GEM
       sass (~> 3.2.2)
       sprockets (~> 2.8, < 3.0)
       sprockets-rails (~> 2.0)
+    scout_apm (2.1.22)
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -647,6 +648,7 @@ DEPENDENCIES
   rspec-rails
   ruby-jq (~> 0.1.6)
   sass-rails (~> 4.0.3)
+  scout_apm
   sdoc (~> 0.4.0)
   sequel
   sequel-redshift!
