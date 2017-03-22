@@ -26,7 +26,7 @@ var exportDataAsExcel = function() {
 var doGridOp = function(data, opData,opName, col) {
   console.log('doGridOp',arguments);
   if (opName == 'gradient') {
-    if (opData[0][0]) {
+    if (_.isArray(opData[0])) {
       var colors = opData[0];
       var domain = opData[1];
     } else {

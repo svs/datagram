@@ -281,16 +281,17 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   var doGridOp = function(view, opData,opName, col) {
     console.log('doGridOp',arguments);
     if (opName == 'gradient') {
-      if (opData[0][0]) {
-	    var colors = opData[0];
-	    var domain = opData[1];
-	  } else {
-      var colors = opData;
-      var data = _.map(data.rowData, col.field);
-      var max = _.max(data);
-      var min = _.min(data);
-      var domain = [min,max];
-    }
+      var data = _.map($scope.renderedData[view].rowData, col.field);
+      console.log('data',data);
+      if (_.isArray(opData[0])) {
+	var colors = opData[0];
+	var domain = opData[1];
+      } else {
+	var colors = opData;
+	var max = _.max(data);
+	var min = _.min(data);
+	var domain = [min,max];
+      }
       console.log('colors',colors);
       console.log('domain',domain);
       var scale = chroma.scale(colors).domain(domain).mode('lab');
