@@ -10,6 +10,7 @@ require 'rest-client'
 require 'aws/s3'
 
 require './lib/dg_log.rb'
+require './app/services/clients/sql.rb'
 if !defined?(Rails)
   raise "No environment specified" unless ENV["ENV"]
   @logger = Logger.new(STDOUT)
@@ -35,38 +36,9 @@ task :perform  do
           d = payload["params"].slice(*payload["data"].keys) if payload["data"]
           r = JSON.parse(RestClient.get(payload["url"], {params: d}))
         else
-          url = url.gsub("mysql://","mysql2://")
-          options = url =~ /redshift/ ? {client_min_messages: false, force_standard_strings: false} : {}
-          Sequel.connect(url, options) do |db|
-            q = payload["data"]["query"]
-            r = db.fetch(q).all
-          end
+          c = Clients::Sql.new(url, payload)
+          r = c.response
         end
-        #ap [payload["key"],r, payload["datagram_id"]]
-        filename = "#{payload["datagram_id"]}-#{payload["key"]}.json"
-        elapsed = (Time.now.to_i - t).round
-        Rails.logger.info "#Perform Finished query in #{elapsed} seconds"
-        json = JSON.dump(r)
-        bytesize = json.bytesize
-        if bytesize > 200_000
-          truncated_json = r[0..20]
-        end
-        tt = Time.now
-        Rails.logger.info "#Perform Storing #{filename} #{tt}"
-        x = AWS::S3::S3Object.store(filename,json, "datagramg-cache")
-        Rails.logger.info "#Perform Done storing  #{filename} #{(Time.now - tt).round}"
-
-        response = {
-          elapsed: elapsed,
-          status_code: 200,
-          data_filename: filename,
-          id: payload["key"],
-          datagram_id: payload["datagram_id"],
-          timestamp: payload["timestamp"],
-          bytesize: bytesize,
-          truncated_json: truncated_json
-        }
-        #ap $watch_responses
         $watch_responses.publish(response.to_json)
         DgLog.new("#Perform finished #{payload["key"]} in #{elapsed} seconds", context).log
       rescue Exception => e

@@ -1,9 +1,9 @@
 require 'clockwork'
 require 'clockwork/database_events'
-#require_relative './config/boot'
-#require_relative './config/environment'
-#require 'bunny'
-#require './config/initializers/rabbitmq.rb'
+require_relative './config/boot'
+require_relative './config/environment'
+require 'bunny'
+require './config/initializers/rabbitmq.rb'
 
 module Clockwork
 
