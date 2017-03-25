@@ -12,8 +12,12 @@
 //
 //= require ace.js
 //= require jquery
+//= require c3.min.js
+//= require d3.min.js
+//= require jquery-ui.min.js
 //= require angular-1.5.8.min.js
 //= require lodash
+//= require pivot.min.js
 //= require restangular
 //= require angular-ui-router
 //= require angular-pusher
@@ -29,10 +33,12 @@
 //= require highcharts/highcharts.js
 //= require highcharts-ng.min.js
 //= require bootstrap.min
-//= require liquid.min.js
 //= require mustache.min.js
+//= require c3_renderers.min.js
+//= require d3_renderers.min.js
 //= require ng-csv.min.js
 //= require angular-sanitize.min.js
+//= require angular-pivot.js
 
 $(document).ready(function() {
   $('a[href="' + window.location.pathname + '"]').parent().addClass('active');

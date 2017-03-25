@@ -4,11 +4,11 @@
 //= require angular-highlightjs.js
 //= require directives.js
 //= require ui-grid.min.js
-//= require ag-grid.min.js
+//= require ag-grid-ent.min.js
 
+agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Production_100Devs24_May_2017__MTQ5NTU4MDQwMDAwMA==16be8f8f82a5e4b5fa39766944c69a32");
 agGrid.initialiseAgGridWithAngular1(angular);
-
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng","ngSanitize","agGrid",'ngCsv']).
+var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng","ngSanitize","agGrid",'ngCsv','angular-pivottable']).
 config(['PusherServiceProvider',
   function(PusherServiceProvider) {
     PusherServiceProvider
@@ -107,6 +107,15 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', '$timeout',function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike, $timeout) {
 
   $scope.renderedData = {};
+  var renderers = $.extend($.pivotUtilities.renderers,
+			   $.pivotUtilities.c3_renderers);
+  $scope.pivotOptions = {renderers: renderers, name: "pivot"};
+  $scope.pivotConfig = {};
+  $scope.pivotRefresh = function() {
+    console.log('pivotRefresh', arguments);
+  };
+
+
   $scope.renderedUrls = {};
   $scope.selected = {streamSink: {}, streamSinkId: null, frequency: null};
   $scope.options = {truncate: true};
@@ -124,7 +133,6 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   $scope.gridData = [];
 
   $scope.updateCurrentParams = function(k) {
-    alert(k);
   };
 
   var loadDatagram = function() {
@@ -276,7 +284,21 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   };
 
-  $scope.gridOptions = {enableSorting: true, enableFilter: true, rowData: null};
+
+  $scope.big = false;
+  $scope.resize = function() {
+    $scope.big = !($scope.big);
+    $timeout(function() {
+      $scope.$broadcast('highchartsng.reflow');
+    },100);
+    if ($scope.gridOptions.api) {
+      $timeout(function() {
+        $scope.gridOptions.api.sizeColumnsToFit(true);
+      }, 500);
+    }
+  };
+
+  $scope.gridOptions = {enableSorting: true, enableFilter: true, rowData: null, showToolPanel: true, enableStatusBar: true };
 
   var doGridOp = function(view, opData,opName, col) {
     console.log('doGridOp',arguments);
@@ -322,13 +344,22 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     $scope.gridOptions.api.setColumnDefs(cols);
     $scope.gridOptions.api.setRowData($scope.renderedData[view.name].rowData);
     $scope.gridOptions.api.sizeColumnsToFit();
+    $scope.gridOptions.api.enableStatusBar(true);
+    $scope.gridOptions.columnApi.setPivotMode(data.pivotMode);
+
   }
+
 
   var renderClient = function(view) {
     console.log('renderClient',view);
     if ( view.transform === 'jmespath') {
       $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
-      $scope.renderedData[view.name].options = $scope.renderedData[view.name].options || {a: 'foo'}; //weird new bug
+      if (view.render != 'pivot') {
+	$scope.renderedData[view.name].options = $scope.renderedData[view.name].options || {a: 'foo'}; //weird new bug
+      }
+      if (view.render == 'pivot') {
+	$scope.renderedData[view.name]
+      };
       if (view.render === 'ag-grid') {
 	$timeout(function() {
           renderAgGrid(view);

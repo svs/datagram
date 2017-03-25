@@ -14,9 +14,11 @@
 //= require lodash
 //= require moment.min.js
 //= require chroma.min.js
-//= require ag-grid.min.js
+//= require ag-grid-ent.min.js
 
-var gridOptions = {enableSorting: true, enableFilter: true, rowData: null};
+agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Production_100Devs24_May_2017__MTQ5NTU4MDQwMDAwMA==16be8f8f82a5e4b5fa39766944c69a32");
+
+var gridOptions = {enableSorting: true, enableFilter: true, rowData: null, showToolPanel: true, enableStatusBar: true };
 
 var exportDataAsExcel = function() {
   console.log('Excel!');
@@ -47,7 +49,7 @@ var doGridOp = function(data, opData,opName, col) {
 };
 
 var renderAgGrid = function(data) {
-  console.log('renderAgGrid');
+  console.log('renderAgGrid', data);
   var keys = _.keys(data.rowData[0]);
   var cols = _.map(keys, function(a) { return {headerName: a, field: a};});
   var reservedWords = ['gradient'];
@@ -67,6 +69,8 @@ var renderAgGrid = function(data) {
   gridOptions.api.setColumnDefs(cols);
   gridOptions.api.setRowData(data.rowData);
   gridOptions.api.sizeColumnsToFit();
+  gridOptions.api.enableStatusBar(true);
+  gridOptions.columnApi.setPivotMode(data.pivotMode);
 };
 
 $(document).ready(function() {

@@ -17,11 +17,14 @@
  *= require 'datagram.css'
  *= require 'ui-grid.min.css'
  *= require 'ag-grid.css'
+*= require 'pivot.min.css'
+*= require 'c3.min.css'
  *= require_self
  */
 
 @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono);
 h1, h2, h3{
+    margin-bottom: 5px;
 }
 
 pre {
@@ -147,4 +150,15 @@ ul#ticker li {
 .nav-tabs > li > a {
     font-size: 1.2em;
     border-right: 1px solid #eee;
+}
+
+.mainnav-menu > li > a {
+    padding: 10px 2px 0px 0px;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.navbar-brand > h1 {
+    line-height: 0.6;
+    font-size: 1.6em;
 }
