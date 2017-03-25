@@ -14,7 +14,7 @@ require './lib/dg_log.rb'
 $stdout.sync = true
 if !defined?(Rails)
   raise "No environment specified" unless ENV["ENV"]
-  @logger = Logger.new
+  @logger = Logger.new(STDOUT)
   Rails = OpenStruct.new(logger: @logger, application: OpenStruct.new(secrets: OpenStruct.new(YAML.load(File.read('./config/secrets.yml'))[ENV["ENV"]])))
 end
 require './config/initializers/rabbitmq.rb'
