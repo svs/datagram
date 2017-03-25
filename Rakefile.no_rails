@@ -52,7 +52,7 @@ task :perform  do
         truncated_json = r[0..20]
         tt = Time.now
         DgLog.new("#Perform Storing #{filename} #{tt}", context).log
-        #x = AWS::S3::S3Object.store(filename,json, "datagramg-cache")
+        x = AWS::S3::S3Object.store(filename,json, "datagramg-cache")
         DgLog.new("#Perform Done storing  #{filename} #{(Time.now - tt).round}", context).log
 
         response = {
