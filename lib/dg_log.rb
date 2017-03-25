@@ -2,7 +2,7 @@ class DgLog
 
   def initialize(string, context,level="info")
     @string = string
-    @context = context
+    @context = context.is_a?(Hash) ? context.symbolize_keys : context
     @level = level
   end
 

@@ -8,7 +8,7 @@ require 'sequel'
 require 'google_drive'
 require 'rest-client'
 require 'aws/s3'
-
+require 'active_support/core_ext/hash'
 require './lib/dg_log.rb'
 if !defined?(Rails)
   raise "No environment specified" unless ENV["ENV"]
@@ -24,9 +24,9 @@ task :perform  do
       begin
         t = Time.now.to_i
         payload = JSON.parse(payload)
-        context = {datagram: payload["datagram_id"], watch: payload["token"], timestamp: payload["timestamp"]}
-        #DgLog.new("#Perform processing watch #{payload["key"]}", context).log
-        #ap context
+        context = payload["context"]
+        ap context
+        DgLog.new("#Perform processing watch #{payload["key"]}", context).log
         url = payload["url"]
         if url =~ /docs.google.com\/spreadsheets/
           c = Clients::GoogleDrive.new(url, payload)
@@ -45,14 +45,14 @@ task :perform  do
         #ap [payload["key"],r, payload["datagram_id"]]
         filename = "#{payload["datagram_id"]}-#{payload["key"]}.json"
         elapsed = (Time.now.to_i - t).round
-        Rails.logger.info "#Perform Finished query in #{elapsed} seconds"
+        DgLog.new("#Perform Finished query in #{elapsed} seconds", context).log
         json = JSON.dump(r)
         bytesize = json.bytesize
         truncated_json = r[0..20]
         tt = Time.now
-        Rails.logger.info "#Perform Storing #{filename} #{tt}"
+        DgLog.new("#Perform Storing #{filename} #{tt}", context).log
         #x = AWS::S3::S3Object.store(filename,json, "datagramg-cache")
-        Rails.logger.info "#Perform Done storing  #{filename} #{(Time.now - tt).round}"
+        DgLog.new("#Perform Done storing  #{filename} #{(Time.now - tt).round}", context).log
 
         response = {
           elapsed: elapsed,
@@ -68,7 +68,7 @@ task :perform  do
         $watch_responses.publish(response.to_json)
         DgLog.new("#Perform finished #{payload["key"]} in #{elapsed} seconds", context).log
       rescue Exception => e
-        Rails.logger.error("#Perform #{e.message}")
+        DgLog.new("#Perform ERROR!! #{e.message}", context).log
         ap e.backtrace
         response = {
           elapsed: Time.now.to_i - t,
@@ -79,7 +79,7 @@ task :perform  do
           datagram_id: payload["datagram_id"]
         }
         $watch_responses.publish(response.to_json)
-        Rails.logger.error "#Perform finished #{payload["key"]} in #{elapsed} seconds with error #{e.message}"
+        DgLog.new("#Perform ERROR!! finished #{payload["key"]} in #{elapsed} seconds with error #{e.message}", context).log
       end
     end
   end

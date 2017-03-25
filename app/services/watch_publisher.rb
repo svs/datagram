@@ -54,7 +54,7 @@ class WatchPublisher
   end
 
   def payload
-    @payload ||= watch_attributes.merge(key: token, meta: args, datagram_id: datagram.token, timestamp: timestamp, refresh_channel: refresh_channel)
+    @payload ||= watch_attributes.merge(key: token, meta: args, datagram_id: datagram.token, timestamp: timestamp, refresh_channel: refresh_channel, context: context)
   end
 
   def watch_attributes
@@ -92,5 +92,9 @@ class WatchPublisher
 
   def redis_tracking_key
     "#{datagram.token}:#{timestamp.to_i}"
+  end
+
+  def context
+    {datagram: datagram.slug, watch: watch.slug, user: watch.user.id, timestamp: timestamp}
   end
 end
