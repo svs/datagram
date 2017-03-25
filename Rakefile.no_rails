@@ -22,7 +22,7 @@ require './config/initializers/s3.rb'
 task :perform  do
   ap "#perform rake started"
   $watches.bind($x, routing_key: "watch-watches").subscribe(block: true) do |di, md, payload|
-    Thread.new do
+    #Thread.new do
       begin
         t = Time.now.to_i
         payload = JSON.parse(payload)
@@ -83,5 +83,5 @@ task :perform  do
         DgLog.new("#Perform ERROR!! finished #{payload["key"]} in #{elapsed} seconds with error #{e.message}", context).log
       end
     end
-  end
+  #end
 end
