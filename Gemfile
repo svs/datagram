@@ -70,7 +70,6 @@ gem 'mustache'
 gem 'jsonpath'
 gem 'json2json'
 gem "pundit"
-gem "newrelic_rpm"
 gem "google_drive"
 gem "legato"
 gem "omniauth-google-oauth2"
