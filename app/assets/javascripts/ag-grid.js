@@ -81,6 +81,7 @@ $(document).ready(function() {
   var url = ($('meta[name="url"]')[0].getAttribute('content'));
   $.get(url, function(a,b,c) {
     renderAgGrid(a);
-
+  }).fail(function() {
+    alert('loading failed');
   });
 });
