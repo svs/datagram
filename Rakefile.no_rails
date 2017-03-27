@@ -51,10 +51,6 @@ task :perform  do
         bytesize = json.bytesize
         truncated_json = r[0..20]
         tt = Time.now
-        DgLog.new("#Perform Storing #{filename} #{tt}", context).log
-        x = AWS::S3::S3Object.store(filename,json, "datagramg-cache")
-        DgLog.new("#Perform Done storing  #{filename} #{(Time.now - tt).round}", context).log
-
         response = {
           elapsed: elapsed,
           status_code: 200,
@@ -68,6 +64,11 @@ task :perform  do
         #ap $watch_responses
         $watch_responses.publish(response.to_json)
         DgLog.new("#Perform finished #{payload["key"]} in #{elapsed} seconds", context).log
+        if Rails.env == 'production'
+          DgLog.new("#Perform Storing #{filename} #{tt}", context).log
+          x = AWS::S3::S3Object.store(filename,json, "datagramg-cache")
+        end
+        DgLog.new("#Perform Done storing  #{filename} #{(Time.now - tt).round}", context).log
       rescue Exception => e
         DgLog.new("#Perform ERROR!! #{e.message}", context).log
         ap e.backtrace

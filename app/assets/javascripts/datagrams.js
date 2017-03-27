@@ -104,16 +104,19 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 
 }]);
 
-angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', '$timeout',function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike, $timeout) {
+angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', '$timeout','$window',function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike, $timeout, $window) {
 
   $scope.renderedData = {};
   var renderers = $.extend($.pivotUtilities.renderers,
 			   $.pivotUtilities.c3_renderers);
-  $scope.pivotOptions = {renderers: renderers, name: "pivot"};
+
+  var refreshPivotConf = function(conf) {
+    $scope.pivotOptions = conf;
+    console.log(conf);
+  }
+
+  $scope.pivotOptions = {renderers: renderers, name: "pivot", onRefresh: refreshPivotConf, rendererOptions: {c3: {height: 200, width: 200}}};
   $scope.pivotConfig = {};
-  $scope.pivotRefresh = function() {
-    console.log('pivotRefresh', arguments);
-  };
 
 
   $scope.renderedUrls = {};
@@ -290,6 +293,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     $scope.big = !($scope.big);
     $timeout(function() {
       $scope.$broadcast('highchartsng.reflow');
+      $window.dispatchEvent(new Event('resize'));
     },100);
     if ($scope.gridOptions.api) {
       $timeout(function() {
@@ -298,7 +302,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     }
   };
 
-  $scope.gridOptions = {enableSorting: true, enableFilter: true, rowData: null, showToolPanel: true, enableStatusBar: true };
+  $scope.gridOptions = {enableSorting: true, enableFilter: true, rowData: null, showToolPanel: true };
 
   var doGridOp = function(view, opData,opName, col) {
     console.log('doGridOp',arguments);
@@ -344,7 +348,6 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     $scope.gridOptions.api.setColumnDefs(cols);
     $scope.gridOptions.api.setRowData($scope.renderedData[view.name].rowData);
     $scope.gridOptions.api.sizeColumnsToFit();
-    $scope.gridOptions.api.enableStatusBar(true);
     $scope.gridOptions.columnApi.setPivotMode(data.pivotMode);
 
   }
@@ -358,7 +361,10 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 	$scope.renderedData[view.name].options = $scope.renderedData[view.name].options || {a: 'foo'}; //weird new bug
       }
       if (view.render == 'pivot') {
-	$scope.renderedData[view.name]
+	if (!($scope.renderedData[view.name].options)) {
+	  $scope.renderedData[view.name].options=$scope.pivotOptions;
+	}
+	$timeout(function() { $(window).trigger('resize');},1000);
       };
       if (view.render === 'ag-grid') {
 	$timeout(function() {
