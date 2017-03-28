@@ -15,7 +15,11 @@ $stdout.sync = true
 if !defined?(Rails)
   raise "No environment specified" unless ENV["ENV"]
   @logger = Logger.new(STDOUT)
-  Rails = OpenStruct.new(logger: @logger, application: OpenStruct.new(secrets: OpenStruct.new(YAML.load(File.read('./config/secrets.yml'))[ENV["ENV"]])))
+  Rails = OpenStruct.new(
+    logger: @logger,
+    application: OpenStruct.new(secrets: OpenStruct.new(YAML.load(File.read('./config/secrets.yml'))[ENV["ENV"]])),
+    env: ENV["ENV"]
+  )
 end
 require './config/initializers/rabbitmq.rb'
 require './config/initializers/s3.rb'
