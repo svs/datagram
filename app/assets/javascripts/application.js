@@ -17,7 +17,7 @@
 //= require jquery-ui.min.js
 //= require angular-1.5.8.min.js
 //= require lodash
-//= require pivot.min.js
+//= require pivot.js
 //= require restangular
 //= require angular-ui-router
 //= require angular-pusher

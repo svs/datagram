@@ -85,15 +85,7 @@ class ViewRenderer
 
   class RenderHtml
     def self.render(html, params, filename)
-      if params.format != "png"
-        return html
-      elsif params.format == "png"
-        x = SecureRandom.urlsafe_base64(5)
-        File.open("/tmp/#{x}.html","w") {|f| f.write(html) }
-        `wkhtmltoimage /tmp/#{x}.html /tmp/#{x}.png`
-        AWS::S3::S3Object.store(filename,open("/tmp/#{x}.png"),'dg-tmp')
-        return {url: "https://s3.amazonaws.com/dg-tmp/#{filename}"}
-      end
+      return html
     end
   end
 end

@@ -19,7 +19,8 @@
  *= require 'ag-grid.css'
 *= require 'pivot.min.css'
 *= require 'c3.min.css'
- *= require_self
+*= require 'material.css'
+*= require_self
  */
 
 @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono);
@@ -161,4 +162,9 @@ ul#ticker li {
 .navbar-brand > h1 {
     line-height: 0.6;
     font-size: 1.6em;
+}
+
+.novixTable {
+    height: 600px !important,
+    width: 600px !important
 }

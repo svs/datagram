@@ -19,6 +19,10 @@ class DatagramPolicy < ApplicationPolicy
     true
   end
 
+  def new?
+    true
+  end
+
   class Scope < Scope
     def resolve
       Datagram.where('archived IS DISTINCT FROM true')

@@ -18,7 +18,7 @@ class DatagramRenderService
 
 
 
-  attr_reader :dfs, :datagram, :format, :params
+  attr_reader :dfs, :datagram, :format, :params, :last_filename
 
   def raw_json
     dfs.raw_json
@@ -30,7 +30,9 @@ class DatagramRenderService
   end
 
   def filename(view)
-    "#{datagram.refresh_channel(params.q_params)}-#{view}-#{datagram.last_update_timestamp}.png"
+    "#{datagram.refresh_channel(params.q_params)}-#{view}-#{datagram.last_update_timestamp}.png".tap{|x|
+      @last_filename = x
+    }
   end
 
 end

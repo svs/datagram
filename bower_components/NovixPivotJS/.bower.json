@@ -1,0 +1,37 @@
+{
+  "name": "NovixPivotJS",
+  "description": "Javascript plugin for PivotTable with handsontable and highcharts renderers",
+  "main": [
+    "hightchart_renderers.js",
+    "novix.pivot.renderer.js"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "pivot",
+    "crosstab",
+    "grid",
+    "table",
+    "pivottable",
+    "pivotgrid",
+    "pivotchart",
+    "jquery"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fbrussa/NovixPivotJS.git"
+  },
+  "dependencies": {
+    "jquery": ">=1.9.0"
+  },
+  "homepage": "https://github.com/fbrussa/NovixPivotJS",
+  "_release": "a76e82f352",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "a76e82f3528ddeed2e2e7f2df752f727f8c8730e"
+  },
+  "_source": "https://github.com/fbrussa/NovixPivotJS.git",
+  "_target": "*",
+  "_originalSource": "NovixPivotJS",
+  "_direct": true
+}
