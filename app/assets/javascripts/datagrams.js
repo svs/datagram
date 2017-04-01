@@ -5,6 +5,10 @@
 //= require directives.js
 //= require ui-grid.min.js
 //= require ag-grid-ent.min.js
+//= require numbro.min.js
+//= require pikaday.js
+//= require ZeroClipboard.min.js
+//= require handsontable.min.js
 //= require hightchart_renderers.js
 //= require novix.pivot.renderer.js
 agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Production_100Devs24_May_2017__MTQ5NTU4MDQwMDAwMA==16be8f8f82a5e4b5fa39766944c69a32");

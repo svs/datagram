@@ -20,6 +20,7 @@
 *= require 'pivot.min.css'
 *= require 'c3.min.css'
 *= require 'material.css'
+*= require 'handsontable.min.css'
 *= require_self
  */
 
