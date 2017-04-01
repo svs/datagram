@@ -5,7 +5,8 @@
 //= require directives.js
 //= require ui-grid.min.js
 //= require ag-grid-ent.min.js
-
+//= require hightchart_renderers.js
+//= require novix.pivot.renderer.js
 agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Production_100Devs24_May_2017__MTQ5NTU4MDQwMDAwMA==16be8f8f82a5e4b5fa39766944c69a32");
 agGrid.initialiseAgGridWithAngular1(angular);
 var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng","ngSanitize","agGrid",'ngCsv','angular-pivottable']).
@@ -23,7 +24,9 @@ angular.module('datagramsApp').filter('fromNow', function() {
   };
 });
 
+var pivotService = angular.module('pivotService',[]).service('Pivot', function() {
 
+});
 
 
 
@@ -76,6 +79,7 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
     $scope.watches = r;
   });
   Restangular.one('api/v1/datagrams/new').get().then(function(r) {
+    console.log(r);
     $scope.datagram = r;
   });
 
@@ -108,20 +112,16 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.renderedData = {};
   var renderers = $.extend($.pivotUtilities.renderers,
-			   $.pivotUtilities.c3_renderers);
+			   $.pivotUtilities.novix_renderers,
+			   $.pivotUtilities.highchart_renderers);
 
-  var refreshPivotConf = function(conf) {
-    $scope.pivotOptions = conf;
-    console.log(conf);
-  }
-
-  $scope.pivotOptions = {renderers: renderers, name: "pivot", onRefresh: refreshPivotConf, rendererOptions: {c3: {height: 200, width: 200}}};
-  $scope.pivotConfig = {};
 
 
   $scope.renderedUrls = {};
   $scope.selected = {streamSink: {}, streamSinkId: null, frequency: null};
   $scope.options = {truncate: true};
+
+  $scope.chartOpts = {};
 
   $scope.selectParamSet = function(name) {
     if (name) {
@@ -201,7 +201,6 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       $scope.truncated = $scope.warnings.length > 0;
       $scope.options.truncate = $scope.truncated;
       _.each($scope.datagram.views, function(v,k) {
-	//console.log('rendering ', v);
 	$scope.render(v, true);
       });
     });
@@ -291,6 +290,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   $scope.big = false;
   $scope.resize = function() {
     $scope.big = !($scope.big);
+    //var hc = angular.element( document.querySelector( '.pvtRendererArea' ) );
+    //hc.addClass('hcbig');
     $timeout(function() {
       $scope.$broadcast('highchartsng.reflow');
       $window.dispatchEvent(new Event('resize'));
@@ -350,21 +351,37 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     $scope.gridOptions.api.sizeColumnsToFit();
     $scope.gridOptions.columnApi.setPivotMode(data.pivotMode);
 
-  }
+  };
 
+  var refreshPivotConf = function(conf) {
+    var v = _.find($scope.datagram.views, {name: conf.viewName});
+    console.log('refreshPivotConf',conf, v.pivotOptions);
+    console.log('v',v);
+    v.pivotOptions = conf;
+    //$scope.pivotOptions = _.merge(conf,v.pivotOptions);
+
+  };
+
+  $scope.pivotOptions = {renderers: renderers, onRefresh: refreshPivotConf };
 
   var renderClient = function(view) {
     console.log('renderClient',view);
     if ( view.transform === 'jmespath') {
-      $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
       if (view.render != 'pivot') {
+	$scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
 	$scope.renderedData[view.name].options = $scope.renderedData[view.name].options || {a: 'foo'}; //weird new bug
       }
       if (view.render == 'pivot') {
-	if (!($scope.renderedData[view.name].options)) {
-	  $scope.renderedData[view.name].options=$scope.pivotOptions;
-	}
-	$timeout(function() { $(window).trigger('resize');},1000);
+	console.log('view.pivotOptions',view.pivotOptions);
+	view.pivotOptions = _.pick(view.pivotOptions, ["aggregatorName","cols","rows","vals","rendererName","viewName"]);
+	console.log('view.pivotOptions',view.pivotOptions);
+	var o = _.merge($scope.pivotOptions, view.pivotOptions);
+	o.rows = (o.rows === null) ? [] : o.rows;
+	console.log('o',o);
+	$('#pivot').pivotUI(jmespath.search($scope.datagram,view.template).data, o);
+	$timeout(function() {
+	  $(window).trigger('resize');
+	},1000);
       };
       if (view.render === 'ag-grid') {
 	$timeout(function() {
@@ -388,6 +405,34 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     makeRenderedUrls(view);
   };
 
+
+  $scope.addSeries = function(viewName) {
+    var series = $scope.chartOpts[viewName].series;
+    console.log('series', series);
+    if (series == undefined) {
+      $scope.chartOpts[viewName].series = [];
+    }
+    $scope.chartOpts[viewName].series.push($scope.chartOpts[viewName].newSeries);
+    console.log('chartOpts',$scope.chartOpts);
+    $scope.buildChart(viewName);
+  };
+
+  $scope.buildChart = function(viewName) {
+    var co = $scope.chartOpts[viewName];
+    console.log($scope.datagram.views);
+    var v = _.find($scope.datagram.views, {name: viewName});
+    console.log(v);
+    var t = angular.toJson(_.omit($scope.chartOpts[viewName],"newSeries"),2);
+    _.each(co.series, function(a) {
+      t = t.replace('"' + a.data + '"', a.data);
+      _.each(['series','name','type','data'], function(a) {
+	t = t.replace('"' + a + '":', a + ":");
+      });
+      t = t.replace(/"/g,"'");
+    });
+    v.template = t;
+    $scope.render(v);
+  };
 
   $scope.addParamSet = function() {
     $scope.datagram.param_sets["__new"] = {name: "new", params: _.clone($scope.datagram.publish_params), frequency: null, at: null};

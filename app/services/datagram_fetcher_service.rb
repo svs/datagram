@@ -15,8 +15,12 @@ class DatagramFetcherService
     @max_size = (params && params[:max_size]) ? params[:max_size].to_i : Float::INFINITY
   end
 
+  def renderer
+    @renderer ||= DatagramRenderService.new(self)
+  end
+
   def render(views = [])
-    DatagramRenderService.new(self).render(Array(views)).tap{|r|
+    renderer.render(Array(views)).tap{|r|
       if r.is_a?(Hash) && r[:url] && is_default?
         datagram.update(default_view_url: r[:url])
       end

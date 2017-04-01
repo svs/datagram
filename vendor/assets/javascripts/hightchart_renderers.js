@@ -56,7 +56,8 @@
                 h = rowKeys[_i];
                 series.push({
                     name: h.join("-"),
-                    data: rowData
+                  data: rowData,
+		  type: chartType
                 });
             }
 
@@ -139,9 +140,10 @@
             if (opts) {
                 options = $.extend(options, opts, true);
             }
-
-            $result.highcharts(options);
-            return $result;
+	  console.log('Highcharts Options',options, $result);
+	  $result.css({width: '600px', height:'600px'});
+          $result.highcharts(options);
+          return $result;
         };
     };
 
@@ -242,7 +244,7 @@
             }
 
             var $result = $("<div class='novixTable'>").width(opts.$el.find(".pvtRendererArea").width()-5).height(opts.$el.find(".pvtRendererArea").height()-5);
-            
+
             $result.highcharts(options);
             return $result;
 
@@ -252,6 +254,7 @@
 
     return $.pivotUtilities.highchart_renderers = {
         "Line Chart": makeHighChart("line"),
+        "Spline Chart": makeHighChart("spline"),
         "Bar Chart": makeHighChart("bar"),
         "Stacked Bar Chart": makeHighChart("bar", { plotOptions: { series: { stacking: 'normal' } }, }),
         "Column Chart": makeHighChart("column"),

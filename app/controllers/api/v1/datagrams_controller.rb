@@ -62,15 +62,25 @@ module Api
             (render layout: 'ag-grid') and return
           end
           ds = DatagramFetcherService.new(datagram, params)
-          response = ds.render(params[:views])
+          renderer = ds.renderer
+          response = renderer.render(params[:views])
+          filename = renderer.last_filename
           respond_to do |format|
             format.json { render json: response }
             format.xml { render xml: response }
-
-            format.html { render html: response, layout: nil}
+            format.html { render html: response, layout: 'html'}
             format.png {
               if response.is_a?(Hash)
                 redirect_to(response[:url])
+              elsif response.is_a?(String)
+                x = SecureRandom.urlsafe_base64(5)
+                html = render_to_string(inline:response, layout: 'html')
+                ap html
+                File.open("/tmp/#{x}.html","w") {|f| f.write(html) }
+                `wkhtmltoimage /tmp/#{x}.html /tmp/#{x}.png`
+                AWS::S3::S3Object.store(filename,open("/tmp/#{x}.png"),'dg-tmp')
+                redirect_to "https://s3.amazonaws.com/dg-tmp/#{filename}"
+
               else
                 send_file response, type: 'image/png', disposition: 'inline'
               end
