@@ -356,13 +356,13 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   var refreshPivotConf = function(conf) {
     var v = _.find($scope.datagram.views, {name: conf.viewName});
     console.log('refreshPivotConf',conf, v.pivotOptions);
-    console.log(v);
-    //v.pivotOptions = conf;
+    console.log('v',v);
+    v.pivotOptions = conf;
     //$scope.pivotOptions = _.merge(conf,v.pivotOptions);
 
   };
 
-  $scope.pivotOptions = {renderers: renderers, onRefresh: refreshPivotConf, viewName: "pivot"};
+  $scope.pivotOptions = {renderers: renderers, onRefresh: refreshPivotConf };
 
   var renderClient = function(view) {
     console.log('renderClient',view);
@@ -372,10 +372,14 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 	$scope.renderedData[view.name].options = $scope.renderedData[view.name].options || {a: 'foo'}; //weird new bug
       }
       if (view.render == 'pivot') {
-
-	$scope.renderedData[view.name] = {pivotData: jmespath.search($scope.datagram,view.template).data, pivotOptions: view.pivotOptions};
+	console.log('view.pivotOptions',view.pivotOptions);
+	view.pivotOptions = _.pick(view.pivotOptions, ["aggregatorName","cols","rows","vals","rendererName","viewName"]);
+	console.log('view.pivotOptions',view.pivotOptions);
+	var o = _.merge($scope.pivotOptions, view.pivotOptions);
+	o.rows = (o.rows === null) ? [] : o.rows;
+	console.log('o',o);
+	$('#pivot').pivotUI(jmespath.search($scope.datagram,view.template).data, o);
 	$timeout(function() {
-	  console.log('FOOOOOOOOOOOOOOOOOOO1');
 	  $(window).trigger('resize');
 	},1000);
       };

@@ -174,7 +174,7 @@ script type="text/ng-template" id="show.html"
                     a ng-repeat="l in renderedData[view.name]"
                       | {{l}}
                       br
-                  div ng-pivot="renderedData[view.name].pivotData" ng-pivot-options="renderedData[view.name].pivotOptions" ng-if="view.render == 'pivot'"
+                  div#pivot ng-if="view.render == 'pivot'"
                   pre
                     | {{renderedData[view.name]}}
             tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
