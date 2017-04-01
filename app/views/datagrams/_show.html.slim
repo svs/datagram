@@ -134,34 +134,7 @@ script type="text/ng-template" id="show.html"
                       | Start Streaming
               .row
                 #e.col-md-6 ng-class="big ? '' : 'col-md-6'" style="margin-bottom: 10px"
-                  tabset ng-if="view.render == 'chart'"
-                    tab heading="builder"
-                      .input-group
-                        label Chart Type&nbsp;
-                        select.form-control ng-model="chartOpts[view.name].type" ng-change="buildChart(view.name)"
-                          option ng-repeat="o in ['line','column','stacked column']"
-                            | {{o}}
-                      .input-group
-                      label xAxis
-                      input.form-control type="text" ng-model="chartOpts[view.name].xAxis" ng-change="buildChart(view)"
-                      .row
-                        .col-md-5
-                          h4 Series
-                          .input-group
-                          label Name
-                          input.form-control type="text" ng-model="chartOpts[view.name].newSeries.name"
-                          label Data
-                          input.form-control type="text" ng-model="chartOpts[view.name].newSeries.data"
-                          label Type
-                          input.form-control type="text" ng-model="chartOpts[view.name].newSeries.type"
-                          a.btn.btn-success ng-click="addSeries(view.name)" Add Series
-                        .col-md-5
-                          ul ng-repeat="series in chartOpts[view.name].series"
-                            li
-                              | {{series.name}} - {{series.data}}
-
-                    tab heading="code"
-                      div ui-ace="{mode: 'javascript', theme: 'eclipse'}" style="min-height: 300px; height: 100%" ng-model="view.template" ng-change="render(view, false)"
+                  div ui-ace="{mode: 'javascript', theme: 'eclipse'}" style="min-height: 300px; height: 100%" ng-model="view.template" ng-change="render(view, false)"
                   div ng-if="view.render != 'chart'"
                     div ui-ace="{mode: 'javascript', theme: 'eclipse'}" style="min-height: 300px; height: 100%" ng-model="view.template" ng-change="render(view, false)"
 
