@@ -380,9 +380,10 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 	view.pivotOptions = _.pick(view.pivotOptions, ["aggregatorName","cols","rows","vals","rendererName","viewName"]);
 	console.log('view.pivotOptions',view.pivotOptions);
 	var o = _.merge($scope.pivotOptions, view.pivotOptions);
+	o.viewName = view.name;
 	o.rows = (o.rows === null) ? [] : o.rows;
 	console.log('o',o);
-	$('#pivot').pivotUI(jmespath.search($scope.datagram,view.template).data, o);
+	$('#pivot').pivotUI(jmespath.search($scope.datagram,view.template), o);
 	$timeout(function() {
 	  $(window).trigger('resize');
 	},1000);
