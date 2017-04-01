@@ -382,6 +382,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 	var o = _.merge($scope.pivotOptions, view.pivotOptions);
 	o.viewName = view.name;
 	o.rows = (o.rows === null) ? [] : o.rows;
+	o.cols = (o.cols === null) ? [] : o.cols;
+	o.vals = (o.vals === null) ? [] : o.vals;
 	console.log('o',o);
 	$('#pivot').pivotUI(jmespath.search($scope.datagram,view.template), o);
 	$timeout(function() {
