@@ -280,18 +280,17 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   };
 
-  $scope.render = function(view, button) {
+  $scope.render = function(view, button, resize) {
     if ((view.transform == 'jq' && button) || (view.transform == 'liquid' && button)){
       console.log('renderServer',view);
       renderServer(view);
     } else {
       renderClient(view);
     }
-
   };
 
 
-  $scope.big = false;
+  $scope.big = true;
   $scope.resize = function() {
     $scope.big = !($scope.big);
     //var hc = angular.element( document.querySelector( '.pvtRendererArea' ) );

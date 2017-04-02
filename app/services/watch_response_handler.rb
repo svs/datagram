@@ -17,7 +17,8 @@ class WatchResponseHandler
         error: params[:error],
         report_time: nil,
         bytesize: params[:bytesize],
-        truncated_json: params[:truncated_json]
+        truncated_json: params[:truncated_json],
+        response_json: params[:response_json]
       }
       if wr.update(update_attrs)
         if watch

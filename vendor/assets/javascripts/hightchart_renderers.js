@@ -141,7 +141,7 @@
                 options = $.extend(options, opts, true);
             }
 	  console.log('Highcharts Options',options, $result);
-	  $result.css({width: '600px', height:'600px'});
+	  $result.css({width: '1000px', height:'600px'});
           $result.highcharts(options);
           return $result;
         };

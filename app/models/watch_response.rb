@@ -22,7 +22,7 @@ class WatchResponse < ActiveRecord::Base
   end
 
   def response_json
-    @response_json ||= (response_filename ? s3_file : read_attribute(:response_json))
+    @response_json ||= (read_attribute(:response_json) || (response_filename ? s3_file : read_attribute(:response_json)))
   end
 
 

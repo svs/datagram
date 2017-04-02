@@ -63,7 +63,8 @@ task :perform  do
           datagram_id: payload["datagram_id"],
           timestamp: payload["timestamp"],
           bytesize: bytesize,
-          truncated_json: truncated_json
+          truncated_json: truncated_json,
+          response_json: bytesize < 1_000_000 ? json : nil
         }
         #ap $watch_responses
         $watch_responses.publish(response.to_json)

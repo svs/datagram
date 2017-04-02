@@ -105,7 +105,7 @@ namespace :foreman do
     task :export do
       on roles(:app) do
         within current_path do
-          execute :bundle, "exec foreman export bluepill -c clock=1,watch_consumer=1,perform=3 -a stats  -l #{current_path} -u deploy -r #{shared_path}/tmp/pids -t config/config.eye.erb #{shared_path}/eye"
+          execute :bundle, "exec foreman export bluepill -c clock=1,watch_consumer=1,perform=2 -a stats  -l #{current_path} -u deploy -r #{shared_path}/tmp/pids -t config/config.eye.erb #{shared_path}/eye"
         end
       end
     end
@@ -150,6 +150,6 @@ end
 
 task :foo do
   on roles(:app) do
-    execute "ls"
+    execute ""
   end
 end
