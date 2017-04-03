@@ -246,13 +246,16 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   var makeRenderedUrls = function(view) {
-    var x = {params: _.merge.apply(_.merge,_.map($scope.datagram.responses,'params'))};
-    var p = $httpParamSerializerJQLike(x);
+    var staticParams = {params: _.merge.apply(_.merge,_.map($scope.datagram.responses,'params'))};
+    var dynamicParams = {params: $scope.selectedParamSet};
+    staticParams = $httpParamSerializerJQLike(staticParams);
+    dynamicParams = $httpParamSerializerJQLike(dynamicParams);
     var render = view.render == 'chart' ? 'png' : view.render;
     render = render == "ag-grid" ? "aggrid" : render;
-    var url =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + p + '&views[]=' + view.name;
-    $scope.renderedUrls[view.name] = url;
-    console.log('renderedUrls', view.name, url);
+    var staticUrl =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + staticParams + '&views[]=' + view.name;
+    var dynamicUrl =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + dynamicParams + '&views[]=' + view.name;
+    $scope.renderedUrls[view.name] = {static: staticUrl, dynamic: dynamicUrl};
+    console.log('renderedUrls', view, dynamicUrl, $scope.selectedParams);
   };
 
   var renderServer = function(view) {

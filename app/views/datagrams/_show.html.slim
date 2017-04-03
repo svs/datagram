@@ -103,8 +103,8 @@ script type="text/ng-template" id="show.html"
             i.fa.fa-arrows-alt
             | {{big}}
           tabset
-            tab ng-repeat="view in datagram.views" select="alert('foo')"
-              tab-heading select="alert('foo')"
+            tab ng-repeat="view in datagram.views" ng-click="resize()"
+              tab-heading
                 a ng-click="$window.alert('foo')"
                   | {{view.name}}
               .row style="padding-bottom: 10px;border-bottom: 1px solid #ccc"
@@ -117,8 +117,10 @@ script type="text/ng-template" id="show.html"
                     option ng-repeat="o in ['json','csv','chart','html','ag-grid','pivot']"
                       | {{o}}
                   button.btn.btn-secondary ng-click="render(view, true)" style="margin-left: 10px;" Render
-                  a href="{{renderedUrls[view.name]}}" target="_blank" style="font-size: 2.2em; position: relative; top: 7px; left: 5px"
+                  a href="{{renderedUrls[view.name].static}}" target="_blank" style="font-size: 2.2em; position: relative; top: 7px; left: 5px"
                     i.fa.fa-camera style="color: lightblue"
+                  a href="{{renderedUrls[view.name].dynamic}}" target="_blank" style="font-size: 2.2em; position: relative; top: 7px; left: 5px"
+                    i.fa.fa-bar-chart-o style="color: lightblue"
                   b style="padding-left: 10px"
                     | {{metadata[0].response_received_at | fromNow}}
                 .col-md-6
@@ -137,9 +139,10 @@ script type="text/ng-template" id="show.html"
                   div hljs-to-json="renderedData[view.name]"
 
               .row style="margin-bottom: 10px; padding-top: 30px"
-                .col-md-2 &nbsp;
-                #p.col-md-8 ng-class="big ? '' : 'col-md-6'" style="margin: 20px; padding: 10px; border: solid 1px #eee"
-                  highchart id="chart1" config="renderedData[view.name]" ng-if="view.render=='chart'"
+                .col-md-2 ng-if="view.render !== 'ag-grid'"
+                #p ng-class="view.render !== 'ag-grid' ? 'col-md-8' : 'col-md-12'"
+                  div ng-if="view.render=='chart'" style="width: 100%; height: 500px"
+                    highchart id="chart1" config="renderedData[view.name]"
                   div hljs-to-json="renderedData[view.name]" ng-if="view.render=='json'"
                   .material ng-if="view.transform=='liquid' || view.transform=='mustache'" ng-bind-html="renderedData[view.name]"
                   div ag-grid="gridOptions" style="height: 500px" id="foo" class="ag-fresh" ng-if="view.render == 'ag-grid'"
