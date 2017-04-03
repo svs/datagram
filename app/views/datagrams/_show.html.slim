@@ -129,24 +129,23 @@ script type="text/ng-template" id="show.html"
                     | &nbsp; seconds
                     button ng-click="setStreamSink(view, selectedParamSet, selected.frequency)"
                       | Start Streaming
-              .row style="margin-top: 20px; height: 300px"
-                #e.col-md-6 ng-class="big ? '' : 'col-md-6'" style="margin-bottom: 10px; background: #f6f6f6"
+              .row style="margin-top: 20px;"
+                #e.col-md-6 style="margin-bottom: 10px; background: #f6f6f6"
+                  | {{ view.render }}
                   div ui-ace="{mode: 'javascript', theme: 'eclipse'}" style="min-height: 300px; height: 300px;" ng-model="view.template" ng-change="render(view, false)"
-                #j.col-md-6 style="margin-bottom: 10px; background: #f6f6f6; max-height: 300px; overflow: scroll" ng-if="view.transform == 'jq' || view.transform == 'jmespath'"
+                #j.col-md-6 style="margin-bottom: 10px; background: #f6f6f6; max-height: 325px; overflow: scroll" ng-if="view.transform == 'jq' || view.transform == 'jmespath'"
                   div hljs-to-json="renderedData[view.name]"
-
               .row style="margin-bottom: 10px; padding-top: 30px"
                 #p ng-class="view.render !== 'ag-grid' ? 'col-md-8' : 'col-md-12'"
                   div ng-if="view.render=='chart'" style="width: 100%; height: 500px"
                     highchart id="chart1" config="renderedData[view.name]"
-                  div hljs-to-json="renderedData[view.name]" ng-if="view.render=='json'"
                   .material ng-if="view.transform=='liquid' || view.transform=='mustache'" ng-bind-html="renderedData[view.name]"
                   div ag-grid="gridOptions" style="height: 500px" id="foo" class="ag-fresh" ng-if="view.render == 'ag-grid'"
                   div ng-if="view.render=='csv'"
                     a ng-repeat="l in renderedData[view.name]"
                       | {{l}}
                       br
-                  div#pivot ng-if="view.render == 'pivot'"
+                  div#pivot ng-if="view.render === 'pivot'"
             a.btn ng-click="addView()" style="position: relative; top: 5px"
               i.fa.fa-plus style="margin-right: 5px"
               | Add a view

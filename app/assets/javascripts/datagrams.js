@@ -387,7 +387,9 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 	o.cols = (o.cols === null) ? [] : o.cols;
 	o.vals = (o.vals === null) ? [] : o.vals;
 	console.log('o',o);
-	$('#pivot').pivotUI(jmespath.search($scope.datagram,view.template), o);
+	$scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
+	$('#pivot').pivotUI($scope.renderedData[view.name], o);
+	console.log('rendering pivot');
 	$timeout(function() {
 	  $(window).trigger('resize');
 	},1000);
