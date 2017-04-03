@@ -295,7 +295,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.big = true;
   $scope.resize = function() {
-    $scope.big = !($scope.big);
+    //$scope.big = !($scope.big);
     //var hc = angular.element( document.querySelector( '.pvtRendererArea' ) );
     //hc.addClass('hcbig');
     $timeout(function() {
