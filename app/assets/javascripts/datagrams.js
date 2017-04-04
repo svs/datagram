@@ -71,7 +71,7 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
     console.log($scope.datagrams, $scope.datagrams.length);
     $('#loading').show();
     datagramService.refreshDatagrams().then(function(r) {
-      $scope.datagrams = datagramService.datagrams; //_.sortBy(r, function(s) { return s.name});
+      $scope.datagrams = _.sortBy(datagramService.datagrams,function(s) { return s.name});
       $scope.groupedDatagrams = _.groupBy($scope.datagrams, function(d) { return d.name.match(":") ? d.name.split(":")[0] : "Z";});
       $('#loading').hide();
       $timeout(load, 60000);
