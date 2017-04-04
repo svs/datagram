@@ -64,17 +64,20 @@ datagramsApp.config(function($stateProvider,$urlRouterProvider) {
 
 });
 
-angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams','$timeout', function($scope, Restangular,$stateParams, $timeout) {
+angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams','$timeout', 'datagramService', function($scope, Restangular,$stateParams, $timeout, datagramService) {
+  $scope.datagrams = datagramService.datagrams;
+
   var load = function() {
+    console.log($scope.datagrams, $scope.datagrams.length);
     $('#loading').show();
-    Restangular.all('api/v1/datagrams').getList().then(function(r) {
-      $scope.datagrams = _.sortBy(r, function(s) { return s.name});
+    datagramService.refreshDatagrams().then(function(r) {
+      $scope.datagrams = datagramService.datagrams; //_.sortBy(r, function(s) { return s.name});
       $scope.groupedDatagrams = _.groupBy($scope.datagrams, function(d) { return d.name.match(":") ? d.name.split(":")[0] : "Z";});
       $('#loading').hide();
       $timeout(load, 60000);
-
     });
   };
+
   load();
 }]);
 
