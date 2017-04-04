@@ -65,17 +65,20 @@ datagramsApp.config(function($stateProvider,$urlRouterProvider) {
 });
 
 angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams','$timeout', '$location','datagramService', function($scope, Restangular,$stateParams, $timeout, $location,datagramService) {
-  $scope.datagrams = datagramService.datagrams;
-  $scope.groupedDatagrams = _.groupBy($scope.datagrams, function(d) { return d.name.match(":") ? d.name.split(":")[0] : "Z";});
+
+  var init = function() {
+    $scope.datagrams = _.sortBy(datagramService.datagrams,function(s) { return s.name});
+    $scope.groupedDatagrams = _.groupBy($scope.datagrams, function(d) { return d.name.match(":") ? d.name.split(":")[0] : "Z";});
+    var groupName = $location.search().g;
+    $scope.groupName=(groupName || 0);
+  };
+  init();
 
   var load = function() {
     console.log($scope.datagrams, $scope.datagrams.length);
     $('#loading').show();
     datagramService.refreshDatagrams().then(function(r) {
-      $scope.datagrams = _.sortBy(datagramService.datagrams,function(s) { return s.name});
-      $scope.groupedDatagrams = _.groupBy($scope.datagrams, function(d) { return d.name.match(":") ? d.name.split(":")[0] : "Z";});
-      var groupName = $location.search().g;
-      $scope.groupName=(groupName || 0);
+      init();
       $('#loading').hide();
       $timeout(load, 60000);
     });
@@ -86,8 +89,8 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
     $scope.groupName = groupName;
     $location.search({g: groupName});
   }
-
   load();
+
 }]);
 
 angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangular','$stateParams', '$state', function($scope, Restangular, $stateParams, $state) {
