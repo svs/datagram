@@ -124,7 +124,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   $scope.renderedUrls = {};
   $scope.selected = {streamSink: {}, streamSinkId: null, frequency: null};
   $scope.options = {truncate: true};
-
+  $scope.viewsChanged = false;
   $scope.chartOpts = {};
 
   $scope.selectParamSet = function(name) {
@@ -283,7 +283,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   };
 
-  $scope.render = function(view, button, resize) {
+  $scope.render = function(view, button, markChanged) {
+    $scope.viewsChanged = markChanged;
     if ((view.transform == 'jq' && button) || (view.transform == 'liquid' && button)){
       console.log('renderServer',view);
       renderServer(view);
@@ -475,7 +476,9 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       delete $scope.datagram.param_sets["__new"];
     }
     var d = {views: $scope.datagram.views, param_sets: $scope.datagram.param_sets, publish_params: $scope.datagram.param_sets["__default"]["params"]};
-    $http({method: 'PATCH', url: '/api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: d}}).then(callback || function(r) {
+    $http({method: 'PATCH', url: '/api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: d}}).then(function(r) {
+      $scope.viewsChanged = false;
+      callback();
     });
   };
 

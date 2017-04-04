@@ -40,8 +40,9 @@ script type="text/ng-template" id="show.html"
       .col-md-3
         h4 Params
         tabset
-          a  ng-click="addParamSet()"
-            | Add
+          a.btn  ng-click="addParamSet()"
+            i.fa.fa-plus style="margin-right: 5px"
+            | Add a parameter set
           tab ng-repeat="(name, values) in (datagram.param_sets)" heading="{{values.name || 'default'}}" ng-click="selectParamSet(values.name)"
             table.table style="margin-left: 20px"
               tr style="border: 0px; padding: 1px" ng-if="name !== '__default'"
@@ -59,7 +60,6 @@ script type="text/ng-template" id="show.html"
               a.btn ng-click="save()" style="margin: 3px"
                 i.fa.fa-save style="margin-right: 5px"
                 | Save
-
               a.btn ng-click="refresh(values.name || '__default')" style="margin: 3px"
                 i.fa.fa-refresh style="margin-right: 5px"
                 | Refresh
@@ -132,7 +132,7 @@ script type="text/ng-template" id="show.html"
                       | Start Streaming
               .row style="margin-top: 20px;" ng-if="viewEditor"
                 #e.col-md-6 style="margin-bottom: 10px; background: #f6f6f6"
-                  div ui-ace="{mode: 'javascript', theme: 'eclipse'}" style="min-height: 300px; height: 300px;" ng-model="view.template" ng-change="render(view, false)"
+                  div ui-ace="{mode: 'javascript', theme: 'eclipse'}" style="min-height: 300px; height: 300px;" ng-model="view.template" ng-change="render(view, false, true)"
                 #j.col-md-6 style="margin-bottom: 10px; background: #f6f6f6; max-height: 325px; overflow: scroll" ng-if="view.transform == 'jq' || view.transform == 'jmespath'"
                   div hljs-to-json="renderedData[view.name]"
               .row style="margin-bottom: 10px; padding-top: 30px"
@@ -149,7 +149,7 @@ script type="text/ng-template" id="show.html"
             a.btn ng-click="addView()" style="position: relative; top: 5px"
               i.fa.fa-plus style="margin-right: 5px"
               | Add a view
-            a.btn ng-click="save()" style="position: relative; top: 5px"
+            a.btn ng-click="save()" style="position: relative; top: 5px" ng-class="viewsChanged ? 'btn-danger' : ''"
               i.fa.fa-save style="margin-right: 5px"
               | Save Views
             a.btn ng-click="viewEditor = !viewEditor" style="position: relative; top: 5px"
