@@ -6,6 +6,9 @@ script type="text/ng-template" id="show.html"
       .col-md-5
         h2.portlet-title style="margin-bottom: 0px"
           u
+            a ui-sref="index({g: groupName})"
+              | {{groupName}}
+            | :
             | {{datagram.name}}
           div.pull-right
             a.btn ui-sref="edit({id: datagram.id})" style=""

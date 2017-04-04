@@ -39,7 +39,7 @@ datagramsApp.config(function($stateProvider,$urlRouterProvider) {
 
   $stateProvider.
     state('index',
-	  {url: '/', templateUrl: "index.html"}
+	  {url: '/?g', templateUrl: "index.html", reloadOnSearch: false}
 	 ).
     state('new',
 	  {
@@ -64,7 +64,7 @@ datagramsApp.config(function($stateProvider,$urlRouterProvider) {
 
 });
 
-angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams','$timeout', 'datagramService', function($scope, Restangular,$stateParams, $timeout, datagramService) {
+angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams','$timeout', '$location','datagramService', function($scope, Restangular,$stateParams, $timeout, $location,datagramService) {
   $scope.datagrams = datagramService.datagrams;
 
   var load = function() {
@@ -73,10 +73,18 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
     datagramService.refreshDatagrams().then(function(r) {
       $scope.datagrams = _.sortBy(datagramService.datagrams,function(s) { return s.name});
       $scope.groupedDatagrams = _.groupBy($scope.datagrams, function(d) { return d.name.match(":") ? d.name.split(":")[0] : "Z";});
+      var groupName = $location.search().g;
+      $scope.groupName=(groupName || 0);
       $('#loading').hide();
       $timeout(load, 60000);
     });
   };
+
+  $scope.setActiveTab = function(groupName) {
+    console.log(groupName);
+    $scope.groupName = groupName;
+    $location.search({g: groupName});
+  }
 
   load();
 }]);
@@ -123,7 +131,6 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 			   $.pivotUtilities.highchart_renderers);
 
 
-
   $scope.renderedUrls = {};
   $scope.selected = {streamSink: {}, streamSinkId: null, frequency: null};
   $scope.options = {truncate: true};
@@ -155,6 +162,9 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 	var p = $httpParamSerializerJQLike($scope.selectedParamSet.params);
 	return {href: "/api/v1/d/" + $scope.datagram.token + "." + a + '?' + p, l: '.' + a + '?' + decodeURIComponent(p) };
       });
+      var d = $scope.datagram;
+      $scope.groupName = d.name.match(":") ? d.name.split(":")[0] : null;
+      $scope.datagram.name = d.name.match(":") ? d.name.split(":")[1] : d.name.split(":")[0];
       console.log('loadDatagram', $scope.datagram);
     });
   };
@@ -481,7 +491,6 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     var d = {views: $scope.datagram.views, param_sets: $scope.datagram.param_sets, publish_params: $scope.datagram.param_sets["__default"]["params"]};
     $http({method: 'PATCH', url: '/api/v1/datagrams/' + $scope.datagram.id, data:{ datagram: d}}).then(function(r) {
       $scope.viewsChanged = false;
-      callback();
     });
   };
 

@@ -13,8 +13,9 @@ script type="text/ng-template" id="index.html"
         h5
           | Add a
           = link_to 'data source', '/sources#/new'
-    tabset
-      tab heading="All"
+    tabset active="groupName==0"
+      tab index="0"
+        tab-heading All
         .row style="margin-bottom: 20px"
           .col-md-12
             .input-group
@@ -33,7 +34,10 @@ script type="text/ng-template" id="index.html"
               .portlet-body
                 img src="{{datagram.default_view_url}}" style="width: 100%"
 
-      tab ng-repeat="(k,ds) in groupedDatagrams" heading="{{k}} {{filtered.length > 0 ? '(' + filtered.length + ')' : ''}}"
+      tab ng-repeat="(k,ds) in groupedDatagrams" active="groupName==k"
+        tab-heading
+          a ng-click="setActiveTab(k)"
+            | {{k}} ({{filtered.length}})
         .row style="margin-bottom: 20px"
           .col-md-12
             .input-group
