@@ -9,7 +9,7 @@ module Api
 
       def index
         @datagrams = policy_scope(Datagram)
-        render json: @datagrams.map{|d| d.as_json.except(:responses)}
+        #render json: @datagrams.map{|d| d.as_json.except(:responses)}
       end
 
       def new
