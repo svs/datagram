@@ -150,6 +150,6 @@ end
 
 task :foo do
   on roles(:app) do
-    execute ""
+    execute "free"
   end
 end
