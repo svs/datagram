@@ -7,6 +7,17 @@ script type="text/ng-template" id="show.html"
         h2.portlet-title style="margin-bottom: 0px"
           u
             | {{datagram.name}}
+          div.pull-right
+            a.btn ui-sref="edit({id: datagram.id})" style=""
+              h3
+                i.fa.fa-edit
+            a.btn ng-click="archive()" style=""
+              h3
+                i.fa.fa-trash-o
+            a.btn ng-click="info = !(info)"
+              h3 style="margin-bottom: 0px"
+                i.fa.fa-info
+
         b
           | {{metadata[0].response_received_at | fromNow}} &bull; &nbsp;
         a href="{{datagram.public_url}}"
@@ -16,18 +27,8 @@ script type="text/ng-template" id="show.html"
           | Uses Routing Key
 
 
-        div
-          a.btn.btn-success ui-sref="edit({id: datagram.id})" style="margin: 8px"
-            i.fa.fa-edit
-            | Edit
-          a.btn.btn-danger ng-click="archive()" style="margin: 8px"
-            i.fa.fa-destroy
-            | Archive
-          a.btn ui-sref="show_ro({id: datagram.id})"
-            h3 style="margin-bottom: 0px"
-              i.fa.fa-eye.text-muted
 
-        .portlet.portlet-boxed style="margin-bottom: 5px"
+        .portlet.portlet-boxed style="margin-bottom: 5px" ng-if="info"
           h4.portlet-title style="margin: 0px"
             u style="padding: 3px"
               | Watches
@@ -129,9 +130,8 @@ script type="text/ng-template" id="show.html"
                     | &nbsp; seconds
                     button ng-click="setStreamSink(view, selectedParamSet, selected.frequency)"
                       | Start Streaming
-              .row style="margin-top: 20px;"
+              .row style="margin-top: 20px;" ng-if="viewEditor"
                 #e.col-md-6 style="margin-bottom: 10px; background: #f6f6f6"
-                  | {{ view.render }}
                   div ui-ace="{mode: 'javascript', theme: 'eclipse'}" style="min-height: 300px; height: 300px;" ng-model="view.template" ng-change="render(view, false)"
                 #j.col-md-6 style="margin-bottom: 10px; background: #f6f6f6; max-height: 325px; overflow: scroll" ng-if="view.transform == 'jq' || view.transform == 'jmespath'"
                   div hljs-to-json="renderedData[view.name]"
@@ -152,6 +152,10 @@ script type="text/ng-template" id="show.html"
             a.btn ng-click="save()" style="position: relative; top: 5px"
               i.fa.fa-save style="margin-right: 5px"
               | Save Views
+            a.btn ng-click="viewEditor = !viewEditor" style="position: relative; top: 5px"
+              i.fa.fa-wrench style="margin-right: 5px"
+              | View Editor
+
             tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
               tabset
                 tab heading="Data"
