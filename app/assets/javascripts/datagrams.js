@@ -66,6 +66,7 @@ datagramsApp.config(function($stateProvider,$urlRouterProvider) {
 
 angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams','$timeout', '$location','datagramService', function($scope, Restangular,$stateParams, $timeout, $location,datagramService) {
   $scope.datagrams = datagramService.datagrams;
+  $scope.groupedDatagrams = _.groupBy($scope.datagrams, function(d) { return d.name.match(":") ? d.name.split(":")[0] : "Z";});
 
   var load = function() {
     console.log($scope.datagrams, $scope.datagrams.length);
