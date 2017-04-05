@@ -9,7 +9,6 @@ require 'google_drive'
 require 'rest-client'
 require 'aws/s3'
 require 'active_support/core_ext/hash'
-require './lib/dg_log.rb'
 
 $stdout.sync = true
 if !defined?(Rails)
@@ -21,8 +20,11 @@ if !defined?(Rails)
     env: ENV["ENV"]
   )
 end
+require 'pusher'
 require './config/initializers/rabbitmq.rb'
 require './config/initializers/s3.rb'
+require './config/initializers/pusher.rb'
+require './lib/dg_log.rb'
 task :perform  do
   ap "#perform rake started"
   $watches.bind($x, routing_key: "watch-watches").subscribe(block: true) do |di, md, payload|

@@ -141,6 +141,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   $scope.viewsChanged = false;
   $scope.chartOpts = {};
 
+  $scope.log = {};
+
   $scope.selectParamSet = function(name) {
     if (name) {
       $scope.selectedParamSet =  $scope.datagram.param_sets[name];
@@ -241,11 +243,17 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     $scope.refresh = function(name) {
       $scope.selectedParamSet = $scope.datagram.param_sets[name];
       console.log('refresh with ',$scope.datagram.param_sets[name]);
+      $scope.log = {};
+      $scope.refreshing = true;
       $http.put('/api/v1/datagrams/' + $scope.datagram.id + '/refresh', {params: $scope.datagram.param_sets[name].params} ).then(function(r) {
 	console.log('subscribed ',r.data.token);
 	Pusher.subscribe(r.data.token,'data', function(item) {
 	  console.log('Pusher received', item);
+	  $scope.refreshing = false;
 	  getDatagram($scope.datagram.param_sets[name].params);
+	});
+	Pusher.subscribe(r.data.token,'log', function(item) {
+	  console.log('log',item);
 	});
       });
     };

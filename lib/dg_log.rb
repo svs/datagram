@@ -9,6 +9,9 @@ class DgLog
   def log
     #ap log_line
     Rails.logger.send(level, log_line)
+    if channel
+      Pusher.trigger(channel, 'log', {ts: ts, log: log_line})
+    end
   end
 
   private
@@ -53,6 +56,16 @@ class DgLog
                      context[:timestamp]
                    end
                   )
+  end
+
+  def channel
+    return @channel || (@channel =
+                        if context.is_a? Binding
+                          eval("@channel", context) || nil
+                        else
+                          context[:channel]
+                        end
+                       )
   end
 
   def log_line

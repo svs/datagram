@@ -63,16 +63,17 @@ script type="text/ng-template" id="show.html"
               a.btn ng-click="save()" style="margin: 3px"
                 i.fa.fa-save style="margin-right: 5px"
                 | Save
-              a.btn ng-click="refresh(values.name || '__default')" style="margin: 3px"
-                i.fa.fa-refresh style="margin-right: 5px"
+              a.btn ng-click="refresh(values.name || '__default')" style="margin: 3px" ng-class="refreshing ? 'pulse' : ''"
+                i.fa.fa-refresh style="margin-right: 5px" ng-if="!refreshing"
+                i.fa.fa-spinner.fa-spin style="margin-right: 5px" ng-if="refreshing"
                 | Refresh
               a.btn ng-click="reload(values.name || '__default')" style="margin: 3px"
                 i.fa.fa-refresh style="margin-right: 5px"
                 | Reload
               br
-              span ng-if="truncated"
+              span.label.label-warning ng-if="truncated"
                 input type="checkbox" ng-model="options.truncate"
-                | truncate?
+                | Results truncated
 
 
 

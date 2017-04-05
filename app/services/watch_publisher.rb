@@ -95,6 +95,6 @@ class WatchPublisher
   end
 
   def context
-    {datagram: datagram.slug, watch: watch.slug, user: watch.user.id, timestamp: timestamp}
+    {datagram: datagram.slug, watch: watch.slug, user: watch.user.id, timestamp: timestamp, channel: refresh_channel}
   end
 end

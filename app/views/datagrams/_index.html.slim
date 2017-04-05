@@ -36,7 +36,7 @@ script type="text/ng-template" id="index.html"
 
       tab ng-repeat="(k,ds) in groupedDatagrams" active="groupName==k"
         tab-heading
-          a ng-click="setActiveTab(k)"
+          a ng-click="setActiveTab(k)" style="cursor:pointer"
             | {{k}} ({{filtered.length}})
         .row style="margin-bottom: 20px"
           .col-md-12
