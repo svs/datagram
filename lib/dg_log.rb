@@ -10,7 +10,7 @@ class DgLog
     #ap log_line
     Rails.logger.send(level, log_line)
     if channel
-      Pusher.trigger(channel, 'log', {ts: ts, log: log_line})
+      Pusher.trigger(channel, 'log', {ts: ts, log: pusher_log_line})
     end
   end
 
@@ -73,4 +73,8 @@ class DgLog
   end
 
 
+  def pusher_log_line
+    as = log_line.split("#")
+    as[0].split(" ") + [as[1]]
+  end
 end

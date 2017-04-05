@@ -71,10 +71,11 @@ script type="text/ng-template" id="show.html"
                 i.fa.fa-refresh style="margin-right: 5px"
                 | Reload
               br
-              span.label.label-warning ng-if="truncated"
+              span.label.label-warning ng-if="truncated && !refreshing"
                 input type="checkbox" ng-model="options.truncate"
                 | Results truncated
-
+              span ng-if="refreshing"
+                | {{log.log[3]}}
 
 
       .col-md-4

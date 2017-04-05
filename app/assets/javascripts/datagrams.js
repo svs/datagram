@@ -254,6 +254,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 	});
 	Pusher.subscribe(r.data.token,'log', function(item) {
 	  console.log('log',item);
+	  $scope.log = item;
 	});
       });
     };
