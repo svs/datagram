@@ -7,6 +7,7 @@ task :watch_consumer => :environment do
     Pusher.trigger(w[:refresh_channel], 'data', w)
     datagram = Datagram.find_by(token: w[:datagram_token])
     DgLog.new("#ResponseConsumer Push", context).log
+    datagram = nil
     pl = nil
     w = nil
   end
