@@ -16,6 +16,9 @@ class DatagramRenderService
     Array(views).compact.reduce(raw_json){|result, view| result = _render(result, view)}
   end
 
+  def last_view
+    DatagramViewLoader.new(datagram, view).load
+  end
 
 
   attr_reader :dfs, :datagram, :format, :params, :last_filename

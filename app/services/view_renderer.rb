@@ -10,15 +10,15 @@ class ViewRenderer
 
 
   def render
-    renderer.render(transform, params, filename)
+    renderer.new(self).render
   end
 
   def transform
     transformer.transform(view, json, params)
   end
+  attr_reader :view, :json, :params, :filename
 
   private
-  attr_reader :view, :json, :params, :filename
   def renderer
     Kernel.const_get("ViewRenderer::Render" + view["render"].titleize.gsub(" ",""))
   end
@@ -49,14 +49,29 @@ class ViewRenderer
     end
   end
 
-  class TransformLiquid
-    def self.transform(v, json, params)
-      r = ::Liquid::Template.parse(v["template"]).render(json.merge(params: params)).html_safe
+
+  class Render
+    def initialize(view_renderer)
+      @view_renderer = view_renderer
     end
+    attr_reader :view_renderer
+
+    delegate :params, to: :view_renderer
+    delegate :filename, to: :view_renderer
+    delegate :view, to: :view_renderer
+
+    def json
+      view_renderer.transform
+    end
+
+    def render
+      return json
+    end
+
   end
 
-  class RenderChart
-    def self.render(json,params,filename)
+  class RenderChart < Render
+    def render
       if params.format == "png"
         j = JSON.dump(json)
         i = ::RestClient.post('http://export.highcharts.com/',"content=options&options=#{j}&type=image/jpeg")
@@ -68,24 +83,25 @@ class ViewRenderer
     end
   end
 
-  class RenderJson
-    def self.render(json,params,filename)
-      return json
+  class RenderJson < Render
+  end
+
+  class RenderAgGrid < Render
+  end
+
+  class RenderPivot < Render
+    def render
+      return {data: json, config: config}
+    end
+
+    def config
+      Hash[view["pivotOptions"].slice("aggregatorName","cols","rows","vals","rendererName").map{|k,v| [k, v ? v : []]}]
     end
   end
 
-  class RenderAgGrid < RenderJson
+  class RenderCsv < Render
   end
 
-  class RenderCsv < RenderJson
-    def self.render(json, params, filename)
-      super
-    end
-  end
-
-  class RenderHtml
-    def self.render(html, params, filename)
-      return html
-    end
+  class RenderHtml < Render
   end
 end

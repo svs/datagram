@@ -85,7 +85,7 @@ gem 'slack-notify'
 gem 'slack-ruby-client'
 gem 'telegram-bot-ruby'
 gem 'business_time'
-
+gem 'phantomjs'
 gem "keen"
 gem 'scout_apm'
 

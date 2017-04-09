@@ -1627,6 +1627,7 @@
           };
         })(this);
         refresh();
+	console.log(this.find(".pvtAxisContainer"));
         this.find(".pvtAxisContainer").sortable({
           update: function(e, ui) {
             if (ui.sender == null) {

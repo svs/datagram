@@ -34,6 +34,8 @@
 //= require highcharts-ng.min.js
 //= require bootstrap.min
 //= require mustache.min.js
+//= require handlebars.js
+//= require handlebars-helpers.js
 //= require c3_renderers.min.js
 //= require d3_renderers.min.js
 //= require ng-csv.min.js

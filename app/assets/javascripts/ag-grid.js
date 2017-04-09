@@ -78,10 +78,7 @@ $(document).ready(function() {
   var eGridDiv = document.querySelector('#myGrid');
   new agGrid.Grid(eGridDiv, gridOptions);
 
-  var url = ($('meta[name="url"]')[0].getAttribute('content'));
-  $.get(url, function(a,b,c) {
-    renderAgGrid(a);
-  }).fail(function() {
-    alert('loading failed');
-  });
+  var data = ($('meta[name="data"]')[0].getAttribute('content'));
+  console.log(data);
+  renderAgGrid(data);
 });

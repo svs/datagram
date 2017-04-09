@@ -1,7 +1,10 @@
 script type="text/ng-template" id="index.html"
   div ng-controller="streamsCtrl"
     tabset
-      tab ng-repeat="stream in streams" heading="{{stream.name}}"
+      tab ng-repeat="stream in streams"  active="stream.name===selectedTab"
+        tab-heading
+          a ng-click="setActiveTab(stream.name)" style="cursor:pointer"
+            | {{stream.name}}
         div
           .col-md-4 ng-repeat="data in stream.streamers | orderBy: 'name'"
             .portlet.portlet-boxed
@@ -13,4 +16,6 @@ script type="text/ng-template" id="index.html"
                 |{{data.last_run_at | fromNow}}
               .portlet-body
                 img src="{{data.data.url}}" style="width: 100%"
-      i.fa.fa-refresh ng-class="loading ? 'fa-spin' : ''" ng-click="load()" style="font-size: 1.5em; font-weight: 300; padding-top: 12px; color: #700593"
+      a.btn ng-click="openNewModal()"
+        i.fa.fa-plus
+        | Add a Stream

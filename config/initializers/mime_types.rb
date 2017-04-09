@@ -4,3 +4,4 @@
 # Mime::Type.register "text/richtext", :rtf
 Mime::Type.register "text/uri-list", :uri
 Mime::Type.register "text/html", :aggrid
+Mime::Type.register "text/html", :pivot

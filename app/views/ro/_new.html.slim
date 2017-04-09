@@ -1,0 +1,20 @@
+script type="text/ng-template" id="new.html"
+  div
+    .portlet
+      .portlet-title
+        .col-md-5
+          h2.portlet-title style="margin-bottom: 0px; padding-left: 20px"
+            u Add a Stream
+    .portlet style="margin: 20px"
+      .form-group
+        label Name
+        input.form-control ng-model="stream_sink.name"
+      .form-group
+        label Type
+        select.form-control ng-model="stream_sink.stream_type"
+          option ng-repeat="o in ['Datagram','Slack','Telegram','Basecamp']"
+            | {{o}}
+      a.btn.btn-success.btn-large ng-click="save()"
+        h4
+          i.fa.fa-plus
+          | Add Stream

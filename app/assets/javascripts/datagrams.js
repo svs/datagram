@@ -277,7 +277,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     staticParams = $httpParamSerializerJQLike(staticParams);
     dynamicParams = $httpParamSerializerJQLike(dynamicParams);
     var render = view.render == 'chart' ? 'png' : view.render;
-    render = render == "ag-grid" ? "aggrid" : render;
+    render = render == "ag-grid" ? "html" : render;
+    render = render == "pivot" ? "html" : render;
     var staticUrl =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + staticParams + '&views[]=' + view.name;
     var dynamicUrl =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + dynamicParams + '&views[]=' + view.name;
     $scope.renderedUrls[view.name] = {static: staticUrl, dynamic: dynamicUrl};
@@ -433,7 +434,12 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     if (view.transform === 'mustache') {
       $scope.renderedData[view.name] = Mustache.render(view.template, $scope.datagram);
       console.log($scope.renderedData[view.name]);
-    } else if (view.transform === 'liquid') {
+    }
+    if (view.transform == 'handlebars') {
+      var template = Handlebars.compile(view.template);
+      $scope.renderedData[view.name] = template($scope.datagram);
+    }
+    if (view.transform === 'liquid') {
       console.log('liquid!');
       var tmpl = Liquid.parse(view.template);
       var t = tmpl.render($scope.datagram);
