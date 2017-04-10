@@ -57,7 +57,7 @@ module Api
           datagram = User.find_by(token: params[:api_key]).datagrams.find_by(slug: params[:slug])
         end
         if datagram
-          if ["json","xml","html","png"].include?(params[:format])
+          if ["json","xml","csv","html","png"].include?(params[:format])
             ds = DatagramFetcherService.new(datagram, params)
             renderer = ds.renderer
             response = renderer.render(params[:views])
@@ -71,8 +71,22 @@ module Api
               render template: "api/v1/datagrams/#{last_view(datagram)['render']}", layout: last_view(datagram)['render']
             }
             format.png {
-              @data = response
-              render
+              if response.is_a?(Hash)
+                redirect_to(response[:url])
+              elsif response.is_a?(String)
+                x = SecureRandom.urlsafe_base64(5)
+                html = render_to_string(inline:response, layout: 'html')
+                ap html
+                File.open("/tmp/#{x}.html","w") {|f| f.write(html) }
+                `wkhtmltoimage /tmp/#{x}.html /tmp/#{x}.png`
+                AWS::S3::S3Object.store(filename,open("/tmp/#{x}.png"),'dg-tmp')
+                redirect_to "https://s3.amazonaws.com/dg-tmp/#{filename}"
+
+              else
+                send_file response, type: 'image/png', disposition: 'inline'
+              end
+#              @data = response
+#              render
             }
             format.csv {
               csv = CSV.generate do |f|
