@@ -584,6 +584,7 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
     xml-simple (1.1.5)
+    yajl-ruby (1.3.0)
 
 PLATFORMS
   ruby
@@ -662,6 +663,7 @@ DEPENDENCIES
   telegram-bot-ruby
   therubyracer
   uglifier (>= 1.3.0)
+  yajl-ruby
 
 BUNDLED WITH
    1.10.6
