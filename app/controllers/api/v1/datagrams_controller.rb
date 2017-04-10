@@ -68,7 +68,7 @@ module Api
             format.xml { render xml: response }
             format.html {
               @data = response
-              render
+              render template: "api/v1/datagrams/#{last_view(datagram)['render']}", layout: last_view(datagram)['render']
             }
             format.png {
               @data = response
@@ -122,7 +122,7 @@ module Api
         create_params
       end
 
-      def last_view
+      def last_view(datagram)
         if params[:views]
           if params[:views].is_a?(Array)
             v = DatagramViewLoader.new(datagram, params[:views][-1])
@@ -130,6 +130,7 @@ module Api
             v = DatagramViewLoader.new(datagram, params[:views])
           end
         end
+        v.load
       end
 
 

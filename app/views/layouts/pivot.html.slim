@@ -2,7 +2,7 @@ doctype html
 
 html
   head
-    meta name="url" content="#{@url}"
+    meta name="data" content="#{@data.to_json}"
     = javascript_include_tag 'pivotPage'
     = stylesheet_link_tag 'pivotPage'
 

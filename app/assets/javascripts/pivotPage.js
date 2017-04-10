@@ -25,11 +25,8 @@ $(document).ready(function() {
 			   $.pivotUtilities.novix_renderers,
 			   $.pivotUtilities.highchart_renderers);
 
-  var url = ($('meta[name="url"]')[0].getAttribute('content'));
-  $.get(url, function(a,b,c) {
-    console.log(a);
-    $('#pivot').pivotUI(a.data, _.merge(a.config,{renderers: renderers}));
-  }).fail(function() {
-    alert('loading failed');
-  });
+  var a = JSON.parse(unescape($('meta[name="data"]')[0].getAttribute('content')));
+  console.log(a);
+  $('#pivot').pivotUI(a.data, _.merge(a.config,{renderers: renderers}));
+
 });
