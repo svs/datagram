@@ -39,7 +39,11 @@ class ViewRenderer
 
   class TransformJq
     def self.transform(v, json, params = null)
-      json.jq(v["template"])[0]
+      begin
+        x = json.jq(v["template"])[0]
+      rescue Exception => e
+        {error: e.message}
+      end
     end
   end
 

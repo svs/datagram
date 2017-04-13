@@ -18,7 +18,7 @@
 
 agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Production_100Devs24_May_2017__MTQ5NTU4MDQwMDAwMA==16be8f8f82a5e4b5fa39766944c69a32");
 
-var gridOptions = {enableSorting: true, enableFilter: true, rowData: null, showToolPanel: true, enableStatusBar: true };
+var gridOptions = {enableSorting: true, enableFilter: true, rowData: null, showToolPanel: true };
 
 var exportDataAsExcel = function() {
   console.log('Excel!');
@@ -69,8 +69,13 @@ var renderAgGrid = function(data) {
   gridOptions.api.setColumnDefs(cols);
   gridOptions.api.setRowData(data.rowData);
   gridOptions.api.sizeColumnsToFit();
-  gridOptions.api.enableStatusBar(true);
-  gridOptions.columnApi.setPivotMode(data.pivotMode);
+  //gridOptions.columnApi.setPivotMode(data.pivotMode);
+  setTimeout(function() {
+    if (typeof window.callPhantom === 'function') {
+      window.callPhantom({ hello: 'world' });
+    }
+  }, 2000);
+
 };
 
 $(document).ready(function() {
@@ -78,7 +83,8 @@ $(document).ready(function() {
   var eGridDiv = document.querySelector('#myGrid');
   new agGrid.Grid(eGridDiv, gridOptions);
 
-  var data = JSON.parse(($('meta[name="data"]')[0].getAttribute('content')));
-  console.log(data);
-  renderAgGrid(data);
+  var url = $('meta[name="url"]')[0].getAttribute('content');
+  $.get(url, function(a) {
+    renderAgGrid(a);
+  });
 });
