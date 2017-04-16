@@ -8,7 +8,6 @@ class ViewRenderer
   end
 
 
-
   def render
     renderer.new(self).render
   end

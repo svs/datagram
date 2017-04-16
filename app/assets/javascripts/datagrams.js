@@ -364,7 +364,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   var renderAgGrid = function(view) {
-    console.log('renderAgGrid');
+    console.log('renderAgGrid', view);
     var keys = _.keys($scope.renderedData[view.name].rowData[0]);
     var cols = _.map(keys, function(a) { return {headerName: a, field: a};});
     var reservedWords = ['gradient'];
@@ -381,9 +381,26 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     });
     console.log(cols);
     $scope.gridOptions.api.setColumnDefs(cols);
+    if (view.gridOptions && view.gridOptions.columnState) {
+      $scope.gridOptions.columnApi.setColumnState(view.gridOptions.columnState);
+      $scope.gridOptions.columnApi.setPivotMode(view.gridOptions.pivotMode);
+    }
     $scope.gridOptions.api.setRowData($scope.renderedData[view.name].rowData);
     $scope.gridOptions.api.sizeColumnsToFit();
-    $scope.gridOptions.columnApi.setPivotMode(data.pivotMode);
+    $scope.gridOptions.api.sizeColumnsToFit();
+    $timeout(function() {
+      _.each(['columnPivotModeChanged','columnRowGroupChanged','columnPivotChanged'], function(a) {
+	$scope.gridOptions.api.addEventListener(a, function() {
+	  if (!view.gridOptions) {
+	    view.gridOptions = {columnState: {}, pivotMode: false};
+	  }
+	  view.gridOptions.columnState = $scope.gridOptions.columnApi.getColumnState();
+	  view.gridOptions.pivotMode = $scope.gridOptions.columnApi.isPivotMode();
+	  $scope.viewsChanged = true;
+	  console.log(view);
+	});
+      });
+    }, 1000);
 
   };
 
@@ -500,7 +517,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   $scope.save = function(callback) {
-    //console.log($scope.datagram);
+    console.log('save views',$scope.datagram.views);
     var newSet = $scope.datagram.param_sets["__new"];
     if (newSet) {
       //console.log(newSet);
