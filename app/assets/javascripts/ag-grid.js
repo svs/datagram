@@ -66,10 +66,15 @@ var renderAgGrid = function(data) {
     });
   });
   console.log(cols);
+
   gridOptions.api.setColumnDefs(cols);
   gridOptions.api.setRowData(data.rowData);
   gridOptions.api.sizeColumnsToFit();
   //gridOptions.columnApi.setPivotMode(data.pivotMode);
+  if (data.gridOptions && data.gridOptions.columnState) {
+    gridOptions.columnApi.setColumnState(data.gridOptions.columnState);
+    gridOptions.columnApi.setPivotMode(data.gridOptions.pivotMode);
+  }
   setTimeout(function() {
     if (typeof window.callPhantom === 'function') {
       window.callPhantom({ hello: 'world' });
@@ -85,6 +90,7 @@ $(document).ready(function() {
 
   var url = $('meta[name="url"]')[0].getAttribute('content');
   $.get(url, function(a) {
+    console.log(a);
     renderAgGrid(a);
   });
 });

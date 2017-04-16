@@ -261,6 +261,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.reload = function(name) {
     getDatagram($scope.selectedParamSet.params);
+    pivotLoaded = 0;
   }
 
   $scope.addView = function() {
@@ -404,11 +405,17 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   };
 
+  var pivotLoaded = 0;
   var refreshPivotConf = function(conf) {
     var v = _.find($scope.datagram.views, {name: conf.viewName});
     console.log('refreshPivotConf',conf, v.pivotOptions);
     console.log('v',v);
     v.pivotOptions = conf;
+    if (pivotLoaded > 0) {
+      $scope.viewsChanged = true;
+    }
+    pivotLoaded += 1;
+
     //$scope.pivotOptions = _.merge(conf,v.pivotOptions);
 
   };

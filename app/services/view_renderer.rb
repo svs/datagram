@@ -90,6 +90,10 @@ class ViewRenderer
   end
 
   class RenderAgGrid < Render
+    def render
+      super.merge(gridOptions: view["gridOptions"])
+    end
+
   end
 
   class RenderPivot < Render
