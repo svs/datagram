@@ -73,7 +73,7 @@ class ViewRenderer
 
   end
 
-  class RenderChart < Render
+  class RenderHighcharts < Render
     def render
       if params.format == "png"
         j = JSON.dump(json)

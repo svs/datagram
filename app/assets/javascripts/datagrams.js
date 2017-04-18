@@ -11,6 +11,7 @@
 //= require handsontable.min.js
 //= require hightchart_renderers.js
 //= require novix.pivot.renderer.js
+//= require tauCharts.js
 agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Production_100Devs24_May_2017__MTQ5NTU4MDQwMDAwMA==16be8f8f82a5e4b5fa39766944c69a32");
 agGrid.initialiseAgGridWithAngular1(angular);
 var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng","ngSanitize","agGrid",'ngCsv','angular-pivottable']).
@@ -127,7 +128,7 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 
 }]);
 
-angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', '$timeout','$window',function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike, $timeout, $window) {
+angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', '$timeout','$window','$location',function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike, $timeout, $window, $location) {
 
   $scope.renderedData = {};
   var renderers = $.extend($.pivotUtilities.renderers,
@@ -143,6 +144,11 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.log = {};
 
+  var init = function() {
+    var groupName = $location.search().g;
+    $scope.activeTabName=(groupName || null);
+  }
+  init();
   $scope.selectParamSet = function(name) {
     if (name) {
       $scope.selectedParamSet =  $scope.datagram.param_sets[name];
@@ -171,6 +177,11 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       var d = $scope.datagram;
       $scope.groupName = d.name.match(":") ? d.name.split(":")[0] : null;
       $scope.datagram.name = d.name.match(":") ? d.name.split(":")[1] : d.name.split(":")[0];
+      console.log('activeTabName', $scope.activeTabName);
+      if (!$scope.activeTabName) {
+	$scope.activeTabName = $scope.datagram.views[0].name || $scope.datagram.responses[0].slug;
+	console.log('activeTabName', $scope.activeTabName);
+      }
       console.log('loadDatagram', $scope.datagram);
     });
   };
@@ -277,7 +288,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     var dynamicParams = {params: $scope.selectedParamSet};
     staticParams = $httpParamSerializerJQLike(staticParams);
     dynamicParams = $httpParamSerializerJQLike(dynamicParams);
-    var render = view.render == 'chart' ? 'png' : view.render;
+    var render = view.render == 'highcharts' ? 'png' : view.render;
     render = render == "ag-grid" ? "html" : render;
     render = render == "pivot" ? "html" : render;
     var staticUrl =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + staticParams + '&views[]=' + view.name;
@@ -323,7 +334,11 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
 
   $scope.big = true;
-  $scope.resize = function() {
+  $scope.switchTab = function(name) {
+    $scope.activeTabName = name;
+    $location.search({g: name});
+
+    console.log('switchTab',name);
     //$scope.big = !($scope.big);
     //var hc = angular.element( document.querySelector( '.pvtRendererArea' ) );
     //hc.addClass('hcbig');
@@ -470,37 +485,21 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       console.log(t);
       $scope.renderedData[view.name] = $sce.trustAsHtml(t);
     };
+    if (view.render == 'taucharts') {
+      if (!view.tauChartsOptions) {
+	view.tauChartsOptions = {data: $scope.renderedData[view.name],x: null, y: null, type: 'line', handleRenderingErrors: false};
+      }
+      view.tauChartsOptions.keys = _.keys($scope.renderedData[view.name][0]);
+      var tco = _.omit(_.clone(view.tauChartsOptions), "keys");
+      console.log('TAUCHART!',tco);
+      var chart = new tauCharts.Chart(tco);
+      chart.renderTo('#tauchart');
+    }
     makeRenderedUrls(view);
   };
 
 
-  $scope.addSeries = function(viewName) {
-    var series = $scope.chartOpts[viewName].series;
-    console.log('series', series);
-    if (series == undefined) {
-      $scope.chartOpts[viewName].series = [];
-    }
-    $scope.chartOpts[viewName].series.push($scope.chartOpts[viewName].newSeries);
-    console.log('chartOpts',$scope.chartOpts);
-    $scope.buildChart(viewName);
-  };
 
-  $scope.buildChart = function(viewName) {
-    var co = $scope.chartOpts[viewName];
-    console.log($scope.datagram.views);
-    var v = _.find($scope.datagram.views, {name: viewName});
-    console.log(v);
-    var t = angular.toJson(_.omit($scope.chartOpts[viewName],"newSeries"),2);
-    _.each(co.series, function(a) {
-      t = t.replace('"' + a.data + '"', a.data);
-      _.each(['series','name','type','data'], function(a) {
-	t = t.replace('"' + a + '":', a + ":");
-      });
-      t = t.replace(/"/g,"'");
-    });
-    v.template = t;
-    $scope.render(v);
-  };
 
   $scope.addParamSet = function() {
     $scope.datagram.param_sets["__new"] = {name: "new", params: _.clone($scope.datagram.publish_params), frequency: null, at: null};
