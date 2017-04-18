@@ -280,7 +280,13 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       $scope.datagram.views = [];
     };
     $scope.viewsChanged = true;
-    $scope.datagram.views.push({name: 'New View', type: null, template: null});
+    $scope.viewEditor = true;
+    console.log('addView', _.keys($scope.datagram.responses)[0]);
+    var newTemplate = "responses." + _.keys($scope.datagram.responses)[0] + ".data[]";
+    var v = {name: 'New View', transform: 'jmespath', template: newTemplate, render: 'json'};
+    $scope.datagram.views.push(v);
+    $scope.activeTabName = 'New View';
+    renderClient(v);
   };
 
   var makeRenderedUrls = function(view) {

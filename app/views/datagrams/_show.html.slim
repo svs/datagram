@@ -183,15 +183,16 @@ script type="text/ng-template" id="show.html"
                       | {{l}}
                       br
                   div#pivot ng-if="view.render === 'pivot'"
-            a.btn ng-click="addView()" style="position: relative; top: 5px"
-              i.fa.fa-plus style="margin-right: 5px"
-              | Add a view
-            a.btn ng-click="save()" style="position: relative; top: 5px" ng-class="viewsChanged ? 'btn-danger' : ''"
-              i.fa.fa-save style="margin-right: 5px"
-              | Save Views
-            a.btn ng-click="viewEditor = !viewEditor" style="position: relative; top: 5px"
-              i.fa.fa-wrench style="margin-right: 5px"
-              | View Editor
+            div.pull-right
+              a.btn ng-click="addView()" style="position: relative; top: 5px"
+                i.fa.fa-plus style="margin-right: 5px"
+                | Add a view
+              a.btn ng-click="save()" style="position: relative; top: 5px" ng-class="viewsChanged ? 'btn-danger' : ''"
+                i.fa.fa-save style="margin-right: 5px"
+                | Save Views
+              a.btn ng-click="viewEditor = !viewEditor" style="position: relative; top: 5px"
+                i.fa.fa-wrench style="margin-right: 5px"
+                | View Editor
 
             tab ng-repeat="response in datagram.responses" active="activeTabName==response.slug" ng-click="switchTab(response.slug)"
               tab-heading
