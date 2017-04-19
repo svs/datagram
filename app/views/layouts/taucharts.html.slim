@@ -1,0 +1,10 @@
+doctype html
+
+html
+  head
+    meta name="url" content="#{@url}"
+    = javascript_include_tag 'tauchartsPage'
+    = stylesheet_link_tag 'tauchartsPage'
+
+  body
+    = yield

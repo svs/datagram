@@ -194,11 +194,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                throw new Error('Plugin is already registered.');
 	            }
 	        },
-	        get: function get(name) {
-	            return plugins[name] || function (x) {
-	                throw new Error(x + ' plugin is not defined');
-	            };
-	        }
+	      get: function get(name) {
+		console.log(plugins)
+	        return plugins[name] || function (x) {
+	          throw new Error(x + ' plugin is not defined');
+	        };
+	      }
 	    },
 	    globalSettings: {
 

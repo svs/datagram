@@ -11,7 +11,7 @@
 //= require handsontable.min.js
 //= require hightchart_renderers.js
 //= require novix.pivot.renderer.js
-//= require tauCharts.js
+//= require tauCharts.min.js
 agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Production_100Devs24_May_2017__MTQ5NTU4MDQwMDAwMA==16be8f8f82a5e4b5fa39766944c69a32");
 agGrid.initialiseAgGridWithAngular1(angular);
 var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng","ngSanitize","agGrid",'ngCsv','angular-pivottable']).
@@ -88,7 +88,7 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
   $scope.setActiveTab = function(groupName) {
     console.log(groupName);
     $scope.groupName = groupName;
-    $location.search({g: groupName});
+    $location.search({g: groupName, s: $scope.selectedParamSetName});
   }
   load();
 
@@ -152,7 +152,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.selectParamSet = function(name) {
     $scope.selectedParamSetName = name;
-    $location.search({s: name});
+    $location.search({s: name, g: $scope.activeTabName});
     if (name) {
       $scope.selectedParamSet =  $scope.datagram.param_sets[name];
     } else {
@@ -303,6 +303,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     var render = view.render == 'highcharts' ? 'png' : view.render;
     render = render == "ag-grid" ? "html" : render;
     render = render == "pivot" ? "html" : render;
+    render = render == "taucharts" ? "html" : render;
     var staticUrl =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + staticParams + '&views[]=' + view.name;
     var dynamicUrl =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + dynamicParams + '&views[]=' + view.name;
     $scope.renderedUrls[view.name] = {static: staticUrl, dynamic: dynamicUrl};
@@ -498,19 +499,32 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       $scope.renderedData[view.name] = $sce.trustAsHtml(t);
     };
     if (view.render == 'taucharts') {
+      var tcDefaults = {
+	plugins: [
+          tauCharts.api.plugins.get('tooltip')(),
+          tauCharts.api.plugins.get('legend')()
+	]
+      };
+      console.log('tauChartsOptions',view.tauChartsOptions);
       if (!view.tauChartsOptions) {
-	view.tauChartsOptions = {data: $scope.renderedData[view.name],x: null, y: null, type: 'line', handleRenderingErrors: false};
+	view.tauChartsOptions = {tco: {x: null, y: null, type: null, handleRenderingErrors: false}};
       }
       view.tauChartsOptions.keys = _.keys($scope.renderedData[view.name][0]);
-      var tco = _.omit(_.clone(view.tauChartsOptions), "keys");
+      var tco = _.merge(_.merge(tcDefaults, view.tauChartsOptions.tco),{data: $scope.renderedData[view.name]});
       console.log('TAUCHART!',tco);
       var chart = new tauCharts.Chart(tco);
+      $($('#tauchart')[0]).html('');
       chart.renderTo('#tauchart');
     }
     makeRenderedUrls(view);
   };
 
 
+  $scope.renameView = function(name) {
+    $scope.activeTabName = name;
+    $scope.viewsChanged = true;
+    $location.search({g: name, s: $location.search.s});
+  };
 
 
   $scope.addParamSet = function() {

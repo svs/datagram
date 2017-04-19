@@ -96,6 +96,15 @@ class ViewRenderer
 
   end
 
+  class RenderTaucharts < Render
+    def render
+      view["tauChartsOptions"]["tco"].merge({data: super})
+    end
+
+  end
+
+
+
   class RenderPivot < Render
     def render
       return {data: json, config: config}

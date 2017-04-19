@@ -115,7 +115,7 @@ script type="text/ng-template" id="show.html"
                   | {{view.name}}
               .row style="padding-bottom: 10px;border-bottom: 1px solid #ccc"
                 .col-md-6 layout="row" width="100%"
-                  input type="text" ng-model = "view.name" style="width: 200px"
+                  input type="text" ng-model = "view.name" style="width: 200px" ng-change="renameView(view.name)"
                   select ng-model="view.transform" ng-change="render(view)"
                     option ng-repeat="o in ['','jq','jmespath','mustache','handlebars']"
                       | {{o}}
@@ -143,42 +143,41 @@ script type="text/ng-template" id="show.html"
                   div ui-ace="{mode: 'javascript', theme: 'eclipse'}" style="min-height: 300px; height: 300px;" ng-model="view.template" ng-change="render(view, false, true)"
                 #j.col-md-6 style="margin-bottom: 10px; background: #f6f6f6; max-height: 325px; overflow: scroll" ng-if="(view.transform == 'jq' || view.transform == 'jmespath') && view.render != 'taucharts'"
                   div hljs-to-json="renderedData[view.name]"
-                #j.col-md-6 style="margin-bottom: 10px; background: #f6f6f6; max-height: 325px; overflow: scroll" ng-if="(view.transform == 'jq' || view.transform == 'jmespath') && view.render == 'taucharts'"
+                #j.col-md-6 style="margin-bottom: 0px 10px; background: #f6f6f6;" ng-if="(view.transform == 'jq' || view.transform == 'jmespath') && view.render == 'taucharts'"
                   form.form-horizontal
                     .form-group
                       label.col-md-2 X
                       .col-md-3
-                        select ng-model="view.tauChartsOptions.x" ng-change="render(view)"
+                        select.form-control ng-model="view.tauChartsOptions.tco.x" ng-change="render(view)"
                           option ng-repeat="o in view.tauChartsOptions.keys"
                             | {{o}}
                     .form-group
                       label.col-md-2 Y
                       .col-md-3
-                        select ng-model="view.tauChartsOptions.y" ng-change="render(view)"
+                        select.form-control ng-model="view.tauChartsOptions.tco.y" ng-change="render(view)"
                           option ng-repeat="o in view.tauChartsOptions.keys"
                             | {{o}}
                     .form-group
                       label.col-md-2 Type
                       .col-md-3
-                        select ng-model="view.tauChartsOptions.type" ng-change="render(view)"
+                        select.form-control ng-model="view.tauChartsOptions.tco.type" ng-change="render(view)"
                           option ng-repeat="o in ['line','bar','stacked-bar','horizontal-bar','stacked-horizontal-bar']"
                             | {{o}}
                     .form-group
                       label.col-md-2 Color
                       .col-md-3
-                        select ng-model="view.tauChartsOptions.color" ng-change="render(view)"
+                        select.form-control ng-model="view.tauChartsOptions.tco.color" ng-change="render(view)"
                           option ng-repeat="o in view.tauChartsOptions.keys"
                             | {{o}}
 
                 #j.col-md-6 style="margin-bottom: 10px; max-height: 325px; overflow: scroll" ng-if="view.render=='html'"
                   .material ng-if="view.transform=='handlebars' || view.transform=='mustache'" ng-bind-html="renderedData[view.name]"
               .row style="margin-bottom: 10px; padding-top: 30px"
-                #p ng-class="view.render !== 'ag-grid' ? 'col-md-8' : 'col-md-12'"
+                #p ng-class="view.render !== 'ag-grid' && view.render !== 'taucharts' ? 'col-md-8' : 'col-md-12'"
                   div ng-if="view.render=='highcharts'" style="width: 100%; height: 500px"
                     highchart id="chart1" config="renderedData[view.name]"
-                  div ng-if="view.render=='taucharts'" style="width: 100%; height: 800px"
-                    div id="tauchart"
-                    div hljs-to-json="view.tauChartsOptions"
+                  div ng-if="view.render=='taucharts'" style="width: 100%; height: 500px"
+                    div id="tauchart" style="height: 100%; width: 100%"
                   div ag-grid="gridOptions" style="height: 500px" id="foo" class="ag-fresh" ng-if="view.render == 'ag-grid'"
                   .material ng-if="view.transform=='handlebars' || view.transform=='mustache'" ng-bind-html="renderedData[view.name]"
                   div ng-if="view.render=='csv'"
