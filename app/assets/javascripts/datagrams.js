@@ -147,9 +147,12 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   var init = function() {
     var groupName = $location.search().g;
     $scope.activeTabName=(groupName || null);
-  }
-  init();
+    $scope.selectedParamSetName = $location.search().s;
+  };
+
   $scope.selectParamSet = function(name) {
+    $scope.selectedParamSetName = name;
+    $location.search({s: name});
     if (name) {
       $scope.selectedParamSet =  $scope.datagram.param_sets[name];
     } else {
@@ -157,6 +160,9 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     }
     getDatagram($scope.selectedParamSet.params);
   };
+
+
+  init();
 
 
   $scope.gridData = [];
