@@ -15,7 +15,7 @@
 //= require c3.min.js
 //= require d3.min.js
 //= require jquery-ui.min.js
-//= require angular-1.5.8.min.js
+//= require angular.js
 //= require lodash
 //= require pivot.js
 //= require restangular

@@ -1,21 +1,32 @@
 = stylesheet_link_tag 'highlight'
 script type="text/ng-template" id="show_ro.html"
-  div ng-controller="datagramCtrl"
+  div style="width:90%; margin: auto; padding-top:30px"
     .row.portlet-title
-      .col-md-5
-        h2.portlet-title style="margin-bottom: 0px"
-          u
-            | {{datagram.name}}
-            a ui-sref="show({id: datagram.id})"
-              i.fa.fa-eye style="margin-left: 10px; padding: 4px; background: #ccc; border-radius: 10px;"
-        b
-          | {{metadata[0].response_received_at | fromNow}} &bull; &nbsp;
-        a ng-repeat="u in datagram.urls" href="{{u.href}}"
-          | {{u.l}}
-          | &bull; &nbsp;
-      .col-md-3
+      .col-md-6
+        .row
+          h2.portlet-title style="margin-bottom: 0px"
+            u
+              | {{datagram.name}}
+              a ui-sref="show({id: datagram.id})"
+                i.fa.fa-edit style="margin-left: 10px; padding: 4px"
+        .row
+          a.btn.btn-large.btn-warning ng-click="refresh(values.name || '__default')" style="margin: 3px"
+            i.fa.fa-refresh style="margin-right: 5px"
+            | Refresh Now
+          a.btn.btn-large.btn-success ng-click="reload(values.name || '__default')" style="margin: 3px"
+            i.fa.fa-refresh style="margin-right: 5px"
+            | Reload Now
+          br
+          input type="checkbox" ng-model="options.truncate"
+          | truncate?
+          | {{options.truncate}}
+
+      .col-md-6
         tabset
-          tab ng-repeat="(name, values) in (datagram.param_sets)" heading="{{values.name || 'default'}}" ng-click="selectParamSet(values.name)"
+          tab ng-repeat="(name, values) in (datagram.param_sets)"  ng-click="selectParamSet(values.name)"
+            tab-heading
+              a.btn
+                | {{values.name || 'default'}}
             table.table
               tr style="border: 0px; padding: 1px" ng-if="name !== '__default'"
                 td style="border: 0px; padding: 1px"
@@ -29,35 +40,29 @@ script type="text/ng-template" id="show_ro.html"
                 td style="border: 0px; padding: 1px"
                   input type="text" ng-model="values.params[k]" ng-blur="updateCurrentParams(k)"
       .col-md-4
-        a.btn.btn-large.btn-warning ng-click="refresh(values.name || '__default')" style="margin: 3px"
-          i.fa.fa-refresh style="margin-right: 5px"
-          | Refresh Now
-        a.btn.btn-large.btn-success ng-click="reload(values.name || '__default')" style="margin: 3px"
-          i.fa.fa-refresh style="margin-right: 5px"
-          | Reload Now
-        br
-        input type="checkbox" ng-model="options.truncate"
-        | truncate?
-        | {{options.truncate}}
 
 
     .row
       .col-md-12
           tabset
-            tab heading="{{view.name}}" ng-repeat="view in datagram.views"
+            tab ng-repeat="view in datagram.views"
+              tab-heading
+                a.btn
+                  | {{view.name}}
               .row#view
-                .col-mod-12
+                .col-md-12
                   a href="{{renderedUrls[view.name]}}" target="_blank"
                     | {{view.render}}
 
-                  highchart id="chart1" config="renderedData[view.name]" ng-if="view.render=='chart'"
+                  highchart id="chart1" config="renderedData[view.name]" ng-if="view.render=='highcharts'"
                   div hljs-to-json="renderedData[view.name]" ng-if="view.render=='json'"
                   div#preview ng-if="view.render=='liquid' || view.render=='mustache'" ng-bind-html="renderedData[view.name]"
                   div ag-grid="gridOptions" style="height: 500px; width: 100%" class="ag-fresh" ng-if="view.render == 'ag-grid'"
-                  div ui-grid="gridData" style="height: 500px" id="foo" ng-if="view.render == 'ui-grid'"
-                  div ui-grid="{data: renderedData[view.name]}" style="height: 500px" ng-if="view.render=='csv'"
 
-            tab ng-repeat="response in datagram.responses" heading="{{response.name}}"
+            tab ng-repeat="response in datagram.responses"
+              tab-heading
+                a.btn
+                  | {{response.name}}
               tabset
                 tab heading="Data"
                   div hljs-to-json="response.data"

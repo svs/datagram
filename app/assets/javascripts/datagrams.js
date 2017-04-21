@@ -1,73 +1,4 @@
-//= require tauCharts.min.js
-//= require angular-pusher
-//= require 'checklist-model.js'
-//= require highlight.pack.js
-//= require angular-highlightjs.js
-//= require directives.js
-//= require ui-grid.min.js
-//= require ag-grid-ent.min.js
-//= require numbro.min.js
-//= require pikaday.js
-//= require ZeroClipboard.min.js
-//= require handsontable.min.js
-//= require hightchart_renderers.js
-//= require novix.pivot.renderer.js
-
-
-agGrid.LicenseManager.setLicenseKey("ag-Grid_Evaluation_License_Not_for_Production_100Devs24_May_2017__MTQ5NTU4MDQwMDAwMA==16be8f8f82a5e4b5fa39766944c69a32");
-agGrid.initialiseAgGridWithAngular1(angular);
-var datagramsApp = angular.module('datagramsApp', ['restangular','ui.router','checklist-model', 'hljs', 'doowb.angular-pusher', 'directives.json','ui.bootstrap', "pascalprecht.translate", "humanSeconds","ui.ace","highcharts-ng","ngSanitize","agGrid",'ngCsv','angular-pivottable']).
-config(['PusherServiceProvider',
-  function(PusherServiceProvider) {
-    PusherServiceProvider
-      .setToken('ab5d78a0ff96a4179917')
-      .setOptions({});
-  }
-]);
-
-angular.module('datagramsApp').filter('fromNow', function() {
-  return function(date) {
-    return moment(date).fromNow();
-  };
-});
-
-var pivotService = angular.module('pivotService',[]).service('Pivot', function() {
-
-});
-
-
-
-datagramsApp.config(function($stateProvider,$urlRouterProvider) {
-  $urlRouterProvider.otherwise('/');
-
-  $stateProvider.
-    state('index',
-	  {url: '/?g', templateUrl: "index.html", reloadOnSearch: false}
-	 ).
-    state('new',
-	  {
-	    url: '/new',
-	    templateUrl: 'new.html'
-	  }).
-    state('show',
-	  {
-	    url: '/:id',
-	    templateUrl: 'show.html'
-	  }).
-    state('show_ro',
-	  {
-	    url: '/:id/r',
-	    templateUrl: 'show_ro.html'
-	  }).
-    state('edit',
-	  {
-	    url: '/:id/edit',
-	    templateUrl: 'edit.html'
-	  });
-
-});
-
-angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams','$timeout', '$location','datagramService', function($scope, Restangular,$stateParams, $timeout, $location,datagramService) {
+angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams','$timeout', '$location','$modal','datagramService', function($scope, Restangular,$stateParams, $timeout, $location,$modal,datagramService) {
 
   var init = function() {
     $scope.datagrams = _.sortBy(datagramService.datagrams,function(s) { return s.name});
@@ -77,8 +8,21 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
   };
   init();
 
+  $scope.openShowModal = function(datagram){
+    console.log('openRoModal',datagram);
+    var modalInstance = $modal.open({
+      templateUrl: 'show_ro.html',
+      controller: 'roCtrl',
+      size: 'lg',
+      windowClass: 'big-modal',
+      resolve: {
+	dg: function() { return datagram}
+      }
+    });
+    modalInstance.result.then(function(n) {
+    });
+  };
   var load = function() {
-    console.log($scope.datagrams, $scope.datagrams.length);
     $('#loading').show();
     datagramService.refreshDatagrams().then(function(r) {
       init();
@@ -96,38 +40,24 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
 
 }]);
 
-angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangular','$stateParams', '$state', function($scope, Restangular, $stateParams, $state) {
-  Restangular.all('api/v1/watches').getList().then(function(r) {
-    $scope.watches = r;
-  });
-  Restangular.one('api/v1/datagrams/new').get().then(function(r) {
-    console.log(r);
-    $scope.datagram = r;
-  });
 
-  var baseDatagrams = Restangular.all('api/v1/datagrams');
-  var loaded = false;
-  $scope.save = function() {
-    baseDatagrams.post({datagram: $scope.datagram}).then(function(r) {
-      $state.go('show',{id: $scope.watch.id});
+angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','dg', 'renderService','datagramService','$http','$timeout', function($scope, $modalInstance, dg, renderService, datagramService, $http, $timeout) {
+  $scope.datagram = dg;
+  $scope.renderedData = renderService.renderedData;
+  console.log(dg);
+  console.log(datagramService);
+  datagramService.getDatagramData(dg).then(function() {
+    console.log('dg responses',dg);
+    _.each(dg.views, function(v) {
+      console.log('rendering',v.name,renderService.render(dg,v));
     });
-  };
+    $timeout(function() {
+      $scope.$broadcast('highchartsng.reflow');
+    },100);
 
-  $scope.$watch('datagram.watch_ids.length', function(n,o) {
-        if (loaded) {
-            var selected_watches = _.filter($scope.watches, function(w) {
-		return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params));
-              });
-          $scope.datagram.publish_params = _.reduce(_.map(selected_watches,function(w) { return w.params}), function(a,b) { return _.merge(a,b)});
-
-	} else {
-	    if (!(_.isUndefined(n))) {
-		loaded = true;
-	    }
-	}
+    console.log('RD',renderService.renderedData);
 
   });
-
 }]);
 
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', '$timeout','$window','$location',function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike, $timeout, $window, $location) {
@@ -614,5 +544,39 @@ angular.module('datagramsApp').controller('editDatagramCtrl',['$scope','$http','
       $state.go('show',{id: $scope.datagram.id});
     });
   };
+
+}]);
+
+angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangular','$stateParams', '$state', function($scope, Restangular, $stateParams, $state) {
+  Restangular.all('api/v1/watches').getList().then(function(r) {
+    $scope.watches = r;
+  });
+  Restangular.one('api/v1/datagrams/new').get().then(function(r) {
+    console.log(r);
+    $scope.datagram = r;
+  });
+
+  var baseDatagrams = Restangular.all('api/v1/datagrams');
+  var loaded = false;
+  $scope.save = function() {
+    baseDatagrams.post({datagram: $scope.datagram}).then(function(r) {
+      $state.go('show',{id: $scope.watch.id});
+    });
+  };
+
+  $scope.$watch('datagram.watch_ids.length', function(n,o) {
+        if (loaded) {
+            var selected_watches = _.filter($scope.watches, function(w) {
+		return _.contains($scope.datagram.watch_ids, w.id) && !(_.isEmpty(w.params));
+              });
+          $scope.datagram.publish_params = _.reduce(_.map(selected_watches,function(w) { return w.params}), function(a,b) { return _.merge(a,b)});
+
+	} else {
+	    if (!(_.isUndefined(n))) {
+		loaded = true;
+	    }
+	}
+
+  });
 
 }]);

@@ -30,6 +30,9 @@ script type="text/ng-template" id="index.html"
                   h4.portlet-title style="margin: 3px"
                     u style="padding-bottom: 4px"
                       | {{ datagram.name }}
+                a.btn.pull-right ng-click="openShowModal(datagram)"
+                  i.fa.fa-eye
+                  |{{datagram.id}}
                 |{{datagram.updated_at | fromNow}}
               .portlet-body
                 img src="{{datagram.default_view_url}}" style="width: 100%"
@@ -53,6 +56,8 @@ script type="text/ng-template" id="index.html"
                   h4.portlet-title style="margin: 3px"
                     u style="padding-bottom: 4px"
                       | {{ datagram.name }}
+                a.btn.pull-right ng-click="openShowModal(datagram)"
+                  i.fa.fa-eye
                 |{{datagram.updated_at | fromNow}}
               .portlet-body
                 img src="{{datagram.default_view_url}}" style="width: 100%"
