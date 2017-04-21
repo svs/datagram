@@ -24,7 +24,7 @@ script type="text/ng-template" id="index.html"
               input.form-control type="text" ng-model="search.name" placeholder="search for..."
         .row
           .col-md-4 ng-repeat="datagram in datagrams | filter:search:strict"
-            .portlet.portlet-boxed
+            .portlet.portlet-boxed style="box-shadow: 2px 4px 10px #eee"
               .portlet-heading style="margin: 0px; border-bottom: 0px; background: #fafafa;"
                 a ui-sref="show({id: datagram.id})"
                   h4.portlet-title style="margin: 3px"
@@ -51,7 +51,7 @@ script type="text/ng-template" id="index.html"
 
         .row
           .col-md-4 ng-repeat="datagram in ds | filter:search:strict as filtered"
-            .portlet.portlet-boxed
+            .portlet.portlet-boxed style="box-shadow: 2px 4px 10px #eee"
               .portlet-heading style="margin: 0px; border-bottom: 0px; background: #fafafa;"
                 a ui-sref="show({id: datagram.id})"
                   h4.portlet-title style="margin: 3px"
