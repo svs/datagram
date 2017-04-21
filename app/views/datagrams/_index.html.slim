@@ -25,14 +25,16 @@ script type="text/ng-template" id="index.html"
         .row
           .col-md-4 ng-repeat="datagram in datagrams | filter:search:strict"
             .portlet.portlet-boxed
-              .portlet-heading style="margin: 0px; border-bottom: 0px"
+              .portlet-heading style="margin: 0px; border-bottom: 0px; background: #fafafa;"
                 a ui-sref="show({id: datagram.id})"
                   h4.portlet-title style="margin: 3px"
                     u style="padding-bottom: 4px"
                       | {{ datagram.name }}
-                a.btn.pull-right ng-click="openShowModal(datagram)"
-                  i.fa.fa-eye
-                |{{datagram.updated_at | fromNow}}
+                    a.btn.pull-right ng-click="openShowModal(datagram)"
+                      h3 style="position: relative; top: -10px"
+                        i.fa.fa-eye
+                span style="padding: 3px"
+                  |{{datagram.updated_at | fromNow}}
               .portlet-body
                 img src="{{datagram.default_view_url}}" style="width: 100%"
 
