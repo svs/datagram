@@ -41,17 +41,9 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
 }]);
 
 
-angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','dg', 'renderService','datagramService','$http','$timeout','$window', function($scope, $modalInstance, dg, renderService, datagramService, $http, $timeout, $window) {
+angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','dg', 'renderService','datagramService','$http','$timeout','$window', '$state', function($scope, $modalInstance, dg, renderService, datagramService, $http, $timeout, $window, $state) {
   $scope.renderedData = renderService.renderedData;
 
-  // function loadDatagram(datagram, params) {
-  //   datagramService.setCurrentDatagram(dg);
-  //   datagramService.getDatagramData(datagram, params).then(function() {
-  //     $timeout(function() {
-  // 	$scope.$broadcast('highchartsng.reflow');
-  //     },100);
-  //   });
-  // };
   $scope.d = datagramService;
   datagramService.setCurrentDatagram(dg).then(function() {
     console.log('setCurrentDatagram done');
@@ -64,6 +56,10 @@ angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','
   $scope.previous = function() {
     datagramService.loadPrevious();
   };
+  $scope.edit = function() {
+    $state.go('show',{id: datagramService.datagram.id});
+    $modalInstance.close();
+  }
   var reflow = function() {
     $timeout(function() {
       $scope.$broadcast('highchartsng.reflow');

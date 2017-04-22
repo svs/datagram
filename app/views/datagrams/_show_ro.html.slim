@@ -7,8 +7,9 @@ script type="text/ng-template" id="show_ro.html"
           h2.portlet-title.pull-left style="margin-bottom: 0px"
             u
               | {{d.datagram.name}}
-              a ui-sref="show({id: d.datagram.id})"
-                i.fa.fa-edit style="margin-left: 10px; padding: 4px"
+              a.btn ng-click="edit()"
+                h2
+                  i.fa.fa-edit style="margin-left: 10px; padding: 4px"
           .pull-right
             a.btn ng-click="previous()"
               h3
@@ -24,12 +25,6 @@ script type="text/ng-template" id="show_ro.html"
             i.fa.fa-refresh style="margin-right: 5px"
             | Reload Now
           i.fa.fa-spinner.fa-spin style="margin-right: 5px" ng-if="refreshing"
-
-          br
-          input type="checkbox" ng-model="options.truncate"
-          | truncate?
-          | {{options.truncate}}
-
       .col-md-6
         tabset
           tab ng-repeat="(name, values) in (d.datagram.paramSets)"  ng-click="selectParamSet(values.name)"
@@ -68,7 +63,7 @@ script type="text/ng-template" id="show_ro.html"
                   .material ng-if="view.transform=='handlebars' || view.transform=='mustache'" ng-bind-html="renderedData[view.name]"
                   div#pivot ng-if="view.render === 'pivot'" style="height: 500px"
 
-            tab ng-repeat="response in datagram.responses"
+            tab ng-repeat="response in d.datagram.responses"
               tab-heading
                 a.btn
                   | {{response.name}}

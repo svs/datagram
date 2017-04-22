@@ -10,7 +10,7 @@ angular.module('datagramsApp')
       selectParamSet: selectParamSet,
       datagram: null,
       selectedParamSetName: '__default',
-      options: {truncate: true},
+      options: {truncate: false},
       log: null,
       reset: reset,
       loadNext: loadNext,
@@ -50,6 +50,7 @@ angular.module('datagramsApp')
     }
 
     function loadNext() {
+      console.log(service);
       var g = service.groupedDatagrams[service.datagram.group];
       var i = _.findIndex(g, service.datagram);
       setCurrentDatagram(i == 0 ? g[g.length-1] : g[i-1]);
