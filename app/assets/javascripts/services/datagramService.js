@@ -102,7 +102,7 @@ angular.module('datagramsApp')
       if (datagram.id === lastLoaded.datagram && params === lastLoaded.params) {
 	console.log('lastLoaded is same. no need to load anything');
 	_.each(service.datagram.views, function(v) {
-	  console.log('rendering',v.name,renderService.render(service.datagram,v));
+	  console.log('rendering',v.name,renderService.render(service.datagram,v, params));
 	});
 	q.resolve(service.datagram);
       } else {
@@ -126,9 +126,9 @@ angular.module('datagramsApp')
 	       console.log(d);
 	       service.datagram = _.merge(service.datagram, d);
 	       _.each(service.datagram.views, function(v) {
-		 console.log('rendering',v.name,renderService.render(service.datagram,v));
-		 q.resolve(service.datagram);
+		 console.log('rendering',v.name,renderService.render(service.datagram,v, params));
 	       });
+	       q.resolve(service.datagram);
 
 	     });
       }

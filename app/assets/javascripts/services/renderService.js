@@ -1,5 +1,5 @@
 angular.module('datagramsApp')
-  .factory('renderService', ['$timeout', function($timeout) {
+  .factory('renderService', ['$timeout', '$http',function($timeout, $http) {
     var renderers = $.extend($.pivotUtilities.renderers,
 			     $.pivotUtilities.novix_renderers,
 			     $.pivotUtilities.highchart_renderers);
@@ -13,7 +13,7 @@ angular.module('datagramsApp')
     };
     return service;
 
-    function render(datagram,view) {
+    function render(datagram,view, params) {
       console.log('renderClient',view);
       if ( view.transform === 'jmespath') {
 	if (view.render != 'pivot') {
@@ -43,16 +43,19 @@ angular.module('datagramsApp')
           }, 200);
 	}
       };
+      if (view.transform === 'jq') {
+	service.renderedData[view.name] = renderJq(datagram, view, params);
+      };
       if (view.transform === 'mustache') {
-	service.renderedData[view.name] = Mustache.render(view.template, $scope.datagram);
+	service.renderedData[view.name] = Mustache.render(view.template, datagram);
       }
       if (view.transform == 'handlebars') {
 	var template = Handlebars.compile(view.template);
-	service.renderedData[view.name] = template($scope.datagram);
+	service.renderedData[view.name] = template(datagram);
       }
       if (view.transform === 'liquid') {
 	var tmpl = Liquid.parse(view.template);
-	var t = tmpl.render($scope.datagram);
+	var t = tmpl.render(datagram);
 	service.renderedData[view.name] = $sce.trustAsHtml(t);
       };
       if (view.render == 'taucharts') {
@@ -144,6 +147,17 @@ angular.module('datagramsApp')
     }
   };
 
+    function renderJq(datagram, view, params) {
+      console.log('renderJq',params);
+      $http({
+	url: datagram.public_url,
+	paramSerializer: '$httpParamSerializerJQLike',
+	method: 'GET',
+	params: _.merge(_.clone({params: params}),{"views[]": view.name})
+    }).then(function(r) {
+      service.renderedData[view.name] = r.data;
+    });
 
+    }
 
   }]);

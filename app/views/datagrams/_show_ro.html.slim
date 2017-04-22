@@ -54,7 +54,7 @@ script type="text/ng-template" id="show_ro.html"
     .row
       .col-md-12
           tabset
-            tab ng-repeat="view in d.datagram.views"
+            tab ng-repeat="view in d.datagram.views" ng-click="selectView(view)"
               tab-heading
                 a.btn
                   | {{view.name}}

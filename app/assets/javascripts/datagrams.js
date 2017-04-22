@@ -62,6 +62,17 @@ angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','
     datagramService.loadPrevious();
   };
 
+  $scope.selectView = function(view) {
+    $timeout(function() {
+      $scope.$broadcast('highchartsng.reflow');
+      $window.dispatchEvent(new Event('resize'));
+    },100);
+    if ($scope.gridOptions.api) {
+      $timeout(function() {
+        $scope.gridOptions.api.sizeColumnsToFit(true);
+      }, 500);
+    }
+  };
 
   $scope.selectParamSet = function(name) {
     datagramService.selectParamSet(name);
