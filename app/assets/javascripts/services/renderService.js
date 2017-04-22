@@ -1,8 +1,15 @@
 angular.module('datagramsApp')
   .factory('renderService', ['$timeout', function($timeout) {
+    var renderers = $.extend($.pivotUtilities.renderers,
+			     $.pivotUtilities.novix_renderers,
+			     $.pivotUtilities.highchart_renderers);
+
+
     var service = {
       renderedData: {},
-      render: render
+      render: render,
+      pivotOptions: {renderers: renderers},
+      gridOptions: {enableSorting: true, enableFilter: true, rowData: null, showToolPanel: true }
     };
     return service;
 
@@ -17,7 +24,7 @@ angular.module('datagramsApp')
 	  console.log('view.pivotOptions',view.pivotOptions);
 	  view.pivotOptions = _.pick(view.pivotOptions, ["aggregatorName","cols","rows","vals","rendererName","viewName"]);
 	  console.log('view.pivotOptions',view.pivotOptions);
-	  var o = _.merge($scope.pivotOptions, view.pivotOptions);
+	  var o = _.merge(service.pivotOptions, view.pivotOptions);
 	  o.viewName = view.name;
 	  o.rows = (o.rows === null) ? [] : o.rows;
 	  o.cols = (o.cols === null) ? [] : o.cols;
@@ -33,7 +40,7 @@ angular.module('datagramsApp')
 	if (view.render === 'ag-grid') {
 	  $timeout(function() {
             renderAgGrid(view);
-          }, 500);
+          }, 1500);
 	}
       };
       if (view.transform === 'mustache') {
@@ -63,8 +70,79 @@ angular.module('datagramsApp')
 	var tco = _.merge(_.merge(tcDefaults, view.tauChartsOptions.tco),{data: service.renderedData[view.name]});
 	console.log('TAUCHART!',tco);
 	service.renderedData[view.name] = tco;
+	var chart = new tauCharts.Chart(tco);
+	$($('#tauchart')[0]).html('');
+	$timeout(function() {
+	  chart.renderTo('#tauchart');
+	}, 200);
+
       }
       return service.renderedData[view.name];
     };
+
+  function renderAgGrid(view) {
+    console.log('renderAgGrid', view);
+    var keys = _.keys(service.renderedData[view.name].rowData[0]);
+    var cols = _.map(keys, function(a) { return {headerName: a, field: a};});
+    var reservedWords = ['gradient'];
+    _.map(service.renderedData[view.name].columnDefs, function(v,k,x) {
+      var col = _.find(cols, {field: k});
+      col = _.merge(col, _.omit(v, reservedWords));
+      var ops = _.pick(v, reservedWords);
+      _.map(ops, function(opData,opName) {
+        var r = doGridOp(view.name,opData,opName,col);
+        col = _.merge(col, r);
+      });
+    });
+    var eGridDiv = document.querySelector('#aggrid');
+    new agGrid.Grid(eGridDiv, service.gridOptions);
+    service.gridOptions.api.setColumnDefs(cols);
+    if (view.gridOptions && view.gridOptions.columnState) {
+      service.gridOptions.columnApi.setColumnState(view.gridOptions.columnState);
+      service.gridOptions.columnApi.setPivotMode(view.gridOptions.pivotMode);
+    }
+    service.gridOptions.api.setRowData(service.renderedData[view.name].rowData);
+    service.gridOptions.api.sizeColumnsToFit();
+    service.gridOptions.api.sizeColumnsToFit();
+    $timeout(function() {
+      _.each(['columnPivotModeChanged','columnRowGroupChanged','columnPivotChanged'], function(a) {
+	service.gridOptions.api.addEventListener(a, function() {
+	  if (!view.gridOptions) {
+	    view.gridOptions = {columnState: {}, pivotMode: false};
+	  }
+	  view.gridOptions.columnState = service.gridOptions.columnApi.getColumnState();
+	  view.gridOptions.pivotMode = service.gridOptions.columnApi.isPivotMode();
+	  service.viewsChanged = true;
+	});
+      });
+    }, 1000);
+
+  };
+
+  function doGridOp(view, opData,opName, col) {
+    console.log('doGridOp',arguments);
+    if (opName == 'gradient') {
+      var data = _.map(service.renderedData[view].rowData, col.field);
+      console.log('data',data);
+      if (_.isArray(opData[0])) {
+	var colors = opData[0];
+	var domain = opData[1];
+      } else {
+	var colors = opData;
+	var max = _.max(data);
+	var min = _.min(data);
+	var domain = [min,max];
+      }
+      console.log('colors',colors);
+      console.log('domain',domain);
+      var scale = chroma.scale(colors).domain(domain).mode('lab');
+      var r = {cellStyle: function(p) {
+        return {background: scale(p.value), color: "white"};
+      }};
+      return r;
+    }
+  };
+
+
 
   }]);

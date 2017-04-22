@@ -43,21 +43,36 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
 
 angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','dg', 'renderService','datagramService','$http','$timeout', function($scope, $modalInstance, dg, renderService, datagramService, $http, $timeout) {
   $scope.datagram = dg;
+  datagramService.reset();
   $scope.renderedData = renderService.renderedData;
   console.log(dg);
   console.log(datagramService);
-  datagramService.getDatagramData(dg).then(function() {
-    console.log('dg responses',dg);
-    _.each(dg.views, function(v) {
-      console.log('rendering',v.name,renderService.render(dg,v));
+  loadDatagram(dg);
+
+  function loadDatagram(datagram, params) {
+    datagramService.getDatagramData(dg, params).then(function() {
+      $scope.gridOptions = renderService.gridOptions;
+      console.log('gridOptions',$scope.gridOptions);
+      $timeout(function() {
+	$scope.$broadcast('highchartsng.reflow');
+      },100);
+      console.log('RD',renderService.renderedData);
     });
-    $timeout(function() {
-      $scope.$broadcast('highchartsng.reflow');
-    },100);
+  };
 
-    console.log('RD',renderService.renderedData);
 
-  });
+
+  $scope.selectParamSet = function(name) {
+    datagramService.selectParamSet(name);
+  };
+
+  $scope.updateCurrentParams = function(k) {
+  };
+
+  $scope.refresh = function() {
+    datagramService.refresh();
+  };
+
 }]);
 
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', '$timeout','$window','$location',function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike, $timeout, $window, $location) {

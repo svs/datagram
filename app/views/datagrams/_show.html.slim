@@ -173,7 +173,7 @@ script type="text/ng-template" id="show.html"
                 #j.col-md-6 style="margin-bottom: 10px; max-height: 325px; overflow: scroll" ng-if="view.render=='html'"
                   .material ng-if="view.transform=='handlebars' || view.transform=='mustache'" ng-bind-html="renderedData[view.name]"
               .row style="margin-bottom: 10px; padding-top: 30px"
-                #p ng-class="view.render !== 'ag-grid' && view.render !== 'taucharts' ? 'col-md-8' : 'col-md-12'"
+                #p.col-md-12
                   div ng-if="view.render=='highcharts'" style="width: 100%; height: 500px"
                     highchart id="chart1" config="renderedData[view.name]"
                   div ng-if="view.render=='taucharts'" style="width: 100%; height: 500px"
