@@ -2,15 +2,19 @@ angular.module('datagramsApp')
   .factory('datagramService', function($q, $http, $window, $state, Pusher, renderService) {
     var defaults = {
       datagrams: [],
+      groupedDatagrams: {},
       refresh: refresh,
       refreshDatagrams: refreshDatagrams,
+      setCurrentDatagram: setCurrentDatagram,
       getDatagramData: getDatagramData,
       selectParamSet: selectParamSet,
       datagram: null,
       selectedParamSetName: '__default',
       options: {truncate: true},
       log: null,
-      reset: reset
+      reset: reset,
+      loadNext: loadNext,
+      loadPrevious: loadPrevious
     };
 
     var service = defaults;
@@ -19,6 +23,13 @@ angular.module('datagramsApp')
 
     function reset() {
       service = defaults;
+    }
+
+    function setCurrentDatagram(datagram) {
+      console.log('setCurrentDatagram', datagram);
+      service.datagram = datagram;
+      service.group = datagram.group;
+      getDatagramData(datagram);
     }
 
     function selectParamSet(name) {
@@ -34,6 +45,18 @@ angular.module('datagramsApp')
       return service.datagram.paramSets[service.selectedParamSetName].params;
     }
 
+    function loadNext() {
+      var g = service.groupedDatagrams[service.datagram.group];
+      var i = _.findIndex(g, service.datagram);
+      setCurrentDatagram(i == 0 ? g[g.length-1] : g[i-1]);
+    };
+
+    function loadPrevious() {
+      var g = service.groupedDatagrams[service.datagram.group];
+      var i = _.findIndex(g, service.datagram);
+      setCurrentDatagram(i == g.length - 1 ? g[0] : g[i+1]);
+    };
+
 
     function refresh() {
       var q = $q.defer();
@@ -46,6 +69,7 @@ angular.module('datagramsApp')
 	  console.log('Pusher received', item);
 	  service.refreshing = false;
 	  getDatagramData(service.datagram, name).then(function() {
+	    service.refreshing = false;
 	    q.resolve(service.datagram);
 	  });
 	});
@@ -62,6 +86,7 @@ angular.module('datagramsApp')
       var q = $q.defer();
       $http.get('api/v1/datagrams').success(function(data) {
 	service.datagrams = data;
+	service.groupedDatagrams = _.groupBy(service.datagrams, function(d) { return d.group});
 	q.resolve(service.datagrams);
       })
 	.error(function(data, status) {

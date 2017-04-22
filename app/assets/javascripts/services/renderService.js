@@ -40,7 +40,7 @@ angular.module('datagramsApp')
 	if (view.render === 'ag-grid') {
 	  $timeout(function() {
             renderAgGrid(view);
-          }, 1500);
+          }, 200);
 	}
       };
       if (view.transform === 'mustache') {
@@ -94,6 +94,7 @@ angular.module('datagramsApp')
         col = _.merge(col, r);
       });
     });
+    $($('#aggrid')[0]).html('');
     var eGridDiv = document.querySelector('#aggrid');
     new agGrid.Grid(eGridDiv, service.gridOptions);
     service.gridOptions.api.setColumnDefs(cols);

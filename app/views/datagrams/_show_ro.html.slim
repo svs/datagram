@@ -4,11 +4,18 @@ script type="text/ng-template" id="show_ro.html"
     .row.portlet-title
       .col-md-6
         .row
-          h2.portlet-title style="margin-bottom: 0px"
+          h2.portlet-title.pull-left style="margin-bottom: 0px"
             u
-              | {{datagram.name}}
-              a ui-sref="show({id: datagram.id})"
+              | {{d.datagram.name}}
+              a ui-sref="show({id: d.datagram.id})"
                 i.fa.fa-edit style="margin-left: 10px; padding: 4px"
+          .pull-right
+            a.btn ng-click="previous()"
+              h3
+                i.fa.fa-arrow-left
+              a.btn ng-click="next()"
+                h3
+                  i.fa.fa-arrow-right
         .row
           a.btn.btn-large.btn-warning ng-click="refresh()" style="margin: 3px"
             i.fa.fa-refresh style="margin-right: 5px"
@@ -16,6 +23,8 @@ script type="text/ng-template" id="show_ro.html"
           a.btn.btn-large.btn-success ng-click="reload()" style="margin: 3px"
             i.fa.fa-refresh style="margin-right: 5px"
             | Reload Now
+          i.fa.fa-spinner.fa-spin style="margin-right: 5px" ng-if="refreshing"
+
           br
           input type="checkbox" ng-model="options.truncate"
           | truncate?
@@ -23,7 +32,7 @@ script type="text/ng-template" id="show_ro.html"
 
       .col-md-6
         tabset
-          tab ng-repeat="(name, values) in (datagram.paramSets)"  ng-click="selectParamSet(values.name)"
+          tab ng-repeat="(name, values) in (d.datagram.paramSets)"  ng-click="selectParamSet(values.name)"
             tab-heading
               a.btn
                 | {{values.name || 'default'}}
@@ -45,21 +54,19 @@ script type="text/ng-template" id="show_ro.html"
     .row
       .col-md-12
           tabset
-            tab ng-repeat="view in datagram.views"
+            tab ng-repeat="view in d.datagram.views"
               tab-heading
                 a.btn
                   | {{view.name}}
               .row#view
-                .col-md-12
-                  a href="{{renderedUrls[view.name]}}" target="_blank"
-                    | {{view.render}}
-
+                .col-md-13
                   div ng-if="view.render=='highcharts'" style="width: 100%; height: 500px"
                     highchart id="chart1" config="renderedData[view.name]"
                   div ng-if="view.render=='taucharts'" style="width: 100%; height: 500px"
                     div id="tauchart" style="height: 100%; width: 100%"
                   #aggrid style="height: 500px" class="ag-fresh" ng-if="view.render == 'ag-grid'"
                   .material ng-if="view.transform=='handlebars' || view.transform=='mustache'" ng-bind-html="renderedData[view.name]"
+                  div#pivot ng-if="view.render === 'pivot'" style="height: 500px"
 
             tab ng-repeat="response in datagram.responses"
               tab-heading

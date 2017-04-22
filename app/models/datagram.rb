@@ -63,6 +63,9 @@ class Datagram < ActiveRecord::Base
     uid_for_params(params)
   end
 
+  def group
+    name =~ /:/ ? name.split(":")[0] : "Z"
+  end
 
   private
 

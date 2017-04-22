@@ -42,24 +42,25 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
 
 
 angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','dg', 'renderService','datagramService','$http','$timeout', function($scope, $modalInstance, dg, renderService, datagramService, $http, $timeout) {
-  $scope.datagram = dg;
-  datagramService.reset();
   $scope.renderedData = renderService.renderedData;
-  console.log(dg);
-  console.log(datagramService);
-  loadDatagram(dg);
 
-  function loadDatagram(datagram, params) {
-    datagramService.getDatagramData(dg, params).then(function() {
-      $scope.gridOptions = renderService.gridOptions;
-      console.log('gridOptions',$scope.gridOptions);
-      $timeout(function() {
-	$scope.$broadcast('highchartsng.reflow');
-      },100);
-      console.log('RD',renderService.renderedData);
-    });
+  // function loadDatagram(datagram, params) {
+  //   datagramService.setCurrentDatagram(dg);
+  //   datagramService.getDatagramData(datagram, params).then(function() {
+  //     $timeout(function() {
+  // 	$scope.$broadcast('highchartsng.reflow');
+  //     },100);
+  //   });
+  // };
+  $scope.d = datagramService;
+  datagramService.setCurrentDatagram(dg);
+
+  $scope.next = function() {
+    datagramService.loadNext();
   };
-
+  $scope.previous = function() {
+    datagramService.loadPrevious();
+  };
 
 
   $scope.selectParamSet = function(name) {
@@ -70,7 +71,10 @@ angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','
   };
 
   $scope.refresh = function() {
-    datagramService.refresh();
+    $scope.refreshing = true;
+    datagramService.refresh().then(function() {
+      $scope.refreshing = false;
+    });
   };
 
 }]);
