@@ -41,7 +41,7 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
 }]);
 
 
-angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','dg', 'renderService','datagramService','$http','$timeout', function($scope, $modalInstance, dg, renderService, datagramService, $http, $timeout) {
+angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','dg', 'renderService','datagramService','$http','$timeout','$window', function($scope, $modalInstance, dg, renderService, datagramService, $http, $timeout, $window) {
   $scope.renderedData = renderService.renderedData;
 
   // function loadDatagram(datagram, params) {
@@ -53,7 +53,10 @@ angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','
   //   });
   // };
   $scope.d = datagramService;
-  datagramService.setCurrentDatagram(dg);
+  datagramService.setCurrentDatagram(dg).then(function() {
+    console.log('setCurrentDatagram done');
+    reflow();
+  });
 
   $scope.next = function() {
     datagramService.loadNext();
@@ -61,17 +64,19 @@ angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','
   $scope.previous = function() {
     datagramService.loadPrevious();
   };
-
-  $scope.selectView = function(view) {
+  var reflow = function() {
     $timeout(function() {
       $scope.$broadcast('highchartsng.reflow');
       $window.dispatchEvent(new Event('resize'));
     },100);
-    if ($scope.gridOptions.api) {
+    if ($scope.gridOptions && $scope.gridOptions.api) {
       $timeout(function() {
         $scope.gridOptions.api.sizeColumnsToFit(true);
       }, 500);
     }
+  };
+  $scope.selectView = function(view) {
+    reflow();
   };
 
   $scope.selectParamSet = function(name) {

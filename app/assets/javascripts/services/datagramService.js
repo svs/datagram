@@ -26,10 +26,14 @@ angular.module('datagramsApp')
     }
 
     function setCurrentDatagram(datagram) {
+      var q = $q.defer();
       console.log('setCurrentDatagram', datagram);
       service.datagram = datagram;
       service.group = datagram.group;
-      getDatagramData(datagram);
+      getDatagramData(datagram).then(function() {
+	q.resolve(service.datagram);
+      });
+      return q.promise;
     }
 
     function selectParamSet(name) {
