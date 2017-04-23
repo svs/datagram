@@ -172,10 +172,12 @@ ul#ticker li {
 
 };
 
-.big-modal  .modal-content{
+.big-modal .modal-content{
     width: 1500px;
+    height: 900px;
 }
 
-.big-modal  .modal-dialog{
+.big-modal .modal-dialog{
     width: 1500px;
+    height: 900px;
 }

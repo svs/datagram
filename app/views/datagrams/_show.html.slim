@@ -11,6 +11,9 @@ script type="text/ng-template" id="show.html"
             | :
             | {{datagram.name}}
           div.pull-right
+            a.btn ng-click="openShowModal(datagram)" style="cursor: pointer"
+              h3
+                i.fa.fa-eye
             a.btn ui-sref="edit({id: datagram.id})" style=""
               h3
                 i.fa.fa-edit
@@ -18,7 +21,7 @@ script type="text/ng-template" id="show.html"
               h3
                 i.fa.fa-trash-o
             a.btn ng-click="info = !(info)"
-              h3 style="margin-bottom: 0px"
+              h3
                 i.fa.fa-info
 
         b

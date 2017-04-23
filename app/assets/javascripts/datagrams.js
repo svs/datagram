@@ -91,7 +91,7 @@ angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','
 
 }]);
 
-angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', '$timeout','$window','$location',function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike, $timeout, $window, $location) {
+angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', '$timeout','$window','$location','$modal',function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike, $timeout, $window, $location, $modal) {
 
   $scope.renderedData = {};
   var renderers = $.extend($.pivotUtilities.renderers,
@@ -111,6 +111,19 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     var groupName = $location.search().g;
     $scope.activeTabName=(groupName || null);
     $scope.selectedParamSetName = $location.search().s;
+  };
+
+  $scope.openShowModal = function(datagram){
+    console.log('openRoModal',datagram);
+    var modalInstance = $modal.open({
+      templateUrl: 'show_ro.html',
+      controller: 'roCtrl',
+      size: 'lg',
+      windowClass: 'big-modal',
+      resolve: {
+	dg: function() { return datagram}
+      }
+    });
   };
 
   $scope.selectParamSet = function(name) {

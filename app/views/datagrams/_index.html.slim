@@ -26,17 +26,18 @@ script type="text/ng-template" id="index.html"
           .col-md-4 ng-repeat="datagram in datagrams | filter:search:strict"
             .portlet.portlet-boxed style="box-shadow: 2px 4px 10px #eee"
               .portlet-heading style="margin: 0px; border-bottom: 0px; background: #fafafa;"
-                a ui-sref="show({id: datagram.id})"
+                a ng-click="openShowModal(datagram)" style="cursor: pointer"
                   h4.portlet-title style="margin: 3px"
                     u style="padding-bottom: 4px"
                       | {{ datagram.name }}
-                    a.btn.pull-right ng-click="openShowModal(datagram)"
+                    a.btn.pull-right ui-sref="show({id: datagram.id})"
                       h3 style="position: relative; top: -10px"
-                        i.fa.fa-eye
+                        i.fa.fa-edit
                 span style="padding: 3px"
                   |{{datagram.updated_at | fromNow}}
               .portlet-body
-                img src="{{datagram.default_view_url}}" style="width: 100%"
+                a ng-click="openShowModal(datagram)" style="cursor: pointer"
+                  img src="{{datagram.default_view_url}}" style="width: 100%"
 
       tab ng-repeat="(k,ds) in groupedDatagrams" active="groupName==k"
         tab-heading
@@ -53,14 +54,15 @@ script type="text/ng-template" id="index.html"
           .col-md-4 ng-repeat="datagram in ds | filter:search:strict as filtered"
             .portlet.portlet-boxed style="box-shadow: 2px 4px 10px #eee"
               .portlet-heading style="margin: 0px; border-bottom: 0px; background: #fafafa;"
-                a ui-sref="show({id: datagram.id})"
+                a ng-click="openShowModal(datagram)" style="cursor: pointer"
                   h4.portlet-title style="margin: 3px"
                     u style="padding-bottom: 4px"
                       | {{ datagram.name }}
-                    a.btn.pull-right ng-click="openShowModal(datagram)"
+                    a.btn.pull-right ui-sref="show({id: datagram.id})"
                       h3 style="position: relative; top: -10px"
-                        i.fa.fa-eye
+                        i.fa.fa-edit
                 span style="padding: 3px"
                   |{{datagram.updated_at | fromNow}}
               .portlet-body
-                img src="{{datagram.default_view_url}}" style="width: 100%"
+                a ng-click="openShowModal(datagram)" style="cursor: pointer"
+                  img src="{{datagram.default_view_url}}" style="width: 100%"
