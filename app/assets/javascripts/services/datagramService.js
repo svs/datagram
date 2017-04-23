@@ -73,7 +73,7 @@ angular.module('datagramsApp')
 	Pusher.subscribe(r.data.token,'data', function(item) {
 	  console.log('Pusher received', item);
 	  service.refreshing = false;
-	  getDatagramData(service.datagram, name).then(function() {
+	  getDatagramData(service.datagram, name, true).then(function() {
 	    service.refreshing = false;
 	    q.resolve(service.datagram);
 	  });
@@ -101,10 +101,10 @@ angular.module('datagramsApp')
       return q.promise;
     }
 
-    function getDatagramData(datagram, params) {
+    function getDatagramData(datagram, params, force) {
       var q = $q.defer();
       console.log('lastLoaded', lastLoaded);
-      if (datagram.id === lastLoaded.datagram && params === lastLoaded.params) {
+      if (datagram.id === lastLoaded.datagram && params === lastLoaded.params && !force) {
 	console.log('lastLoaded is same. no need to load anything');
 	_.each(service.datagram.views, function(v) {
 	  console.log('rendering',v.name,renderService.render(service.datagram,v, params));
