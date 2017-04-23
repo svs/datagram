@@ -174,10 +174,10 @@ ul#ticker li {
 
 .big-modal .modal-content{
     width: 1500px;
-    height: 900px;
+    min-height: 900px;
 }
 
 .big-modal .modal-dialog{
     width: 1500px;
-    height: 900px;
+    min-height: 900px;
 }
