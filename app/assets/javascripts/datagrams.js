@@ -1,4 +1,4 @@
-angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams','$timeout', '$location','$modal','datagramService', function($scope, Restangular,$stateParams, $timeout, $location,$modal,datagramService) {
+angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular','$stateParams','$timeout', '$location','$modal','datagramService', 'userService', function($scope, Restangular,$stateParams, $timeout, $location,$modal,datagramService, userService) {
 
   var init = function() {
     $scope.datagrams = _.sortBy(datagramService.datagrams,function(s) { return s.name});
@@ -24,6 +24,9 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
   };
   var load = function() {
     $('#loading').show();
+    userService.load().then(function(r) {
+      $scope.user = userService.user;
+    });
     datagramService.refreshDatagrams().then(function(r) {
       init();
       $('#loading').hide();

@@ -32,7 +32,7 @@ Rails.application.routes.draw do
       get 'd/:token', to: 'datagrams#t', as: 'd'
       get 't/:slug', to: 'datagrams#t', as: 't', defaults: { format: "json"}
       get 'w/:token', to: 'watches#t', as: 'w', defaults: { format: "json"}
-
+      get 'profile', to: 'users#me', as: 'profile', defaults: { format: "json"}
     end
   end
 end

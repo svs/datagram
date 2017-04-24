@@ -1,6 +1,7 @@
 script type="text/ng-template" id="index.html"
   div ng-controller="datagramsCtrl"
     .row
+      | {{user}}
       h3.pull-left style="margin-right: 10px"  All Datagrams
       a.btn.btn-success.btn-large ui-sref="new"
         | Add a Datagram
@@ -30,7 +31,7 @@ script type="text/ng-template" id="index.html"
                   h4.portlet-title style="margin: 3px"
                     u style="padding-bottom: 4px"
                       | {{ datagram.name }}
-                    a.btn.pull-right ui-sref="show({id: datagram.id})"
+                    a.btn.pull-right ui-sref="show({id: datagram.id})" ng-if="!user.ro"
                       h3 style="position: relative; top: -10px"
                         i.fa.fa-edit
                 span style="padding: 3px"
@@ -58,7 +59,7 @@ script type="text/ng-template" id="index.html"
                   h4.portlet-title style="margin: 3px"
                     u style="padding-bottom: 4px"
                       | {{ datagram.name }}
-                    a.btn.pull-right ui-sref="show({id: datagram.id})"
+                    a.btn.pull-right ui-sref="show({id: datagram.id})" ng-if="!user.ro"
                       h3 style="position: relative; top: -10px"
                         i.fa.fa-edit
                 span style="padding: 3px"

@@ -12,7 +12,7 @@ class DatagramPolicy < ApplicationPolicy
   end
 
   def show?
-    true
+    !user.ro
   end
 
   def index?

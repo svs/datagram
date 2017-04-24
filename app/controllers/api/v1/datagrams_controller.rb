@@ -150,6 +150,9 @@ module Api
         v.load
       end
 
+      def user_not_authorized
+        raise
+      end
 
     end
 
