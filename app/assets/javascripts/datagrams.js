@@ -130,6 +130,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
 
   $scope.selectParamSet = function(name) {
+    console.log('name', name);
+    console.log($scope.paramSets);
     $scope.selectedParamSetName = name;
     $location.search({s: name, g: $scope.activeTabName});
     if (name) {
@@ -507,7 +509,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
 
   $scope.addParamSet = function() {
-    $scope.datagram.param_sets["__new"] = {name: "new", params: _.clone($scope.datagram.publish_params), frequency: null, at: null};
+    $scope.datagram.param_sets["__new"] = {name: "__new", params: _.clone($scope.datagram.publish_params), frequency: null, at: null};
+    $scope.selectParamSet("__new");
   };
   // var refreshWatchResponses = function() {
   //   _.each($scope.datagram.watches, function(w,i) {

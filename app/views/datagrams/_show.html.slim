@@ -48,7 +48,6 @@ script type="text/ng-template" id="show.html"
         tabset
           a.btn  ng-click="addParamSet()"
             i.fa.fa-plus style="margin-right: 5px"
-            | Add a parameter set
           tab ng-repeat="(name, values) in (datagram.param_sets)"  ng-click="selectParamSet(values.name)" active="selectedParamSetName == name"
             tab-heading
               a.btn
