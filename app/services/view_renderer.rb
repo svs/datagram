@@ -78,7 +78,8 @@ class ViewRenderer
       if params.format == "png"
         j = JSON.dump(json)
         i = ::RestClient.post('http://export.highcharts.com/',"content=options&options=#{j}&type=image/jpeg")
-        AWS::S3::S3Object.store(filename,i,'dg-tmp')
+        s3 = Aws::S3::Resource.new
+        s3.put_object(key: filename,body: i, bucket: 'dg-tmp')
         return {url: "https://s3.amazonaws.com/dg-tmp/#{filename}"}
       else
         return json

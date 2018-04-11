@@ -1,16 +1,16 @@
 source 'https://rubygems.org'
-ruby '2.2.0'
+ruby '2.4.2'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.8'
 # Use postgresql as the database for Active Record
-gem 'pg'
+gem 'pg', '~> 0.15'
 # gems for consumers
 gem 'sequel'
 gem "mysql2"
 #gem "sqlite3"
 #gem 'em-pg-sequel'
 #gem 'em-synchrony'
-gem 'sequel-redshift', git: 'https://github.com/svs/sequel-redshift.git'
+# gem 'sequel-redshift', git: 'https://github.com/svs/sequel-redshift.git'
 gem 'rethinkdb'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
@@ -78,9 +78,9 @@ gem 'ruby-jq', '~> 0.1.6'
 gem 'jmespath'
 gem 'chronic'
 gem 'liquid'
-gem 'aws-s3'
+gem 'aws-sdk-s3'
 gem 'imgkit'
-gem 'rollbar', '~> 2.5.0'
+#gem 'rollbar', '~> 2.5.0'
 gem 'slack-notify'
 gem 'slack-ruby-client'
 gem 'telegram-bot-ruby'

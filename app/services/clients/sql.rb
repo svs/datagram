@@ -26,7 +26,9 @@ module Clients
 
     def save_to_s3
       Rails.logger.info "#Perform Storing #{filename}"
-      x = AWS::S3::S3Object.store(filename,json, "datagramg-cache")
+      s3 = Aws::S3::Resource.new
+      obj = s3.bucket('dg-tmp').object(filename)
+      s3.put_object(key: filename, body:json, bucket: "datagramg-cache")
       Rails.logger.info "#Perform Done storing  #{filename} #{(Time.now - tt).round}"
     end
 

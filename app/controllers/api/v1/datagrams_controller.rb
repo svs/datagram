@@ -82,7 +82,9 @@ module Api
                 ap html
                 File.open("/tmp/#{x}.html","w") {|f| f.write(html) }
                 `wkhtmltoimage /tmp/#{x}.html /tmp/#{x}.png`
-                AWS::S3::S3Object.store(filename,open("/tmp/#{x}.png"),'dg-tmp')
+                s3 = Aws::S3::Resource.new
+                obj = s3.bucket('dg-tmp').object(filename)
+                obj.upload("/tmp/#{x}.png")
                 redirect_to "https://s3.amazonaws.com/dg-tmp/#{filename}"
 
               else

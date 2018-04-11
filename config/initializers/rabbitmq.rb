@@ -17,5 +17,5 @@ begin
   $x  = $ch.topic('datagrams_topic_exchange', auto_delete: false)
 
   $watches.bind($x)
-
+rescue
 end
