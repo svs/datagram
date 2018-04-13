@@ -24,8 +24,10 @@ default: &default
 
 development:
   <<: *default
-  database: dekko_dev
-  username: svs
+  database: datagram
+  username: postgres
+  host: db
+  password:
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.

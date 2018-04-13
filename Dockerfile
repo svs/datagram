@@ -47,9 +47,9 @@ RUN apt-get install -y libjq-dev
 
 
 RUN gem install bundler
-RUN groupadd deploy
-RUN useradd -s /bin/bash -g deploy --home-dir /home/deploy deploy
-RUN mkdir /home/deploy
+#RUN groupadd deploy
+#RUN useradd -s /bin/bash -g deploy --home-dir /home/deploy deploy
+RUN mkdir /myapp
 
 # RUN mkdir /home/deploy/jq
 # WORKDIR /home/deploy
@@ -64,24 +64,27 @@ RUN mkdir /home/deploy
 
 # RUN sudo ldconfig
 
-WORKDIR /home/deploy
-RUN mkdir datagram
+WORKDIR /myapp
+#RUN mkdir datagram
 
 #RUN /usr/local/rbenv/bin/rbenv global 2.1.2
 #RUN /usr/local/rbenv/bin/rbenv local 2.1.2
 
 
-ADD Gemfile /home/deploy/datagram/Gemfile
-ADD Gemfile.lock /home/deploy/datagram/Gemfile.lock
-WORKDIR /home/deploy/datagram
+#ADD Gemfile /home/deploy/datagram/Gemfile
+#ADD Gemfile.lock /home/deploy/datagram/Gemfile.lock
+#WORKDIR /home/deploy/datagram
+COPY Gemfile ./Gemfile
+COPY Gemfile.lock ./Gemfile.lock
 RUN bundle install
-
+COPY . .
+COPY ./config/database.docker /myapp/config/database.foo
 #RUN apt-get -y update
 
-RUN ls
-ADD . /home/deploy/datagram
-ADD ./config/database.docker /home/deploy/datagram/config/database.yml
-RUN bundle exec rake assets:clobber && rake assets:precompile RAILS_ENV=production
+#RUN ls
+#ADD . /home/deploy/datagram
+
+#RUN bundle exec rake assets:clobber && rake assets:precompile RAILS_ENV=production
 #RUN rm -rf /home/deploy/datagram/.git
 #EXPOSE 3000
-CMD bundle exec puma -p 4999 -e production
+#CMD bundle exec puma -p 3000

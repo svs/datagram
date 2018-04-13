@@ -80,6 +80,13 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
+development:
+  <<: *default
+  database: datagram
+  username: postgres
+  password:
+  host: db
+
 production:
   <<: *default
   database: datagram
