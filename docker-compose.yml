@@ -1,0 +1,16 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+  web:
+    build: .
+    image: datagram
+    command: bundle exec rails s -p 4000 -b '0.0.0.0'
+    volumes:
+      - .:/myapp
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
