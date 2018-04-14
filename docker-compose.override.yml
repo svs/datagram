@@ -1,0 +1,16 @@
+version: '2'
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+      - ./public/system/:/app/public/system/
+    ports:
+      - 3000:3000
+  nginx:
+    volumes:
+      - ./nginx.devel.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+  db_backup:
+    command: /bin/true

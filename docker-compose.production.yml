@@ -1,0 +1,24 @@
+version: '2'
+services:
+  app:
+    image: MY_USER/MY_IMAGE:0.1
+    volumes:
+      - ./file_storage:/app/public/system/
+      - assets:/app/public/assets/
+    environment:
+      - SECRET_KEY_BASE=COPY_YOUR_KEY_HERE
+  nginx:
+    ports:
+      - 80
+    volumes:
+      - ./nginx.production.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      default:
+      nginx_default:
+        aliases:
+          - MY_APP_NAME
+volumes:
+  assets:
+networks:
+  nginx_default:
+    external: true

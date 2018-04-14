@@ -76,9 +76,9 @@ WORKDIR /myapp
 #WORKDIR /home/deploy/datagram
 COPY Gemfile ./Gemfile
 COPY Gemfile.lock ./Gemfile.lock
-RUN bundle install
+RUN bundle install --jobs 20 --retry 5
 COPY . .
-COPY ./config/database.docker /myapp/config/database.foo
+#COPY ./config/database.docker /myapp/config/database.foo
 #RUN apt-get -y update
 
 #RUN ls
