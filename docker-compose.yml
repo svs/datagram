@@ -1,13 +1,18 @@
-version: '2'
+version: '2.1'
 services:
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672
   db:
     image: postgres
     ports:
-    - "5432"
+      - "5432"
   app:
     command: bundle exec puma -C config/puma.rb
     ports:
-      - "3000"
+      - "4000"
     depends_on:
       - db
   nginx:
@@ -28,3 +33,15 @@ services:
   #    - PGPORT=5432
   #    - PGHOST=db
       - PGDATABASE=app_database
+  worker1:
+    build: .
+    command: bundle exec rake  watch_consumer
+    depends_on:
+      - db
+      - rabbitmq
+  perform:
+    build: .
+    command: bundle exec rake --rakefile Rakefile.no_rails perform ENV=development
+    depends_on:
+      - rabbitmq
+      - db
