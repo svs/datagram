@@ -3,8 +3,9 @@
     if ENV['RABBITMQ_PORT']
       endpoint=ENV['RABBITMQ_PORT'].gsub("tcp","amqp")
     else
-      endpoint = Rails.application.secrets.rabbitmq_url || ENV['RABBITMQ_URL'] || "localhost://rabbitmq:5672"
+      endpoint = Rails.application.secrets.rabbitmq_url || ENV['RABBITMQ_URL'] || "amqp://rabbitmq:5672"
     end
+    p endpoint
     username = Rails.application.secrets.rabbitmq_user || "guest"
     password = Rails.application.secrets.rabbitmq_password || "guest"
 
@@ -21,7 +22,7 @@
     break
   rescue
     puts "..."
-    sleep 3
-    puts "#sleepiung for 3 seconds"
+    sleep 10
+    puts "#sleepiung for 10 seconds"
   end
 end
