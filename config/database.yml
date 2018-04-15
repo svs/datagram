@@ -17,17 +17,13 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  username: postgres
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
 
-development:
+development: &development
   <<: *default
   database: datagram
-  username: postgres
-  host: db
-  password:
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -63,7 +59,6 @@ test:
   <<: *default
   database: dekko_test
   host: localhost
-  username: svs
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
 # ever seen by anyone, they now have access to your database.
@@ -84,4 +79,5 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  url: <%= Rails.application.secrets[:database_url] %>
+  <<: *development
+  #url: <%= Rails.application.secrets[:database_url] %>
