@@ -1,11 +1,9 @@
 == README
+```
+docker-compose build
+docker-compose up rabbitmq redis db nginx
+# wait for the services to start
+docker-compose up app worker1 perform
+```
 
-* Start RabbitMQ
-* Start Redis
-* Update database.yml - you will need to run against postgres 9.4
-then
-
-    bundle exec foreman start
-
-
-If you need help deploying, call me!
+then go to `http://localhost:4000`
