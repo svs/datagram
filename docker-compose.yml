@@ -13,9 +13,12 @@ services:
     image: postgres
     ports:
       - "5432"
+
   app:
-    #command: bundle exec puma -C config/puma.rb
+#    command: bundle exec puma -C config/puma.rb
     command: bundle exec rails s -p 4000 -b 0.0.0.0
+    env_file:
+      - '.web-variables.env'
     ports:
       - "4000"
     depends_on:
@@ -46,7 +49,8 @@ services:
       - rabbitmq
   perform:
     build: .
-    command: bundle exec rake --rakefile Rakefile.no_rails perform ENV=development
+    #command: bundle exec rake --rakefile Rakefile.no_rails perform ENV=development
+    command: bundle exec rake --rakefile Rakefile.no_rails perform ENV=production
     depends_on:
       - rabbitmq
       - db

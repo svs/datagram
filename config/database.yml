@@ -2,16 +2,16 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
-  database: app_database
-  host: db
-  user: postgres
-  password:
+  host: datagramdb.chbzairfmdzi.us-east-1.rds.amazonaws.com
+  database: <%= ENV['DB_NAME'] %>
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
 
-development:
-  <<: *default
+#development:
+#  <<: *default
 
-test:
-  <<: *default
+#test:
+#  <<: *default
 
 production:
   <<: *default
