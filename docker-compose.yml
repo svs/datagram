@@ -9,10 +9,10 @@ services:
     ports:
       - 15672
       - 5672
-  db:
-    image: postgres
-    ports:
-      - "5432"
+#  db:
+#    image: postgres
+#    ports:
+#      - "5432"
 
   app:
 #    command: bundle exec puma -C config/puma.rb
@@ -21,8 +21,8 @@ services:
       - '.web-variables.env'
     ports:
       - "4000"
-    depends_on:
-      - db
+#    depends_on:
+#      - db
   nginx:
     image: nginx
     volumes_from:
@@ -31,8 +31,8 @@ services:
       - app
   db_backup:
     image: equinoxone/postgres_backup:0.1
-    depends_on:
-      - db
+#    depends_on:
+#      - db
     volumes:
       - ./backup:/backup
     environment:
@@ -43,9 +43,9 @@ services:
       - PGDATABASE=app_database
   worker1:
     build: .
-    command: bundle exec rake  watch_consumer
+    command: bundle exec rake watch_consumer
     depends_on:
-      - db
+#      - db
       - rabbitmq
   perform:
     build: .
@@ -53,4 +53,4 @@ services:
     command: bundle exec rake --rakefile Rakefile.no_rails perform ENV=production
     depends_on:
       - rabbitmq
-      - db
+#      - db
