@@ -70,7 +70,7 @@ module Api
             format.json { render json: response }
             format.xml { render xml: response }
             format.html {
-              @url = url_for(params.merge("format" => "json"), host: ENV['HOSTNAME'])
+              @url = url_for(params.merge("format" => "json", "host" => ENV['HOSTNAME']))
               render template: "api/v1/datagrams/#{last_view(datagram)['render']}", layout: last_view(datagram)['render']
             }
             format.png {
