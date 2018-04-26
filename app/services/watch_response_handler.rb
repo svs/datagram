@@ -72,6 +72,7 @@ class WatchResponseHandler
 
 
   def wr
+    ap WatchResponse.connection_config
     @wr ||= WatchResponse.find_by(token: params[:id]) rescue nil
   end
 

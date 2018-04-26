@@ -1,4 +1,4 @@
-5.times do
+1.times do
   begin
     if ENV['RABBITMQ_PORT']
       endpoint=ENV['RABBITMQ_PORT'].gsub("tcp","amqp")
@@ -21,8 +21,5 @@
     $watches.bind($x)
     break
   rescue
-    puts "..."
-    sleep 10
-    puts "#sleepiung for 10 seconds"
   end
 end
