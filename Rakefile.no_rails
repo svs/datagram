@@ -7,7 +7,7 @@ require 'json'
 require 'sequel'
 require 'google_drive'
 require 'rest-client'
-require 'aws/s3'
+require 'aws-sdk-s3'
 require 'active_support/core_ext/hash'
 
 $stdout.sync = true
@@ -71,9 +71,13 @@ task :perform  do
         #ap $watch_responses
         $watch_responses.publish(response.to_json)
         DgLog.new("#Perform finished #{payload["key"]} in #{elapsed} seconds", context).log
-        if Rails.env == 'production'
+        if true #Rails.env == 'production'
           DgLog.new("#Perform Storing #{filename} #{tt}", context).log
-          x = AWS::S3::S3Object.store(filename,json, "datagramg-cache")
+          s3 = Aws::S3::Resource.new(region: 'us-east-1')
+          obj = s3.bucket('datagramg-cache').object(filename)
+          obj.put(body:json)
+
+          #x = AWS::S3::S3Object.store(filename,json, "datagrame-cache")
         end
         DgLog.new("#Perform Done storing  #{filename} #{(Time.now - tt).round}", context).log
       rescue Exception => e

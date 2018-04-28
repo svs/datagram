@@ -16,50 +16,30 @@ ActiveRecord::Schema.define(version: 20170320060908) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "datagram_responses", force: :cascade do |t|
-    t.integer  "datagram_id"
-    t.integer  "timestamp"
-    t.string   "token"
-    t.integer  "status_code"
-    t.boolean  "complete"
-    t.boolean  "automatic"
-    t.jsonb    "params"
-    t.string   "param_set_name"
-    t.string   "view_name"
-    t.string   "thumbnail_url"
-    t.integer  "watch_response_ids",              array: true
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-  end
-
   create_table "datagrams", force: :cascade do |t|
-    t.string   "name",                  limit: 255
-    t.integer  "watch_ids",                                         array: true
-    t.string   "at",                    limit: 255
+    t.string   "name"
+    t.integer  "watch_ids",                                       array: true
+    t.string   "at"
     t.integer  "frequency"
     t.integer  "user_id"
-    t.string   "token",                 limit: 255
+    t.string   "token"
     t.boolean  "use_routing_key"
     t.integer  "last_update_timestamp", limit: 8
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "slug",                  limit: 255
+    t.string   "slug"
     t.json     "publish_params"
     t.datetime "deleted_at"
     t.jsonb    "views"
-    t.boolean  "archived",                          default: false
-    t.boolean  "keep",                              default: false
+    t.boolean  "archived",                        default: false
+    t.boolean  "keep",                            default: false
     t.text     "description"
-    t.json     "default_view"
-    t.string   "default_view_format"
-    t.string   "default_view_url"
-    t.text     "default_view_body"
     t.json     "param_sets"
   end
 
   create_table "sources", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.string   "url",        limit: 255
+    t.string   "name"
+    t.string   "url"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -80,7 +60,6 @@ ActiveRecord::Schema.define(version: 20170320060908) do
     t.json     "stream_data"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
-    t.string   "token"
     t.integer  "stream_sink_id"
     t.string   "param_set"
     t.string   "view_name"
@@ -96,19 +75,19 @@ ActiveRecord::Schema.define(version: 20170320060908) do
   create_table "users", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email",                  limit: 255, default: "", null: false
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
-    t.string   "reset_password_token",   limit: 255
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                      default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
-    t.string   "token",                  limit: 255
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "token"
     t.integer  "linked_account_id"
-    t.string   "role",                   limit: 255
+    t.string   "role"
     t.boolean  "use_routing_key"
     t.string   "google_token"
     t.string   "google_refresh_token"
@@ -147,7 +126,6 @@ ActiveRecord::Schema.define(version: 20170320060908) do
     t.string   "uid"
     t.string   "datagram_uid"
     t.boolean  "complete"
-    t.string   "thumbnail_url"
     t.string   "response_filename"
     t.json     "truncated_json"
   end
@@ -156,22 +134,22 @@ ActiveRecord::Schema.define(version: 20170320060908) do
     t.integer  "user_id"
     t.json     "data"
     t.integer  "frequency"
-    t.string   "at",                  limit: 255
-    t.string   "name",                limit: 255
-    t.string   "url",                 limit: 255
-    t.string   "method",              limit: 255, default: "get"
-    t.string   "webhook_url",         limit: 255
-    t.string   "protocol",            limit: 255, default: "http"
-    t.string   "token",               limit: 255
+    t.string   "at"
+    t.string   "name"
+    t.string   "url"
+    t.string   "method",              default: "get"
+    t.string   "webhook_url"
+    t.string   "protocol",            default: "http"
+    t.string   "token"
     t.json     "strip_keys"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.json     "keep_keys"
-    t.string   "last_response_token", limit: 255
+    t.string   "last_response_token"
     t.boolean  "use_routing_key"
-    t.string   "slug",                limit: 255
+    t.string   "slug"
     t.json     "params"
-    t.string   "report_time",         limit: 255
+    t.string   "report_time"
     t.json     "transform"
     t.integer  "source_id"
     t.text     "description"
