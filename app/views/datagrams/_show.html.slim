@@ -44,16 +44,16 @@ script type="text/ng-template" id="show.html"
 
 
       .col-md-3
-        h4 Params
+        h4 Params foo
         tabset
           a.btn  ng-click="addParamSet()"
             i.fa.fa-plus style="margin-right: 5px"
-          tab ng-repeat="(name, values) in (datagram.param_sets)"  ng-click="selectParamSet(values.name)" active="selectedParamSetName == name"
+          tab ng-repeat="(name, values) in (datagram.param_sets)"  ng-click="selectParamSet(values.name)"
             tab-heading
               a.btn
                 | {{values.name || 'default'}}
             table.table style="margin-left: 20px"
-              tr style="border: 0px; padding: 1px" ng-if="name !== '__default'"
+              tr style="border: 0px; padding: 1px"
                 td style="border: 0px; padding: 1px"
                   | name
                 td style="border: 0px; padding: 1px"

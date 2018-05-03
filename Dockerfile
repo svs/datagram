@@ -76,15 +76,16 @@ WORKDIR /myapp
 #WORKDIR /home/deploy/datagram
 COPY Gemfile ./Gemfile
 COPY Gemfile.lock ./Gemfile.lock
-RUN bundle install
+RUN bundle install --jobs 20 --retry 5
 COPY . .
-COPY ./config/database.docker /myapp/config/database.foo
+#COPY ./config/database.docker /myapp/config/database.foo
 #RUN apt-get -y update
 
 #RUN ls
 #ADD . /home/deploy/datagram
-
-#RUN bundle exec rake assets:clobber && rake assets:precompile RAILS_ENV=production
+ENV RAILS_ENV production
+ENV RACK_ENV production
+RUN bundle exec rake assets:clobber && rake assets:precompile RAILS_ENV=production
 #RUN rm -rf /home/deploy/datagram/.git
 #EXPOSE 3000
 #CMD bundle exec puma -p 3000

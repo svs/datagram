@@ -101,6 +101,8 @@ group :development, :test do
   gem 'metric_fu'
   gem 'pry-rails'
   gem 'rspec-legacy_formatters'
+  gem 'dotenv-rails'
+  gem 'timecop'
   # gem 'faye_formatter', path: '../faye_formatter'
 end
 

@@ -1,5 +1,6 @@
 task :watch_consumer => :environment do
   Rails.logger.info 'Started #WatchConsumer'
+  ap WatchResponse.connection_config
   $watch_responses.subscribe(block: true) do |di, md, payload|
     parser = Yajl::Parser.new
     pl = parser.parse(payload)

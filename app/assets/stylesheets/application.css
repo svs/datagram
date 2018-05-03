@@ -22,6 +22,7 @@
 *= require 'material.css'
 *= require 'handsontable.min.css'
 *= require 'tauCharts.min.css'
+*= require 'highcharts-ng.css'
 *= require_self
  */
 

@@ -2,8 +2,9 @@ begin
   if ENV['RABBITMQ_PORT']
     endpoint=ENV['RABBITMQ_PORT'].gsub("tcp","amqp")
   else
-    endpoint = Rails.application.secrets.rabbitmq_url || ENV['RABBITMQ_URL'] || "amqp://localhost:5672"
+    endpoint = Rails.application.secrets.rabbitmq_url || ENV['RABBITMQ_URL'] || "amqp://rabbitmq:5672"
   end
+  Rails.logger.info "Connecting to RabbitMQ at #{endpoint}"
   username = Rails.application.secrets.rabbitmq_user || "guest"
   password = Rails.application.secrets.rabbitmq_password || "guest"
 
