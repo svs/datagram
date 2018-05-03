@@ -39,3 +39,10 @@ services:
     command: bundle exec rake --rakefile Rakefile.no_rails perform ENV=production
     depends_on:
       - rabbitmq
+  clock:
+    build: .
+    command: bundle exec clockwork clock.rb ENV=production RAILS_ENV=production
+    env_file:
+      - '.web-variables.env'
+    depends_on:
+      - rabbitmq
