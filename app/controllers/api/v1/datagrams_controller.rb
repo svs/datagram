@@ -70,7 +70,11 @@ module Api
             format.json { render json: response }
             format.xml { render xml: response }
             format.html {
-              @url = url_for(params.merge("format" => "json", "host" => ENV['HOSTNAME']))
+              if last_view(datagram)["render"] == "html"
+                @t = response.html_safe
+              else
+                @url = url_for(params.merge("format" => "json", "host" => Rails.env.production? ? ENV['HOSTNAME'] : 'localhost:4000'))
+              end
               render template: "api/v1/datagrams/#{last_view(datagram)['render']}", layout: last_view(datagram)['render']
             }
             format.png {

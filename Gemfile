@@ -89,7 +89,7 @@ gem 'phantomjs'
 gem 'yajl-ruby', require: 'yajl'
 gem "keen"
 gem 'scout_apm'
-
+gem 'handlebars'
 group :development, :test do
   gem 'rspec-rails'
   gem 'guard-rspec'

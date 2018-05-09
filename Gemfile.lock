@@ -255,6 +255,10 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    handlebars (0.8.0)
+      handlebars-source (~> 4.0.5)
+      therubyracer (~> 0.12.1)
+    handlebars-source (4.0.11)
     hashdiff (0.3.7)
     hashfilter (0.0.4)
       activesupport
@@ -640,6 +644,7 @@ DEPENDENCIES
   friendly_id (~> 5.0.0)
   google_drive
   guard-rspec
+  handlebars
   hashdiff
   hashfilter
   html2slim
