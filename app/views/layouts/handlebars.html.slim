@@ -1,0 +1,11 @@
+doctype html
+
+html
+  head
+    meta name="url" content="#{@url}"
+    meta name="template" content="#{@v.template}"
+    = javascript_include_tag 'handlebarsPage'
+    = stylesheet_link_tag 'dashboard.min.css'
+
+  body
+    = yield

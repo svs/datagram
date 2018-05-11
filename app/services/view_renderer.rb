@@ -54,10 +54,7 @@ class ViewRenderer
 
   class TransformHandlebars
     def self.transform(v, json, params)
-      ap [v, json, params]
-      handlebars = Handlebars::Context.new
-      template = handlebars.compile(v["template"])
-      template.call(json)
+      json
     end
   end
 

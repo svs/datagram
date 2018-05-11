@@ -70,12 +70,9 @@ module Api
             format.json { render json: response }
             format.xml { render xml: response }
             format.html {
-              if last_view(datagram)["render"] == "html"
-                @t = response.html_safe
-              else
-                @url = url_for(params.merge("format" => "json", "host" => Rails.env.production? ? ENV['HOSTNAME'] : 'localhost:4000'))
-              end
-              render template: "api/v1/datagrams/#{last_view(datagram)['render']}", layout: last_view(datagram)['render']
+              @url = url_for(params.merge("format" => "json", "host" => Rails.env.production? ? ENV['HOSTNAME'] : 'localhost:4000'))
+              @v = last_view(datagram)
+              render template: "api/v1/datagrams/#{@v.template_file}", layout: @v.layout_file
             }
             format.png {
               if response.is_a?(Hash)
@@ -146,13 +143,7 @@ module Api
       end
 
       def last_view(datagram)
-        if params[:views]
-          if params[:views].is_a?(Array)
-            v = DatagramViewLoader.new(datagram, params[:views][-1])
-          else
-            v = DatagramViewLoader.new(datagram, params[:views])
-          end
-        end
+        v = DatagramViewLoader.new(datagram, Array(params[:views])[-1])
         v.load
       end
 

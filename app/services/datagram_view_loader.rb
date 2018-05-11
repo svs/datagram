@@ -6,7 +6,7 @@ class DatagramViewLoader
   end
 
   def load
-    datagram_view_of_same_name
+    View.new(datagram_view_of_same_name)
   end
 
   private
