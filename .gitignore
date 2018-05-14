@@ -20,3 +20,4 @@ config/secrets.yml
 .env
 *\#*
 vendor/assets/components
+.web-variables.env
