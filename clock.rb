@@ -17,7 +17,7 @@ module Clockwork
         df.publish!
       end
     rescue Exception => e
-      Rails.logger.error e.message
+      Rails.logger.error "Error publishing #{df.class} #{df.name} #{e.message}"
       nil
     end
     # Or, e.g. if your queue system just needs job names
