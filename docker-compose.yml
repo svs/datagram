@@ -4,29 +4,34 @@ services:
     image: redis
     ports:
       - 6379
+
   rabbitmq:
     image: rabbitmq
     ports:
       - 15672
       - 5672
+
   app:
     command: bundle exec rails s -p 4000 -b 0.0.0.0
     env_file:
       - '.web-variables.env'
     ports:
       - "4000"
+
   nginx:
     image: nginx
     volumes_from:
       - app
     depends_on:
       - app
+
   db_backup:
     image: equinoxone/postgres_backup:0.1
     volumes:
       - ./backup:/backup
     environment:
       - PGDATABASE=app_database
+
   worker1:
     build: .
     command: bundle exec rake watch_consumer ENV=production
@@ -34,11 +39,13 @@ services:
       - '.web-variables.env'
     depends_on:
       - rabbitmq
+
   perform:
     build: .
     command: bundle exec rake --rakefile Rakefile.no_rails perform ENV=production
     depends_on:
       - rabbitmq
+
   clock:
     build: .
     command: bundle exec clockwork clock.rb ENV=production RAILS_ENV=production
