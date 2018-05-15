@@ -12,7 +12,7 @@ module Clockwork
 
   sync_database_events model: DatagramFinder, every: 1.minute do |df|
     begin
-      if !df.archived?
+      if !df.archived? rescue true
         Rails.logger.info "#Clock publishing #{df.class} #{df.name}"
         df.publish!
       end
