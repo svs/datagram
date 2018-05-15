@@ -1,4 +1,4 @@
-if File.basename($0) != 'rake'
+begin
   if ENV['RABBITMQ_PORT']
     endpoint=ENV['RABBITMQ_PORT'].gsub("tcp","amqp")
   else
@@ -19,4 +19,5 @@ if File.basename($0) != 'rake'
 
   $watches.bind($x)
 
+rescue
 end
