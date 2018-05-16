@@ -31,6 +31,7 @@
 //= require angular-humanSeconds.min.js
 //= require jmespath.js
 //= require highcharts/highcharts.js
+//= require highcharts/modules/funnel.js
 //= require highcharts-ng.min.js
 //= require bootstrap.min
 //= require mustache.min.js
