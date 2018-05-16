@@ -281,7 +281,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     var dynamicParams = {params: $scope.selectedParamSet};
     staticParams = $httpParamSerializerJQLike(staticParams);
     dynamicParams = $httpParamSerializerJQLike(dynamicParams);
-    var render = view.render == 'highcharts' ? 'png' : view.render;
+    var render = view.render == 'highcharts' ? 'html' : view.render;
     render = render == "ag-grid" ? "html" : render;
     render = render == "pivot" ? "html" : render;
     render = render == "taucharts" ? "html" : render;
