@@ -18,6 +18,8 @@ begin
   $x  = $ch.topic('datagrams_topic_exchange', auto_delete: false)
 
   $watches.bind($x)
-
-rescue
+  Rails.logger.info "Connected to rabbitMQ"
+  Rails.logger.info $x
+rescue Exception => e
+  Rails.logger.error e.message
 end

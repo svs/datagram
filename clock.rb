@@ -18,6 +18,7 @@ module Clockwork
       end
     rescue Exception => e
       Rails.logger.error "Error publishing #{df.class} #{df.name} #{e.message}"
+      ap e.backtrace
       nil
     end
     # Or, e.g. if your queue system just needs job names
