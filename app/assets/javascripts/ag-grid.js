@@ -84,13 +84,16 @@ var renderAgGrid = function(data) {
 };
 
 $(document).ready(function() {
+    refreshData();
+});
 
+var refreshData = function() {
   var eGridDiv = document.querySelector('#myGrid');
   new agGrid.Grid(eGridDiv, gridOptions);
 
   var url = $('meta[name="url"]')[0].getAttribute('content');
   $.get(url, function(a) {
-    console.log(a);
-    renderAgGrid(a);
+      renderAgGrid(a);
+      setTimeout(refreshData, 60*1000);
   });
-});
+};
