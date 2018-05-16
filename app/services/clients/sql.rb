@@ -25,11 +25,15 @@ module Clients
     attr_reader :url, :payload, :max_size
 
     def save_to_s3
-      Rails.logger.info "#Perform Storing #{filename}"
-      s3 = Aws::S3::Resource.new
-      obj = s3.bucket('dg-tmp').object(filename)
-      s3.put_object(key: filename, body:json, bucket: "datagramg-cache")
-      Rails.logger.info "#Perform Done storing  #{filename} #{(Time.now - tt).round}"
+      begin
+        Rails.logger.info "#Perform Storing #{filename}"
+        s3 = Aws::S3::Resource.new
+        obj = s3.bucket('dg-tmp').object(filename)
+        s3.put_object(key: filename, body:json, bucket: "datagramg-cache")
+        Rails.logger.info "#Perform Done storing  #{filename} #{(Time.now - tt).round}"
+      rescue Exception => e
+        Rails.logger.info "save_to_s3 failed with #{e.message}"
+      end
     end
 
 
