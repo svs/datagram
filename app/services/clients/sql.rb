@@ -26,7 +26,7 @@ module Clients
 
     def save_to_s3
       begin
-        Rails.logger.info "#Perform Storing #{filename}"
+        Rails.logger.info "#S3Client Storing #{filename}"
         s3 = Aws::S3::Resource.new
         obj = s3.bucket('dg-tmp').object(filename)
         s3.put_object(key: filename, body:json, bucket: "datagramg-cache")
