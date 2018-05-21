@@ -75,7 +75,7 @@ task :perform  do
           begin
             DgLog.new("#Perform Storing #{filename} #{tt}", context).log
             s3 = Aws::S3::Resource.new(region: 'us-east-1')
-            obj = s3.bucket('datagramg-cache').object(filename)
+            obj = s3.bucket('datagramg-nv-cache').object(filename)
             obj.put(body:json)
             DgLog.new("#Perform Done storing  #{filename} #{(Time.now - tt).round}", context).log
           rescue Exception => e
