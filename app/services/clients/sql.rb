@@ -28,7 +28,7 @@ module Clients
       begin
         Rails.logger.info "#S3Client Storing #{filename}"
         s3 = Aws::S3::Resource.new
-        obj = s3.bucket('dg-tmp').object(filename)
+        obj = s3.bucket('dg-nv-tmp').object(filename)
         s3.put_object(key: filename, body:json, bucket: "datagramg-cache")
         Rails.logger.info "#Perform Done storing  #{filename} #{(Time.now - tt).round}"
       rescue Exception => e

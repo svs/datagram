@@ -84,9 +84,9 @@ module Api
                 File.open("/tmp/#{x}.html","w") {|f| f.write(html) }
                 `wkhtmltoimage /tmp/#{x}.html /tmp/#{x}.png`
                 s3 = Aws::S3::Resource.new
-                obj = s3.bucket('dg-tmp').object(filename)
+                obj = s3.bucket('dg-nv-tmp').object(filename)
                 obj.upload("/tmp/#{x}.png")
-                redirect_to "https://s3.amazonaws.com/dg-tmp/#{filename}"
+                redirect_to "https://s3.amazonaws.com/dg-nv-tmp/#{filename}"
 
               else
                 send_file response, type: 'image/png', disposition: 'inline'
