@@ -10,8 +10,8 @@ gem "mysql2"
 #gem "sqlite3"
 #gem 'em-pg-sequel'
 #gem 'em-synchrony'
-# gem 'sequel-redshift', git: 'https://github.com/svs/sequel-redshift.git'
-gem 'rethinkdb'
+gem 'sequel-redshift', git: 'https://github.com/svs/sequel-redshift.git'
+#gem 'rethinkdb'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 gem 'less'
