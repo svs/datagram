@@ -1,5 +1,7 @@
 script type="text/ng-template" id="index.html"
+  | FOOOO
   div ng-controller="streamsCtrl"
+    | {{streams}}
     .row
       h3.pull-left style="margin-right: 10px"  Streams
     tabset
@@ -8,7 +10,7 @@ script type="text/ng-template" id="index.html"
           .col-md-4 ng-repeat="(n,d) in data.data"
             .portlet.portlet-boxed
               .portlet-heading style="margin: 0px; border-bottom: 0px"
-                a ui-sref="show({id: datagram.id})"
+                a ng-click="openShowModal(datagram)" style="cursor: pointer"
                   h4.portlet-title style="margin: 3px"
                     u style="padding-bottom: 4px"
                       | {{ n }}

@@ -60,11 +60,7 @@ class DatagramPublisher
   end
 
   def routing_key
-    if datagram.use_routing_key
       "datagram-#{datagram.routing_key}"
-    else
-      nil
-    end
   end
 
     def redis_tracking_key

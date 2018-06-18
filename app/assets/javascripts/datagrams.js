@@ -8,7 +8,8 @@ angular.module('datagramsApp').controller('datagramsCtrl',['$scope','Restangular
   };
   init();
 
-  $scope.openShowModal = function(datagram){
+    $scope.openShowModal = function(datagram){
+
     console.log('openRoModal',datagram);
     var modalInstance = $modal.open({
       templateUrl: 'show_ro.html',
@@ -628,5 +629,69 @@ angular.module('datagramsApp').controller('newDatagramCtrl',['$scope','Restangul
 	}
 
   });
+
+}]);
+
+
+angular.module('datagramsApp').controller('streamsCtrl',['$scope','$http','$stateParams','$timeout', '$modal',function($scope, $http,$stateParams, $timeout, $modal) {
+
+  $scope.streams = {};
+  $scope.selectedTab = null;
+  $scope.load = function() {
+    $scope.loading = true;
+    $http.get('api/v1/streams').then(function(r) {
+	console.log(r);
+	if ($scope.selectedTab === null) {
+	    console.log('!!!!!!1');
+	    console.log(r);
+	    $scope.selectedTab = r.data[0].name;
+	}
+	$scope.streams = r.data;
+	$scope.loading = false;
+	$timeout($scope.load, 60000);
+    });
+  };
+
+  var loadStream = function(token) {
+    $http.get('api/v1/streams/' + token).then(function(r) {
+	console.log(r);
+      $scope.streams[token] = r.data;
+    });
+  };
+  $scope.load();
+
+  $scope.setActiveTab = function(name) {
+    $scope.selectedTab = name;
+  }
+
+  $scope.openNewModal = function(){
+    var modalInstance = $modal.open({
+      templateUrl: 'new.html',
+      controller: 'newStreamCtrl',
+      resolve: {
+	data: {}
+      }
+    });
+    modalInstance.result.then(function(n) {
+      $scope.selectedTab = n;
+      console.log('n',n);
+      $scope.load();
+    });
+  };
+
+  $scope.openShowModal = function(datagram){
+    console.log('openRoModal',datagram);
+    var modalInstance = $modal.open({
+      templateUrl: 'show_ro.html',
+      controller: 'roCtrl',
+      size: 'lg',
+      windowClass: 'big-modal',
+      resolve: {
+	dg: function() { return datagram}
+      }
+    });
+    modalInstance.result.then(function(n) {
+    });
+  };
 
 }]);

@@ -40,17 +40,21 @@ angular.module('streamsApp').controller('streamsCtrl',['$scope','$http','$stateP
   $scope.load = function() {
     $scope.loading = true;
     $http.get('api/v1/streams').then(function(r) {
-      if ($scope.selectedTab === null) {
-	$scope.selectedTab = r.data[5].name;
-      }
-      $scope.streams = r.data;
-      $scope.loading = false;
-      $timeout($scope.load, 60000);
+	console.log(r);
+	if ($scope.selectedTab === null) {
+	    console.log('!!!!!!1');
+	    console.log(r);
+	    $scope.selectedTab = r.data[0].name;
+	}
+	$scope.streams = r.data;
+	$scope.loading = false;
+	$timeout($scope.load, 60000);
     });
   };
 
   var loadStream = function(token) {
     $http.get('api/v1/streams/' + token).then(function(r) {
+	console.log(r);
       $scope.streams[token] = r.data;
     });
   };
@@ -74,6 +78,22 @@ angular.module('streamsApp').controller('streamsCtrl',['$scope','$http','$stateP
       $scope.load();
     });
   };
+
+  $scope.openShowModal = function(datagram){
+    console.log('openRoModal',datagram);
+    var modalInstance = $modal.open({
+      templateUrl: 'show_ro.html',
+      controller: 'roCtrl',
+      size: 'lg',
+      windowClass: 'big-modal',
+      resolve: {
+	dg: function() { return datagram}
+      }
+    });
+    modalInstance.result.then(function(n) {
+    });
+  };
+
 }]);
 
 
@@ -93,5 +113,55 @@ angular.module('streamsApp').controller('newStreamCtrl',['$scope','$modalInstanc
     });
   };
 
+
+}]);
+
+angular.module('streamsApp').controller('roCtrl',['$scope', '$modalInstance','dg', 'renderService','datagramService','$http','$timeout','$window', '$state', function($scope, $modalInstance, dg, renderService, datagramService, $http, $timeout, $window, $state) {
+  $scope.renderedData = renderService.renderedData;
+
+  $scope.d = datagramService;
+  datagramService.setCurrentDatagram(dg).then(function() {
+    console.log('setCurrentDatagram done');
+    reflow();
+  });
+
+  $scope.next = function() {
+    datagramService.loadNext();
+  };
+  $scope.previous = function() {
+    datagramService.loadPrevious();
+  };
+  $scope.edit = function() {
+    $state.go('show',{id: datagramService.datagram.id});
+    $modalInstance.close();
+  }
+  var reflow = function() {
+    $timeout(function() {
+      $scope.$broadcast('highchartsng.reflow');
+      $window.dispatchEvent(new Event('resize'));
+    },100);
+    if ($scope.gridOptions && $scope.gridOptions.api) {
+      $timeout(function() {
+        $scope.gridOptions.api.sizeColumnsToFit(true);
+      }, 500);
+    }
+  };
+  $scope.selectView = function(view) {
+    reflow();
+  };
+
+  $scope.selectParamSet = function(name) {
+    datagramService.selectParamSet(name);
+  };
+
+  $scope.updateCurrentParams = function(k) {
+  };
+
+  $scope.refresh = function() {
+    $scope.refreshing = true;
+    datagramService.refresh().then(function() {
+      $scope.refreshing = false;
+    });
+  };
 
 }]);

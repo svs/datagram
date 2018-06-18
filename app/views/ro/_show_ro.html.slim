@@ -1,0 +1,78 @@
+= stylesheet_link_tag 'highlight'
+script type="text/ng-template" id="show_ro.html"
+  div style="width:90%; margin: auto; padding-top:30px"
+    .row.portlet-title
+      .col-md-6
+        .row
+          h2.portlet-title.pull-left style="margin-bottom: 0px"
+            u
+              | {{d.datagram.name}}
+              a.btn ng-click="edit()"
+                h2
+                  i.fa.fa-edit style="margin-left: 10px; padding: 4px"
+          .pull-right
+            a.btn ng-click="previous()"
+              h3
+                i.fa.fa-arrow-left
+              a.btn ng-click="next()"
+                h3
+                  i.fa.fa-arrow-right
+        .row
+          a.btn.btn-large.btn-warning ng-click="refresh()" style="margin: 3px"
+            i.fa.fa-refresh style="margin-right: 5px"
+            | Refresh Now
+          a.btn.btn-large.btn-success ng-click="reload()" style="margin: 3px"
+            i.fa.fa-refresh style="margin-right: 5px"
+            | Reload Now
+          i.fa.fa-spinner.fa-spin style="margin-right: 5px" ng-if="refreshing"
+      .col-md-6
+        tabset
+          tab ng-repeat="(name, values) in (d.datagram.paramSets)"  ng-click="selectParamSet(values.name)"
+            tab-heading
+              a.btn
+                | {{values.name || 'default'}}
+            table.table
+              tr style="border: 0px; padding: 1px" ng-if="name !== '__default'"
+                td style="border: 0px; padding: 1px"
+                  | name
+                td style="border: 0px; padding: 1px"
+                  input type="text" ng-model="values.name"
+
+              tr ng-repeat="(k,v) in values.params" style="border: 0px; padding: 1px"
+                td style="border: 0px; padding: 1px"
+                  |{{k}}
+                td style="border: 0px; padding: 1px"
+                  input type="text" ng-model="values.params[k]" ng-blur="updateCurrentParams(k)"
+      .col-md-4
+
+
+    .row
+      .col-md-12
+          tabset
+            tab ng-repeat="view in d.datagram.views" ng-click="selectView(view)"
+              tab-heading
+                a.btn
+                  | {{view.name}}
+              .row#view
+                .col-md-13
+                  div ng-if="view.render=='highcharts'" style="width: 100%; height: 500px"
+                    highchart id="chart1" config="renderedData[view.name]"
+                  div ng-if="view.render=='taucharts'" style="width: 100%; height: 500px"
+                    div id="tauchart" style="height: 100%; width: 100%"
+                  #aggrid style="height: 500px" class="ag-fresh" ng-if="view.render == 'ag-grid'"
+                  .material ng-if="view.transform=='handlebars' || view.transform=='mustache'" ng-bind-html="renderedData[view.name]"
+                  div#pivot ng-if="view.render === 'pivot'" style="height: 500px"
+
+            tab ng-repeat="response in d.datagram.responses"
+              tab-heading
+                a.btn
+                  | {{response.name}}
+              tabset
+                tab heading="Data"
+                  div hljs-to-json="response.data"
+                tab heading="Errors"
+                  div hljs-to-json="response.errors"
+                tab heading="MetaData"
+                  div hljs-to-json="response.metadata"
+                tab heading="Params"
+                  div hljs-to-json="response.params"

@@ -1,6 +1,10 @@
+= javascript_include_tag 'services/renderService'
+= javascript_include_tag 'services/datagramService'
+= javascript_include_tag 'datagrams'
 = javascript_include_tag 'streams.js'
 
 div ng-app="streamsApp"
   ui-view
   = render 'index'
+  = render 'show_ro'
   = render 'new'
