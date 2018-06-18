@@ -23,6 +23,14 @@ GIT
       dotenv (>= 0.7)
       thor (>= 0.13.6)
 
+GIT
+  remote: https://github.com/svs/sequel-redshift.git
+  revision: 1b89c88c3f41cc2465597e6ff19df70eb3eb17e2
+  specs:
+    sequel-redshift (0.0.1)
+      pg
+      sequel
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -487,7 +495,6 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rethinkdb (2.3.0.2)
     retriable (3.1.1)
     roodi (3.3.1)
       ruby_parser (~> 3.2, >= 3.2.2)
@@ -676,7 +683,6 @@ DEPENDENCIES
   rails_12factor
   redis
   rest-client
-  rethinkdb
   rspec-legacy_formatters
   rspec-rails
   ruby-jq (~> 0.1.6)
@@ -684,6 +690,7 @@ DEPENDENCIES
   scout_apm
   sdoc (~> 0.4.0)
   sequel
+  sequel-redshift!
   shoulda-matchers
   sidekiq
   slack-notify
