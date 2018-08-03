@@ -86,6 +86,7 @@ COPY . .
 ENV RAILS_ENV production
 ENV RACK_ENV production
 RUN bundle exec rake assets:clobber && rake assets:precompile RAILS_ENV=production
+RUN mv vendor/assets/theme public/assets
 #RUN rm -rf /home/deploy/datagram/.git
 #EXPOSE 3000
 #CMD bundle exec puma -p 3000
