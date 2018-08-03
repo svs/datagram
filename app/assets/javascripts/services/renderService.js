@@ -20,6 +20,21 @@ angular.module('datagramsApp')
 	  service.renderedData[view.name] = jmespath.search(datagram,view.template);
 	  service.renderedData[view.name].options = service.renderedData[view.name].options || {a: 'foo'}; //weird new bug
 	}
+	  if (view.render === 'flexmonster') {
+	      console.log(service.renderedData[view.name]);
+	      view.report = view.report || {dataSource: {data: null}};
+	      console.log(service.renderedData);
+	      view.report.dataSource.data = service.renderedData[view.name];
+	      console.log(view);
+	      $timeout(function() {
+		  var pivot = new Flexmonster({
+		      container: "flexmonster",
+		      toolbar: true,
+		      report: view.report,
+		      licenseKey: "Z77C-XAH84A-2P3E5X-2O1Z2W"
+		  });
+	      });
+	  }
 	if (view.render == 'pivot') {
 	  console.log('view.pivotOptions',view.pivotOptions);
 	  view.pivotOptions = _.pick(view.pivotOptions, ["aggregatorName","cols","rows","vals","rendererName","viewName"]);
