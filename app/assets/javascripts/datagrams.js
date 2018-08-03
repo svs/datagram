@@ -432,12 +432,35 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   $scope.pivotOptions = {renderers: renderers, onRefresh: refreshPivotConf };
 
   var renderClient = function(view) {
-    console.log('renderClient',view);
+      console.log('renderClient',view);
     if ( view.transform === 'jmespath') {
       if (view.render != 'pivot') {
 	$scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
 	$scope.renderedData[view.name].options = $scope.renderedData[view.name].options || {a: 'foo'}; //weird new bug
       }
+	      if (view.render === 'flexmonster') {
+	  console.log($scope.renderedData[view.name]);
+	  view.report = view.report || {dataSource: {data: null}};
+	  console.log($scope.renderedData);
+	  view.report.dataSource.data = $scope.renderedData[view.name];
+	  console.log(view);
+	  $timeout(function() {
+	      var pivot = new Flexmonster({
+		  container: "flexmonster",
+		  toolbar: true,
+		  report: view.report,
+		  licenseKey: "Z77C-XAH84A-2P3E5X-2O1Z2W"
+	      });
+	      pivot.on('reportchange', function () {
+		  view.report = pivot.getReport();
+		  delete view.report.dataSource["data"];
+		  $scope.viewsChanged = true;
+		  console.log(view);
+	      });
+	  }, 500);
+      }
+
+
       if (view.render == 'pivot') {
 	console.log('view.pivotOptions',view.pivotOptions);
 	view.pivotOptions = _.pick(view.pivotOptions, ["aggregatorName","cols","rows","vals","rendererName","viewName"]);
@@ -459,7 +482,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 	$timeout(function() {
           renderAgGrid(view);
         }, 500);
-      }
+      };
     };
     if (view.render === 'png') {
       $scope.$broadcast('highchartsng.reflow');

@@ -42,7 +42,7 @@
 //= require ng-csv.min.js
 //= require angular-sanitize.min.js
 //= require angular-pivot.js
-
+//= require flexmonster
 $(document).ready(function() {
   $('a[href="' + window.location.pathname + '"]').parent().addClass('active');
 });
