@@ -100,17 +100,21 @@ class ViewRenderer
     def render
       super.merge(gridOptions: view["gridOptions"])
     end
-
   end
 
   class RenderTaucharts < Render
     def render
       view["tauChartsOptions"]["tco"].merge({data: super})
     end
-
   end
 
-
+  class RenderFlexmonster < Render
+    def render
+      d = super
+      ap d
+      {data: d, report: view["report"]}
+    end
+  end
 
   class RenderPivot < Render
     def render

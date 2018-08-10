@@ -1,0 +1,10 @@
+doctype html
+
+html
+  head
+    meta name="url" content="#{@url}"
+    = javascript_include_tag 'flexmonsterPage'
+    = stylesheet_link_tag 'flexmonsterPage'
+
+  body
+    = yield

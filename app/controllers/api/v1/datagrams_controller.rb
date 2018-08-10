@@ -63,8 +63,8 @@ module Api
             response = renderer.render(params[:views])
             filename = renderer.last_filename
           end
-          if ["ag-grid","aggrid","pivot"].include?(params[:format])
-            redirect_to url_for(params.merge("format" => "html"))
+          if ["ag-grid","aggrid","pivot","flexmonster"].include?(params[:format])
+            redirect_to url_for(params.merge("format" => "html")) and return
           end
           respond_to do |format|
             format.json { render json: response }
