@@ -39,9 +39,10 @@ angular.module('streamsApp').controller('streamsCtrl',['$scope','$http','$stateP
   $scope.selectedTab = null;
   $scope.load = function() {
     $scope.loading = true;
-    $http.get('api/v1/streams').then(function(r) {
+      $http.get('api/v1/streams').then(function(r) {
+	  console.log(r);
       if ($scope.selectedTab === null) {
-	$scope.selectedTab = r.data[5].name;
+	$scope.selectedTab = r.data[0].name;
       }
       $scope.streams = r.data;
       $scope.loading = false;

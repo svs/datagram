@@ -9,7 +9,7 @@ require 'google_drive'
 require 'rest-client'
 require 'aws-sdk-s3'
 require 'active_support/core_ext/hash'
-
+require 'dotenv'
 $stdout.sync = true
 if !defined?(Rails)
   raise "No environment specified" unless ENV["ENV"]
