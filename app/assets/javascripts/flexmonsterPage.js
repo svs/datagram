@@ -1,6 +1,6 @@
 //= require jquery
 //= require flexmonster
-
+//= require moment.min.js
 $(document).ready(function() {
   var url = $('meta[name="url"]')[0].getAttribute('content');
   console.log(url);
@@ -16,6 +16,7 @@ $(document).ready(function() {
 	  licenseKey: "Z77C-XAH84A-2P3E5X-2O1Z2W",
 	  componentFolder: '/flexmonster/'
       });
+      $('#luts').html(moment(a.metadata.updated_at*1000).fromNow());
 
   });
 });

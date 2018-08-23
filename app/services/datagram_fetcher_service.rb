@@ -27,6 +27,9 @@ class DatagramFetcherService
     }
   end
 
+  def last_filename
+    renderer.last_filename
+  end
 
   #private
   attr_reader :datagram, :views, :max_size

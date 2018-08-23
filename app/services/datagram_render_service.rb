@@ -13,13 +13,16 @@ class DatagramRenderService
   end
 
   def render(views = [])
-    Array(views).compact.reduce(raw_json){|result, view| result = _render(result, view)}
+    Array(views).compact.reduce(raw_json){|result, view| result = _render(result, view)}.merge(metadata: {updated_at: @datagram.last_update_timestamp})
   end
 
   def last_view
     DatagramViewLoader.new(datagram, view).load
   end
 
+  def last_filename
+    @last_filename
+  end
 
   attr_reader :dfs, :datagram, :format, :params, :last_filename
 

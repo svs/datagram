@@ -74,7 +74,7 @@ class ViewRenderer
     end
 
     def render
-      return json
+      return {data: json}
     end
 
   end
@@ -98,26 +98,26 @@ class ViewRenderer
 
   class RenderAgGrid < Render
     def render
-      super.merge(gridOptions: view["gridOptions"])
+      super[:data].merge(gridOptions: view["gridOptions"])
     end
   end
 
   class RenderTaucharts < Render
     def render
-      view["tauChartsOptions"]["tco"].merge({data: super})
+      view["tauChartsOptions"]["tco"].merge(super)
     end
   end
 
   class RenderFlexmonster < Render
     def render
       d = super
-      {data: d, report: view["report"]}
+      d.merge({report: view["report"]})
     end
   end
 
   class RenderPivot < Render
     def render
-      return {data: json, config: config}
+      return super.merge(config: config)
     end
 
     def config

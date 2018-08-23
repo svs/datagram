@@ -59,9 +59,9 @@ module Api
         if datagram
           if ["json","xml","csv","html","png"].include?(params[:format])
             ds = DatagramFetcherService.new(datagram, params)
-            renderer = ds.renderer
-            response = renderer.render(params[:views])
-            filename = renderer.last_filename
+            response = ds.render(params[:views])
+            ap response
+            filename = ds.last_filename
           end
           if ["ag-grid","aggrid","pivot","flexmonster"].include?(params[:format])
             redirect_to url_for(params.merge("format" => "html")) and return
