@@ -60,7 +60,6 @@ module Api
           if ["json","xml","csv","html","png"].include?(params[:format])
             ds = DatagramFetcherService.new(datagram, params)
             response = ds.render(params[:views])
-            ap response
             filename = ds.last_filename
           end
           if ["ag-grid","aggrid","pivot","flexmonster"].include?(params[:format])

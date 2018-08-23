@@ -19,9 +19,13 @@ $(document).ready(function() {
 	  height: '100%',
 	  options: {
 	      grandTotalsPosition: 'top'
-	  }
+	  },
+	  customizeCell: customizeCellFunction
       });
       $('#luts').html(moment(a.metadata.updated_at*1000).fromNow());
 
   });
+
+    function customizeCellFunction(cell, data) {
+    }
 });
