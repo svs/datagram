@@ -80,7 +80,6 @@ module Api
               elsif response.is_a?(String)
                 x = SecureRandom.urlsafe_base64(5)
                 html = render_to_string(inline:response, layout: 'html')
-                ap html
                 File.open("/tmp/#{x}.html","w") {|f| f.write(html) }
                 `wkhtmltoimage /tmp/#{x}.html /tmp/#{x}.png`
                 s3 = Aws::S3::Resource.new
@@ -97,7 +96,6 @@ module Api
             format.csv {
               csv = CSV.generate do |f|
                 response.each_with_index do |_r,i|
-                  ap _r
                   _r = _r
                   if i == 0
                     f << _r.keys

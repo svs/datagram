@@ -111,7 +111,6 @@ class ViewRenderer
   class RenderFlexmonster < Render
     def render
       d = super
-      ap d
       {data: d, report: view["report"]}
     end
   end

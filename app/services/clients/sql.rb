@@ -9,7 +9,6 @@ module Clients
     end
 
     def response
-      ap [url, payload]
       {
         elapsed: elapsed,
         status_code: 200,
@@ -19,7 +18,7 @@ module Clients
         timestamp: payload["timestamp"],
         bytesize: bytesize,
         truncated_json: truncated_json
-      }.tap{|x| ap x}
+      }
     end
 
     attr_reader :url, :payload, :max_size
