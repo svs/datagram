@@ -7,8 +7,10 @@ html
     = stylesheet_link_tag 'flexmonsterPage'
 
   body
-    h2
-      = @datagram.name
-    h3#luts
+    div
+      h1 style="font-family: monospace"
+        = @datagram.name
+        span#luts style="font-size: 0.8em; font-weight: normal; padding-left: 10px"
 
-    = yield
+    .content style="height: 700px"
+      = yield
