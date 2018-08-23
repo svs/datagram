@@ -17,7 +17,9 @@ $(document).ready(function() {
 	  componentFolder: '/flexmonster/',
 	  width: '100%',
 	  height: '100%',
-	  grandTotalsPosition: 'top'
+	  options: {
+	      grandTotalsPosition: 'top'
+	  }
       });
       $('#luts').html(moment(a.metadata.updated_at*1000).fromNow());
 
