@@ -28,7 +28,7 @@ $(document).ready(function() {
   var url = $('meta[name="url"]')[0].getAttribute('content');
   console.log(url);
   $.get(url, function(a,b,c) {
-    $('#pivot').pivotUI(a.data, _.merge(a.config,{renderers: renderers}));
+      $('#pivot').pivotUI(a.data.data, _.merge(a.config,{renderers: renderers, rendererOptions: a.data.options}));
     if (typeof window.callPhantom === 'function') {
       $($('.pvtUi tr')[0]).hide();
       $($('.pvtUi tr')[1]).hide();
