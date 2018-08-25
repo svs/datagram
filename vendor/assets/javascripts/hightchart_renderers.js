@@ -133,13 +133,15 @@
                 credits: false,
                 series: series
             };
-
+	    console.log('extraOptions', extraOptions);
+	    console.log('opts', opts);
             if (extraOptions) {
                 options = $.extend(options, extraOptions, true);
             }
             if (opts) {
                 options = $.extend(options, opts, true);
             }
+
 	  console.log('Highcharts Options',options, $result);
 	  $result.css({width: '1000px', height:'600px'});
           $result.highcharts(options);

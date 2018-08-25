@@ -72,8 +72,6 @@ module Api
               @url = url_for(params.merge("format" => "json", "host" => Rails.env.production? ? ENV['HOSTNAME'] : 'localhost:4000'))
               @v = last_view(datagram)
               @datagram = datagram
-              ap @v.class
-              ap @v.layout_file
               render template: "api/v1/datagrams/#{@v.template_file}", layout: @v.layout_file
             }
             format.png {

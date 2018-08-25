@@ -431,6 +431,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   $scope.pivotOptions = {renderers: renderers, onRefresh: refreshPivotConf };
 
+
   var renderClient = function(view) {
       console.log('renderClient',view);
     if ( view.transform === 'jmespath') {
@@ -449,7 +450,45 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 		  container: "flexmonster",
 		  toolbar: true,
 		  report: view.report,
-		  licenseKey: "Z77C-XAH84A-2P3E5X-2O1Z2W"
+		  licenseKey: "Z786-XAHB1X-004U13-5O2W6O"
+	      });
+	      pivot.on('reportchange', function () {
+		  view.report = pivot.getReport();
+		  delete view.report.dataSource["data"];
+		  $scope.viewsChanged = true;
+		  console.log(view);
+	      });
+	  }, 500);
+      }
+	if (view.render === 'flexchart') {
+	  console.log($scope.renderedData[view.name]);
+	  view.report = view.report || {dataSource: {data: null}};
+	  console.log($scope.renderedData);
+	  view.report.dataSource.data = $scope.renderedData[view.name];
+	  console.log(view);
+	  $timeout(function() {
+	      var pivot = new Flexmonster({
+		  container: "flexmonster",
+		  toolbar: true,
+		  report: view.report,
+		  licenseKey: "Z786-XAHB1X-004U13-5O2W6O"
+	      });
+	      pivot.on('reportcomplete', function() {
+		      var createFlexChart = function() {
+	pivot.highcharts.getData(
+	    {},
+	    function(data) {
+		$('#flexchart').highcharts(data);
+	    },
+	    function(data) {
+		$('#flexchart').highcharts(data);
+	    }
+	);
+    };
+
+		      console.log('Report Complete!!');
+		      pivot.off('reportcomplete');
+		      createFlexChart();
 	      });
 	      pivot.on('reportchange', function () {
 		  view.report = pivot.getReport();
@@ -470,9 +509,12 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 	o.rows = (o.rows === null) ? [] : o.rows;
 	o.cols = (o.cols === null) ? [] : o.cols;
 	o.vals = (o.vals === null) ? [] : o.vals;
-	console.log('o',o);
-	$scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
-	$('#pivot').pivotUI($scope.renderedData[view.name], o);
+	  console.log('o',o);
+	  $scope.renderedData[view.name] = jmespath.search($scope.datagram,view.template);
+	  var d = $scope.renderedData[view.name];
+	  console.log('D!!!!!!',d);
+	  o.rendererOptions = d.options;
+	  $('#pivot').pivotUI(d.data, o);
 	console.log('rendering pivot');
 	$timeout(function() {
 	  $(window).trigger('resize');

@@ -43,6 +43,7 @@
 //= require angular-sanitize.min.js
 //= require angular-pivot.js
 //= require flexmonster
+//= require flexmonster.highcharts.js
 $(document).ready(function() {
   $('a[href="' + window.location.pathname + '"]').parent().addClass('active');
 });

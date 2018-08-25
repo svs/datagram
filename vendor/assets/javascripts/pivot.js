@@ -1155,7 +1155,7 @@
       try {
         pivotData = new opts.dataClass(input, opts);
         try {
-          result = opts.renderer(pivotData, opts.rendererOptions);
+            result = opts.renderer(pivotData, opts.rendererOptions);
         } catch (_error) {
           e = _error;
           if (typeof console !== "undefined" && console !== null) {
