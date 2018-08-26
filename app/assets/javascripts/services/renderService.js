@@ -9,6 +9,7 @@ angular.module('datagramsApp')
 	    renderedData: {},
 	    renderedUrls: {},
 	    render: render,
+	    renderUrls: renderUrls,
 	    pivotOptions: {renderers: renderers},
 	    gridOptions: {enableSorting: true, enableFilter: true, rowData: null, showToolPanel: true }
 	};
@@ -97,7 +98,6 @@ angular.module('datagramsApp')
 		}, 200);
 
 	    }
-
 	    return service.renderedData[view.name];
 	};
 
@@ -178,19 +178,19 @@ angular.module('datagramsApp')
 
 	}
 
-	var makeRenderedUrls = function(view) {
-	    var staticParams = {params: _.merge.apply(_.merge,_.map($scope.datagram.responses,'params'))};
-	    var dynamicParams = {params: $scope.selectedParamSet};
+	function renderUrls(view, params, datagram) {
+	    var staticParams = {params: _.merge.apply(_.merge,_.map(datagram.responses,'params'))};
+	    var dynamicParams = {params: params};
 	    staticParams = $httpParamSerializerJQLike(staticParams);
 	    dynamicParams = $httpParamSerializerJQLike(dynamicParams);
 	    var render = view.render == 'highcharts' ? 'html' : view.render;
 	    render = render == "ag-grid" ? "html" : render;
 	    render = render == "pivot" ? "html" : render;
 	    render = render == "taucharts" ? "html" : render;
-	    var staticUrl =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + staticParams + '&views[]=' + view.name;
-	    var dynamicUrl =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + dynamicParams + '&views[]=' + view.name;
-	    $scope.renderedUrls[view.name] = {static: staticUrl, dynamic: dynamicUrl};
-	    console.log('renderedUrls', view, dynamicUrl, $scope.selectedParams);
+	    var staticUrl =  "/api/v1/d/" + datagram.token + "." + render + '?' + staticParams + '&views[]=' + view.name;
+	    var dynamicUrl =  "/api/v1/d/" + datagram.token + "." + render + '?' + dynamicParams + '&views[]=' + view.name;
+	    console.log(staticUrl, dynamicUrl);
+	    service.renderedUrls[view.name] = {static: staticUrl, dynamic: dynamicUrl};
 	};
 
 

@@ -97,11 +97,6 @@ angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','
 angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular','$stateParams', '$state', 'Pusher', '$http','$sce', '$httpParamSerializerJQLike', '$timeout','$window','$location','$modal', 'renderService', function($scope, Restangular, $stateParams, $state, Pusher, $http, $sce, $httpParamSerializerJQLike, $timeout, $window, $location, $modal, renderService) {
 
   $scope.renderedData = {};
-  var renderers = $.extend($.pivotUtilities.renderers,
-			   $.pivotUtilities.novix_renderers,
-			   $.pivotUtilities.highchart_renderers);
-
-
   $scope.renderedUrls = {};
   $scope.selected = {streamSink: {}, streamSinkId: null, frequency: null};
   $scope.options = {truncate: true};
@@ -276,18 +271,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
     renderClient(v);
   };
 
-  var makeRenderedUrls = function(view) {
-    var staticParams = {params: _.merge.apply(_.merge,_.map($scope.datagram.responses,'params'))};
-    var dynamicParams = {params: $scope.selectedParamSet};
-    staticParams = $httpParamSerializerJQLike(staticParams);
-    dynamicParams = $httpParamSerializerJQLike(dynamicParams);
-    var render = view.render == 'highcharts' ? 'html' : view.render;
-    render = render == "ag-grid" ? "html" : render;
-    render = render == "pivot" ? "html" : render;
-    render = render == "taucharts" ? "html" : render;
-    var staticUrl =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + staticParams + '&views[]=' + view.name;
-    var dynamicUrl =  "/api/v1/d/" + $scope.datagram.token + "." + render + '?' + dynamicParams + '&views[]=' + view.name;
-    $scope.renderedUrls[view.name] = {static: staticUrl, dynamic: dynamicUrl};
+    var makeRenderedUrls = function(view) {
+	$scope.renderedUrls[view.name] = renderService.renderedUrls;
     //console.log('renderedUrls', view, dynamicUrl, $scope.selectedParams);
   };
 
@@ -364,14 +349,12 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 
   };
 
-  $scope.pivotOptions = {renderers: renderers, onRefresh: refreshPivotConf };
-
-
+  $scope.pivotOptions = { onRefresh: refreshPivotConf };
   var renderClient = function(view) {
       renderService.render($scope.datagram, view, $scope.currentParams);
       $scope.renderedData[view.name] = renderService.renderedData;
-      //console.log('RENDERED DATA', $scope.renderedData);
-      makeRenderedUrls(view);
+      renderService.renderUrls(view, $scope.currentParams, $scope.datagram);
+      $scope.renderedUrls = renderService.renderedUrls;
   };
 
 
