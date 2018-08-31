@@ -124,6 +124,17 @@ module Api
         end
       end
 
+      def clone
+        @datagram = policy_scope(Datagram).find(params[:id]) rescue nil
+        if @datagram
+          if @cloned = DatagramCloner.new(@datagram).clone!
+            render json: {id: @cloned.id}
+          else
+            render json: @cloned, status: 422
+          end
+        end
+      end
+
       private
 
       def create_params

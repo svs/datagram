@@ -17,6 +17,9 @@ script type="text/ng-template" id="show.html"
             a.btn ui-sref="edit({id: datagram.id})" style=""
               h3
                 i.fa.fa-edit
+            a.btn ng-click="clone()" style=""
+              h3
+                i.fa.fa-copy
             a.btn ng-click="archive()" style=""
               h3
                 i.fa.fa-trash-o

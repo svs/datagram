@@ -85,6 +85,9 @@ angular.module('datagramsApp').controller('roCtrl',['$scope', '$modalInstance','
   $scope.updateCurrentParams = function(k) {
   };
 
+
+
+
   $scope.refresh = function() {
     $scope.refreshing = true;
     datagramService.refresh().then(function() {
@@ -234,6 +237,12 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
       $state.go('index');
     });
   };
+    $scope.clone = function() {
+	console.log('cloning');
+	$http({method: 'POST', url: 'api/v1/datagrams/' + $scope.datagram.id + '/clone'}).then(function(r) {
+	    console.log(r);
+	});
+    };
 
 
     var subscribed = false;

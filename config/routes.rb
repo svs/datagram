@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       resources :datagrams, :defaults => { :format => 'json' } do
         member do
           put 'refresh'
+          post 'clone'
         end
       end
       resources :sources
