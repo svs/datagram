@@ -2,6 +2,9 @@
 = javascript_include_tag 'chroma.min.js'
 script type="text/ng-template" id="show.html"
   div ng-controller="datagramCtrl"
+    .row
+      .div.alert-success style="padding: 10px; border-radius: 10px" ng-if="flash_message"
+        | {{flash_message}}
     .row.portlet-title
       .col-md-5
         h2.portlet-title style="margin-bottom: 0px"

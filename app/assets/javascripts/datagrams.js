@@ -116,7 +116,8 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   var init = function() {
     var groupName = $location.search().g;
     $scope.activeTabName=(groupName || null);
-    $scope.selectedParamSetName = $location.search().s;
+      $scope.selectedParamSetName = $location.search().s;
+      //$scope.flash_message = "Flash message";
   };
 
   $scope.openShowModal = function(datagram){
@@ -239,9 +240,13 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
   };
     $scope.clone = function() {
 	console.log('cloning');
-	$http({method: 'POST', url: 'api/v1/datagrams/' + $scope.datagram.id + '/clone'}).then(function(r) {
-	    console.log(r);
-	});
+	if (window.confirm("Are you sure you want to clone this datagram?")) {
+	    $http({method: 'POST', url: 'api/v1/datagrams/' + $scope.datagram.id + '/clone'}).then(function(r) {
+		console.log(r);
+		$scope.flash_message = "This datagram was succesfully cloned";
+		$timeout(function() { $scope.flash_message = null}, 5000);
+	    });
+	}
     };
 
 
