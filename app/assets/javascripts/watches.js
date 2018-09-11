@@ -38,12 +38,20 @@ watchesApp.config(function($stateProvider,$urlRouterProvider) {
 
 
 
-angular.module('watchesApp').controller('watchesCtrl',['$scope','Restangular','$stateParams', function($scope, Restangular,$stateParams) {
+angular.module('watchesApp').controller('watchesCtrl',['$scope','Restangular','$stateParams', '$http', function($scope, Restangular,$stateParams, $http) {
   Restangular.all('api/v1/watches').getList().then(function(r) {
     $scope.watches = _.sortBy(r, function(_r) { return _r.name });
     $scope.url_parser = document.createElement('a');
-    $scope.url_parser.href = $scope.watches.url;
+      $scope.url_parser.href = $scope.watches.url;
+
   });
+
+    $scope.archive = function(id) {
+	$http.delete('/api/v1/watches/' + id).then(function(a,b,c) {
+	    console.log(a);
+	});
+    };
+
 }]);
 
 angular.module('watchesApp').controller('watchCtrl',['$scope','Restangular','$stateParams', 'Pusher','$state', '$http', '$location',
