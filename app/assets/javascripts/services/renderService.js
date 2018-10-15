@@ -30,7 +30,7 @@ angular.module('datagramsApp')
 		  var pivot = new Flexmonster({
 		      container: "flexmonster",
 		      report: view.report,
-		      licenseKey: "Z73Q-XB1E2M-646B16-5S1W5Y"
+		      licenseKey: "Z7B9-XADD0R-3N710R-47031D"
 		  });
 	      });
 	  }
