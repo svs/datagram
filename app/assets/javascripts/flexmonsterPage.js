@@ -13,7 +13,7 @@ $(document).ready(function() {
 	  toolbar: true,
 	  report: a.report,
 	  dataSource: {data:a.data},
-	  licenseKey: "Z7S5-XCD911-1P5L61-2Q203Z",
+	  licenseKey: "Z7WN-XC791O-2S3E1A-282E1H",
 	  componentFolder: '/flexmonster/',
 	  width: '100%',
 	  height: '100%',
