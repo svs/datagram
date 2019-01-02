@@ -464,7 +464,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 		  container: "flexmonster",
 		  toolbar: true,
 		  report: view.report,
-		  licenseKey: "Z7S5-XCD911-1P5L61-2Q203Z"
+		  licenseKey: "Z7WN-XC791O-2S3E1A-282E1H"
 	      });
 	      pivot.on('reportchange', function () {
 		  view.report = pivot.getReport();
@@ -485,7 +485,7 @@ angular.module('datagramsApp').controller('datagramCtrl',['$scope','Restangular'
 		  container: "flexmonster",
 		  toolbar: true,
 		  report: view.report,
-		  licenseKey: "Z7S5-XCD911-1P5L61-2Q203Z"
+		  licenseKey: "Z7WN-XC791O-2S3E1A-282E1H"
 	      });
 	      pivot.on('reportcomplete', function() {
 		      var createFlexChart = function() {
