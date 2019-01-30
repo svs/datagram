@@ -34,7 +34,7 @@ script type="text/ng-template" id="index.html"
                       h3 style="position: relative; top: -10px"
                         i.fa.fa-edit
                 span style="padding: 3px"
-                  |{{datagram.updated_at | fromNow}}
+                  |{{datagram.last_update_timestamp | fromNow}}
               .portlet-body
                 a ng-click="openShowModal(datagram)" style="cursor: pointer"
                   img src="{{datagram.default_view_url}}" style="width: 100%"
