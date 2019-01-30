@@ -29,7 +29,7 @@ class WatchResponseHandler
           $redis.hincrby(redis_tracking_key, watch.id, (wr.modified ? -2 : -1)) if redis_tracking_key
           DgLog.new("#WatchResponseHandler updating last_updated on #{datagram.id} to #{params[:timestamp]}", binding).log
           datagram.update(last_update_timestamp: params[:timestamp])
-          Rails.logger.info("#Complete? #{complete?}")
+          # Rails.logger.info("#Complete? #{complete?}")
           if complete?
             DgLog.new("#WatchResponseHandler complete - deleting all watch responses for datagram #{datagram.id} before #{params[:timestamp]}", binding).log
             WatchResponse.where(datagram_id: datagram.id, timestamp: params[:timestamp]).update_all(complete:true)
@@ -49,7 +49,6 @@ class WatchResponseHandler
                 refresh_channel: wr.refresh_channel}
       end
     else
-      Rails.logger.info "#WatchResponseHandler No such watch_response #{params[:id]}"
     end
   end
 

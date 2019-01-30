@@ -4,7 +4,6 @@ class WatchPublisher
   # and to store the response when it is received
 
   def initialize(watch:, params: {},exchange: $x, queue: $watches, datagram: nil, timestamp: nil, args: {}, routing_key: nil, refresh_channel: nil, datagram_uid: nil)
-    Rails.logger.info "\n#WatchPublisher params #{params}"
     @watch = watch
     params = params.stringify_keys if params
     @params = params.blank? ? (watch.params || {}) : (watch.params || {}).merge(params) # should use watch parameters when no parameters provided
