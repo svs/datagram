@@ -17,7 +17,7 @@ class Datagram < ActiveRecord::Base
                        private_url: private_url,
                        public_url: public_url,
                        watches: watches.map{|w| w.attributes.slice("name", "token","params","id","slug")},
-                       timestamp: (Time.at(max_ts/1000) rescue Time.now),
+                       timestamp: (Time.at(max_ts/1000) rescue nil),
                        publish_params: publish_params,
                        stream_sinks: streamers
                      }).except("_id")
