@@ -36,8 +36,6 @@ script type="text/ng-template" id="index.html"
                 span style="padding: 3px"
                   span ng-if="datagram.last_update_timestamp"
                     |{{datagram.last_update_timestamp | fromNow}}
-                  span
-                    | Never
               .portlet-body
                 a ng-click="openShowModal(datagram)" style="cursor: pointer"
                   img src="{{datagram.default_view_url}}" style="width: 100%"
