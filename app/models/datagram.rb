@@ -23,6 +23,9 @@ class Datagram < ActiveRecord::Base
                      }).except("_id")
   end
 
+  def last_updated_at
+    Time.at(max_ts) rescue nil
+  end
 
   # calls DatagramPublisher.publish! passing on the given hash.
   def publish(params = {}, streamer = nil)
