@@ -46,7 +46,6 @@ class Streamer < ActiveRecord::Base
 
     def message
       ps = {params: datagram.param_sets[streamer.param_set]["params"], format: streamer.format}
-      ap "#Streamer #{ps}"
       @message ||= DatagramFetcherService.new(datagram, ps).render([view])
     end
 
