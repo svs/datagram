@@ -66,7 +66,8 @@ class WatchPublisher
   end
 
   def watch_url
-    u = watch.url ? (::Mustache.render(watch.url, params)) : watch.url
+    url = ((watch.source && watch.source.url) || watch.url)
+    u = ::Mustache.render(url, params)
     u.gsub('drive://',"drive://#{watch.user.google_token}@")
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170320060908) do
+ActiveRecord::Schema.define(version: 20190130070248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20170320060908) do
     t.string   "google_token"
     t.string   "google_refresh_token"
     t.boolean  "ro"
+    t.boolean  "is_admin"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -153,6 +154,7 @@ ActiveRecord::Schema.define(version: 20170320060908) do
     t.json     "transform"
     t.integer  "source_id"
     t.text     "description"
+    t.datetime "archived_at"
   end
 
 end

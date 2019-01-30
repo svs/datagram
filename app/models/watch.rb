@@ -11,9 +11,6 @@ class Watch < ActiveRecord::Base
 
   has_many :watch_responses
   belongs_to :source
-  def url
-    source.try(:url) || read_attribute(:url)
-  end
 
   def source_string
     source.try(:name) || url
@@ -41,7 +38,7 @@ class Watch < ActiveRecord::Base
         :data_link => api_v1_w_path(self.token)
       }
     end
-    super.merge(source_string: source_string).except(:url, :created_at, :updated_at, :diff).merge(uri_parts || {})
+    super.merge(source_string: source_string).symbolize_keys.except(:url, :created_at, :updated_at, :diff).merge(uri_parts || {}).tap{|x| ap x}
   end
 
  def last_good_response

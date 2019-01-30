@@ -476,6 +476,7 @@ GEM
     rdoc (4.3.0)
     redcard (1.1.0)
     redis (4.0.1)
+    redis-scheduler (0.9)
     reek (2.2.1)
       parser (~> 2.2)
       rainbow (~> 2.0)
@@ -682,6 +683,7 @@ DEPENDENCIES
   rails (= 4.2.8)
   rails_12factor
   redis
+  redis-scheduler
   rest-client
   rspec-legacy_formatters
   rspec-rails

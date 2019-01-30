@@ -20,11 +20,7 @@ class DatagramFetcherService
   end
 
   def render(views = [])
-    renderer.render(Array(views)).tap{|r|
-      if r.is_a?(Hash) && r[:url] && is_default?
-        datagram.update(default_view_url: r[:url])
-      end
-    }
+    renderer.render(Array(views))
   end
 
   def last_filename

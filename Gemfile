@@ -116,3 +116,4 @@ group :development do
 end
 
 gem 'lograge'
+gem 'redis-scheduler'

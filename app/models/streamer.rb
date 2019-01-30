@@ -11,6 +11,7 @@ class Streamer < ActiveRecord::Base
 
   def publish!
     datagram.publish(self.param_set, self)
+    $redis_scheduler.schedule!(id, Time.now + frequency) if frequency
   end
 
   def archived?
@@ -18,7 +19,8 @@ class Streamer < ActiveRecord::Base
   end
 
   def render
-    update(response_json: streamer.message, last_run_at: DateTime.now)
+
+    update(response_json: streamer.message, thumbnail: thumbnail_url, last_run_at: DateTime.now)
     streamer.stream!
   end
 
@@ -48,6 +50,9 @@ class Streamer < ActiveRecord::Base
       @message ||= DatagramFetcherService.new(datagram, ps).render([view])
     end
 
+    def thumbnail_url
+      `docker run .....`
+    end
 
     private
     attr_reader :datagram, :view, :stream_sink, :streamer
@@ -90,7 +95,7 @@ class Streamer < ActiveRecord::Base
 
     def message
       super
-      m = ((@message.is_a?(Hash) && chartify_url(@message[:url])) || @message) || ""
+      m = ((@message.is_a?(Hash) && chartify_url(thumbnail_url)) || @message) || ""
       m += "\n #{Time.now.to_i - datagram.last_update_timestamp} seconds ago"
     end
 
