@@ -38,7 +38,7 @@ script type="text/ng-template" id="index.html"
                     |{{datagram.last_update_timestamp | fromNow}}
               .portlet-body
                 a ng-click="openShowModal(datagram)" style="cursor: pointer"
-                  img src="{{datagram.default_view_url}}" style="width: 100%"
+                  / img src="{{datagram.default_view_url}}" style="width: 100%"
 
       tab ng-repeat="(k,ds) in groupedDatagrams" active="groupName==k"
         tab-heading
@@ -66,4 +66,4 @@ script type="text/ng-template" id="index.html"
                   |{{datagram.updated_at | fromNow}}
               .portlet-body
                 a ng-click="openShowModal(datagram)" style="cursor: pointer"
-                  img src="{{datagram.default_view_url}}" style="width: 100%"
+                  / img src="{{datagram.default_view_url}}" style="width: 100%"
