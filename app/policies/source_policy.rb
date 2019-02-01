@@ -20,6 +20,8 @@ class SourcePolicy < ApplicationPolicy
     def resolve
       if user.is_admin
         Source.all  #where(user_id: user.id)
+      else
+        Source.all.map{|s| s.attributes.except("url")}
       end
     end
   end
